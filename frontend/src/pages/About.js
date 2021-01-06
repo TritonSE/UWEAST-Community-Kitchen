@@ -2,6 +2,10 @@ import React, { Component} from 'react';
 import Navbar from '../components/NavBar';
 import PayPal from '../components/PayPal';
 
+const config = require('../config');
+
+const BACKEND_URL = config.backend.uri;
+
 class About extends Component {
 
 

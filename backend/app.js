@@ -31,7 +31,7 @@ app.use(cors({methods: ['GET', 'POST', 'PUT', 'DELETE']}));
 
 //Routers 
 app.get('/', function (req, res) {
-  res.status(200).send({Message: "Abandon All Hope Ye Who Enter Here..."});
+  res.status(200).json({message: "Abandon All Hope Ye Who Enter Here..."});
 })
 app.use('/user', require('./routes/user'));
 app.use('/cart', require('./routes/cart'));

@@ -24,7 +24,7 @@ function buildItemJSON(body) {
         const childData = allItems[key];
         items.push(childData);
       }
-      res.sendStatus(200);
+      res.status(200).json({items: items});
     }).catch((error) => {res.sendStatus(error.status || 500);});
   });
   
