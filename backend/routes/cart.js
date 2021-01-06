@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('../db');
+const { getAllMenuItems } = require("../db/services/item");
 //const log = require('../../logger');
 
 const router = express.Router();
@@ -47,7 +47,7 @@ router.get('/', (req, res, next) => {
   let cart = getCart(req);
   if (cart === undefined) cart = [];
 
-  db.getAllMenuItems().then((allItems) => {
+  getAllMenuItems().then((allItems) => {
     for (const key in allItems) {
       const childData = allItems[key];
       items.push(childData);

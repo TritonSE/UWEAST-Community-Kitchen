@@ -1,6 +1,13 @@
 const express = require('express');
-const db = require('../db');
 
 const router = express.Router();
+
+//Define any needed helper function here 
+
+router.post('/automate', (req, res, next) => {
+    //To-Do
+  });
+
+
 
 module.exports = router;
