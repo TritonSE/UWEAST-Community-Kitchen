@@ -12,8 +12,8 @@ module.exports = {
   db: {
     uri: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017'
   },
-  email: {
-    user: process.env.EMAIL_USERNAME || "",
-    pass: process.env.EMAIL_PASSWORD || ""
+  uweast: {
+    email: process.env.UWEAST_USER_EMAIL || "",
+    pass: process.env.UWEAST_USER_PASSWORD || ""
   },
 };

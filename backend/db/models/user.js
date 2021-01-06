@@ -6,9 +6,9 @@ const SALT_WORK_FACTOR = 10;
 
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true },
-  password: { type: String },
-  firstname: String,
-  lastname: String,
+  password: { type: String }
+  // firstname: String,
+  // lastname: String,
 });
 
 userSchema.pre('save', function (next) {
@@ -31,6 +31,8 @@ userSchema.pre('save', function (next) {
     });
   });
 });
+
+//implement password comparison function here
 
 const User = mongoose.model('User', userSchema);
 
