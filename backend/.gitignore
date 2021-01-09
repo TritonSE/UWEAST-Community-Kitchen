@@ -1,2 +1,4 @@
 #Dotenv
 .env
+
+/node_modules
