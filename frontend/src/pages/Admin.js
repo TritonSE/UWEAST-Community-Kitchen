@@ -17,7 +17,7 @@ class Admin extends Component {
             renderAddItems: false,
             renderDeleteItems: false,
             renderItemDetails: false,
-            itemName: ''
+            getItemsArray: []
         }
 
         this.featuredItemModal = this.featuredItemModal.bind(this);
@@ -25,6 +25,21 @@ class Admin extends Component {
         this.addItemModal = this.addItemModal.bind(this);
         this.deleteItemModal = this.deleteItemModal.bind(this);
         this.editItemDetails = this.editItemDetails.bind(this);
+        this.updateField = this.updateField.bind(this);
+        this.updateFieldCheckbox = this.updateFieldCheckbox.bind(this);
+    }
+
+    componentDidMount() {
+        //Get the list of menu items when loading the page
+        fetch(`${BACKEND_URL}item`)
+        .then(res => res.json())
+        .then(data => {
+            this.setState({
+                getItemsArray: data.items,
+            });   
+        }).catch((error) => {
+            console.log(error);
+        })
     }
 
     //The modal that renders the items in the database. Allows for admin to
@@ -32,30 +47,23 @@ class Admin extends Component {
     featuredItemModal() {
         //List of categories
         const featuredCategories = ["Appetizers", "Main Dishes", "Sides", "Drinks"];
-        let pizza = { category: 'Appetizers', name: 'Pizza' };
-        let igor = { category: 'Main Dishes', name: 'Igor'};
-        let fries = { category: 'Sides', name: 'Fries'};
-        let soda = { category: 'Drinks', name: 'Pepsi'}; 
-        let items = [pizza, igor, fries, soda];
 
         return (
             <Modal show={this.state.renderFeaturedItems} onHide={() => this.setState({renderFeaturedItems: false})} >
                 <Modal.Header closeButton>
                     <Modal.Title>Featured Menu Item</Modal.Title>
                 </Modal.Header>
-
                 <Modal.Body>
                     <div>
                         {featuredCategories.map((category, ind) => (
                             <div>
                                 <h6>{category}</h6>
                                 <div className="list-group">
-                                    {items.map((item, ind) => {
+                                    {this.state.getItemsArray.map((item, ind) => {
                                         let checkbox;
-
                                         if(item.category === category) {
                                             //This if will check if the item is already featured or not
-                                            if(false) {
+                                            if(item.featured) {
                                                 checkbox = <input name="menu-item" class="form-check-input" type="checkbox" checked></input>
                                             } else {
                                                 checkbox = <input name="menu-item" class="form-check-input" type="checkbox"></input>
@@ -76,7 +84,6 @@ class Admin extends Component {
                         ))}
                     </div>
                 </Modal.Body>
-                
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => this.setState({renderFeaturedItems: false})}>
                         Close
@@ -93,32 +100,27 @@ class Admin extends Component {
     //This will allows the admin to edit their menu items
     editItemModal() {
         const featuredCategories = ["Appetizers", "Main Dishes", "Sides", "Drinks"];
-        let pizza = { category: 'Appetizers', name: 'Pizza' };
-        let igor = { category: 'Main Dishes', name: 'Igor'};
-        let fries = { category: 'Sides', name: 'Fries'};
-        let soda = { category: 'Drinks', name: 'Pepsi'}; 
-        let items = [pizza, igor, fries, soda];   
 
         return (
             <Modal show={this.state.renderEditItems} onHide={() => this.setState({renderEditItems: false})} >
                 <Modal.Header closeButton>
                     <Modal.Title>Edit item</Modal.Title>
                 </Modal.Header>
-
                 <Modal.Body>
                     <div>
                         {featuredCategories.map((category, ind) => (
                             <div>
                                 <h6>{category}</h6>
                                 <div className="list-group">
-                                    {items.map((item, ind) => {
+                                    {this.state.getItemsArray.map((item, ind) => {
                                         if(item.category === category) {
                                             return (
                                                 <button onClick={() => {
+                                                    const filterItem = this.state.getItemsArray.filter(items => items.name === item.name)[0];
                                                     this.setState({
                                                         renderEditItems: false,
                                                         renderItemDetails: true,
-                                                        itemName: item.name
+                                                        getItemInfo: filterItem,
                                                     })
                                                 }}>Edit {item.name}</button>
                                             )
@@ -129,7 +131,6 @@ class Admin extends Component {
                         ))}
                     </div>
                 </Modal.Body>
-                
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => this.setState({renderEditItems: false})}>
                         Close
@@ -142,9 +143,27 @@ class Admin extends Component {
         )
     }
 
+    // Helper method used to update textfield in edit item modal
+    updateField(e, field) {
+        let updateField = this.state.getItemInfo;
+        updateField[field] = e.target.value;
+        this.setState({ getItemInfo: updateField });
+    }
+
+    //Used for vegan, vegetarian, and glutenFree checkboxes
+    updateFieldCheckbox(isChecked, field) {
+        let updateField = this.state.getItemInfo;
+        updateField[field] = isChecked;
+        this.setState({ getItemInfo: updateField });
+    }
+
     //This will render the modal that displays the description of the food item
     //Allows the admin to edit any field and update accordingly
-    editItemDetails(itemName) {
+    editItemDetails() {
+        //Undefined when page initially renders, returns an error
+        //This check prevents such error
+        if(this.state.getItemInfo === undefined) return; 
+
         return (
             <Modal show={this.state.renderItemDetails} onHide={() => this.setState({renderItemDetails: false})} >
                 <Modal.Header closeButton>
@@ -152,96 +171,123 @@ class Admin extends Component {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <div class="form-group">
-                        <label for="name">{itemName}</label>
-                        <input name="name" type="text" class="form-control" id="editName" placeholder="Enter name" required />
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="name">Description</label>
-                        <input name="description" type="text" class="form-control" id="editDescription" placeholder="Enter description" required />
-                    </div>
+                    <form onSubmit={(e) => console.log(e)}>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input name="name" type="text" class="form-control" id="editName" placeholder="Enter name" required 
+                                value={this.state.getItemInfo.name} onChange={(e) => this.updateField(e, 'name')}
+                            />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="name">Description</label>
+                            <input name="description" type="text" class="form-control" id="editDescription" placeholder="Enter description" required 
+                                value={this.state.getItemInfo.description} onChange={(e) => this.updateField(e, 'description')}
+                            />
+                        </div>
 
-                    <label for="description">Category</label>
+                        <label for="description">Category</label>
 
-                    <div class="form-check">
-                        <input class="form-check-input" name="category" type="radio" name="category" id="categoryAppetizers" value="Appetizers" required />
-                        <label class="form-check-label" for="Appetizers">
-                            Appetizers
-                        </label>
-                    </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="category" type="radio" name="category" id="categoryAppetizers" value="Appetizers" required 
+                                checked={this.state.getItemInfo.category === "Appetizers"} onChange={(e) => this.updateField(e, 'category')}
+                            />
+                            <label class="form-check-label" for="Appetizers">
+                                Appetizers
+                            </label>
+                        </div>
 
-                    <div class="form-check">
-                        <input class="form-check-input" name="category" type="radio" name="category" id="categoryMainDishes" value="Main Dishes" required />
-                        <label class="form-check-label" for="Main Dishes">
-                            Main Dishes
-                        </label>
-                    </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="category" type="radio" name="category" id="categoryMainDishes" value="Main Dishes" required 
+                                checked={this.state.getItemInfo.category === "Main Dishes"} onChange={(e) => this.updateField(e, 'category')}
+                            />
+                            <label class="form-check-label" for="Main Dishes">
+                                Main Dishes
+                            </label>
+                        </div>
 
-                    <div class="form-check">
-                        <input class="form-check-input" name="category" type="radio" name="category" id="categorySides" value="Sides" required />
-                        <label class="form-check-label" for="Sides">
-                            Sides
-                        </label>
-                    </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="category" type="radio" name="category" id="categorySides" value="Sides" required 
+                                checked={this.state.getItemInfo.category === "Sides"} onChange={(e) => this.updateField(e, 'category')}
+                            />
+                            <label class="form-check-label" for="Sides">
+                                Sides
+                            </label>
+                        </div>
 
-                    <div class="form-check">
-                        <input class="form-check-input" name="category" type="radio" name="category" id="categoryDrinks" value="Drinks" required />
-                        <label class="form-check-label" for="Drinks">
-                            Drinks
-                        </label>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="price">Price</label>
-                        <input name="price" type="number" step="0.01" class="form-control" id="editPrice" placeholder="Enter price" required />
-                    </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="category" type="radio" name="category" id="categoryDrinks" value="Drinks" required 
+                                checked={this.state.getItemInfo.category === "Drinks"} onChange={(e) => this.updateField(e, 'category')}
+                            />
+                            <label class="form-check-label" for="Drinks">
+                                Drinks
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="price">Price</label>
+                            <input name="price" type="number" step="0.01" class="form-control" id="editPrice" placeholder="Enter price" required 
+                                value={this.state.getItemInfo.price} onChange={(e) => this.updateField(e, 'price')}
+                            />
+                        </div>
 
-                    <div class="form-group">
-                        <label for="image">Image Link</label>
-                        <input name="image" type="text" class="form-control" id="editImage" placeholder="Enter link" required />
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="cuisine">Cuisine</label>
-                        <input name="cuisine" type="text" class="form-control" id="editCuisine" placeholder="Enter cuisine" required />
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="ingredients">Ingredients</label>
-                        <input name="ingredients" type="text" class="form-control" id="editIngredients" placeholder="Enter ingredients, separated by commas" required />
-                    </div>
+                        <div class="form-group">
+                            <label for="image">Image Link</label>
+                            <input name="image" type="text" class="form-control" id="editImage" placeholder="Enter link" required 
+                                value={this.state.getItemInfo.image} onChange={(e) => this.updateField(e, 'image')}
+                            />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cuisine">Cuisine</label>
+                            <input name="cuisine" type="text" class="form-control" id="editCuisine" placeholder="Enter cuisine" required 
+                                value={this.state.getItemInfo.cuisine} onChange={(e) => this.updateField(e, 'cuisine')}
+                            />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ingredients">Ingredients</label>
+                            <input name="ingredients" type="text" class="form-control" id="editIngredients" placeholder="Enter ingredients, separated by commas" required 
+                                value={this.state.getItemInfo.ingredients.toString().replace(',', ', ')} onChange={(e) => this.updateField(e, 'ingredients')}
+                            />
+                        </div>
 
-                    <div class="form-check form-check-inline">
-                        <input name="vegan" class="form-check-input" type="checkbox" value="" id="editVegan" />
-                        <label class="form-check-label" for="defaultCheck1">
-                            Vegan
-                        </label>
-                    </div>
-                    
-                    <div class="form-check form-check-inline">
-                        <input name="vegetarian" class="form-check-input" type="checkbox" value="" id="editVegetarian" />
-                        <label class="form-check-label" for="defaultCheck2">
-                            Vegetarian
-                        </label>
-                    </div>
-                    
-                    <div class="form-check form-check-inline">
-                        <input name="glutenFree" class="form-check-input" type="checkbox" value="" id="editGlutenFree" />
-                        <label class="form-check-label" for="defaultCheck3">
-                            Gluten Free
-                        </label>
-                    </div>   
+                        <div class="form-check form-check-inline">
+                            <input name="vegan" class="form-check-input" type="checkbox" value="" id="editVegan" 
+                                checked={this.state.getItemInfo.vegan} onChange={(e) => this.updateFieldCheckbox(!this.state.getItemInfo.vegan, 'vegan')}
+                            />
+                            <label class="form-check-label" for="defaultCheck1">
+                                Vegan
+                            </label>
+                        </div>
+                        
+                        <div class="form-check form-check-inline">
+                            <input name="vegetarian" class="form-check-input" type="checkbox" value="" id="editVegetarian" 
+                                checked={this.state.getItemInfo.vegetarian} onChange={(e) => this.updateFieldCheckbox(!this.state.getItemInfo.vegetarian, 'vegetarian')}
+                            />
+                            <label class="form-check-label" for="defaultCheck2">
+                                Vegetarian
+                            </label>
+                        </div>
+                        
+                        <div class="form-check form-check-inline">
+                            <input name="glutenFree" class="form-check-input" type="checkbox" value="" id="editGlutenFree" 
+                                checked={this.state.getItemInfo.glutenFree} onChange={(e) => this.updateFieldCheckbox(!this.state.getItemInfo.glutenFree, 'glutenFree')}
+                            />
+                            <label class="form-check-label" for="defaultCheck3">
+                                Gluten Free
+                            </label>
+                        </div>   
+                        <Modal.Footer>
+                            <Button variant="secondary" type="submit" onClick={() => this.setState({ renderItemDetails: false }) }>
+                                Close
+                            </Button>
+                            <Button variant="primary" onClick={() => this.setState({renderItemDetails: false})}>
+                                Save Changes
+                            </Button>
+                        </Modal.Footer>
+                    </form>
                 </Modal.Body>
-                
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => this.setState({renderItemDetails: false})}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={() => this.setState({renderItemDetails: false})}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
             </Modal>
         )
     }
