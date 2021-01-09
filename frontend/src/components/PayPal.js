@@ -29,6 +29,7 @@ export default function PayPal(props) {
             createOrder: (data, actions) => {
             return actions.order.create({
                 intent: "CAPTURE",
+                
                 purchase_units: [{
                     description: "Food order from UWEAST Kitchen",
                     // Deals with pricing of the cart
@@ -54,7 +55,7 @@ export default function PayPal(props) {
                        return {
                             name: item.name,
                             // Description follows the format:
-                            // Size: {size}, (Gluten Free,) (Other addons,)
+                            // Size: {size}, (Gluten Free,) (Other addons,) 
                             description: [`Size: ${item.size}`, ...item.addons].join(", "),
                             unit_amount: {
                                 currency_code: "USD",
@@ -72,11 +73,13 @@ export default function PayPal(props) {
                 shipping_type: 'PICKUP',
                 application_context: {
                     shipping_preference: 'NO_SHIPPING',
-                }
+                },
             });
             },
             onApprove: async (data, actions) => {
                 return actions.order.capture().then(function(details) {
+                    // Details here includes payer name, phone number, and email.
+                    // Give this info to the backend so they can send another email!
                     alert('Transaction completed by ' + details.payer.name.given_name + '!');
                 });
             },
