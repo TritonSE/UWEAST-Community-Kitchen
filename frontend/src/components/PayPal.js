@@ -2,8 +2,25 @@ import React from 'react'
 
 //PayPal script is located in public/index.html (contains Client ID)
 export default function PayPal(props) {
-    const paypalRef = React.useRef();
+    const { cart } = props;
+    // I assume the cart object looks like this:
+    // {
+    //     cart_total: "",
+    //     item_total: "",
+    //     tax_total: "",
+    //     items: [
+    //         {
+    //             name: "",
+    //             quantity: "",
+    //             size: "",
+    //             addons: ["", ""],
+    //             individual_price: "",
+    //             individual_tax: "",
+    //         },
 
+    //     ]
+    // }
+    const paypalRef = React.useRef();
 
      // To show PayPal buttons once the component loads
     React.useEffect(() => {
@@ -12,46 +29,45 @@ export default function PayPal(props) {
             createOrder: (data, actions) => {
             return actions.order.create({
                 intent: "CAPTURE",
-                purchase_units: [
-                {
-                    description: "UWEAST",
+                purchase_units: [{
+                    description: "Food order from UWEAST Kitchen",
+                    // Deals with pricing of the cart
                     amount: {
                         currency_code: "USD",
-                        value: props.amount,
-                        // breakdown: {
-                        //     item_total: {
-                        //         currency_code: "USD",
-                        //         value: 7.0
-                        //     },
-                        //     // tax_total: {
-                        //     //     currency_code: "USD",
-                        //     //     value: 3.0
-                        //     // }
-                        // }
+                        value: cart.cart_total,
+                        breakdown: {
+                            // includes totals for items and taxes. Shipping and handling can be ignored
+                            // because the items are for pickup and handling is included in price
+                            item_total: {
+                                currency_code: "USD",
+                                value: cart.item_total,
+                            },
+                            tax_total: {
+                                currency_code: "USD",
+                                value: cart.tax_total,
+                            },
+                        }
                     },
-                    
-                    // item_list: {
-                    //     items: [
-                    //       {
-                    //           name: 'Shirt',
-                    //           description: 'Wonderful shirt',
-                    //           quantity: '1',
-                    //           unit_amount: {
-                    //               value: "5.0",
-                    //               currency_code: "USD"
-                    //           }
-                    //       },
-                    //       {
-                    //         name: 'Jeans',
-                    //         description: 'Nice and ripped',
-                    //         quantity: '2',
-                    //         unit_amount: {
-                    //             value: "1.0",
-                    //             currency_code: "USD"
-                    //         }
-                    //     },
-                    //     ]
-                    // }
+                    // Deals with the individual item entries for the order
+                    items: 
+                    cart.items.map((item) => {
+                       return {
+                            name: item.name,
+                            // Description follows the format:
+                            // Size: {size}, (Gluten Free,) (Other addons,)
+                            description: [`Size: ${item.size}`, ...item.addons].join(", "),
+                            unit_amount: {
+                                currency_code: "USD",
+                                value: item.individual_price,
+                            },
+                            tax: {
+                                currency_code: "USD",
+                                value: item.individual_tax,
+                            },
+                            quantity: item.quantity,
+                            category: "PHYSICAL_GOODS"
+                        }
+                    })
                 }],
                 shipping_type: 'PICKUP',
                 application_context: {
@@ -69,7 +85,7 @@ export default function PayPal(props) {
             },
         })
         .render(paypalRef.current);
-    }, []);
+    }, [cart]);
 
     return (
         <div>
