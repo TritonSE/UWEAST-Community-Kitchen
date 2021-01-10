@@ -17,18 +17,34 @@ class Admin extends Component {
             renderAddItems: false,
             renderDeleteItems: false,
             renderItemDetails: false,
-            getItemsArray: []
+            getItemsArray: [],
+            insertItem: {
+                vegan: false,
+                vegetarian: false,
+                glutenFree: false
+            },
+            featureList: {}
         }
 
+        //Modals
         this.featuredItemModal = this.featuredItemModal.bind(this);
         this.editItemModal = this.editItemModal.bind(this);
         this.addItemModal = this.addItemModal.bind(this);
         this.deleteItemModal = this.deleteItemModal.bind(this);
         this.editItemDetails = this.editItemDetails.bind(this);
+
+        //Helper methods
         this.updateField = this.updateField.bind(this);
         this.updateFieldCheckbox = this.updateFieldCheckbox.bind(this);
+        this.updateInsertField = this.updateInsertField.bind(this);
+        this.updateInsertFieldCheckbox = this.updateInsertFieldCheckbox.bind(this);
+
+        //Fetch calls
         this.getItems = this.getItems.bind(this);
         this.saveItemChanges = this.saveItemChanges.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
+        this.insertItem = this.insertItem.bind(this);
+        this.saveFeatures = this.saveFeatures.bind(this);
     }
 
     //////////////////////////////////////////
@@ -42,6 +58,21 @@ class Admin extends Component {
         .then(data => {
             this.setState({
                 getItemsArray: data.items,
+            }, () => {
+                //This callback function allows for featureList to be populated 
+                //upon loading of the page
+                let setList = {};
+                for (let i = 0; i < this.state.getItemsArray.length; i++) {
+                    let info = this.state.getItemsArray[i];
+                    console.log(info);
+                    if(info.featured) setList[info._id] = info._id;
+                }
+
+                console.log(setList);
+
+                this.setState({
+                    featureList: setList    
+                })
             });   
         }).catch((error) => {
             console.log(error);
@@ -50,12 +81,57 @@ class Admin extends Component {
 
     //Fetch call to save item changes upon editing
     saveItemChanges() {
+        if(Object.keys(this.state.insertItem).length < 10) {
+            console.log("Error! Not sufficient data in the object");
+            return;
+        }
+
+        fetch(`${BACKEND_URL}item/insert`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.insertItem)
+        }).then(async result => {
+            if (result.ok) console.log(result.statusText);
+            this.setState({ renderAddItems: false })
+        })
+        .catch(e => {
+            console.log(e);
+        });
+    }
+
+    //fetch call to delete the item
+    deleteItem(item) {
+        if(!item) {
+            console.log("Error! Can't delete this item");
+            return;
+        }
+
+        fetch(`${BACKEND_URL}item/remove`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        }).then(async result => {
+            if (result.ok) console.log(result.statusText);
+
+            this.setState({ renderDeleteItems: false })
+            //render the list to get the updated list
+            this.getItems();
+        })
+        .catch(e => {
+            console.log(e);
+        });    
+    }
+
+    //Fetch call to insert data into the table
+    insertItem() {
         if(!this.state.getItemInfo) {
             console.log("Error! editing item problem.");
             return;
         }
-
-        console.log(this.state.getItemInfo);
 
         fetch(`${BACKEND_URL}item/edit`, {
             method: 'POST',
@@ -64,20 +140,29 @@ class Admin extends Component {
             },
             body: JSON.stringify(this.state.getItemInfo)
         }).then(async result => {
-            console.log(result);
-            if (result.ok){
-                const json = await result.json();
-                console.log(json.message);
-            } else {
-                console.log("Error saving data");
-            }
+            if (result.ok) console.log(result.statusText);
+            this.setState({ renderItemDetails: false })
         })
         .catch(e => {
             console.log(e);
         });
-        
+    }
 
-        this.setState({renderItemDetails: false})
+    //update the items to be listed under the features tag
+    saveFeatures() {
+        fetch(`${BACKEND_URL}item/feature`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.featureList)
+        }).then(async result => {
+            if (result.ok) console.log(result.statusText);
+            this.setState({ renderFeaturedItems: false })
+        })
+        .catch(e => {
+            console.log(e);
+        });    
     }
 
     componentDidMount() {
@@ -103,19 +188,20 @@ class Admin extends Component {
                                 <h6>{category}</h6>
                                 <div className="list-group">
                                     {this.state.getItemsArray.map((item, ind) => {
-                                        let checkbox;
                                         if(item.category === category) {
-                                            //This if will check if the item is already featured or not
-                                            if(item.featured) {
-                                                checkbox = <input name="menu-item" class="form-check-input" type="checkbox" checked></input>
-                                            } else {
-                                                checkbox = <input name="menu-item" class="form-check-input" type="checkbox"></input>
-                                            }
-                                            
                                             return (
                                                 <div>
-                                                    {checkbox}
-                                                    <label class="form-check-label" for="<%= item._id %>">
+                                                    <input name="menu-item" class="form-check-input" type="checkbox" checked={this.state.featureList[item._id]}
+                                                            onChange={(e) => {
+                                                                const getList = this.state.featureList;
+                                                                getList[item._id] ? delete getList[item._id] : getList[item._id] = item._id;
+                                                                this.setState({
+                                                                    featureList: getList
+                                                                });
+                                                            }}>      
+                                                    </input>
+                                            
+                                                    <label class="form-check-label" >
                                                         {item.name}
                                                     </label>
                                                 </div>
@@ -128,10 +214,10 @@ class Admin extends Component {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => this.setState({renderFeaturedItems: false})}>
+                    <Button variant="secondary" onClick={() => this.setState({renderFeaturedItems: false })}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={() => this.setState({renderFeaturedItems: false})}>
+                    <Button variant="primary" onClick={() => this.saveFeatures()}>
                         Save Changes
                     </Button>
                 </Modal.Footer>
@@ -335,6 +421,33 @@ class Admin extends Component {
         )
     }
 
+    //Method used for updating state for inserting item
+    updateInsertField(e, isIngredients) {
+        const getState = this.state.insertItem;
+
+        //Check for ingredients key, so then it will split values into array
+        if(isIngredients) {
+            getState[e.target.name] = e.target.value.split(',');
+        } else {
+            getState[e.target.name] = e.target.value;
+        }
+        
+        this.setState({
+            insertItem: getState
+        })
+    }
+
+    //Same concept as updateInsertField but for the three checkboxes
+    //which are vegan, vegetarian, and glutenFree
+    updateInsertFieldCheckbox(e) {
+        const getState = this.state.insertItem;
+        getState[e.target.name] = !this.state.insertItem[e.target.name];
+
+        this.setState({
+            insertItem: getState
+        });
+    }
+
     //Add item to the database. Allows the admin user to add any type of new item
     //To their menu, and updates instantly
     addItemModal() {
@@ -347,39 +460,51 @@ class Admin extends Component {
                 <Modal.Body>
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input name="name" type="text" class="form-control" id="name" placeholder="Enter name" required />
+                        <input name="name" type="text" class="form-control" id="name" placeholder="Enter name" required 
+                            onChange={(e) => this.updateInsertField(e)}
+                        />
                     </div>
                     
                     <div class="form-group">
                         <label for="name">Description</label>
-                        <input name="description" type="text" class="form-control" id="description" placeholder="Enter description" required />
+                        <input name="description" type="text" class="form-control" id="description" placeholder="Enter description" required 
+                            onChange={(e) => this.updateInsertField(e)}
+                        />
                     </div>
 
                     <label for="description">Category</label>
 
                     <div class="form-check">
-                        <input class="form-check-input" name="category" type="radio" name="category" id="category" value="Appetizers" required />
+                        <input class="form-check-input" name="category" type="radio" name="category" id="category" value="Appetizers" required 
+                            onChange={(e) => this.updateInsertField(e)}
+                        />
                         <label class="form-check-label" for="Appetizers">
                             Appetizers
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" name="category" type="radio" name="category" id="category" value="Main Dishes" required />
+                        <input class="form-check-input" name="category" type="radio" name="category" id="category" value="Main Dishes" required 
+                            onChange={(e) => this.updateInsertField(e)}
+                        />
                         <label class="form-check-label" for="Main Dishes">
                             Main Dishes
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" name="category" type="radio" name="category" id="category" value="Sides" required />
+                        <input class="form-check-input" name="category" type="radio" name="category" id="category" value="Sides" required 
+                            onChange={(e) => this.updateInsertField(e)}
+                        />
                         <label class="form-check-label" for="Sides">
                             Sides
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" name="category" type="radio" name="category" id="category" value="Drinks" required />
+                        <input class="form-check-input" name="category" type="radio" name="category" id="category" value="Drinks" required 
+                            onChange={(e) => this.updateInsertField(e)}
+                        />
                         <label class="form-check-label" for="Drinks">
                             Drinks
                         </label>
@@ -387,40 +512,54 @@ class Admin extends Component {
                     
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input name="price" type="number" step="0.01" class="form-control" id="price" placeholder="Enter price" required />
+                        <input name="price" type="number" step="0.01" class="form-control" id="price" placeholder="Enter price" required 
+                            onChange={(e) => this.updateInsertField(e)}
+                        />
                     </div>
 
                     <div class="form-group">
                         <label for="image">Image Link</label>
-                        <input name="image" type="text" class="form-control" id="image" placeholder="Enter link" required />
+                        <input name="image" type="text" class="form-control" id="image" placeholder="Enter link" required 
+                            onChange={(e) => this.updateInsertField(e)}
+                        />
                     </div>
                     
                     <div class="form-group">
                         <label for="cuisine">Cuisine</label>
-                        <input name="cuisine" type="text" class="form-control" id="cuisine" placeholder="Enter cuisine" required />
+                        <input name="cuisine" type="text" class="form-control" id="cuisine" placeholder="Enter cuisine" required 
+                            onChange={(e) => this.updateInsertField(e)}
+                        />
                     </div>
                     
                     <div class="form-group">
                         <label for="ingredients">Ingredients</label>
-                        <input name="ingredients" type="text" class="form-control" id="ingredients" placeholder="Enter ingredients, separated by commas" required />
+                        <input name="ingredients" type="text" class="form-control" id="ingredients" placeholder="Enter ingredients, separated by commas" required 
+                            onChange={(e) => this.updateInsertField(e, true)}
+                        />
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input name="vegan" class="form-check-input" type="checkbox" value="" id="vegan" />
+                        <input name="vegan" class="form-check-input" type="checkbox" checked={this.state.vegan} id="vegan" 
+                            onChange={(e) => this.updateInsertFieldCheckbox(e)}
+                        />
                         <label class="form-check-label" for="defaultCheck1">
                             Vegan
                         </label>
                     </div>
                     
                     <div class="form-check form-check-inline">
-                        <input name="vegetarian" class="form-check-input" type="checkbox" value="" id="vegetarian" />
+                        <input name="vegetarian" class="form-check-input" type="checkbox" checked={this.state.vegetarian} id="vegetarian" 
+                            onChange={(e) => this.updateInsertFieldCheckbox(e)}
+                        />
                         <label class="form-check-label" for="defaultCheck2">
                             Vegetarian
                         </label>
                     </div>
                     
                     <div class="form-check form-check-inline">
-                        <input name="glutenFree" class="form-check-input" type="checkbox" value="" id="glutenFree" />
+                        <input name="glutenFree" class="form-check-input" type="checkbox" checked={this.state.glutenFree} id="glutenFree" 
+                            onChange={(e) => this.updateInsertFieldCheckbox(e)}
+                        />
                         <label class="form-check-label" for="defaultCheck3">
                             Gluten Free
                         </label>
@@ -428,10 +567,17 @@ class Admin extends Component {
                 </Modal.Body>
                 
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => this.setState({renderAddItems: false})}>
+                    <Button variant="secondary" onClick={() => this.setState({
+                        insertItem: {
+                            vegan: false,
+                            vegetarian: false,
+                            glutenFree: false
+                        },
+                        renderAddItems: false
+                    })}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={() => this.setState({renderAddItems: false})}>
+                    <Button variant="primary" onClick={() => this.saveItemChanges()}>
                         Save Changes
                     </Button>
                 </Modal.Footer>
@@ -442,11 +588,6 @@ class Admin extends Component {
     //Deletes the item from the database
     deleteItemModal() {
         const featuredCategories = ["Appetizers", "Main Dishes", "Sides", "Drinks"];
-        let pizza = { category: 'Appetizers', name: 'Pizza' };
-        let igor = { category: 'Main Dishes', name: 'Igor'};
-        let fries = { category: 'Sides', name: 'Fries'};
-        let soda = { category: 'Drinks', name: 'Pepsi'}; 
-        let items = [pizza, igor, fries, soda];   
 
         return (
             <Modal show={this.state.renderDeleteItems} onHide={() => this.setState({renderDeleteItems: false})} >
@@ -460,10 +601,10 @@ class Admin extends Component {
                             <div>
                                 <h6>{category}</h6>
                                 <div className="list-group">
-                                    {items.map((item, ind) => {
+                                    {this.state.getItemsArray.map((item, ind) => {
                                         if(item.category === category) {
                                             return (
-                                                <button>Delete {item.name}</button>
+                                                <button onClick={() => this.deleteItem(item)}>Delete {item.name}</button>
                                             )
                                         }
                                     })}
@@ -474,9 +615,6 @@ class Admin extends Component {
                 </Modal.Body>
                 
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => this.setState({renderDeleteItems: false})}>
-                        Close
-                    </Button>
                     <Button variant="primary" onClick={() => this.setState({renderDeleteItems: false})}>
                         Save Changes
                     </Button>
