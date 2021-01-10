@@ -27,10 +27,16 @@ class Admin extends Component {
         this.editItemDetails = this.editItemDetails.bind(this);
         this.updateField = this.updateField.bind(this);
         this.updateFieldCheckbox = this.updateFieldCheckbox.bind(this);
+        this.getItems = this.getItems.bind(this);
+        this.saveItemChanges = this.saveItemChanges.bind(this);
     }
 
-    componentDidMount() {
-        //Get the list of menu items when loading the page
+    //////////////////////////////////////////
+    //          Fetch call methods          //
+    //////////////////////////////////////////
+
+    //Fetch call to get all menu items
+    getItems() {
         fetch(`${BACKEND_URL}item`)
         .then(res => res.json())
         .then(data => {
@@ -40,6 +46,43 @@ class Admin extends Component {
         }).catch((error) => {
             console.log(error);
         })
+    }
+
+    //Fetch call to save item changes upon editing
+    saveItemChanges() {
+        if(!this.state.getItemInfo) {
+            console.log("Error! editing item problem.");
+            return;
+        }
+
+        console.log(this.state.getItemInfo);
+
+        fetch(`${BACKEND_URL}item/edit`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.getItemInfo)
+        }).then(async result => {
+            console.log(result);
+            if (result.ok){
+                const json = await result.json();
+                console.log(json.message);
+            } else {
+                console.log("Error saving data");
+            }
+        })
+        .catch(e => {
+            console.log(e);
+        });
+        
+
+        this.setState({renderItemDetails: false})
+    }
+
+    componentDidMount() {
+        //Get the list of menu items when loading the page
+        this.getItems();
     }
 
     //The modal that renders the items in the database. Allows for admin to
@@ -171,7 +214,7 @@ class Admin extends Component {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <form onSubmit={(e) => console.log(e)}>
+                    <form onSubmit={(e) => this.getItems()}>
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input name="name" type="text" class="form-control" id="editName" placeholder="Enter name" required 
@@ -282,7 +325,7 @@ class Admin extends Component {
                             <Button variant="secondary" type="submit" onClick={() => this.setState({ renderItemDetails: false }) }>
                                 Close
                             </Button>
-                            <Button variant="primary" onClick={() => this.setState({renderItemDetails: false})}>
+                            <Button variant="primary" onClick={() => this.saveItemChanges()}>
                                 Save Changes
                             </Button>
                         </Modal.Footer>
