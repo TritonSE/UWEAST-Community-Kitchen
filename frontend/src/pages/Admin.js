@@ -64,11 +64,8 @@ class Admin extends Component {
                 let setList = {};
                 for (let i = 0; i < this.state.getItemsArray.length; i++) {
                     let info = this.state.getItemsArray[i];
-                    console.log(info);
                     if(info.featured) setList[info._id] = info._id;
                 }
-
-                console.log(setList);
 
                 this.setState({
                     featureList: setList    
@@ -80,7 +77,7 @@ class Admin extends Component {
     }
 
     //Fetch call to save item changes upon editing
-    saveItemChanges() {
+    insertItem() {
         if(Object.keys(this.state.insertItem).length < 10) {
             console.log("Error! not enough items in addItem object")
             return;
@@ -118,7 +115,7 @@ class Admin extends Component {
             if (result.ok) console.log(result.statusText);
 
             this.setState({ renderDeleteItems: false })
-            //render the list to get the updated list
+            //render the list to get the updated list without refreshing the page
             this.getItems();
         })
         .catch(e => {
@@ -127,10 +124,19 @@ class Admin extends Component {
     }
 
     //Fetch call to insert data into the table
-    insertItem() {
+    saveItemChanges(e) {
+        // e.preventDefault();
+        const keys = ["name", "description", "category", "price", "image", "cuisine", "ingredients", "vegan", "vegetarian", "glutenFree"];
         if(!this.state.getItemInfo) {
             console.log("Error! editing item problem.");
             return;
+        }
+
+        for(let key in keys) {
+            if(!(keys[key] in this.state.getItemInfo)) {
+                console.log("Error! Missing " + keys[key] + " in object");
+                return;
+            }    
         }
 
         fetch(`${BACKEND_URL}item/edit`, {
@@ -142,6 +148,8 @@ class Admin extends Component {
         }).then(async result => {
             if (result.ok) console.log(result.statusText);
             this.setState({ renderItemDetails: false })
+            //render the list to get the updated list without refreshing the page
+            this.getItems();
         })
         .catch(e => {
             console.log(e);
@@ -261,11 +269,8 @@ class Admin extends Component {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => this.setState({renderEditItems: false})}>
+                    <Button variant="secondary" onClick={() => this.setState({ renderEditItems: false })}>
                         Close
-                    </Button>
-                    <Button variant="primary" onClick={() => this.setState({renderEditItems: false})}>
-                        Save Changes
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -275,7 +280,10 @@ class Admin extends Component {
     // Helper method used to update textfield in edit item modal
     updateField(e, field) {
         let updateField = this.state.getItemInfo;
-        updateField[field] = e.target.value;
+
+        if(e.target.value == "") delete updateField[e.target.name];
+        else updateField[field] = e.target.value;
+
         this.setState({ getItemInfo: updateField });
     }
 
@@ -300,17 +308,17 @@ class Admin extends Component {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <form onSubmit={(e) => this.getItems()}>
+                    <form>
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input name="name" type="text" class="form-control" id="editName" placeholder="Enter name" required 
+                            <input name="name" type="text" class="form-control" placeholder="Enter name" required 
                                 value={this.state.getItemInfo.name} onChange={(e) => this.updateField(e, 'name')}
                             />
                         </div>
                         
                         <div class="form-group">
                             <label for="name">Description</label>
-                            <input name="description" type="text" class="form-control" id="editDescription" placeholder="Enter description" required 
+                            <input name="description" type="text" class="form-control" placeholder="Enter description" required 
                                 value={this.state.getItemInfo.description} onChange={(e) => this.updateField(e, 'description')}
                             />
                         </div>
@@ -318,7 +326,7 @@ class Admin extends Component {
                         <label for="description">Category</label>
 
                         <div class="form-check">
-                            <input class="form-check-input" name="category" type="radio" name="category" id="categoryAppetizers" value="Appetizers" required 
+                            <input class="form-check-input" name="category" type="radio" name="category" value="Appetizers" required 
                                 checked={this.state.getItemInfo.category === "Appetizers"} onChange={(e) => this.updateField(e, 'category')}
                             />
                             <label class="form-check-label" for="Appetizers">
@@ -327,7 +335,7 @@ class Admin extends Component {
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" name="category" type="radio" name="category" id="categoryMainDishes" value="Main Dishes" required 
+                            <input class="form-check-input" name="category" type="radio" name="category" value="Main Dishes" required 
                                 checked={this.state.getItemInfo.category === "Main Dishes"} onChange={(e) => this.updateField(e, 'category')}
                             />
                             <label class="form-check-label" for="Main Dishes">
@@ -336,7 +344,7 @@ class Admin extends Component {
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" name="category" type="radio" name="category" id="categorySides" value="Sides" required 
+                            <input class="form-check-input" name="category" type="radio" name="category" value="Sides" required 
                                 checked={this.state.getItemInfo.category === "Sides"} onChange={(e) => this.updateField(e, 'category')}
                             />
                             <label class="form-check-label" for="Sides">
@@ -345,7 +353,7 @@ class Admin extends Component {
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" name="category" type="radio" name="category" id="categoryDrinks" value="Drinks" required 
+                            <input class="form-check-input" name="category" type="radio" name="category" value="Drinks" required 
                                 checked={this.state.getItemInfo.category === "Drinks"} onChange={(e) => this.updateField(e, 'category')}
                             />
                             <label class="form-check-label" for="Drinks">
@@ -355,34 +363,34 @@ class Admin extends Component {
                         
                         <div class="form-group">
                             <label for="price">Price</label>
-                            <input name="price" type="number" step="0.01" class="form-control" id="editPrice" placeholder="Enter price" required 
+                            <input name="price" type="number" step="0.01" class="form-control" placeholder="Enter price" required 
                                 value={this.state.getItemInfo.price} onChange={(e) => this.updateField(e, 'price')}
                             />
                         </div>
 
                         <div class="form-group">
                             <label for="image">Image Link</label>
-                            <input name="image" type="text" class="form-control" id="editImage" placeholder="Enter link" required 
+                            <input name="image" type="text" class="form-control" placeholder="Enter link" required 
                                 value={this.state.getItemInfo.image} onChange={(e) => this.updateField(e, 'image')}
                             />
                         </div>
                         
                         <div class="form-group">
                             <label for="cuisine">Cuisine</label>
-                            <input name="cuisine" type="text" class="form-control" id="editCuisine" placeholder="Enter cuisine" required 
+                            <input name="cuisine" type="text" class="form-control" placeholder="Enter cuisine" required 
                                 value={this.state.getItemInfo.cuisine} onChange={(e) => this.updateField(e, 'cuisine')}
                             />
                         </div>
                         
                         <div class="form-group">
                             <label for="ingredients">Ingredients</label>
-                            <input name="ingredients" type="text" class="form-control" id="editIngredients" placeholder="Enter ingredients, separated by commas" required 
+                            <input name="ingredients" type="text" class="form-control" placeholder="Enter ingredients, separated by commas" required 
                                 value={this.state.getItemInfo.ingredients.toString().replace(',', ', ')} onChange={(e) => this.updateField(e, 'ingredients')}
                             />
                         </div>
 
                         <div class="form-check form-check-inline">
-                            <input name="vegan" class="form-check-input" type="checkbox" value="" id="editVegan" 
+                            <input name="vegan" class="form-check-input" type="checkbox"
                                 checked={this.state.getItemInfo.vegan} onChange={(e) => this.updateFieldCheckbox(!this.state.getItemInfo.vegan, 'vegan')}
                             />
                             <label class="form-check-label" for="defaultCheck1">
@@ -408,10 +416,10 @@ class Admin extends Component {
                             </label>
                         </div>   
                         <Modal.Footer>
-                            <Button variant="secondary" type="submit" onClick={() => this.setState({ renderItemDetails: false }) }>
+                            <Button variant="secondary" onClick={() => this.setState({ renderItemDetails: false }) }>
                                 Close
                             </Button>
-                            <Button variant="primary" onClick={() => this.saveItemChanges()}>
+                            <Button variant="primary" type="submit" onClick={(e) => this.saveItemChanges(e)}>
                                 Save Changes
                             </Button>
                         </Modal.Footer>
@@ -452,7 +460,7 @@ class Admin extends Component {
     //To their menu, and updates instantly
     addItemModal() {
         return (
-            <Modal show={this.state.renderAddItems} onHide={() => this.setState({renderAddItems: false})} >
+            <Modal show={this.state.renderAddItems} onHide={() => this.setState({ renderAddItems: false })} >
                 <Modal.Header closeButton>
                     <Modal.Title>Add Menu Item</Modal.Title>
                 </Modal.Header>
@@ -576,7 +584,7 @@ class Admin extends Component {
                             })}>
                                 Close
                             </Button>
-                            <Button variant="primary" type="submit" onClick={() => this.saveItemChanges()}>
+                            <Button variant="primary" type="submit" onClick={() => this.insertItem()}>
                                 Save Changes
                             </Button>
                         </Modal.Footer>
