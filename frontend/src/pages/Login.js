@@ -51,7 +51,6 @@ class Login extends Component {
                   This is the Login Page.
               </div> 
               <p>{this.state.isFetching ? 'Fetching message...' : this.state.response}</p>
-
           </div>
 
       )
