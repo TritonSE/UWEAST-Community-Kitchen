@@ -25,13 +25,13 @@ router.post(
         secret,
       };
       // validate secrets
-      if (secret !== config.auth.regiter_secret) {
+      if (secret !== config.auth.register_secret) {
         return res.status(400).json({ errors: [{ msg: "User error" }] });
       }
       // try to create user
       const addSuccesful = await addNewUser(user);
       if (!addSuccesful) {
-        return res.status(400).json({ errors: [{ msg: "User error" }] });
+        return res.status(400).json({ errors: [{ msg: "duplicate user" }] });
       } else {
         // created user, return email and token
         const payload = {
