@@ -1,15 +1,13 @@
 const { Email } = require("../models/email");
-const config = require("../../config");
 
 // if email doesn't exist return err otherwise return email
 async function addnewEmail(raw_email) {
-  let email = await Email.findOne({ email: raw_email.email }).exec();
-  if (email) {
-    return false;
-  } else {
+  try {
     email = new Email(raw_email);
     await email.save();
     return email;
+  } catch (err) {
+    return false;
   }
 }
 
