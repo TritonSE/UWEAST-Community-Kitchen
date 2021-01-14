@@ -178,14 +178,14 @@ class Admin extends Component {
         this.getItems();
     }
 
-    //The modal that renders the items in the database. Allows for admin to
+    //This modal will render when the user clicks on "feature" button
     //Determine the items to be listed as "featured"
     featuredItemModal() {
         //List of categories
         const featuredCategories = ["Appetizers", "Main Dishes", "Sides", "Drinks"];
 
         return (
-            <Modal show={this.state.renderFeaturedItems} onHide={() => this.setState({renderFeaturedItems: false})} >
+            <Modal show={this.state.renderFeaturedItems} onHide={() => this.setState({renderFeaturedItems: false})} backdrop='static'>
                 <Modal.Header closeButton>
                     <Modal.Title>Featured Menu Item</Modal.Title>
                 </Modal.Header>
@@ -239,7 +239,7 @@ class Admin extends Component {
         const featuredCategories = ["Appetizers", "Main Dishes", "Sides", "Drinks"];
 
         return (
-            <Modal show={this.state.renderEditItems} onHide={() => this.setState({renderEditItems: false})} >
+            <Modal show={this.state.renderEditItems} onHide={() => this.setState({renderEditItems: false})} backdrop='static'>
                 <Modal.Header closeButton>
                     <Modal.Title>Edit item</Modal.Title>
                 </Modal.Header>
@@ -280,7 +280,8 @@ class Admin extends Component {
     // Helper method used to update textfield in edit item modal
     updateField(e, field) {
         let updateField = this.state.getItemInfo;
-
+        
+        //Delete the object so the form wil check for empty inputs
         if(e.target.value == "") delete updateField[e.target.name];
         else updateField[field] = e.target.value;
 
@@ -294,7 +295,7 @@ class Admin extends Component {
         this.setState({ getItemInfo: updateField });
     }
 
-    //This will render the modal that displays the description of the food item
+    //This will render when the user clicks on an item inside the "edit" modal
     //Allows the admin to edit any field and update accordingly
     editItemDetails() {
         //Undefined when page initially renders, returns an error
@@ -302,7 +303,7 @@ class Admin extends Component {
         if(this.state.getItemInfo === undefined) return; 
 
         return (
-            <Modal show={this.state.renderItemDetails} onHide={() => this.setState({renderItemDetails: false})} >
+            <Modal show={this.state.renderItemDetails} onHide={() => this.setState({renderItemDetails: false})} backdrop='static'>
                 <Modal.Header closeButton>
                     <Modal.Title></Modal.Title>
                 </Modal.Header>
@@ -416,7 +417,11 @@ class Admin extends Component {
                             </label>
                         </div>   
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={() => this.setState({ renderItemDetails: false }) }>
+                            <Button variant="secondary" onClick={() => {
+                                this.setState({ renderItemDetails: false, renderEditItems: true });
+                                //This call will allow the changes to not take effect if the user closes the modal
+                                this.getItems();
+                            } }>
                                 Close
                             </Button>
                             <Button variant="primary" type="submit" onClick={(e) => this.saveItemChanges(e)}>
@@ -456,11 +461,11 @@ class Admin extends Component {
         });
     }
 
-    //Add item to the database. Allows the admin user to add any type of new item
-    //To their menu, and updates instantly
+    //This modal will render when the user clicks on the "add" button
+    //Admin user can add new item to the database through here
     addItemModal() {
         return (
-            <Modal show={this.state.renderAddItems} onHide={() => this.setState({ renderAddItems: false })} >
+            <Modal show={this.state.renderAddItems} onHide={() => this.setState({ renderAddItems: false })} backdrop='static'>
                 <Modal.Header closeButton>
                     <Modal.Title>Add Menu Item</Modal.Title>
                 </Modal.Header>
@@ -594,12 +599,13 @@ class Admin extends Component {
         )
     }
 
-    //Deletes the item from the database
+    //This modal renders when the user clicks on the "delete" button
+    //Allows the admin user to delete an item from the database
     deleteItemModal() {
         const featuredCategories = ["Appetizers", "Main Dishes", "Sides", "Drinks"];
 
         return (
-            <Modal show={this.state.renderDeleteItems} onHide={() => this.setState({renderDeleteItems: false})} >
+            <Modal show={this.state.renderDeleteItems} onHide={() => this.setState({renderDeleteItems: false})} backdrop='static'>
                 <Modal.Header closeButton>
                     <Modal.Title>Edit item</Modal.Title>
                 </Modal.Header>
@@ -635,7 +641,10 @@ class Admin extends Component {
     render() {
       return (
           <div>
-              <Navbar/>
+            {/* The navbar on top of the page */}
+              <Navbar />
+
+              {/* This is the contents on the admin page */}
               <div class="admin-section">
                     <div class="col-12">
                         <h2 class="admin-title">Admin Panel</h2>
@@ -644,11 +653,11 @@ class Admin extends Component {
 
                     <br />
 
-                    <div class="col-12">
+                    {/* <div class="col-12">
                         <h2 class="admin-title">Orders</h2>
                         <p>View placed orders and mark them as fulfilled.</p>
                         <a class="btn btn-primary" href="/orders" role="button">Orders</a>
-                    </div>
+                    </div> */}
 
                     <br />
 
@@ -674,6 +683,8 @@ class Admin extends Component {
                         <Button onClick={() => this.setState({renderFeaturedItems: true})} >Edit</Button>
                     </div>
                 </div>       
+
+                {/* These are the modals used on the page. They will conditionally render */}
                 {this.featuredItemModal()}
                 {this.editItemModal()}
                 {this.addItemModal()}
