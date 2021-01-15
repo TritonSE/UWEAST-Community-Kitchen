@@ -41,6 +41,7 @@ app.use('/email', require('./routes/email'));
 app.use('/item', require('./routes/item'));
 app.use('/jwt', require('./routes/jwt'));
 app.use('/cart', require('./routes/cart'));
+app.use('/paypal', require('./routes/paypal'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

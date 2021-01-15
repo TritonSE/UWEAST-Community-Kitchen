@@ -16,4 +16,8 @@ module.exports = {
     email: process.env.UWEAST_USER_EMAIL || "",
     pass: process.env.UWEAST_USER_PASSWORD || ""
   },
+  paypal: {
+    PAYPAL_CLIENT_ID: process.env.PAYPAL_CLIENT_ID || "",
+    PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET || ""
+  }
 };
