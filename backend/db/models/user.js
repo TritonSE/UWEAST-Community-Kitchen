@@ -4,8 +4,13 @@ const mongoose = require("mongoose");
 const SALT_WORK_FACTOR = 10;
 
 const userSchema = new mongoose.Schema({
+<<<<<<< HEAD
   email: { type: String, unique: true },
   password: { type: String },
+=======
+  email: { type: String, unique: true, required: true },
+  password: { type: String, required: true },
+>>>>>>> 15dcb27b38b2d832265acc57fe8becc366bed772
   // firstname: String,
   // lastname: String,
 });
