@@ -1,4 +1,5 @@
 import React from 'react'
+import { PayPalButton } from "react-paypal-button-v2";
 
 const config = require('../config');
 
@@ -73,7 +74,7 @@ export default function PayPal(props) {
             shipping_preference: 'NO_SHIPPING',
         },
     }
-    async function createOrder () {
+    const createOrder = () => {
         console.log("Creating order...");
         return fetch(`${BACKEND_URL}createPayment`, {
             method: "POST",
@@ -114,32 +115,13 @@ export default function PayPal(props) {
             console.log(details);
         });
     }
-     // To show PayPal buttons once the component loads
-    React.useEffect(() => {
-        window.paypal
-        .Buttons({
-            createOrder: async (data, actions) => {
-                await createOrder();
-            },
-            onApprove: async (data, actions) => {
-                // return actions.order.capture().then(function(details) {
-                //     // Details here includes payer name, phone number, and email.
-                //     // Give this info to the backend so they can send another email!
-                //     alert('Transaction completed by ' + details.payer.name.given_name + '!');
-                // });
-                alert(data);
-                await onAuthorize(data);
-            },
-            onError: (err) => {
-                console.error(err);
-            },
-        })
-        .render(paypalRef.current);
-    }, [cart]);
 
     return (
         <div>
-            <div ref={paypalRef}/>
+            <PayPalButton
+                createOrder={createOrder}
+                onApprove={onAuthorize}
+            ></PayPalButton>
         </div>
     )
 }
