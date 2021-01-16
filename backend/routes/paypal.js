@@ -17,9 +17,7 @@ router.post('/createPayment', async (req, res) => {
     // req = request
     // res = response
     // next = middleware
-
-
-    const order = req.body;
+    const order = JSON.stringify(req.body);
     console.log(order);
     // call paypal with order object to set up transaction. 
     try{
@@ -37,11 +35,12 @@ router.post('/createPayment', async (req, res) => {
             orderID
         };
         res.json(resJson);
+        return res.send(200);
+
     } catch (err) {
         console.err(err);
         return res.send(500);
     }
-    
 });
 router.post('/executePayment', async (req, res, next) => {
     const orderID = req.body.orderID;
