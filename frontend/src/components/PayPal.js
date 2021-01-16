@@ -1,5 +1,5 @@
 import React from 'react'
-import { PayPalButton } from "react-paypal-button-v2";
+const paypal = require("@paypal/checkout-server-sdk");
 
 const config = require('../config');
 
@@ -28,7 +28,11 @@ export default function PayPal(props) {
     const paypalRef = React.useRef();
     const paypalOrderObject = {
         intent: "CAPTURE",
-                
+        application_context: {
+            shipping_preference: 'NO_SHIPPING',
+            return_url: "https://www.example.com",
+            cancel_url: "https://www.example.com"
+        },
         purchase_units: [{
             description: "Food order from UWEAST Kitchen",
             // Deals with pricing of the cart
@@ -70,33 +74,31 @@ export default function PayPal(props) {
             })
         }],
         shipping_type: 'PICKUP',
-        application_context: {
-            shipping_preference: 'NO_SHIPPING',
-        },
     }
-    const createOrder = () => {
+    const createOrder = async () => {
         console.log("Creating order...");
-        return fetch(`${BACKEND_URL}createPayment`, {
+        return fetch(`${BACKEND_URL}paypal/createPayment`, {
             method: "POST",
-            body: paypalOrderObject,
+            body: JSON.stringify(paypalOrderObject),
             headers: {
                 "content-type": "application/json"
             }, 
         }).then((res) => {
-            return res.id;
+            if(res.ok) {
+                return res.json();
+            }
+        }).then((data) => {
+            console.log("finished creating order")
+            return data.orderID; // make sure to use the same key name for order ID on the client and server
         })
         .catch((err) => {
             console.log(err);
             alert("Create order Error");
-        })
-        .then((data) => {
-            console.log(data);
-            return data.orderID; // make sure to use the same key name for order ID on the client and server
         });
     }
-    const onAuthorize = (data) => {
+    const onApprove = async (data) => {
         console.log("Authorizing order...");
-        return fetch(`${BACKEND_URL}executePayment`, {
+        return fetch(`${BACKEND_URL}paypal/executePayment`, {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -106,6 +108,7 @@ export default function PayPal(props) {
             }),
         }).then((res) => {
            // handle show completion
+           console.log("ORDER COMPLETE!");
            return res.json();
         })
         .catch(() => {
@@ -116,12 +119,30 @@ export default function PayPal(props) {
         });
     }
 
+     // To show PayPal buttons once the component loads
+    React.useEffect(() => {
+        window.paypal
+        .Buttons({
+            createOrder: async(data, actions) => {
+                return actions.order.create(paypalOrderObject);
+            },
+            onApprove: async (data, actions) => {
+                return actions.order.capture().then(function(details) {
+                    // Details here includes payer name, phone number, and email.
+                    // Give this info to the backend so they can send another email!
+                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                });
+            },
+            onError: (err) => {
+                console.error(err);
+            },
+        })
+        .render(paypalRef.current);
+    }, [cart]);
+
     return (
         <div>
-            <PayPalButton
-                createOrder={createOrder}
-                onApprove={onAuthorize}
-            ></PayPalButton>
+            <div ref={paypalRef}/>
         </div>
     )
 }

@@ -40,7 +40,7 @@ app.use('/autoEmails', require('./routes/autoEmails'));
 app.use('/email', require('./routes/email'));
 app.use('/item', require('./routes/item'));
 app.use('/jwt', require('./routes/jwt'));
-app.use('/getPayment', require('./routes/paypal'));
+app.use('/paypal', require('./routes/paypal'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -50,7 +50,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  console.log(err);
+  console.log(JSON.stringify(err));
   res.status(err.status || 500);
   res.json({message: err.message});
 });
