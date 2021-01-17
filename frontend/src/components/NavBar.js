@@ -50,6 +50,10 @@ class NavBar extends Component {
                             <li class="nav-item">
                                 <a class="nav-link" href="/admin">Admin</a>
                             </li>
+                            {/* Orders Page */}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/orders">Orders</a>
+                            </li>
                             {/* Login Page */}
                             <li class="nav-item">
                                 <a class="nav-link" href="/login">Login</a>
