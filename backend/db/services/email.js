@@ -27,9 +27,9 @@ async function changeEmail(raw_email) {
 // }
 
 // find all emails
-// async function findAllEmails() {
-//   return Email.find({}).exec();
-// }
+async function findAllEmails() {
+  return Email.find({}).exec();
+}
 
 // delete email and return true if delete
 // async function deleteOneEmail(incomingEmail) {
@@ -44,7 +44,7 @@ async function changeEmail(raw_email) {
 
 module.exports = {
   // addnewEmail,
-  // findAllEmails,
+  findAllEmails,
   // deleteOneEmail,
   changeEmail,
 };
