@@ -23,7 +23,8 @@ class Admin extends Component {
                 vegetarian: false,
                 glutenFree: false
             },
-            featureList: {}
+            featureList: {},
+            deleteItemsArray: []
         }
 
         //Modals
@@ -198,8 +199,8 @@ class Admin extends Component {
                                     {this.state.getItemsArray.map((item, ind) => {
                                         if(item.category === category) {
                                             return (
-                                                <div>
-                                                    <input name="menu-item" class="form-check-input" type="checkbox" checked={this.state.featureList[item._id]}
+                                                <div className="featured-item-checkbox">
+                                                    <input name="menu-item" className="form-check-input" type="checkbox" checked={this.state.featureList[item._id]}
                                                             onChange={(e) => {
                                                                 const getList = this.state.featureList;
                                                                 getList[item._id] ? delete getList[item._id] : getList[item._id] = item._id;
@@ -386,7 +387,8 @@ class Admin extends Component {
                         <div class="form-group">
                             <label for="ingredients">Ingredients</label>
                             <input name="ingredients" type="text" class="form-control" placeholder="Enter ingredients, separated by commas" required 
-                                value={this.state.getItemInfo.ingredients.toString().replace(',', ', ')} onChange={(e) => this.updateField(e, 'ingredients')}
+                                value={this.state.getItemInfo.ingredients ? this.state.getItemInfo.ingredients.toString().replace(',', ', ') : ''} 
+                                onChange={(e) => this.updateField(e, 'ingredients')}
                             />
                         </div>
 
@@ -607,7 +609,7 @@ class Admin extends Component {
         return (
             <Modal show={this.state.renderDeleteItems} onHide={() => this.setState({renderDeleteItems: false})} backdrop='static'>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit item</Modal.Title>
+                    <Modal.Title>Delete items</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
@@ -619,7 +621,23 @@ class Admin extends Component {
                                     {this.state.getItemsArray.map((item, ind) => {
                                         if(item.category === category) {
                                             return (
-                                                <button onClick={() => this.deleteItem(item)}>Delete {item.name}</button>
+                                                <div>
+                                                    <input type="checkbox" checked={this.state.deleteItemsArray[item._id]} 
+                                                        onChange={(e) => {
+                                                            let itemList = this.state.deleteItemsArray;
+                                                            if(itemList.filter(e => e._id === item._id).length > 0) {
+                                                                itemList = itemList.filter(e => e._id !== item._id)
+                                                            } else {
+                                                                itemList.push(item);
+                                                            }
+
+                                                            this.setState({
+                                                                deleteItemsArray: itemList
+                                                            });
+                                                        }}
+                                                    />
+                                                    <label>Delete {item.name}</label>
+                                                </div>
                                             )
                                         }
                                     })}
@@ -630,8 +648,20 @@ class Admin extends Component {
                 </Modal.Body>
                 
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => this.setState({renderDeleteItems: false})}>
-                        Save Changes
+                    <Button variant="primary" onClick={() => {
+                        const getList = this.state.deleteItemsArray;
+                        const length = getList.length;
+                        for(let i = 0; i < length; i++ ) { 
+                            this.deleteItem(this.state.deleteItemsArray[i]); 
+                        }
+
+                        this.setState({ 
+                            renderDeleteItems: false,
+                            deleteItemsArray: []
+                        })
+                    }}
+                        disabled={this.state.deleteItemsArray.length === 0}>
+                        Delete Item(s)
                     </Button>
                 </Modal.Footer>
             </Modal>
