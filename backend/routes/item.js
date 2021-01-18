@@ -7,7 +7,7 @@ function buildItemJSON(body) {
     body.vegan = body.vegan !== undefined;
     body.vegetarian = body.vegetarian !== undefined;
     body.glutenFree = body.glutenFree !== undefined;
-    body.ingredients = body.ingredients.split(', ');
+    // body.ingredients = body.ingredients.split(', ');
     body.price = parseFloat(body.price);
   
     return body;
@@ -32,12 +32,12 @@ function buildItemJSON(body) {
   });
   
   router.post('/remove', (req, res, next) => {
-    deleteItem(req.body.id);
+    deleteItem(req.body._id);
     res.sendStatus(200);
   });
   
   router.post('/edit', (req, res, next) => {
-    editItem(req.body.id, buildItemJSON(req.body));
+    editItem(req.body._id, buildItemJSON(req.body));
     res.sendStatus(200);
   });
   
