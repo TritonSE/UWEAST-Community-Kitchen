@@ -1,67 +1,81 @@
-import React, { Component} from 'react';
+import React, {useState} from 'react';
+import { useHistory } from "react-router-dom";
 import '../css/NavBar.css';
+import {isAuthorized, removeJWT} from '../util/auth.js';
 
-class NavBar extends Component {
+export default function NavBar (props) {
 
+    {/* store class names of navlist as a state to toggle display when in mobile */}
+    const [navListClass, setNavListClass] = useState("nav-list");
+    const history = useHistory("react-dom-router");
 
-    render (){
+    {/* stores class names to toggle whether content is shown */}
+    var adminContentClass;
+    var loginButtonClass;
 
-      return (
-
-        <html>
-            <head>
-                {/* NavBar Formatting for aesthetics*/}
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
-        
-        
-                <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-            </head>
-            <body>
-                
-                <nav class="navbar navbar-dark bg-dark navbar-toggleable-md navbar-expand-md" id="commRollover">
-                    {/* Left Hand Side of NavBar - Title & Image linked to Menu Page */}
-                    <a class="navbar-brand" href="/">
-                        <img src="" alt="UWEAST"/>
-                    </a>
-        
-                    {/* Triggers on Collapse - Hamburger Icon replaces pages */}
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-        
-                    {/* Right Hand Side of NavBar - Linked Pages (based off of Router paths in App.js) */}
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav">
-                            {/* Menu Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/">Menu</a>
-                            </li>
-                            {/* About Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/about">About</a>
-                            </li>
-                            {/* Contact Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/contact">Contact</a>
-                            </li>
-                            {/* Admin Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin">Admin</a>
-                            </li>
-                            {/* Login Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/login">Login</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </body>
-        </html>
-
-      )
+    {/* removes login token and redirects to menu page */}
+    function logout() {
+        removeJWT();
+        history.push("/");
+        history.go(0);
     }
-  }
-  
-  export default NavBar;
+
+    {/* Handles toggling of hamburger menu by changing classes for css */}
+    function toggleMobileNav() {
+        if(navListClass === "nav-list") {
+            setNavListClass("nav-list nav-shown");
+        } else {
+            setNavListClass("nav-list");
+        }
+    }
+
+    {/* Hides admin content (admin page + logout) or login button depending on whether user is logged in */}
+    if(isAuthorized()) {
+        adminContentClass = "nav-item";
+        loginButtonClass = "nav-item hidden";
+    } else {
+        adminContentClass = "nav-item hidden";
+        loginButtonClass = "nav-item";
+    }
+
+    return (
+        <div class="navbar">
+            {/* Left Hand Side of NavBar - Title & Image linked to Menu Page */}
+            <div class="navbar-logo">
+                <img src="" alt="UWEAST Logo"></img>
+            </div>
+            <div class="navbar-nav">
+                {/* Triggers on Collapse - Hamburger Icon replaces pages */}
+                <a onClick={toggleMobileNav} class="nav-toggler" />
+
+                {/* Right Hand Side of NavBar - Linked Pages (based off of Router paths in App.js) */}
+                <ul class={navListClass}>
+                    {/* Menu Page */}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Menu</a>
+                    </li>
+                    {/* Contact Page */}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                    {/* About Page */}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    {/* Admin Page - only visible when isAuthorized()*/}
+                    <li class={adminContentClass}>
+                        <a class="nav-link" href="/admin">Admin</a>
+                    </li>
+                    {/* Logout Button - starts logout operation, only visible when isAuthorized() */}
+                    <li class={adminContentClass}>
+                        <a class="nav-link" style={{cursor: "pointer"}} onClick={logout}>Logout</a>
+                    </li>
+                    {/* Login Page - only visible when not isAuthorized()*/}
+                    <li class={loginButtonClass}>
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    )
+}
