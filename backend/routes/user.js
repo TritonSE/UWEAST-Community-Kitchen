@@ -26,12 +26,12 @@ router.post(
       };
       // validate secrets
       if (secret !== config.auth.register_secret) {
-        return res.status(400).json({ errors: [{ msg: "User error" }] });
+        return res.status(401).json({ errors: [{ msg: "User Error" }] });
       }
       // try to create user
       const addSuccesful = await addNewUser(user);
       if (!addSuccesful) {
-        return res.status(400).json({ errors: [{ msg: "duplicate user" }] });
+        return res.status(409).json({ errors: [{ msg: "Duplicate User" }] });
       } else {
         // created user, return email and token
         const payload = {
@@ -44,7 +44,7 @@ router.post(
       }
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server err");
+      res.status(500).send("Server Error");
     }
   }
 );
@@ -65,7 +65,7 @@ router.post(
       const user = await findOneUser(email);
       if (!user) {
         return res
-          .status(400)
+          .status(401)
           .json({ errors: [{ msg: "Invalid Credentials" }] });
       }
       // compare user password with passed in value
@@ -73,7 +73,7 @@ router.post(
         if (err) throw err;
         if (!isMatch) {
           return res
-            .status(400)
+            .status(401)
             .json({ errors: [{ msg: "Invalid Credentials" }] });
         }
         // matched user, return email and token
@@ -87,7 +87,7 @@ router.post(
       });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server err");
+      res.status(500).send("Server error");
     }
   }
 );

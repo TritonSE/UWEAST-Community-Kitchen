@@ -35,12 +35,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Login() {
+export default function Register() {
   const classes = useStyles();
   const history = useHistory();
   const [state, setState] = React.useState({
     email: '',
     password: '',
+    secret: '',
     snack: {
       message: '',
       open: false
@@ -55,13 +56,15 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setState({ ...state, form_disabled: true });
+
     const submission = {
       email: state.email,
-      password: state.password
+      password: state.password,
+      secret: state.secret
     };
 
-    //Check if either field is empty
-    if (state.email === '' || state.password === ''){
+    //Check if any field is empty
+    if (state.email === '' || state.password === '' || state.secret === ''){
         setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
         return;
     }
@@ -71,28 +74,32 @@ export default function Login() {
       return;
     }
     try {
-        //Attempt to login with given credentials 
-      const response = await fetch(`${BACKEND_URL}user/login`, {
+        //Attempt to register with given credentials 
+      const response = await fetch(`${BACKEND_URL}user/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submission)
       });
 
-      //Successful Login
+      //Successful Registration
       if (response.ok) {
         const json = await response.json();
         setJWT(json.token);
         setUser(json.email);
         history.push("/admin");
       }
-      //Invalid Credentials
+      //Invalid Credentials 
       else if (response.status === 401) {
-        setState({...state, form_disabled: false, snack: {message: 'Email or password not recognized.', open: true}});
+        setState({...state, form_disabled: false, snack: {message: 'Could not register account: Invalid Secret Key!', open: true}});
+      }
+       //Duplicate User 
+      else if (response.status === 409) {
+        setState({...state, form_disabled: false, snack: {message: 'Could not register account: Email already in use!', open: true}});
       }
       //Any other server response
       else {
         const text = await response.text();
-        setState({...state, form_disabled: false, snack: {message: `Could not log in: ${text}`, open: true}});
+        setState({...state, form_disabled: false, snack: {message: `Could not register account: ${text}`, open: true}});
       }
     } 
     //General Error
@@ -108,7 +115,6 @@ export default function Login() {
     setState({...state, snack: {...state.snack, open: false}});
   };
 
-  //If user is already logged in, then redirect to Admin Page
   return isAuthenticated() ? <Redirect to="/admin"/> : ( 
       <div>
           <Navbar/>
@@ -120,15 +126,15 @@ export default function Login() {
                 >
                 <Grid item md={6} xs={12}>
                     <Typography variant="h4" className={classes.title}>
-                    Login
+                    Register an Account
                     </Typography>
                     <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
                     <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
-                    {/* <Link to="forgot-password"><Typography>Forgot your password?</Typography></Link> */}
-                     <Link to="register"><Typography>Register An Account</Typography></Link>
+                    <TextField label='Secret Key' variant='outlined' type='password' onChange={handleChange('secret')}/>
+                    <Link to="login"><Typography>Already have an account? Sign-In</Typography></Link>
                     <div className={classes.centered}>
-                        <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Login</Button>
+                        <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Register</Button>
                     </div>
                     </form>
                 </Grid>   

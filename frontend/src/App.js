@@ -11,6 +11,7 @@ import About from './pages/About';
 import Admin from './pages/Admin';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -20,6 +21,10 @@ function App() {
         {/* Login Page */}
         <Route exact path="/login">
           <Login/>
+        </Route>
+        {/* Register Page */}
+        <Route exact path="/register">
+          <Register/>
         </Route>
         {/* About Page */}
         <Route exact path="/about">
