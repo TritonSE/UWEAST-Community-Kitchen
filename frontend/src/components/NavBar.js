@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import { useHistory } from "react-router-dom";
-import '../css/NavBar.css';
+import { Navbar, Nav } from 'react-bootstrap';
 import {isAuthorized, removeJWT} from '../util/auth.js';
+import '../css/NavBar.css';
+
 
 export default function NavBar (props) {
 
-    {/* store class names of navlist as a state to toggle display when in mobile */}
-    const [navListClass, setNavListClass] = useState("nav-list");
+    {/* history hook to redirect on logout */}
     const history = useHistory("react-dom-router");
 
     {/* stores class names to toggle whether content is shown */}
@@ -20,62 +21,53 @@ export default function NavBar (props) {
         history.go(0);
     }
 
-    {/* Handles toggling of hamburger menu by changing classes for css */}
-    function toggleMobileNav() {
-        if(navListClass === "nav-list") {
-            setNavListClass("nav-list nav-shown");
-        } else {
-            setNavListClass("nav-list");
-        }
-    }
-
     {/* Hides admin content (admin page + logout) or login button depending on whether user is logged in */}
     if(isAuthorized()) {
-        adminContentClass = "nav-item";
-        loginButtonClass = "nav-item hidden";
+        adminContentClass = "px-3";
+        loginButtonClass = "px-3 d-none";
     } else {
-        adminContentClass = "nav-item hidden";
-        loginButtonClass = "nav-item";
+        adminContentClass = "px-3 d-none";
+        loginButtonClass = "px-3";
     }
 
     return (
-        <div class="navbar">
-            {/* Left Hand Side of NavBar - Title & Image linked to Menu Page */}
-            <div class="navbar-logo">
-                <img src="" alt="UWEAST Logo"></img>
-            </div>
-            <div class="navbar-nav">
-                {/* Triggers on Collapse - Hamburger Icon replaces pages */}
-                <a onClick={toggleMobileNav} class="nav-toggler" />
+        <html>
+            <head>
+                {/* Bootstrap Resources */}
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+            </head>
+            <Navbar className="navbar-bg-color" collapseOnSelect expand="md" variant="dark">
+                {/* Left Hand Side of Navbar - Title & Image linked to Menu Page */}
+                <Navbar.Brand href="/">
+                    <img src="" className="d-inline-block align-top" alt="UWEAST Logo"/>
+                </Navbar.Brand>
 
-                {/* Right Hand Side of NavBar - Linked Pages (based off of Router paths in App.js) */}
-                <ul class={navListClass}>
-                    {/* Menu Page */}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Menu</a>
-                    </li>
-                    {/* Contact Page */}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact</a>
-                    </li>
-                    {/* About Page */}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
-                    {/* Admin Page - only visible when isAuthorized()*/}
-                    <li class={adminContentClass}>
-                        <a class="nav-link" href="/admin">Admin</a>
-                    </li>
-                    {/* Logout Button - starts logout operation, only visible when isAuthorized() */}
-                    <li class={adminContentClass}>
-                        <a class="nav-link" style={{cursor: "pointer"}} onClick={logout}>Logout</a>
-                    </li>
-                    {/* Login Page - only visible when not isAuthorized()*/}
-                    <li class={loginButtonClass}>
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+                {/* Triggers on Collapse - Hamburger Icon replaces pages */}
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+
+                {/* Right Hand Side of Navbar - Linked Pages (based off of Router paths in App.js) */}
+                <Navbar.Collapse id="responsive-navbar-nav">
+                    <Nav className="ml-auto">
+                        {/* Menu Page */}
+                        <Nav.Link className="px-3" href="/">Menu</Nav.Link>
+
+                        {/* Contact Page */}
+                        <Nav.Link className="px-3" href="/contact">Contact</Nav.Link>
+
+                        {/* About Page */}
+                        <Nav.Link className="px-3" href="/about">About</Nav.Link>
+
+                        {/* Admin Page - only visible when isAuthorized()*/}
+                        <Nav.Link className={adminContentClass} href="/admin">Admin</Nav.Link>
+
+                        {/* Logout Button - starts logout operation, only visible when isAuthorized() */}
+                        <Nav.Link className={adminContentClass} onClick={logout}>Logout</Nav.Link>
+
+                        {/* Login Page - only visible when not isAuthorized()*/}
+                        <Nav.Link className={loginButtonClass} href="/login">Login</Nav.Link>        
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        </html>
     )
 }
