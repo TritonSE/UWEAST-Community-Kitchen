@@ -1,4 +1,6 @@
 import React from 'react'
+import { useHistory } from "react-router-dom";
+
 // const paypal = require("@paypal/checkout-server-sdk");
 
 const config = require('../config');
@@ -8,6 +10,7 @@ const BACKEND_URL = config.backend.uri;
 //PayPal script is located in public/index.html (contains Client ID)
 export default function PayPal(props) {
     const { cart } = props;
+    let history = useHistory();
     // I assume the cart object looks like this:
     // {
     //     cart_total: "",
@@ -173,8 +176,17 @@ export default function PayPal(props) {
                     });
                 });
             },
+            onCancel: () => {
+                // If the user cancels their order, send them back to the cart summary
+                // The cart summary exists at the menu page
+                console.log("cancel");
+                history.push("/");
+            },
             onError: (err) => {
+                alert("An error occurred!");
                 console.error(err);
+                history.push("/");
+
             },
         })
         .render(paypalRef.current);
