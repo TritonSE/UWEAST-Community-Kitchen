@@ -19,17 +19,9 @@ const { addOrder, findOrders } = require("../db/services/order");
 //     isValidated,
 //   ],
 //   async (req, res, next) => {
-//     const { Customer, Pickup, Timestamps, PayPal, Order } = req.body;
 //     try {
 //       // try to add the order and respond with err msg or success
-//       orderJson = {
-//         Customer: Customer,
-//         Pickup: Pickup,
-//         Timestamps: Timestamps,
-//         PayPal: PayPal,
-//         Order: Order,
-//       };
-//       const orderSuccessful = await addOrder(orderJson);
+//       const orderSuccessful = await addOrder(req.body);
 //       if (!orderSuccessful) {
 //         return res
 //           .status(400)
@@ -46,7 +38,7 @@ const { addOrder, findOrders } = require("../db/services/order");
 
 // @body: startDate, endDate
 // returns emails between the given dates
-router.get(
+router.post(
   "/",
   [
     body("startDate").isISO8601().optional(),
