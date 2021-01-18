@@ -1,5 +1,5 @@
 import React from 'react'
-const paypal = require("@paypal/checkout-server-sdk");
+// const paypal = require("@paypal/checkout-server-sdk");
 
 const config = require('../config');
 
@@ -22,8 +22,8 @@ export default function PayPal(props) {
     //             individual_price: "",
     //             individual_tax: "",
     //         },
-
-    //     ]
+    //     ],
+    //     pickup_date: ""
     // }
     const paypalRef = React.useRef();
     const paypalOrderObject = {
@@ -75,7 +75,10 @@ export default function PayPal(props) {
         }],
         shipping_type: 'PICKUP',
     }
-    const createOrder = async () => {
+    // THE FOLLOWING TWO METHODS ARE NOT USED. THEY WERE CREATED FOR
+    // SERVER SIDE PAYMENT INTEGRATION, BUT THIS ISN'T BEST PRACTICE,
+    // SO IT WAS NOT PURSUED. THEREFORE THESE METHODS ARE COMMENTED OUT.
+    /* const createOrder = async () => {
         console.log("Creating order...");
         return fetch(`${BACKEND_URL}paypal/createPayment`, {
             method: "POST",
@@ -117,7 +120,7 @@ export default function PayPal(props) {
             alert("Successful order!");
             console.log(details);
         });
-    }
+    } */
 
      // To show PayPal buttons once the component loads
     React.useEffect(() => {
@@ -129,8 +132,45 @@ export default function PayPal(props) {
             onApprove: async (data, actions) => {
                 return actions.order.capture().then(function(details) {
                     // Details here includes payer name, phone number, and email.
-                    // Give this info to the backend so they can send another email!
-                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                    console.log(details);
+
+                    // create order object
+                    const orderObj = {
+                        "Customer": {
+                            "Name": details.payer.name.given_name + " " + details.payer.name.surname,
+                            "Email": details.payer.email_address,
+                            "Phone": details.payer.phone.phone_number
+                        },
+                        "Pickup": cart.pickup_date,
+                        "PayPal": {
+                            "Amount": cart.cart_total,
+                            "transactionID": details.id
+                        },
+                        "Order": 
+                        cart.items.map((item) => {
+                            return {
+                                "item": item.name,
+                                "quantity": item.quantity,
+                                "extra": [`${item.size} size`, ...item.addons].join(", "),
+                            }
+                        })
+                    }
+
+                    // signal email automation by calling the /autoEmails/automate route, 
+                    // this will automatically add the order to the database 
+                    return fetch(`${BACKEND_URL}autoEmails/automate`, {
+                        method: "POST",
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                        body: JSON.stringify(orderObj),
+                    }).then((res) => {
+                        // alert the user that their order was successful
+                        alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                    })
+                    .catch(() => {
+                        alert("Error");
+                    });
                 });
             },
             onError: (err) => {
