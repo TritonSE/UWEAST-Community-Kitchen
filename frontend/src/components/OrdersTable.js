@@ -8,30 +8,75 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-const columns = ["Name", "Company", "City", "State"];
-
-const data = [
- ["Joe James", "Test Corp", "Yonkers", "NY"],
- ["John Walsh", "Test Corp", "Hartford", "CT"],
- ["Bob Herm", "Test Corp", "Tampa", "FL"],
- ["James Houston", "Test Corp", "Dallas", "TX"],
-];
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
+const object = {
+    pickUpDate: "1/2/2021",
+    pickUpTime: "2:13 PM",
+    name: 'Amitesh',
+    email: '123@gmail.com',
+    phoneNumber: '858778069',
+    dateSubmitted: '1/1/2021',
+    amountPaid: '50.00',
+    itemInfo: [
+      {
+        name: 'curry',
+        quantity: '1',
+        description: '',
+        size: 'family'
+      }, 
+      {
+        name: 'rice',
+        quantity: '2',
+        description: 'brown rice, not white',
+        size: 'family'
+      }
+    ]
 }
 
-const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9)
+const object2 = {
+  pickUpDate: "1/3/2021",
+  pickUpTime: "2:13 PM",
+  name: 'Tom',
+  email: '4566@gmail.com',
+  phoneNumber: '858778069',
+  dateSubmitted: '1/1/2021',
+  amountPaid: '60.00',
+  itemInfo: [
+    {
+      name: 'Pasta',
+      quantity: '1',
+      description: '',
+      size: 'single'
+    }, 
+    {
+      name: 'bread',
+      quantity: '2',
+      description: 'No sauce please',
+      size: 'single'
+    }
+  ]
+}
+
+const columns = ["Pick up Date", "Pick Up Time", "Name", "Email", "Phone Number", "Submission Date", "Amount Paid"];
+
+const data = [
+  [object.pickUpDate, object.pickUpTime, object.name, object.email, object.phoneNumber, object.dateSubmitted, object.amountPaid],
+  [object2.pickUpDate, object2.pickUpTime, object2.name, object2.email, object2.phoneNumber, object2.dateSubmitted, object2.amountPaid],
+  [object.pickUpDate, object.pickUpTime, object.name, object.email, object.phoneNumber, object.dateSubmitted, object.amountPaid],
+  [object.pickUpDate, object.pickUpTime, object.name, object.email, object.phoneNumber, object.dateSubmitted, object.amountPaid],
 ];
 
+function createData(name, quantity, description, size) {
+  return { name, quantity, description, size };
+}
+
 const renderRow = (rowData, rowMeta) => {
-    console.log(rowData);
-    console.log(rowMeta);
+    const getIndex = rowMeta.rowIndex;
+    console.log(getIndex);
+
+    const rows = [
+      createData(object.itemInfo.name, object.itemInfo.quantity, object.itemInfo.description, object.itemInfo.size)
+    ]
+
     return (
         <React.Fragment>
           <tr>
@@ -40,45 +85,11 @@ const renderRow = (rowData, rowMeta) => {
                 <Table style={{ minWidth: "650" }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Dessert (100g serving)</TableCell>
-                      <TableCell align="right">Calories</TableCell>
-                      <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                      <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                      <TableCell align="right">Calories</TableCell>
-                      <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                      <TableCell align="right">Calories</TableCell>
-                      <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                      <TableCell align="right">Protein&nbsp;(g)</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map(row => (
-                      <TableRow key={row.name}>
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.fat}</TableCell>
-                        <TableCell align="right">{row.carbs}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </td>
-          </tr>
-          <tr>
-            <td colSpan={6}>
-              <TableContainer component={Paper}>
-                <Table style={{ minWidth: "650" }} aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Dessert (100g serving)</TableCell>
-                      <TableCell align="right">Calories</TableCell>
-                      <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                      <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                      <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                      <TableCell>Items purchases</TableCell>
+                      <TableCell align="right">Name</TableCell>
+                      <TableCell align="right">Quantity</TableCell>
+                      <TableCell align="right">Special Instructions</TableCell>
+                      <TableCell align="right">Size</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
