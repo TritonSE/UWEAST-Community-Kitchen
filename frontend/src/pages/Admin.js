@@ -13,7 +13,7 @@ class Admin extends Component {
       return (
 
           <div>
-              <Navbar/>
+              <Navbar currentPage="admin"/>
               <div style={{marginTop: "30px"}}>
                   This is the Admin Page.
               </div>           
