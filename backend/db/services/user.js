@@ -1,17 +1,21 @@
-const mongoose = require('mongoose');
-const mongodb = require('mongodb');
-const { User } = require('../models/user');
+const { User } = require("../models/user");
 
-//Example of how to write queries/updates: https://github.com/TritonSE/tse-recruitment-backend/blob/master/services/applications.js
-
-function addNewUser(user) {
-    User.create(user);
+// if user doesn't exist create and return user otherwise false
+async function addNewUser(raw_user) {
+  try {
+    user = new User(raw_user);
+    await user.save();
+    return user;
+  } catch (err) {
+    return false;
+  }
 }
 
-function findOneUser(candidateUsername) {
-    return User.findOne({ username: candidateUsername }).exec();
+async function findOneUser(incomingEmail) {
+  return User.findOne({ email: incomingEmail }).exec();
 }
 
-module.exports = { 
+module.exports = {
   addNewUser,
-  findOneUser};
+  findOneUser,
+};
