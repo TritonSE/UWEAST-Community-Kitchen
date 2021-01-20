@@ -7,7 +7,7 @@ const { addOrder } = require('../db/services/order');
 
 const router = express.Router();
 
-//Define any needed helper function here 
+//transport for nodemailer
 const transporter = config.uweast.user === "" ? null : nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
@@ -21,6 +21,7 @@ const mail = config.uweast.user === "" ? null : new Email({
   preview: false
 });
 
+//sends email using given template and to to_email with req.body
 async function sendEmail(template, to_email, req, res) {
   if (mail != null) {
     await mail.send({
@@ -47,19 +48,26 @@ async function sendEmail(template, to_email, req, res) {
 router.post('/automate', async (req, res, next) => {
   // Assume req.body looks like this:
   // {
-  //   "email": "",
-  //   "name": "",
-  //   "phone": "",
-  //   "date": Date,
-  //   "order": [
+  //   "Customer": {
+  //     "Name": "",
+  //     "Email": "",
+  //     "Phone": ""
+  //   },
+  //   "Pickup": Date,
+  //   "Paypal": {
+  //     "Amount": "0.04",
+  //     "transactionID": ""
+  //   },
+  //   "Order": [
   //     {
-  //       "name": "",
+  //       "item": "",
   //       "quantity": Number,
-  //       "description": ""
+  //       "extra": [""]
   //     }
   //   ]
   // }
 
+  //add order in request body to database
   try {
     const order = await addOrder(req.body);
     if (!order) {
@@ -72,6 +80,7 @@ router.post('/automate', async (req, res, next) => {
     res.status(500).send("Server err");
   }
 
+  //query db for emails and send uweast copy to that email
   try {
     const emails = await findAllEmails();
     if (!emails.length) {
@@ -84,7 +93,9 @@ router.post('/automate', async (req, res, next) => {
     res.status(500).send("Server err");
   }
 
+  //send customer copy to email provided
   sendEmail('customer-email', req.body.Customer.Email, req, res);
+
   return res.status(200).send();
 });
 
