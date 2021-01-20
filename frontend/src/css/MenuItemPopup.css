@@ -1,0 +1,157 @@
+.greyout 
+{
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+  top: 0;
+  left: 0;
+}
+
+.menu-item-popup 
+{
+  max-width: 800px;
+  background-color: white;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 500px;
+  overflow-x: hidden;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  z-index: 2;
+}
+
+.close-button 
+{
+  position: absolute;
+  right: 1px;
+  margin-top: -10px;
+  transform: rotate(45deg);
+  font-size: 30px;
+}
+
+.close-button:hover
+{
+  cursor: pointer;
+}
+
+.title-popup
+{
+  font-weight: bold;
+  color: #747474;
+  margin-bottom: 0px;
+}
+
+.desc-popup
+{
+  font-weight: lighter;
+  color: #747474;
+}
+
+.section-title 
+{
+  background-color: #f1f1f1;
+  padding: 1px;
+  margin-bottom: 2px;
+  padding: 10px;
+}
+
+.section-title h3
+{
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+
+.left-popup img
+{
+  object-fit: cover;
+  width: calc(100% - 15px);
+  border-radius: 10px;
+  margin: 5px;
+  min-height: calc(100% - 10px);
+}
+
+.right-popup
+{
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.right-popup::-webkit-scrollbar {
+  display: none;
+  width: 0px;
+}
+
+.choice-label 
+{
+  display: block;
+  margin-bottom: 0px;
+  margin-left: 20px;
+}
+
+.label-title 
+{
+  margin-left: 5px;
+}
+
+.instructions-textarea
+{
+  margin-left: 20px;
+  width: calc(100% - 40px);
+}
+
+.quantity-buttons 
+{
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.quantity-number 
+{
+  min-width: 30px;
+  font-weight: bold;
+  font-size: 20px;
+  display: inline-block;
+}
+
+.button 
+{
+  border: 0px;
+  color: white;
+  border-radius: 15px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  align-items: center;
+}
+
+.decrease-button 
+{
+  background-color: red;
+}
+
+.increase-button 
+{
+  background-color: green;
+}
+
+.submit-order-button
+{
+  width: 100%;
+  border: 0px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: black;
+  color: white;
+}

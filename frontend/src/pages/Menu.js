@@ -1,5 +1,8 @@
 import React, { Component} from 'react';
 import Navbar from '../components/NavBar';
+import SearchSection from '../components/SearchSection';
+import MenuSection from '../components/MenuSection';
+import MenuItemPopup from '../components/MenuItemPopup'
 const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
@@ -13,9 +16,8 @@ class Menu extends Component {
 
           <div>
               <Navbar/>
-              <div style={{marginTop: "30px"}}>
-                  This is the Menu Page.
-              </div>           
+              <SearchSection/>
+              <MenuSection/> 
           </div>
 
       )
