@@ -2,6 +2,8 @@ const express = require('express');
 const nodemailer = require("nodemailer");
 const Email = require('email-templates');
 const config = require('../config');
+const { findAllEmails } = require("../db/services/email");
+const { addOrder } = require('../db/services/order');
 
 const router = express.Router();
 
@@ -20,7 +22,7 @@ const mail = config.uweast.user === "" ? null : new Email({
 });
 
 async function sendEmail(template, to_email, req, res) {
-  if(mail != null) {
+  if (mail != null) {
     await mail.send({
       template: template,
       message: {
@@ -28,11 +30,11 @@ async function sendEmail(template, to_email, req, res) {
         to: to_email
       },
       locals: {
-        name: req.body.name,
-        number: req.body.phone,
-        email: req.body.email,
-        date: req.body.date,
-        order: req.body.order
+        name: req.body.Customer.Name,
+        number: req.body.Customer.Phone,
+        email: req.body.Customer.Email,
+        date: req.body.Pickup,
+        order: req.body.Order
       }
     });
     console.log(`Email ${template} has been sent to ${to_email}.`);
@@ -42,7 +44,7 @@ async function sendEmail(template, to_email, req, res) {
   }
 }
 
-router.post('/automate', (req, res, next) => {
+router.post('/automate', async (req, res, next) => {
   // Assume req.body looks like this:
   // {
   //   "email": "",
@@ -58,10 +60,33 @@ router.post('/automate', (req, res, next) => {
   //   ]
   // }
 
-    sendEmail('customer-email', req.body.email, req, res);
-    sendEmail('uweast-receipt', config.uweast.user, req, res);
-    res.status(200).send();
-  });
+  try {
+    const order = await addOrder(req.body);
+    if (!order) {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "Order unsuccessful" }] });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server err");
+  }
+
+  try {
+    const emails = await findAllEmails();
+    if (!emails.length) {
+      return res.status(400).json({ errors: [{ msg: "no emails found" }] });
+    } else {
+      sendEmail('uweast-receipt', emails[0].email, req, res);
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server err");
+  }
+
+  sendEmail('customer-email', req.body.Customer.Email, req, res);
+  return res.status(200).send();
+});
 
 
 
