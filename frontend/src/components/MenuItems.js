@@ -1,18 +1,18 @@
-import React, { Component} from 'react';
+import React from 'react';
 import MenuItemCategory from './MenuItemCategory';
 import '../css/MenuItems.css';
-import MenuItem from './MenuItem';
 const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
 
-const MenuItems = ({ foodCategories}) => {
+const MenuItems = ({ foodCategories, processForm, popupVisible, popupValues, togglePopup }) => {
   return (
 
       <div className="menu-items">
-        {foodCategories.map((categoryName, key) => (
-          <MenuItemCategory categoryName={categoryName} key={key} />
-        ))}
+        {/** generates categories in the menu */}
+        {foodCategories.map((categoryName, key) => {
+          return <MenuItemCategory key={key} categoryName={categoryName} key={key} processForm={processForm} popupVisible={popupVisible} popupValues={popupValues} togglePopup={togglePopup} />
+        })}
       </div>
 
   )

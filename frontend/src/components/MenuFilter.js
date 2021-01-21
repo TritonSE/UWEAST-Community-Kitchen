@@ -9,6 +9,7 @@ const MenuFilter = ( {foodCategories, changeVisibleCategories} ) => {
     return (
       <div className="menu-filter">
         {foodCategories.map((categoryName, key) => (
+          // generates filter buttons based on categories
           <MenuFilterButton categoryName={categoryName} key={key} changeVisibleCategories={changeVisibleCategories()} />
         ))}
       </div>

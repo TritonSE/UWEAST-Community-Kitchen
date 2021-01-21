@@ -1,64 +1,38 @@
 import React, { useState } from 'react';
-import MenuItemCategory from './MenuItemCategory';
 import '../css/MenuItemPopup.css';
-const config = require('../config');
 
-const BACKEND_URL = config.backend.uri;
-
-const MenuItemPopup = ({ values, togglePopup }) => {
+const MenuItemPopup = ({ values, togglePopup, processForm }) => {
   const [quantity, setQuantity] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(values.get("price"));
-  const indvidualPrice = values.get("price");
-  const familyPrice = parseInt(indvidualPrice) + 5;
+  const [totalPrice, setTotalPrice] = useState(parseInt(values.get("price")));
+  const indvidualPrice = parseInt(values.get("price"));
+  const familyPrice = parseInt(indvidualPrice);
 
   let currPrice = indvidualPrice;
 
-  const processForm = e => {
-    e.preventDefault();
-    var data = new FormData(e.target);
-    var object = {};
-
-    data.forEach((value, key) => {
-        if(!Reflect.has(object, key)){
-            object[key] = value;
-            return;
-        }
-
-        if(!Array.isArray(object[key])){
-            object[key] = [object[key]];    
-        }
-        object[key].push(value);
-    });
-
-    var json = JSON.stringify(object);
-    togglePopup();
-  }
-
+  // handles changing price and quantity states
   const changeQuantity = sign => {
     if(sign == "+") {
       setQuantity(quantity + 1);
-      changeTotalPrice(5);
+      // calulates on quantity + 1 b/c state hasn't updated yet
+      setTotalPrice(currPrice * (quantity + 1));
     }
     else if(sign == "-") {
       if(quantity > 1) {
         setQuantity(quantity - 1);
-        changeTotalPrice(3);
+        // calulates on quantity - 1 b/c state hasn't updated yet
+        setTotalPrice(currPrice * (quantity - 1));
       }
     }
   }
 
-  const changeTotalPrice = () => {
-    setTotalPrice(currPrice * (quantity + 1));
-  }
-
+  // will be used when family price is introduced to toggle between
   const changePrice = newPrice => {
     currPrice = newPrice;
-
-    changeTotalPrice();
   }
 
   return (
     <>
+      {/** div that fades out the background */}
       <div className="greyout" onClick={togglePopup}></div>
       <div className="menu-item-popup">
         <span className="close-button" onClick={togglePopup}>+</span>
@@ -68,8 +42,18 @@ const MenuItemPopup = ({ values, togglePopup }) => {
         <div className="right-popup">
           <form onSubmit={processForm} id="popup-form">
             <h2 className="title-popup">{values.get("title")}</h2>
-            <input type="hidden" name="title" value={values.get("title")} />
             <h2 className="desc-popup">{values.get("description")}</h2>
+            <p className="dietary-info">
+              {/**
+               * dietary info is an array list with 3 boolean values:
+               * 1. vegan
+               * 2. vegatarian
+               * 3. gluten-free
+               */}
+              {(values.get("dietary-info")[0]) ? "vegan " : null}
+              {(values.get("dietary-info")[1]) ? "vegetarian " : null}
+              {(values.get("dietary-info")[2]) ? "gluten-free " : null}
+            </p>
             <div className="size-section">
               <div className="section-title">
                 <h3>Choose Size</h3>
@@ -84,24 +68,6 @@ const MenuItemPopup = ({ values, togglePopup }) => {
                 <span onClick={() => changePrice(familyPrice)} className="label-title">Family</span>
               </label>
             </div>
-            <div className="size-section">
-              <div className="section-title">
-                <h3>Dietary Options</h3>
-                <i>optional</i>
-              </div>
-              <label className="choice-label">
-                <input type="checkbox" name="dietary" value="vegetarian" />
-                <span className="label-title">Vegetarian</span>
-              </label>
-              <label className="choice-label">
-                <input type="checkbox" name="dietary" value="vegan" />
-                <span className="label-title">Vegan</span>
-              </label>
-              <label className="choice-label">
-                <input type="checkbox" name="dietary" value="gluten free" />
-                <span className="label-title">Gluten-Free</span>
-              </label>
-            </div>
             <div className="instructions-section">
               <div className="section-title">
                 <h3>Special Instructions</h3>
@@ -112,22 +78,16 @@ const MenuItemPopup = ({ values, togglePopup }) => {
             <div className="quantity-section">
               <div className="section-title"><h3>Quantity</h3></div>
               <div className="quantity-buttons">
-                <button type="button" className="button decrease-button" onClick={
-                  () => {
-                    changeQuantity("-")
-                    changeTotalPrice();
-                  }
+                <button type="button" className="button decrease-button" onClick={() => {changeQuantity("-");}
                   }>-</button>
                 <span className="quantity-number">{quantity}</span>
                 <button type="button" className="button increase-button" 
-                  onClick={
-                    () => {
-                      changeQuantity("+");
-                      changeTotalPrice();
-                    }
-                  }>+</button>
+                  onClick={() => {changeQuantity("+");}}>+</button>
               </div>
             </div>
+            <input name="name" type="hidden" value={values.get("title")} />
+            <input name="price" type="hidden" value={totalPrice} />
+            <input name="quantity" type="hidden" value={quantity} />
             <input className="submit-order-button" type="submit" value={"Add " + quantity + " to cart $" + totalPrice} />
           </form>
         </div>

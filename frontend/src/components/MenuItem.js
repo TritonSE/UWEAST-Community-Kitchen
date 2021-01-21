@@ -1,17 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import "../css/MenuItem.css";
 const config = require('../config');
 
-const BACKEND_URL = config.backend.uri;
-
-const MenuItem = ( {image, title, description, price, togglePopup} ) => {
+const MenuItem = ( {description, image, price, title, togglePopup, dietaryInfo} ) => {
     return (
-      <div className="menu-item" onClick={() => togglePopup(title, description, price, image)}>
+      <div className="menu-item" onClick={() => togglePopup(title, description, price, image, dietaryInfo)}>
         <div className="menu-image">
           <img src={image}></img>
         </div>
         <div className="menu-text">
-          <h3 className="menu-title">{title}</h3>
+          <h3 className="menu-name">{title}</h3>
           <p className="menu-description">{description}</p>
           <p className="menu-price">{price}</p>
         </div>

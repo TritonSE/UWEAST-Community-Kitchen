@@ -4,7 +4,7 @@
   height: 100vh;
   overflow: hidden;
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.4);
   z-index: 1;
   top: 0;
   left: 0;
@@ -52,6 +52,13 @@
 {
   font-weight: lighter;
   color: #747474;
+}
+
+.dietary-info 
+{
+  color: #747474;
+  margin: 0px;
+  margin-top: -10px;
 }
 
 .section-title 

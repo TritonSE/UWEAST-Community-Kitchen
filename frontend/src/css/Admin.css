@@ -1,0 +1,16 @@
+.admin-section {
+  padding-top: 50px;
+  padding-left: 80px;
+}
+
+.admin-info {
+  margin-bottom: 25px;
+}
+
+.admin-info__icon {
+  margin-right: 20px;
+}
+
+.featured-item-checkbox {
+  margin-left: calc(2vw);
+}

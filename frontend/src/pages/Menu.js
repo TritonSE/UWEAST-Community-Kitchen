@@ -13,9 +13,9 @@ class Menu extends Component {
     render (){
 
       return (
-
           <div>
-              <Navbar/>
+              <Navbar currentPage="menu"/>
+              {/** search section is the top, non-menu half of the page */}
               <SearchSection/>
               <MenuSection/> 
           </div>

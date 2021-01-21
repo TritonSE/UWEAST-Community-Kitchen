@@ -6,53 +6,55 @@ const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
 
-const MenuItemCategory = ({ categoryName }) => {
-  /**
-   * useEffect(() => {
-    fetch("http://localhost:9000/item/insert", {
-      method: 'POST',
-      body: JSON.stringify({
-        'vegan' : true,
-        'vegetarian' : true,
-        'glutenFree' : true,
-        'ingredients' : "apple, banana",
-        'price': '5'
-      })
-    })
+const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues, togglePopup }) => {
+  // array that stores menu items for the current category
+  const [menuItems, setMenuItems] = useState(new Array());
+  const menuItemValues = [];
+
+  // useEffect() is called to get information from database
+  useEffect(() => {
+    fetch("http://localhost:9000/item/")
     .then(async result => {
-      console.log(result);
+      if (result.ok) {
+        const json = await result.json();
+
+        for(var i = 0; i < json.items.length; i++) {
+
+          // is stored only if the category name is the same as json's category
+          if((json.items != undefined) && (json.items[i].category == categoryName)) {
+            menuItemValues.push(json.items[i]);
+          }
+        }
+        setMenuItems(menuItemValues);
+      }
+      else {
+        console.log("error");
+      }
     })
-    .catch(e => {
-      console.log(e);
-    });
-  }, []);
+
+  /**
+   * sets dependency on categoryName, meaning that whenever categoryName 
+   * changes, useEffect is called again. This is necessary so that when filters * are clicked data is actually reloaded
    */
-
-  const [popupVisible, setPopupVisible] = useState(false);
-  const [popupValues, setPopupValues] = useState(new Map());
-
-  const togglePopup = (title, description, price, image) => {
-    setPopupVisible(!popupVisible);
-    
-    popupValues.set("title", title);
-    popupValues.set("description", description);
-    popupValues.set("price", price);
-    popupValues.set("image", image);
-
-    setPopupValues(popupValues);
-  }
+  }, [categoryName]);
   
   return (
       <>
-        {popupVisible ? <MenuItemPopup name="hello" values={popupValues} togglePopup={togglePopup}/> : null}
+        {/** popup is created here, if it is visible it is rendered */}
+        {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
         <div className="menu-item-category">
           <h2> {categoryName} </h2>
           <div className="menu-item-category-grid">
-            <MenuItem image="https://images2.minutemediacdn.com/image/upload/c_crop,h_1126,w_2000,x_0,y_181/f_auto,q_auto,w_1100/v1554932288/shape/mentalfloss/12531-istock-637790866.jpg" title="Food Item 1" description="Food Description 1" price="5" togglePopup={togglePopup} />
-            <MenuItem image="https://images2.minutemediacdn.com/image/upload/c_crop,h_1126,w_2000,x_0,y_181/f_auto,q_auto,w_1100/v1554932288/shape/mentalfloss/12531-istock-637790866.jpg" title="Food Item 2" description="Food Description 2" price="5" togglePopup={togglePopup} />
-            <MenuItem image="https://images2.minutemediacdn.com/image/upload/c_crop,h_1126,w_2000,x_0,y_181/f_auto,q_auto,w_1100/v1554932288/shape/mentalfloss/12531-istock-637790866.jpg" title="Food Item 3" description="Food Description 3" price="5" togglePopup={togglePopup} />
-            <MenuItem image="https://images2.minutemediacdn.com/image/upload/c_crop,h_1126,w_2000,x_0,y_181/f_auto,q_auto,w_1100/v1554932288/shape/mentalfloss/12531-istock-637790866.jpg" title="Food Item 4" description="Food Description 4" price="5" togglePopup
-            ={togglePopup} />
+            {/** generate menu items based off of array */}
+            {menuItems.map((menuItem, key) => {
+              let title = menuItem.name;
+              let image = menuItem.image;
+              let description = menuItem.description;
+              let price = menuItem.price;
+              let dietaryInfo = [menuItem.vegan, menuItem.vegetarian, menuItem.glutenFree];
+
+              return <MenuItem title={title} image={image} price={price} description={description} togglePopup={togglePopup} key={key} dietaryInfo={dietaryInfo} />
+            })}
           </div>
         </div>
       </>
