@@ -46,7 +46,7 @@ class Login extends Component {
       return (
 
           <div>
-              <Navbar/>
+              <Navbar currentPage="login"/>
               <div style={{marginTop: "30px"}}>
                   This is the Login Page.
               </div> 
