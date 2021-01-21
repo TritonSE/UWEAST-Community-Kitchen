@@ -13,7 +13,7 @@ class Menu extends Component {
       return (
 
           <div>
-              <Navbar/>
+              <Navbar currentPage="menu"/>
               <div style={{marginTop: "30px"}}>
                   This is the Menu Page.
               </div>           
