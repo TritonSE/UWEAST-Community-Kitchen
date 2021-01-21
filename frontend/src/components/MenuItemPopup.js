@@ -40,8 +40,6 @@ const MenuItemPopup = ({ values, togglePopup }) => {
       changeTotalPrice(5);
     }
     else if(sign == "-") {
-      alert("here");
-
       if(quantity > 1) {
         setQuantity(quantity - 1);
         changeTotalPrice(3);
@@ -49,10 +47,8 @@ const MenuItemPopup = ({ values, togglePopup }) => {
     }
   }
 
-  const changeTotalPrice = newQuantity => {
-
-    alert(newQuantity);
-    setTotalPrice(currPrice * (newQuantity));
+  const changeTotalPrice = () => {
+    setTotalPrice(currPrice * (quantity + 1));
   }
 
   const changePrice = newPrice => {
