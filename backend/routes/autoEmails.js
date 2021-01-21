@@ -2,12 +2,14 @@ const express = require('express');
 const nodemailer = require("nodemailer");
 const Email = require('email-templates');
 const config = require('../config');
+const { body } = require("express-validator");
 const { findAllEmails } = require("../db/services/email");
 const { addOrder } = require('../db/services/order');
+const { isValidated } = require("../middleware/validation");
 
 const router = express.Router();
 
-//transport for nodemailer
+//transporter object for nodemailer
 const transporter = config.uweast.user === "" ? null : nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
@@ -15,13 +17,14 @@ const transporter = config.uweast.user === "" ? null : nodemailer.createTranspor
   auth: config.uweast
 });
 
+//template based sender object
 const mail = config.uweast.user === "" ? null : new Email({
   transport: transporter,
   send: true,
   preview: false
 });
 
-//sends email using given template and to to_email with req.body
+//Populates given email template with req.body and sends it to to_email
 async function sendEmail(template, to_email, req, res) {
   if (mail != null) {
     await mail.send({
@@ -40,12 +43,19 @@ async function sendEmail(template, to_email, req, res) {
     });
     console.log(`Email ${template} has been sent to ${to_email}.`);
   } else {
-    res.status(400).send("Error occurred");
-    console.log(`Email ${template} would have been sent to ${to_email} but is disabled.`);
+    return res.status(500).send("Server err");
   }
 }
 
-router.post('/automate', async (req, res, next) => {
+//sends automated emails and returns success:true if successful
+router.post('/automate', 
+  [
+    body("Customer").notEmpty(),
+    body("Pickup").notEmpty(),
+    body("PayPal").notEmpty(),
+    body("Order").notEmpty(),
+    isValidated,
+  ], async (req, res, next) => {
   // Assume req.body looks like this:
   // {
   //   "Customer": {
@@ -67,7 +77,7 @@ router.post('/automate', async (req, res, next) => {
   //   ]
   // }
 
-  //add order in request body to database
+  //adds order passed in request body to the database
   try {
     const order = await addOrder(req.body);
     if (!order) {
@@ -77,10 +87,10 @@ router.post('/automate', async (req, res, next) => {
     }
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server err");
+    return res.status(500).send("Server err");
   }
 
-  //query db for emails and send uweast copy to that email
+  //query db for emails and send uweast copy of order receipt
   try {
     const emails = await findAllEmails();
     if (!emails.length) {
@@ -90,13 +100,13 @@ router.post('/automate', async (req, res, next) => {
     }
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server err");
+    return res.status(500).send("Server err");
   }
 
-  //send customer copy to email provided
+  //send customer copy of order receipt
   sendEmail('customer-email', req.body.Customer.Email, req, res);
 
-  return res.status(200).send();
+  return res.status(200).json({success: true});
 });
 
 
