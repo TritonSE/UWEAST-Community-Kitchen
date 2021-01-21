@@ -15,7 +15,7 @@ class Menu extends Component {
       return (
 
           <div>
-              <Navbar/>
+              <Navbar currentPage="menu"/>
               <SearchSection/>
               <MenuSection/> 
           </div>
