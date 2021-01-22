@@ -1,71 +1,78 @@
-import React, { Component} from 'react';
+import React from 'react';
+import {useHistory} from "react-router-dom";
+import {Navbar, Nav} from 'react-bootstrap';
+import {isAuthorized, removeJWT} from '../util/auth.js';
 import '../css/NavBar.css';
 
-class NavBar extends Component {
 
+export default function NavBar (props) {
 
-    render (){
+    {/* history hook to redirect on logout */}
+    const history = useHistory();
 
-      return (
+    {/* stores class names to toggle whether content is shown */}
+    var adminContentClass;
+    var loginButtonClass;
 
+    {/* removes login token and redirects to menu page */}
+    function logout() {
+        removeJWT();
+        history.push("/");
+        history.go(0);
+    }
+
+    {/* Hides admin content (admin page + logout) or login button depending on whether user is logged in */}
+    if(isAuthorized()) {
+        adminContentClass = "nav-link";
+        loginButtonClass = "nav-link d-none";
+    } else {
+        adminContentClass = "nav-link d-none";
+        loginButtonClass = "nav-link";
+    }
+
+    {/* Check current page from props to change active nav-link color */}
+    function isPageActive(pageToCheck) {
+        return (pageToCheck === props.currentPage) ? " active" : "";
+    }
+
+    return (
         <html>
             <head>
-                {/* NavBar Formatting for aesthetics*/}
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
-        
-        
-                <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+                {/* Bootstrap Resources */}
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
             </head>
-            <body>
-                
-                <nav class="navbar navbar-dark bg-dark navbar-toggleable-md navbar-expand-md" id="commRollover">
-                    {/* Left Hand Side of NavBar - Title & Image linked to Menu Page */}
-                    <a class="navbar-brand" href="/">
-                        <img src="" alt="UWEAST"/>
-                    </a>
-        
-                    {/* Triggers on Collapse - Hamburger Icon replaces pages */}
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-        
-                    {/* Right Hand Side of NavBar - Linked Pages (based off of Router paths in App.js) */}
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav">
-                            {/* Menu Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/">Menu</a>
-                            </li>
-                            {/* About Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/about">About</a>
-                            </li>
-                            {/* Contact Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/contact">Contact</a>
-                            </li>
-                            {/* Admin Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin">Admin</a>
-                            </li>
-                            {/* Orders Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/orders">Orders</a>
-                            </li>
-                            {/* Login Page */}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/login">Login</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </body>
-        </html>
+            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="md" variant="dark">
+                {/* Left Hand Side of Navbar - Title & Image linked to Menu Page */}
+                <Navbar.Brand href="/">
+                    <img src="" className="d-inline-block align-top" alt="UWEAST Logo"/>
+                </Navbar.Brand>
 
-      )
-    }
-  }
-  
-  export default NavBar;
+                {/* Triggers on Collapse - Hamburger Icon replaces pages */}
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+
+                {/* Right Hand Side of Navbar - Linked Pages (based off of Router paths in App.js) */}
+                <Navbar.Collapse id="responsive-navbar-nav">
+                    <Nav className="ml-auto">
+                        {/* Menu Page */}
+                        <Nav.Link className={"nav-link" + isPageActive("menu")} href="/">Menu</Nav.Link>
+
+                        {/* Contact Page */}
+                        <Nav.Link className={"nav-link" + isPageActive("contact")} href="/contact">Contact</Nav.Link>
+
+                        {/* About Page */}
+                        <Nav.Link className={"nav-link" + isPageActive("about")} href="/about">About</Nav.Link>
+
+                        {/* Admin Page - only visible when isAuthorized()*/}
+                        <Nav.Link className={adminContentClass + isPageActive("admin")} href="/admin">Admin</Nav.Link>
+
+                        {/* Logout Button - starts logout operation, only visible when isAuthorized() */}
+                        <Nav.Link className={adminContentClass} onClick={logout}>Logout</Nav.Link>
+
+                        {/* Login Page - only visible when not isAuthorized()*/}
+                        <Nav.Link className={loginButtonClass + isPageActive("login")} href="/login">Login</Nav.Link>        
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        </html>
+    )
+}

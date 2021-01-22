@@ -62,13 +62,43 @@ const object2 = {
   ]
 }
 
+const object3 = {
+  pickUpDate: "01/8/2021",
+  pickUpTime: "2:13 PM",
+  name: 'Jeff',
+  email: 'Jeff123@gmail.com',
+  phoneNumber: '8778909999',
+  dateSubmitted: '01/10/2021',
+  amountPaid: '90.00',
+  itemInfo: [
+    {
+      name: 'Pasta',
+      quantity: '1',
+      description: '',
+      size: 'single'
+    }, 
+    {
+      name: 'Tea',
+      quantity: '2',
+      description: 'No sauce please',
+      size: 'single'
+    },
+    {
+      name: 'Free money',
+      quantity: '2',
+      description: 'bags on bags',
+      size: 'single'
+    }
+  ]
+}
+
 const objList = [object, object2];
 
 const data = [
-  [object.pickUpDate, object.pickUpTime, object.name, object.email, object.phoneNumber, object.dateSubmitted, object.amountPaid],
-  [object2.pickUpDate, object2.pickUpTime, object2.name, object2.email, object2.phoneNumber, object2.dateSubmitted, object2.amountPaid],
-  [object.pickUpDate, object.pickUpTime, object.name, object.email, object.phoneNumber, object.dateSubmitted, object.amountPaid],
-  [object.pickUpDate, object.pickUpTime, object.name, object.email, object.phoneNumber, object.dateSubmitted, object.amountPaid],
+  [object.pickUpDate, object.pickUpTime, object.name, object.email, object.phoneNumber, object.dateSubmitted, object.amountPaid, object.itemInfo],
+  [object2.pickUpDate, object2.pickUpTime, object2.name, object2.email, object2.phoneNumber, object2.dateSubmitted, object2.amountPaid, object2.itemInfo],
+  [object3.pickUpDate, object3.pickUpTime, object3.name, object3.email, object3.phoneNumber, object3.dateSubmitted, object3.amountPaid, object3.itemInfo],
+  [object.pickUpDate, object.pickUpTime, object.name, object.email, object.phoneNumber, object.dateSubmitted, object.amountPaid, object.itemInfo],
 ];
 
 //END OF DUMMY DATA
@@ -86,18 +116,10 @@ function createData(name, quantity, description, size) {
  * @param {Object} rowMeta - index of the data
  */
 const renderRow = (rowData, rowMeta) => {
-    let getItemInfo = {};
-    
-    for(let i = 0; i < objList.length; i++) {
-      if(rowData[2] === objList[i].name && rowData[0] === objList[i].pickUpDate) {
-        getItemInfo = objList[i];
-      }
-    }
-    
     const rows = []
-    const length = getItemInfo.itemInfo.length;
+    const length = rowData[7].length;
     for(let i = 0; i < length; i++) {
-      rows.push(createData(getItemInfo.itemInfo[i].name, getItemInfo.itemInfo[i].quantity, getItemInfo.itemInfo[i].description, getItemInfo.itemInfo[i].size))
+      rows.push(createData(rowData[7][i].name, rowData[7][i].quantity, rowData[7][i].description, rowData[7][i].size))
     }
 
     return (
@@ -264,6 +286,14 @@ const columns = [
   options: {
     filter: false
   }  
+},
+{
+  name: "Order Description",
+  options: {
+    display: false, 
+    viewColumns: false, 
+    filter: false
+  }
 }];
 
 export default function OrdersTable(props) {

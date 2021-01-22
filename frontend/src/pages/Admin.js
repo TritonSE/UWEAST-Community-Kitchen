@@ -672,7 +672,7 @@ class Admin extends Component {
       return (
           <div>
             {/* The navbar on top of the page */}
-              <Navbar />
+              <Navbar currentPage="admin"/>
 
               {/* This is the contents on the admin page */}
               <div class="admin-section">

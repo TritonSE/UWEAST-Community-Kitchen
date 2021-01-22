@@ -44,7 +44,7 @@ class About extends Component {
       return (
 
           <div>
-              <Navbar/>
+              <Navbar currentPage="about"/>
               <div style={{marginTop: "30px"}}>
                   This is the About Page.
               </div>
