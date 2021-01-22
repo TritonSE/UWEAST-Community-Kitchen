@@ -12,100 +12,16 @@ import Paper from "@material-ui/core/Paper";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
+import '../css/Orders.css';
 
-//DUMMY DATA
-const object = {
-    pickUpDate: "01/02/2021",
-    pickUpTime: "2:13 PM",
-    name: 'Amitesh',
-    email: '123@gmail.com',
-    phoneNumber: '858778069',
-    dateSubmitted: '01/01/2021',
-    amountPaid: '50.00',
-    itemInfo: [
-      {
-        name: 'curry',
-        quantity: '1',
-        description: '',
-        size: 'family'
-      }, 
-      {
-        name: 'rice',
-        quantity: '2',
-        description: 'brown rice, not white',
-        size: 'family'
-      }
-    ]
-}
-
-const object2 = {
-  pickUpDate: "01/03/2021",
-  pickUpTime: "2:13 PM",
-  name: 'Tom',
-  email: '4566@gmail.com',
-  phoneNumber: '858778069',
-  dateSubmitted: '01/05/2021',
-  amountPaid: '60.00',
-  itemInfo: [
-    {
-      name: 'Pasta',
-      quantity: '1',
-      description: '',
-      size: 'single'
-    }, 
-    {
-      name: 'bread',
-      quantity: '2',
-      description: 'No sauce please',
-      size: 'single'
-    }
-  ]
-}
-
-const object3 = {
-  pickUpDate: "01/8/2021",
-  pickUpTime: "2:13 PM",
-  name: 'Jeff',
-  email: 'Jeff123@gmail.com',
-  phoneNumber: '8778909999',
-  dateSubmitted: '01/10/2021',
-  amountPaid: '90.00',
-  itemInfo: [
-    {
-      name: 'Pasta',
-      quantity: '1',
-      description: '',
-      size: 'single'
-    }, 
-    {
-      name: 'Tea',
-      quantity: '2',
-      description: 'No sauce please',
-      size: 'single'
-    },
-    {
-      name: 'Free money',
-      quantity: '2',
-      description: 'bags on bags',
-      size: 'single'
-    }
-  ]
-}
-
-const objList = [object, object2];
-
-const data = [
-  [object.pickUpDate, object.pickUpTime, object.name, object.email, object.phoneNumber, object.dateSubmitted, object.amountPaid, object.itemInfo],
-  [object2.pickUpDate, object2.pickUpTime, object2.name, object2.email, object2.phoneNumber, object2.dateSubmitted, object2.amountPaid, object2.itemInfo],
-  [object3.pickUpDate, object3.pickUpTime, object3.name, object3.email, object3.phoneNumber, object3.dateSubmitted, object3.amountPaid, object3.itemInfo],
-  [object.pickUpDate, object.pickUpTime, object.name, object.email, object.phoneNumber, object.dateSubmitted, object.amountPaid, object.itemInfo],
-];
-
-//END OF DUMMY DATA
+import {
+  createMuiTheme,
+  MuiThemeProvider,
+} from "@material-ui/core/styles";
 
 //Converts the data to an object list
-function createData(name, quantity, description, size) {
-  return { name, quantity, description, size };
+function createData(name, description, size, quantity) {
+  return { name, description, size, quantity };
 }
 
 /**
@@ -117,58 +33,46 @@ function createData(name, quantity, description, size) {
  */
 const renderRow = (rowData, rowMeta) => {
     const rows = []
-    const length = rowData[7].length;
+    const length = rowData[5].length;
     for(let i = 0; i < length; i++) {
-      rows.push(createData(rowData[7][i].name, rowData[7][i].quantity, rowData[7][i].description, rowData[7][i].size))
+      rows.push(createData(rowData[5][i].item, rowData[5][i].extra, rowData[5][i].size, rowData[5][i].quantity));
     }
 
     return (
         <React.Fragment>
-          <tr>
-            <td colSpan={5}>
-              <TableContainer component={Paper}>
-                <Table style={{ minWidth: "650" }} aria-label="simple table">
+          <TableRow>
+            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+              <TableContainer>
+                <Table aria-label="simple table">
+                {/* The dropdown header */}
                   <TableHead>
                     <TableRow>
-                      <TableCell>Items purchased</TableCell>
-                      <TableCell align="right">Name</TableCell>
-                      <TableCell align="right">Quantity</TableCell>
-                      <TableCell align="right">Special Instructions</TableCell>
-                      <TableCell align="right">Size</TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}><b>Items</b></TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}><b>Special Instructions</b></TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}><b>Size</b></TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}><b>Quantity</b></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
+                  {/* The dropdown row data */}
                     {rows.map(row => (
                       <TableRow key={row.name}>
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.name}</TableCell>
-                        <TableCell align="right">{row.quantity}</TableCell>
-                        <TableCell align="right">{row.description}</TableCell>
-                        <TableCell align="right">{row.size}</TableCell>
+                        <TableCell style={{width: 'calc(5vw)'}}>{row.name}</TableCell>
+                        <TableCell style={{width: 'calc(5vw)'}}>{row.description}</TableCell>
+                        <TableCell style={{width: 'calc(5vw)'}}>{row.size}</TableCell>
+                        <TableCell style={{width: 'calc(5vw)'}}>{row.quantity}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         </React.Fragment>   
     )
 }
 
-//The options used to customize the MUITable
-const options = {
-  filter: true,
-  filterType: 'textField',
-  expandableRowsOnClick: true,
-  expandableRows: true,
-  selectableRows: "single",
-  rowsPerPageOptions: [10, 25, 50],
-  renderExpandableRow: renderRow
-};
-
+//This displays the filters in the top left
 const renderDateFilters = (options) => {
   if (options[0] && options[1]) {
     return `Start Date: ${options[0]}, End Date: ${options[1]}`;
@@ -177,11 +81,16 @@ const renderDateFilters = (options) => {
   return [];
 }
 
-const updateAgeFilters = (filterList, filterPos, index) => {
-  console.log('customFilterListOnDelete: ', filterList, filterPos, index);
-
+/**
+ * This updates the filterList when it is closed
+ * 
+ * @param {List} filterList 
+ * @param {int} filterPos 
+ * @param {int} index 
+ */
+const updateDateFilters = (filterList, filterPos, index) => {
   if (filterPos === 0) {
-    filterList[index].splice(filterPos, 1, '');
+    filterList[index].splice(filterPos, 2, '');
   } else if (filterPos === 1) {
     filterList[index].splice(filterPos, 1);
   } else if (filterPos === -1) {
@@ -191,7 +100,16 @@ const updateAgeFilters = (filterList, filterPos, index) => {
   return filterList;  
 }
 
-const DisplayAgeFilters = (filterList, onChange, index, column) => {  
+/**
+ * This function displays the date range picker when clicking on the
+ * textfield inside the filters modal
+ * @param {List} filterList 
+ * @param {Function} onChange 
+ * @param {int} index 
+ * @param {int} column 
+ */
+const DisplayDateFilters = (filterList, onChange, index, column) => {  
+  //Get the initial start date and end date for the date filter
   const initialStartDate = new Date();
   const initialEndDate = new Date();
   initialEndDate.setDate(initialStartDate.getDate()+7);
@@ -199,10 +117,9 @@ const DisplayAgeFilters = (filterList, onChange, index, column) => {
   const startDate = initialStartDate.getMonth()+1 + "/" + initialStartDate.getDate() + "/" + initialStartDate.getFullYear();
   const endDate = initialEndDate.getMonth()+1 + "/" + initialEndDate.getDate() + "/" + initialEndDate.getFullYear();
 
+  //Called when the "apply" button is clicked
   const saveDate = (event, picker) => {
-    console.log(event.target.value);
     const split = event.target.value.split(" - ");
-    console.log(split);
     filterList[index][0] = split[0];
     filterList[index][1] = split[1];
     onChange(filterList[index], index, column);
@@ -224,16 +141,29 @@ const DisplayAgeFilters = (filterList, onChange, index, column) => {
 //The column headers for the table
 const columns = [
 {
-  name: "Pick up Date",
+  name: "Pick up Details",
   options: {
-    filter: false
-  }
-}, 
-{
-  name: "Pick Up Time",
-  options: {
-    filter: false
-  }
+    filter: true,
+    filterType: 'custom',
+    customFilterListOptions: {
+      render: renderDateFilters,
+      update: updateDateFilters
+    },
+    filterOptions: {
+      names: [],
+      logic(date, filters) {
+        if (filters[0] && filters[1]) {
+          return date < filters[0] || date > filters[1];
+        } else if (filters[0]) {
+          return date < filters[0];
+        } else if (filters[1]) {
+          return date > filters[1];
+        }
+        return false;
+      },
+      display: DisplayDateFilters
+    }
+  }  
 },
 {
   name: "Name",
@@ -257,31 +187,6 @@ const columns = [
   }  
 },
 {
-  name: "Submission Date",
-  options: {
-    filter: true,
-    filterType: 'custom',
-    customFilterListOptions: {
-      render: renderDateFilters,
-      update: updateAgeFilters
-    },
-    filterOptions: {
-      names: [],
-      logic(date, filters) {
-        if (filters[0] && filters[1]) {
-          return date < filters[0] || date > filters[1];
-        } else if (filters[0]) {
-          return date < filters[0];
-        } else if (filters[1]) {
-          return date > filters[1];
-        }
-        return false;
-      },
-      display: DisplayAgeFilters
-    }
-  }  
-},
-{
   name: "Amount Paid",
   options: {
     filter: false
@@ -297,12 +202,38 @@ const columns = [
 }];
 
 export default function OrdersTable(props) {
+  const options = {
+    filter: true,
+    filterType: 'textField',
+    expandableRowsOnClick: true,
+    expandableRows: true,
+    selectableRows: "single",
+    rowsPerPageOptions: [10, 25, 50],
+    renderExpandableRow: renderRow,
+    searchOpen: true,
+  };
+
+ const getMuiTheme = () =>
+ createMuiTheme({
+   overrides: {
+     MUIDataTable: {
+       root: {
+         backgroundColor: '#AAF',
+       },
+       paper: {
+         boxShadow: 'none',
+       },
+     },
+   },
+ });
+
   return (
-      <MUIDataTable
-          title={"Past Orders"}
-          data={data}
+      <MuiThemeProvider theme={getMuiTheme()}>
+        <MUIDataTable
+          data={props.orders}
           columns={columns}
           options={options}
       />
+      </MuiThemeProvider>
   )
 }
