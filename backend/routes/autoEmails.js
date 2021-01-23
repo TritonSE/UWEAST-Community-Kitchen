@@ -37,7 +37,7 @@ async function sendEmail(template, to_email, req, res) {
         name: req.body.Customer.Name,
         number: req.body.Customer.Phone,
         email: req.body.Customer.Email,
-        date: req.body.Pickup,
+        date: req.body.Pickup.toLocaleString(),
         order: req.body.Order
       }
     });
