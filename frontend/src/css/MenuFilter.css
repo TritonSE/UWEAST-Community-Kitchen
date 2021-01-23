@@ -1,0 +1,7 @@
+.menu-filter
+{
+  position: fixed;
+  width: 100%;
+  top: calc(50vh + 40px);
+  width: 150px;
+}
