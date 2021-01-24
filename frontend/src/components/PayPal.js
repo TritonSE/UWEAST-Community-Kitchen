@@ -33,8 +33,6 @@ export default function PayPal(props) {
         intent: "CAPTURE",
         application_context: {
             shipping_preference: 'NO_SHIPPING',
-            return_url: "https://www.example.com",
-            cancel_url: "https://www.example.com"
         },
         purchase_units: [{
             description: "Food order from UWEAST Kitchen",

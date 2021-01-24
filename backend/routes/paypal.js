@@ -2,11 +2,14 @@ const express = require('express');
 const paypal = require("@paypal/checkout-server-sdk");
 
 const router = express.Router();
+// THE FOLLOWING FILE ISN'T BEING USED. IT HAS IMPLEMENTATIONS FOR SERVER SIDE
+// PAYMENTS, BUT THIS ISN'T BEST PRACTICE AND ONLY WORKS WITH THE OLD PAYPAL API
+// I AM LEAVING THIS HERE IN CASE WE WANT TO PURSUE THIS LATER.
 
 // const clientId = process.env.PAYPAL_CLIENT_ID;
 // const clientSecret = process.env.PAYPAL_SECRET_ID;
-const clientId = "AZIQD_bt5g6zbU_22BfYx8aGx3MvNCS1jbPHvJg-DVkVhzO3ooFXTGJ4Lm1rRRp0xp4d2uiNu9JkcCUz";
-const clientSecret = "EHDSz4JHWOx3VMR15YC6oVQF_WrGCcq5DEq6E4mHrKUBbuZthvKBdPWO0hLHnWse1F0iKWwJQlVUIvuZ";
+const clientId = "";
+const clientSecret = "";
 /* Post route for starting the payment process. This takes in payment object
  through the request body and creates a PayPal order through the PayPal API.
  Once the order is created, we get a Payment ID, and return it to the client
