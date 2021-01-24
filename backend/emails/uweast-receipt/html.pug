@@ -1,11 +1,12 @@
 p Dear all,
-p A new order was placed by #{name}. The customer's email is #{email} and their phone number is #{number}. The pick up date chosen by the customer is #{date}.
+p A new order was placed by #{name}. The customer's email is #{email} and their phone number is #{number}. The pick up date chosen by the customer is #{date} at #{time}.
 p The following are the details of the order.
 p Order Summary:
 ul
     each val in order
         li= `${val.quantity} x ${val.item} (${val.extra})`
 p The payment details for this order can be found on either the PayPal auto receipt for this order or on your PayPal account under transactions.
+p NOTE: This is an automatically generated email. Please do not reply.
     br
     br
     | UWEAST
