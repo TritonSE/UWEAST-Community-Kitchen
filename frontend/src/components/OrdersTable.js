@@ -41,7 +41,7 @@ const renderRow = (rowData, rowMeta) => {
     return (
         <React.Fragment>
           <TableRow>
-            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
               <TableContainer>
                 <Table aria-label="simple table">
                 {/* The dropdown header */}
@@ -127,7 +127,7 @@ const DisplayDateFilters = (filterList, onChange, index, column) => {
 
   return (
     <div style={{width: '20vw'}}>
-      <label>Submission dates</label>
+      <label>{index == 0 ? 'Pick Up Details' : 'Submission Details'}</label>
       <DateRangePicker
         initialSettings={{ startDate: filterList[index][0] || startDate, endDate: filterList[index][1] || endDate}}
         onApply={saveDate}
@@ -152,12 +152,13 @@ const columns = [
     filterOptions: {
       names: [],
       logic(date, filters) {
+        const getDate = date.split("\n")[0];
         if (filters[0] && filters[1]) {
-          return date < filters[0] || date > filters[1];
+          return getDate < filters[0] || getDate > filters[1];
         } else if (filters[0]) {
-          return date < filters[0];
+          return getDate < filters[0];
         } else if (filters[1]) {
-          return date > filters[1];
+          return getDate > filters[1];
         }
         return false;
       },
@@ -199,6 +200,32 @@ const columns = [
     viewColumns: false, 
     filter: false
   }
+},
+{
+  name: "Submission Details",
+  options: {
+    filter: true,
+    filterType: 'custom',
+    customFilterListOptions: {
+      render: renderDateFilters,
+      update: updateDateFilters
+    },
+    filterOptions: {
+      names: [],
+      logic(date, filters) {
+        const getDate = date.split("\n")[0];
+        if (filters[0] && filters[1]) {
+          return getDate < filters[0] || getDate > filters[1];
+        } else if (filters[0]) {
+          return getDate < filters[0];
+        } else if (filters[1]) {
+          return getDate > filters[1];
+        }
+        return false;
+      },
+      display: DisplayDateFilters
+    }
+  }  
 }];
 
 export default function OrdersTable(props) {

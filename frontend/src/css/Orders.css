@@ -1,7 +1,10 @@
 :root {
     --yellow: #f9ce1d;
     --black: black;
-    --lightgrey: rgb(241, 241, 241);
+    --lightgrey: #CCCCCC;
+    --darkgrey: #747474;
+    --white: #FFFFFF;
+    --offwhite: #F1f1f1;
 }
 
 .orders-table {
@@ -42,4 +45,25 @@
     margin-left: 0;
     padding-left: calc(1vw);
     width: 100%;
+}
+
+#root > div > div > div > div > div.MUIDataTable-responsiveBase-5 > table > thead > tr > th,
+#root > div > div > div > div > div.MuiToolbar-root.MuiToolbar-regular.MUIDataTableToolbar-root-13.MuiToolbar-gutters {
+    background-color: var(--yellow);
+}
+
+.spinner-orders-page {
+    width: calc(100%);
+    display: flex;
+    justify-content: center;
+    margin-top: calc(20%);
+}
+
+#root > div > div > div {
+    color: var(--yellow);
+}
+
+/* Allows for the time information to be on seperate lines */
+td { 
+    white-space:pre 
 }
