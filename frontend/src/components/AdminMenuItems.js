@@ -8,10 +8,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import '../css/AdminMenuItems.css';
-import {
-  createMuiTheme,
-  MuiThemeProvider,
-} from "@material-ui/core/styles";
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function createData(itemName, imgSource, categoryName, options, baseprice, description) {
   return {
@@ -117,7 +115,10 @@ export default function AdminMenuItems (props) {
                                     </TableCell>
                                     <TableCell align="left">{row.basePrice}</TableCell>
                                     <TableCell align="left">{row.description}</TableCell>
-                                    <TableCell align="left">Edit buttons</TableCell>
+                                    <TableCell align="left" >
+                                        <EditIcon style={{"marginRight": "5px"}}/>
+                                        <DeleteIcon style={{"marginLeft": "5px"}}/>
+                                    </TableCell>
                                 </TableRow>
                         )})}
                     </TableBody>
