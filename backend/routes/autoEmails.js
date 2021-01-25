@@ -37,8 +37,8 @@ async function sendEmail(template, to_email, uw_email, req, res) {
         name: req.body.Customer.Name,
         number: req.body.Customer.Phone,
         email: req.body.Customer.Email,
-        date: req.body.Pickup.toLocaleDateString(),
-        time: req.body.Pickup.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'}),
+        date: new Date(req.body.Pickup).toLocaleDateString(),
+        time: new Date(req.body.Pickup).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'}),
         order: req.body.Order,
         dbemail: uw_email
       }
