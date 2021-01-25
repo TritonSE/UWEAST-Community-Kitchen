@@ -2,9 +2,23 @@
     min-width: 500px;
     max-width: 85vw;
 }
+.menuTable {
+    min-width: 500px;
+    max-width: 85vw;
+}
+.menuTableHeaders {
+    font-size: 20px !important;
+    font-weight: bold !important;
+}
 .menuItemImage {
     border-radius: 10px;
     object-fit: cover;
     width: 150px;
     height: 150px;
+}
+.oddrowbg{
+    background-color: #ffffff;
+}
+.evenrowbg{
+    background-color: #f1f1f1;
 }

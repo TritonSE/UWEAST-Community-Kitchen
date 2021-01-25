@@ -83,12 +83,12 @@ export default function AdminMenuItems (props) {
     
     const menuTable = () => {
         return (
-            <TableContainer component={Paper} >
-                <Table aria-label="simple table" className="menuTableContainer">
+            <TableContainer component={Paper} className="menuTableContainer">
+                <Table aria-label="simple table" className="menuTable">
                     <TableHead>
                         <TableRow>
                             <TableCell>#</TableCell>
-                            <TableCell align="Center">Item Image</TableCell>
+                            <TableCell align="center">Item Image</TableCell>
                             <TableCell align="left">Item Name</TableCell>
                             <TableCell align="left">Category Name</TableCell>
                             <TableCell align="left">Size/Options</TableCell>
@@ -98,26 +98,28 @@ export default function AdminMenuItems (props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={row.itemName}>
-                                <TableCell component="th" scope="row">
-                                    {index}
-                                </TableCell>
-                                <TableCell align="center">
-                                    <img src={row.imgSource} alt={row.itemName} className="menuItemImage"/>
-                                </TableCell>
-                                <TableCell>{row.itemName}</TableCell>
-                                <TableCell align="left">{row.categoryName}</TableCell>
-                                <TableCell align="left">
-                                    {row.options.map((v) => {
-                                        return (<p>{v}</p>)
-                                    })}
-                                </TableCell>
-                                <TableCell align="left">{row.basePrice}</TableCell>
-                                <TableCell align="left">{row.description}</TableCell>
-                                <TableCell align="left">Edit buttons</TableCell>
-                            </TableRow>
-                        ))}
+                        {rows.map((row, index) => {
+                            const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
+                            return (
+                                <TableRow key={row.itemName} className={bgColor}>
+                                    <TableCell component="th" scope="row">
+                                        {index}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <img src={row.imgSource} alt={row.itemName} className="menuItemImage"/>
+                                    </TableCell>
+                                    <TableCell>{row.itemName}</TableCell>
+                                    <TableCell align="left">{row.categoryName}</TableCell>
+                                    <TableCell align="left">
+                                        {row.options.map((v) => {
+                                            return (<p>{v}</p>)
+                                        })}
+                                    </TableCell>
+                                    <TableCell align="left">{row.basePrice}</TableCell>
+                                    <TableCell align="left">{row.description}</TableCell>
+                                    <TableCell align="left">Edit buttons</TableCell>
+                                </TableRow>
+                        )})}
                     </TableBody>
                 </Table>
             </TableContainer>
