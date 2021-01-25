@@ -10,7 +10,6 @@ const itemSchema = new mongoose.Schema({
     Family: { type: String },
   },
   isFeatured: { type: Boolean, default: false },
-  isCompleted: { type: Boolean, default: false },
   Accomodations: {
     type: [
       {
