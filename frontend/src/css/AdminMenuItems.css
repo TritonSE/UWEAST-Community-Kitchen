@@ -1,0 +1,10 @@
+.menuTableContainer {
+    min-width: 500px;
+    max-width: 85vw;
+}
+.menuItemImage {
+    border-radius: 10px;
+    object-fit: cover;
+    width: 150px;
+    height: 150px;
+}
