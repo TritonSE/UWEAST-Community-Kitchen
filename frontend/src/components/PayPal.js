@@ -133,14 +133,13 @@ export default function PayPal(props) {
             onApprove: async (data, actions) => {
                 return actions.order.capture().then(function(details) {
                     // Details here includes payer name, phone number, and email.
-                    console.log(details);
 
                     // create order object
                     const orderObj = {
                         "Customer": {
                             "Name": details.payer.name.given_name + " " + details.payer.name.surname,
                             "Email": details.payer.email_address,
-                            "Phone": details.payer.phone.phone_number
+                            "Phone": details.payer.phone.phone_number.national_number
                         },
                         "Pickup": cart.pickup_date,
                         "PayPal": {
@@ -152,11 +151,10 @@ export default function PayPal(props) {
                             return {
                                 "item": item.name,
                                 "quantity": item.quantity,
-                                "extra": [`${item.size} size`, ...item.addons].join(", "),
+                                "extra": [`${item.size} size`, ...item.addons],
                             }
                         })
                     }
-
                     // signal email automation by calling the /autoEmails/automate route, 
                     // this will automatically add the order to the database 
                     return fetch(`${BACKEND_URL}autoEmails/automate`, {
@@ -166,8 +164,14 @@ export default function PayPal(props) {
                         },
                         body: JSON.stringify(orderObj),
                     }).then((res) => {
-                        // alert the user that their order was successful
-                        alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                        if(res.ok){
+                            alert('Transaction completed! You will receive a confirmation email shortly.');
+                            history.push("/");
+                        } else {
+                            alert('Transaction completed, but email automation failed. You paid for your meal, and should get a confirmation from PayPal');
+                            history.push("/");
+
+                        }
                     })
                     .catch(() => {
                         alert("Error");
