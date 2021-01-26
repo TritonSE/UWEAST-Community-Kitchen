@@ -13,7 +13,7 @@ class Contact extends Component {
       return (
 
           <div>
-              <Navbar/>
+              <Navbar currentPage="contact"/>
               <div style={{marginTop: "30px"}}>
                   This is the Contact Page.
               </div>           
