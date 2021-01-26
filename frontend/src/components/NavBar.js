@@ -65,6 +65,8 @@ export default function NavBar (props) {
                         {/* Admin Page - only visible when isAuthorized()*/}
                         <Nav.Link className={adminContentClass + isPageActive("admin")} href="/admin">Admin</Nav.Link>
 
+                        <Nav.Link className={adminContentClass + isPageActive("admin")} href="/orders">Orders</Nav.Link>
+
                         {/* Logout Button - starts logout operation, only visible when isAuthorized() */}
                         <Nav.Link className={adminContentClass} onClick={logout}>Logout</Nav.Link>
 

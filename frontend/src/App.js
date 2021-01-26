@@ -11,6 +11,7 @@ import About from './pages/About';
 import Admin from './pages/Admin';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
+import Orders from './pages/Orders';
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
         {/* Admin Page */}
         <Route exact path="/admin">
           <Admin/>
+        </Route>
+        {/* Orders page */}
+        <Route exact path="/orders">
+          <Orders />
         </Route>
         {/* Any other URL is automatically matched to Menu Page */}
         <Route path="/">
