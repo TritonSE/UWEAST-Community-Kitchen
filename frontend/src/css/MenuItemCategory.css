@@ -8,13 +8,6 @@
   border-bottom: 1px solid black;
 }
 
-.menu-item-category-grid 
-{
-  display: grid;
-  grid-template-columns: repeat(3, minmax(200px, auto));
-  grid-gap: 10px;
-}
-
 .menu-item-category h2 
 {
   font-size: 20px;
@@ -36,7 +29,7 @@
   .menu-item-category-grid 
   {
     display: grid;
-    grid-template-columns: repeat(3, minmax(200px, auto));
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
   }
 }

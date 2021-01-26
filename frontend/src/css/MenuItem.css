@@ -5,6 +5,7 @@
 
 .menu-item 
 {
+  position: relative;
   width: 100%;
   height: 100px;
   background-color: #ffffff;
@@ -19,10 +20,6 @@
 .menu-item::-webkit-scrollbar {
   display: none;
   width: 0px;
-}
-
-.menu-image
-{
 }
 
 .menu-image img
@@ -57,9 +54,45 @@
   padding: 0px;
 }
 
-.menu-item p 
+.menu-text p 
 {
   font-size: 16px;
   margin: 0px;
   padding: 0px;
+}
+
+.menu-price
+{
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #f1f1f1;
+  width: 60px;
+  text-align: center;
+  border-bottom-left-radius: 5px;
+  font-weight: bold;
+  color: black;
+}
+
+.menu-plus-button 
+{
+  display: flex;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+  background-color: #1edc31;
+  border-radius: 15px;
+  color: white;
+  font-size: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-plus 
+{
+  display: flex;
+  align-self: center;
+  margin-top: -6px;
 }
