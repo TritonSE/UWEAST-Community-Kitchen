@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 :root {
     --yellow: #f9ce1d;
     --black: black;
@@ -19,36 +21,39 @@
 }
 
 /* Sets the background color for the toolbar at the top */
-#root > div > div > div > div > div.MuiToolbar-root.MuiToolbar-regular.MUIDataTableToolbar-root-100.MuiToolbar-gutters {
+.orders-page-container > div > div > div > div.MuiToolbar-root.MuiToolbar-regular.MUIDataTableToolbar-root-100.MuiToolbar-gutters {
     background-color: var(--yellow);
 }
 
 /* Sets the background color for the table header column */
-#root > div > div > div > div > div.MUIDataTable-responsiveBase-92 > table > thead > tr > th {
+.orders-page-container > div > div > div > div.MUIDataTable-responsiveBase-92 > table > thead > tr > th {
     background-color: var(--yellow);
-    font-weight: 700;
 }
 
-/* Sets the background color for the header in the dropdown row */
-#root > div > div > div > div > div.MUIDataTable-responsiveBase-92 > table > tbody > tr > td > div > table > tbody {
-    background-color: var(--lightgrey);
+.orders-page-container > div > div > div > div.MUIDataTable-responsiveBase-5 > table > thead > tr > th > span > div > div.MUIDataTableHeadCell-data-54 {
+    font-weight: bold;
 }
 
 /* Sets the background color for the rows in the dropdown row */
-#root > div > div > div > div > div.MUIDataTable-responsiveBase-92 > table > tbody > tr > td > div > table > thead {
-    background-color: var(--lightgrey);
+.orders-page-container > div > div > div > div.MUIDataTable-responsiveBase-5 > table > tbody > tr > td > div > table > tbody > tr > td {
+    background-color: var(--offwhite);    
+}
+
+/* Sets the background color for the header in the dropdown row */
+.orders-page-container > div > div > div > div.MUIDataTable-responsiveBase-5 > table > tbody > tr > td > div > table > thead > tr > th {
+    background-color: var(--offwhite);   
 }
 
 /* The background color and styling for the filters */
-#root > div > div > div > div > div.MUIDataTableFilterList-root-119 {
+.orders-page-container > div > div > div > div.MUIDataTableFilterList-root-119 {
     background-color: var(--yellow);
     margin-left: 0;
     padding-left: calc(1vw);
     width: 100%;
 }
 
-#root > div > div > div > div > div.MUIDataTable-responsiveBase-5 > table > thead > tr > th,
-#root > div > div > div > div > div.MuiToolbar-root.MuiToolbar-regular.MUIDataTableToolbar-root-13.MuiToolbar-gutters {
+.orders-page-container > div > div > div > div.MUIDataTable-responsiveBase-5 > table > thead > tr > th,
+.orders-page-container > div > div > div > div.MuiToolbar-root.MuiToolbar-regular.MUIDataTableToolbar-root-13.MuiToolbar-gutters {
     background-color: var(--yellow);
 }
 
@@ -59,7 +64,7 @@
     margin-top: calc(20%);
 }
 
-#root > div > div > div {
+.orders-page-container > div > div {
     color: var(--yellow);
 }
 

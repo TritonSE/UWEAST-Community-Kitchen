@@ -7,7 +7,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -47,10 +46,10 @@ const renderRow = (rowData, rowMeta) => {
                 {/* The dropdown header */}
                   <TableHead>
                     <TableRow>
-                      <TableCell style={{width: 'calc(5vw)'}}><b>Items</b></TableCell>
-                      <TableCell style={{width: 'calc(5vw)'}}><b>Special Instructions</b></TableCell>
-                      <TableCell style={{width: 'calc(5vw)'}}><b>Size</b></TableCell>
-                      <TableCell style={{width: 'calc(5vw)'}}><b>Quantity</b></TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}>Items</TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}>Special Instructions</TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}>Size</TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}>Quantity</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -127,7 +126,7 @@ const DisplayDateFilters = (filterList, onChange, index, column) => {
 
   return (
     <div style={{width: '20vw'}}>
-      <label>{index == 0 ? 'Pick Up Details' : 'Submission Details'}</label>
+      <label>{index === 0 ? 'Pick Up Details' : 'Submission Details'}</label>
       <DateRangePicker
         initialSettings={{ startDate: filterList[index][0] || startDate, endDate: filterList[index][1] || endDate}}
         onApply={saveDate}
@@ -234,7 +233,7 @@ export default function OrdersTable(props) {
     filterType: 'textField',
     expandableRowsOnClick: true,
     expandableRows: true,
-    selectableRows: "single",
+    selectableRows: "none",
     rowsPerPageOptions: [10, 25, 50],
     renderExpandableRow: renderRow,
     searchOpen: true,
@@ -244,13 +243,30 @@ export default function OrdersTable(props) {
  createMuiTheme({
    overrides: {
      MUIDataTable: {
-       root: {
-         backgroundColor: '#AAF',
-       },
        paper: {
          boxShadow: 'none',
        },
      },
+     MuiTableRow: {
+      root: {
+        '&$selected': {
+          backgroundColor: '#F1f1f1'
+        }
+      }
+    },
+     MUIDataTableHeadCell: {
+       root: {
+        fontFamily: 'Roboto, sans-serif',
+        fontSize: 'calc(16px)',
+        fontWeight: 'bold'  
+       }
+     },
+     MUIDataTableBodyCell: {
+      root: {
+       fontFamily: 'Roboto, sans-serif',
+       fontSize: 'calc(16px)'
+      }
+    }
    },
  });
 

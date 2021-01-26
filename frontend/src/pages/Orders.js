@@ -88,7 +88,7 @@ export default class Orders extends React.Component {
     
     render() {
         return (
-            <div>
+            <div className="orders-page-container">
                 <NavBar />
                 {this.state.Loading ? 
                 <div className="spinner-orders-page">
