@@ -7,6 +7,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { isAuthenticated, setJWT, setUser } from '../util/auth';
 import Navbar from '../components/NavBar';
+import ForgotPasswordDialogue from '../components/ForgotPasswordDialogue';
+
 const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
@@ -35,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Login() {
+export default function ResetPassword() {
   const classes = useStyles();
   const history = useHistory();
   const [state, setState] = React.useState({
@@ -45,7 +47,8 @@ export default function Login() {
       message: '',
       open: false
     },
-    form_disabled: false
+    form_disabled: false,
+    forgot_password_dialogue: false
   });
 
   const handleChange = (prop) => (event) => {
@@ -120,16 +123,15 @@ export default function Login() {
                 >
                 <Grid item md={6} xs={12}>
                     <Typography variant="h4" className={classes.title}>
-                    Login
+                    Reset Password
                     </Typography>
                     <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
-                    <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
-                    {/* <Link to="forgot-password"><Typography>Forgot your password?</Typography></Link> */}
-                     <Link to="register"><Typography>Register An Account</Typography></Link>
-                     <Link to="reset-password"><Typography>Reset Password</Typography></Link>
+                    <TextField label='Current Password' variant='outlined' type='password' onChange={handleChange('password')}/>
+                    <TextField label='New Password' variant='outlined' type='password' onChange={handleChange('password')}/>
+                     <ForgotPasswordDialogue/>
                     <div className={classes.centered}>
-                        <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Login</Button>
+                        <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Reset</Button>
                     </div>
                     </form>
                 </Grid>   

@@ -5,24 +5,24 @@ const ADMIN_EMAIL_ATTRIBUTE = 'uweast-ck:admin-email';
 
 const BACKEND_URL = config.backend.uri;
 
-async function isAuthenticated() {
-    if (!localStorage.hasOwnProperty(ADMIN_TOKEN_ATTRIBUTE)){
-        return false
-    }
-    const submission = {
-        jwtToken: localStorage.getItem(ADMIN_TOKEN_ATTRIBUTE)
-    }
-    const response = await fetch(`${BACKEND_URL}jwt/verify`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(submission)
-      });
+function isAuthenticated() {
+    // if (!localStorage.hasOwnProperty(ADMIN_TOKEN_ATTRIBUTE)){
+    //     return false
+    // }
+    // const submission = {
+    //     jwtToken: localStorage.getItem(ADMIN_TOKEN_ATTRIBUTE)
+    // }
+    // const response = await fetch(`${BACKEND_URL}jwt/verify`, {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(submission)
+    //   });
 
-      if(response.ok){
-          return true;
-      }
-      return false;
-    // return localStorage.hasOwnProperty(ADMIN_TOKEN_ATTRIBUTE);
+    //   if(response.ok){
+    //       return true;
+    //   }
+    //   return false;
+    return localStorage.hasOwnProperty(ADMIN_TOKEN_ATTRIBUTE);
   }
   
   function getJWT() {
