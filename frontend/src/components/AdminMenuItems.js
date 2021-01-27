@@ -36,6 +36,12 @@ export default function AdminMenuItems (props) {
         createData('Cookies', 
             'https://celebratingsweets.com/wp-content/uploads/2018/12/MM-Cookies-1-500x500.jpg',
             'Sides', ['Individual', 'Family'], 3.50, 'Item description'),
+            createData('Cookies', 
+            'https://celebratingsweets.com/wp-content/uploads/2018/12/MM-Cookies-1-500x500.jpg',
+            'Sides', ['Individual', 'Family'], 3.50, 'Item description'),
+            createData('Cookies', 
+            'https://celebratingsweets.com/wp-content/uploads/2018/12/MM-Cookies-1-500x500.jpg',
+            'Sides', ['Individual', 'Family'], 3.50, 'Item description'),
     ];
     // Fetch all menu items to display in table
 
@@ -82,17 +88,17 @@ export default function AdminMenuItems (props) {
     const menuTable = () => {
         return (
             <TableContainer component={Paper} className="menuTableContainer">
-                <Table aria-label="simple table" className="menuTable">
+                <Table aria-label="simple table" stickyHeader className="menuTable">
                     <TableHead>
-                        <TableRow>
-                            <TableCell>#</TableCell>
-                            <TableCell align="center">Item Image</TableCell>
-                            <TableCell align="left">Item Name</TableCell>
-                            <TableCell align="left">Category Name</TableCell>
-                            <TableCell align="left">Size/Options</TableCell>
-                            <TableCell align="left">Base Price</TableCell>
-                            <TableCell align="left">Description</TableCell>
-                            <TableCell align="left">Edit</TableCell>
+                        <TableRow >
+                            <TableCell className="menuTableHeaders">#</TableCell>
+                            <TableCell className="menuTableHeaders" align="center">Item Image</TableCell>
+                            <TableCell className="menuTableHeaders" align="left">Item Name</TableCell>
+                            <TableCell className="menuTableHeaders" align="left">Category Name</TableCell>
+                            <TableCell className="menuTableHeaders" align="left">Size/Options</TableCell>
+                            <TableCell className="menuTableHeaders" align="left">Base Price</TableCell>
+                            <TableCell className="menuTableHeaders" align="left">Description</TableCell>
+                            <TableCell className="menuTableHeaders" align="left">Edit</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -100,22 +106,22 @@ export default function AdminMenuItems (props) {
                             const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
                             return (
                                 <TableRow key={row.itemName} className={bgColor}>
-                                    <TableCell component="th" scope="row">
+                                    <TableCell component="th" scope="row" className="menuRowText">
                                         {index}
                                     </TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="center" className="menuRowText">
                                         <img src={row.imgSource} alt={row.itemName} className="menuItemImage"/>
                                     </TableCell>
-                                    <TableCell>{row.itemName}</TableCell>
-                                    <TableCell align="left">{row.categoryName}</TableCell>
-                                    <TableCell align="left">
+                                    <TableCell className="menuRowText">{row.itemName}</TableCell>
+                                    <TableCell align="left" className="menuRowText">{row.categoryName}</TableCell>
+                                    <TableCell align="left" className="menuRowText">
                                         {row.options.map((v) => {
                                             return (<p>{v}</p>)
                                         })}
                                     </TableCell>
-                                    <TableCell align="left">{row.basePrice}</TableCell>
-                                    <TableCell align="left">{row.description}</TableCell>
-                                    <TableCell align="left" >
+                                    <TableCell align="left" className="menuRowText">{row.basePrice}</TableCell>
+                                    <TableCell align="left" className="menuRowText">{row.description}</TableCell>
+                                    <TableCell align="left" className="menuRowText">
                                         <EditIcon style={{"marginRight": "5px"}}/>
                                         <DeleteIcon style={{"marginLeft": "5px"}}/>
                                     </TableCell>
@@ -129,9 +135,10 @@ export default function AdminMenuItems (props) {
     
     return (
         <div>
-            <Button onClick={() => setDeleteConfirmation("french toast")}>+ Add Item</Button>
+            <div className="aboveTableContainer">
+                <Button>+ Add Item</Button>
+            </div>
             {menuTable()}
-            {deleteConfirmationModal()}
         </div>
         
     );
