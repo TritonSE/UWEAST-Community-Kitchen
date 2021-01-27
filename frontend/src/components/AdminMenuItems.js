@@ -12,6 +12,7 @@ import SearchBar from "material-ui-search-bar";
 import '../css/AdminMenuItems.css';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 function createData(itemName, imgSource, categoryName, options, baseprice, description) {
   return {
@@ -149,7 +150,10 @@ export default function AdminMenuItems (props) {
     return (
         <div>
             <div className="aboveTableContainer">
-                <Button>+ Add Item</Button>
+                <Button className="menuAddButton">
+                    <AddCircleIcon className="menuAddButtonIcon" />
+                    Add Item
+                </Button>
                 <SearchBar
                     value={searchTerm}
                     onChange={(newValue) => setSearchTerm(newValue)}

@@ -17,7 +17,20 @@
     align-items: center;
     justify-content: space-between;
 }
+.menuAddButton {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: var(--yellow) !important;
+    border: 1px solid var(--yellow) !important;
+    color: var(--black) !important;
+    font-weight: bold !important;
+}
+.menuAddButtonIcon {
+    color: var(--white) !important;
+    margin-right: 10px;
+}
+.menuSearchBar {
 
+}
 .menuTableContainer {
     min-width: 500px;
     max-width: 85vw;
