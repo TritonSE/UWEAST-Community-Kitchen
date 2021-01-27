@@ -7,6 +7,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import SearchBar from "material-ui-search-bar";
 
 import '../css/AdminMenuItems.css';
@@ -85,7 +87,7 @@ function menuTable(displayContent) {
                     {displayContent.map((row, index) => {
                         const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
                         return (
-                            <TableRow key={row.itemName} className={bgColor}>
+                            <TableRow key={row.itemName + "" + row.index + "" + row.categoryName} className={bgColor}>
                                 <TableCell component="th" scope="row" className="menuRowText">
                                     {index}
                                 </TableCell>
@@ -112,40 +114,59 @@ function menuTable(displayContent) {
         </TableContainer>
     );
 }
+
 export default function AdminMenuItems (props) {
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
+    const [filter, setFilter] = useState("All");
     // create testing data
     const rows = [
-        createData('Brioche French Toast', 
-            'https://d1e3z2jco40k3v.cloudfront.net/-/media/mccormick-us/recipes/mccormick/q/800/quick_and_easy_french_toast_new_800x800.jpg?rev=7ec5983cd3674050aac15327c66935dc&vd=20200628T071104Z&hash=E2A73229EE45D0D9AD547240FE366160',
-            'Appetizers', ['Family', 'Gluten Free'], 14.50, 'Item description'),
-    ];
+            createData('Brioche French Toast', 
+                'https://d1e3z2jco40k3v.cloudfront.net/-/media/mccormick-us/recipes/mccormick/q/800/quick_and_easy_french_toast_new_800x800.jpg?rev=7ec5983cd3674050aac15327c66935dc&vd=20200628T071104Z&hash=E2A73229EE45D0D9AD547240FE366160',
+                'Appetizer', ['Family', 'Gluten Free'], 14.50, 'Item description'),
+            createData('Italian Pizza',
+                'https://thefoodellers.com/wp-content/uploads/2019/05/Italian-Pizza-Recipe.jpeg',
+                'Main Dish', ['Family', 'Vegetarian'], 19.99, 'Item description'),
+            createData('Drink', 
+                'https://zdnet2.cbsistatic.com/hub/i/r/2020/06/09/2eacd230-d144-4224-9e64-aa012e900877/resize/1200x900/1e8024904299314d9378f958f86e920c/coca-cola-coke-coca-cola.jpg',
+                'Drink', ['Individual'], 2.00, 'Item description'),
+            createData('Cookies', 
+                'https://celebratingsweets.com/wp-content/uploads/2018/12/MM-Cookies-1-500x500.jpg',
+                'Side', ['Individual', 'Family'], 3.50, 'Item description'),
+        ];
     const [displayContent, setDisplayContent] = useState(rows);
     // Fetch all menu items to display in table
 
 
     // update display contents based on search term
     const handleSearch = (searchTerm) => {
-        console.log("handleSearch")
-        const newRows = [
-            createData('Brioche French Toast', 
-                'https://d1e3z2jco40k3v.cloudfront.net/-/media/mccormick-us/recipes/mccormick/q/800/quick_and_easy_french_toast_new_800x800.jpg?rev=7ec5983cd3674050aac15327c66935dc&vd=20200628T071104Z&hash=E2A73229EE45D0D9AD547240FE366160',
-                'Appetizers', ['Family', 'Gluten Free'], 14.50, 'Item description'),
-            createData('Italian Pizza',
-                'https://thefoodellers.com/wp-content/uploads/2019/05/Italian-Pizza-Recipe.jpeg',
-                'Main Dishes', ['Family', 'Vegetarian'], 19.99, 'Item description'),
-            createData('Cookies', 
-                'https://celebratingsweets.com/wp-content/uploads/2018/12/MM-Cookies-1-500x500.jpg',
-                'Sides', ['Individual', 'Family'], 3.50, 'Item description'),
-            createData('Cookies', 
-                'https://celebratingsweets.com/wp-content/uploads/2018/12/MM-Cookies-1-500x500.jpg',
-                'Sides', ['Individual', 'Family'], 3.50, 'Item description'),
-            createData('Cookies', 
-                'https://celebratingsweets.com/wp-content/uploads/2018/12/MM-Cookies-1-500x500.jpg',
-                'Sides', ['Individual', 'Family'], 3.50, 'Item description'),
-        ];
-        setDisplayContent(newRows); 
+        if(searchTerm === ""){
+            setDisplayContent(rows.filter(x => x.categoryName === filter));
+        }
+        else{
+            setDisplayContent(displayContent.filter(x => x.itemName.toLowerCase().includes(searchTerm.toLowerCase()))); 
+        }
+    }
+    // update display contents based on filter term
+    // possible terms are: Main Dish, Appetizer, Drink, Side
+    const handleFilterChange = (filter) => {
+
+        console.log("handleFilter " + filter)
+        if(filter === "All"){        
+            setDisplayContent(rows); 
+        }
+        else{
+            const newRows = [];
+            for(var index in rows) { 
+                // console.log(rows[index])
+                if (rows[index]["categoryName"] === filter){
+                    console.log("pushing " + rows[index]);
+                    newRows.push(rows[index]); 
+                }
+            }
+            console.log(newRows)
+            setDisplayContent(newRows); 
+        }
     }
     return (
         <div>
@@ -154,11 +175,32 @@ export default function AdminMenuItems (props) {
                     <AddCircleIcon className="menuAddButtonIcon" />
                     Add Item
                 </Button>
-                <SearchBar
-                    value={searchTerm}
-                    onChange={(newValue) => setSearchTerm(newValue)}
-                    onRequestSearch={() => handleSearch(searchTerm)}
-                />
+                <span style={{"display": "flex", "flexDirection": "row"}}>
+                    <Select
+                        className="menuFilterSelect"
+                        id="item-filter-select"
+                        defaultValue="All"
+                        displayEmpty="false"
+                        variant="outlined"
+                        value={filter}
+                        onChange={(v) => {
+                            setFilter(v.target.value);
+                            handleFilterChange(v.target.value);
+                        }}
+                    >
+                        <MenuItem value="All">All</MenuItem>
+                        <MenuItem value="Appetizer">Appetizer</MenuItem>
+                        <MenuItem value="Main Dish">Main Dish</MenuItem>
+                        <MenuItem value="Side">Side</MenuItem>
+                        <MenuItem value="Drink">Drink</MenuItem>
+                    </Select>
+                    <SearchBar
+                        className="menuSearchBar"
+                        value={searchTerm}
+                        onChange={(newValue) => setSearchTerm(newValue)}
+                        onRequestSearch={() => handleSearch(searchTerm)}
+                    />
+                </span>
             </div>
             {menuTable(displayContent)}
         </div>
