@@ -12,7 +12,12 @@
     min-width: 500px;
     max-width: 85vw;
     padding-bottom: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
+
 .menuTableContainer {
     min-width: 500px;
     max-width: 85vw;
