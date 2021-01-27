@@ -13,7 +13,11 @@ module.exports = {
     uri: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017'
   },
   uweast: {
-    email: process.env.UWEAST_USER_EMAIL || "",
+    user: process.env.UWEAST_USER_EMAIL || "",
     pass: process.env.UWEAST_USER_PASSWORD || ""
   },
+  paypal: {
+    PAYPAL_CLIENT_ID: process.env.PAYPAL_CLIENT_ID || "",
+    PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET || ""
+  }
 };
