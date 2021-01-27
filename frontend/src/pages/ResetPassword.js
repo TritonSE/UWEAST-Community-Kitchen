@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .MuiButton-root': {
       margin: theme.spacing(3),
-      //backgroundColor: "red"
     }
   },
   title: {
@@ -42,13 +41,14 @@ export default function ResetPassword() {
   const history = useHistory();
   const [state, setState] = React.useState({
     email: '',
-    password: '',
+    oldPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
     snack: {
       message: '',
       open: false
     },
     form_disabled: false,
-    forgot_password_dialogue: false
   });
 
   const handleChange = (prop) => (event) => {
@@ -60,22 +60,36 @@ export default function ResetPassword() {
     setState({ ...state, form_disabled: true });
     const submission = {
       email: state.email,
-      password: state.password
+      oldPassword: state.oldPassword,
+      newPassword: state.newPassword
     };
 
     //Check if either field is empty
-    if (state.email === '' || state.password === ''){
+    if (state.email === '' || state.oldPassword === '' || state.newPassword ==='' || state.confirmNewPassword ===''){
         setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
         return;
     }
     //Check Password Length
-    if (submission.password.length < 6) {
-      setState({...state, form_disabled: false, snack: {message: 'Password must be at least 6 characters long.', open: true}});
+    if (state.newPassword.length < 6) {
+      setState({...state, form_disabled: false, snack: {message: 'New Password must be at least 6 characters long.', open: true}});
       return;
     }
+
+    //Check New Password Matches Confirmed Password
+    if (state.newPassword !== state.confirmNewPassword) {
+      setState({...state, form_disabled: false, snack: {message: 'New Password Does Not Match', open: true}});
+      return;
+    }
+
+    //Check New Password is different from Old Password
+    if (state.newPassword === state.oldPassword) {
+      setState({...state, form_disabled: false, snack: {message: 'New Password Cannot Be The Same As Current Password!', open: true}});
+      return;
+    }
+
     try {
         //Attempt to login with given credentials 
-      const response = await fetch(`${BACKEND_URL}user/login`, {
+      const response = await fetch(`${BACKEND_URL}user/resetPassword`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submission)
@@ -83,19 +97,17 @@ export default function ResetPassword() {
 
       //Successful Login
       if (response.ok) {
-        const json = await response.json();
-        setJWT(json.token);
-        setUser(json.email);
-        history.push("/admin");
+        alert("Password Successfully Reset!");
+        history.push("/reset-password");
+        history.go(0);
       }
       //Invalid Credentials
       else if (response.status === 401) {
-        setState({...state, form_disabled: false, snack: {message: 'Email or password not recognized.', open: true}});
+        setState({...state, form_disabled: false, snack: {message: 'Email or old password not recognized.', open: true}});
       }
       //Any other server response
       else {
-        const text = await response.text();
-        setState({...state, form_disabled: false, snack: {message: `Could not log in: ${text}`, open: true}});
+        setState({...state, form_disabled: false, snack: {message: `An error occurred: Password could not be updated`, open: true}});
       }
     } 
     //General Error
@@ -126,9 +138,10 @@ export default function ResetPassword() {
                     Reset Password
                     </Typography>
                     <form className={classes.form} onSubmit={handleSubmit}>
-                    <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
-                    <TextField label='Current Password' variant='outlined' type='password' onChange={handleChange('password')}/>
-                    <TextField label='New Password' variant='outlined' type='password' onChange={handleChange('password')}/>
+                    <TextField required={true} label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
+                    <TextField  required={true} label='Current Password' variant='outlined' type='password' onChange={handleChange('oldPassword')}/>
+                    <TextField  required={true} label='New Password' variant='outlined' type='password' onChange={handleChange('newPassword')}/>
+                    <TextField color="#F9CE1D" required={true} label='Confirm New Password' variant='outlined' type='password' onChange={handleChange('confirmNewPassword')}/>
                      <ForgotPasswordDialogue/>
                     <div className={classes.centered}>
                         <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Reset</Button>

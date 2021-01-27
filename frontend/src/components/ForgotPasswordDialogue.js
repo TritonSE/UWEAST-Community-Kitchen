@@ -39,13 +39,11 @@ export default function FormDialog() {
 
       //Successful Login
       if (response.ok) {
-        const json = await response.json();
-        alert(JSON.stringify(json));
+        alert("Email Successfully Sent!");
         handleClose();
       }
       //Invalid Credentials
       else {
-            const json = await response.json();
             alert(JSON.stringify(json));
         //setState({...state, form_disabled: false, snack: {message: 'Email or password not recognized.', open: true}});
       }
@@ -55,51 +53,6 @@ export default function FormDialog() {
     }
 
   }
-
-//   const handleSubmit = async (event) => {
-//     event.preventDefault();
-//     const submission = {
-//       email: state.email,
-//       password: state.password
-//     };
-
-//     //Check if either field is empty
-//     if (state.email === '' || state.password === ''){
-//         //setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
-//         return;
-//     }
-//     //Check Password Length
-//     if (submission.password.length < 6) {
-//       //setState({...state, form_disabled: false, snack: {message: 'Password must be at least 6 characters long.', open: true}});
-//       return;
-//     }
-//     try {
-//         //Attempt to login with given credentials 
-//       const response = await fetch(`${BACKEND_URL}user/login`, {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify(submission)
-//       });
-
-//       //Successful Login
-//       if (response.ok) {
-//         const json = await response.json();
-//       }
-//       //Invalid Credentials
-//       else if (response.status === 401) {
-//         //setState({...state, form_disabled: false, snack: {message: 'Email or password not recognized.', open: true}});
-//       }
-//       //Any other server response
-//       else {
-//         const text = await response.text();
-//         //setState({...state, form_disabled: false, snack: {message: `Could not log in: ${text}`, open: true}});
-//       }
-//     } 
-//     //General Error
-//     catch (error) {
-//       //setState({...state, form_disabled: false, snack: {message: `An error occurred: ${error.message}`, open: true}});
-//     }
-//   };
 
   const handleClickOpen = () => {
     setState({open: true});
@@ -138,10 +91,11 @@ export default function FormDialog() {
             Cancel
           </Button>
           <Button onClick={handleSend} color="primary">
-            Send
+            Send Email
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={true} autoHideDuration={6000} message={"Jello"}/>
     </div>
   );
 }

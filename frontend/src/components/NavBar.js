@@ -1,9 +1,7 @@
 import React from 'react';
 import {useHistory} from "react-router-dom";
 import {Navbar, Nav} from 'react-bootstrap';
-import {isAuthorized, removeJWT} from '../util/auth.js';
 import '../css/NavBar.css';
-import { useHistory } from 'react-router-dom';
 import { isAuthenticated, logout} from '../util/auth';
 
 
@@ -17,14 +15,14 @@ export default function NavBar (props) {
     var loginButtonClass;
 
     {/* removes login token and redirects to menu page */}
-    function logout() {
-        removeJWT();
-        history.push("/");
+    function Logout() {
+        logout();
+        history.push("/login");
         history.go(0);
     }
 
     {/* Hides admin content (admin page + logout) or login button depending on whether user is logged in */}
-    if(isAuthorized()) {
+    if(isAuthenticated()) {
         adminContentClass = "nav-link";
         loginButtonClass = "nav-link d-none";
     } else {
@@ -68,7 +66,7 @@ export default function NavBar (props) {
                         <Nav.Link className={adminContentClass + isPageActive("admin")} href="/admin">Admin</Nav.Link>
 
                         {/* Logout Button - starts logout operation, only visible when isAuthorized() */}
-                        <Nav.Link className={adminContentClass} onClick={logout}>Logout</Nav.Link>
+                        <Nav.Link className={adminContentClass} onClick={Logout}>Logout</Nav.Link>
 
                         {/* Login Page - only visible when not isAuthorized()*/}
                         <Nav.Link className={loginButtonClass + isPageActive("login")} href="/login">Login</Nav.Link>        
