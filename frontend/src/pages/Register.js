@@ -41,6 +41,7 @@ export default function Register() {
   const [state, setState] = React.useState({
     email: '',
     password: '',
+    passwordConfirmation: '',
     secret: '',
     snack: {
       message: '',
@@ -73,6 +74,13 @@ export default function Register() {
       setState({...state, form_disabled: false, snack: {message: 'Password must be at least 6 characters long.', open: true}});
       return;
     }
+
+    //Check Passwords Match
+    if (state.password !== state.passwordConfirmation) {
+      setState({...state, form_disabled: false, snack: {message: 'Passwords Do Not Match.', open: true}});
+      return;
+    }
+
     try {
         //Attempt to register with given credentials 
       const response = await fetch(`${BACKEND_URL}user/register`, {
@@ -126,11 +134,12 @@ export default function Register() {
                 >
                 <Grid item md={6} xs={12}>
                     <Typography variant="h4" className={classes.title}>
-                    Register an Account
+                    Register Account
                     </Typography>
                     <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
                     <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
+                    <TextField label='Confirm Password' variant='outlined' type='password' onChange={handleChange('passwordConfirmation')}/>
                     <TextField label='Secret Key' variant='outlined' type='password' onChange={handleChange('secret')}/>
                     <Link to="login"><Typography>Already have an account? Sign-In</Typography></Link>
                     <div className={classes.centered}>

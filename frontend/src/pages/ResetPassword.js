@@ -138,10 +138,10 @@ export default function ResetPassword() {
                     Reset Password
                     </Typography>
                     <form className={classes.form} onSubmit={handleSubmit}>
-                    <TextField required={true} label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
-                    <TextField  required={true} label='Current Password' variant='outlined' type='password' onChange={handleChange('oldPassword')}/>
-                    <TextField  required={true} label='New Password' variant='outlined' type='password' onChange={handleChange('newPassword')}/>
-                    <TextField color="#F9CE1D" required={true} label='Confirm New Password' variant='outlined' type='password' onChange={handleChange('confirmNewPassword')}/>
+                    <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
+                    <TextField  label='Current Password' variant='outlined' type='password' onChange={handleChange('oldPassword')}/>
+                    <TextField  label='New Password' variant='outlined' type='password' onChange={handleChange('newPassword')}/>
+                    <TextField label='Confirm New Password' variant='outlined' type='password' onChange={handleChange('confirmNewPassword')}/>
                      <ForgotPasswordDialogue/>
                     <div className={classes.centered}>
                         <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Reset</Button>

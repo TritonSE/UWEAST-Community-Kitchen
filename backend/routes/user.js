@@ -168,7 +168,7 @@ router.post(
       const updatedUser = await updateOneUser(user);
       if(!updatedUser){
         return res
-          .status(401)
+          .status(400)
           .json({ errors: [{ msg: "Could not update user..." }] });
       }
 
@@ -181,8 +181,7 @@ router.post(
       sendEmail('forgot-password', email, locals, res);
 
       res.status(200).json({
-        msg: "Email Successfully Sent",
-        pass: randomlyGeneratedPass
+        msg: "Email Successfully Sent"
       });
     } catch (err) {
       console.error(err.message);

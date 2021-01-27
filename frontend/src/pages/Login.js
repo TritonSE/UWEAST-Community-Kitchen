@@ -126,7 +126,7 @@ export default function Login() {
                     <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
                     <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
                     {/* <Link to="forgot-password"><Typography>Forgot your password?</Typography></Link> */}
-                     <Link to="register"><Typography>Register An Account</Typography></Link>
+                     <Link to="register"><Typography>Register Account</Typography></Link>
                      <Link to="reset-password"><Typography>Reset Password</Typography></Link>
                     <div className={classes.centered}>
                         <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Login</Button>

@@ -16,7 +16,11 @@ export default function FormDialog() {
   //const [open, setOpen] = React.useState(false);
   const [state, setState] = React.useState({
     open: false,
-    email: ''
+    email: '',
+    error:{
+      display: false,
+      message: ''
+    }
   });
 
   const handleSend = async() => {
@@ -24,10 +28,9 @@ export default function FormDialog() {
           email: state.email
       };
 
-      //Check if either field is empty
+      //Check if email field is empty
     if (state.email === ''){
-        alert("Email Address cannot be empty!");
-        //setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
+        setState({...state, error:{display: true, message: "Field cannot be empty!"}})
         return;
     }
     try{
@@ -37,33 +40,37 @@ export default function FormDialog() {
         body: JSON.stringify(submission)
       });
 
-      //Successful Login
+      //Everything went great
       if (response.ok) {
         alert("Email Successfully Sent!");
         handleClose();
+      } 
+      //Invalid Email
+      else if(response.status == 401){
+        setState({...state, error:{display: true, message: "Invalid Email"}});
       }
-      //Invalid Credentials
+      //Any Server Errors
       else {
-            alert(JSON.stringify(json));
-        //setState({...state, form_disabled: false, snack: {message: 'Email or password not recognized.', open: true}});
+            setState({...state, error:{display: true, message: "System Error: Try Again Later"}});
       }
     }
+    //General Errors
     catch(error){
-        alert("ERRROR");
+        setState({...state, error:{display: true, message: `An error occurred: ${error.message}`}});
     }
 
   }
 
   const handleClickOpen = () => {
-    setState({open: true});
+    setState({...state, email:'', open: true, error:{display: false}});
   };
 
   const handleClose = () => {
-    setState({open: false});
+    setState({...state, open: false, error:{display: false}});
   };
 
   const handleEmailChange = (event) => {
-    setState({email: event.target.value, open: true});
+    setState({...state, email: event.target.value, open: true});
   }
 
   return (
@@ -78,6 +85,8 @@ export default function FormDialog() {
           </DialogContentText>
           <TextField
             onChange={handleEmailChange}
+            error={state.error.display}
+            helperText={state.error.display ? state.error.message: null}
             autoFocus
             margin="dense"
             id="name"
@@ -95,7 +104,6 @@ export default function FormDialog() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar open={true} autoHideDuration={6000} message={"Jello"}/>
     </div>
   );
 }
