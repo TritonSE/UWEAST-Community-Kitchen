@@ -9,7 +9,7 @@
 }
 
 .aboveTableContainer{
-    min-width: 500px;
+    min-width: 350px;
     max-width: 85vw;
     padding-bottom: 40px;
     display: flex;
@@ -38,15 +38,11 @@
     height: 100%;
 }
 .menuTableContainer {
-    min-width: 500px;
+    min-width: 350px;
     max-width: 85vw;
     max-height: 80vh;
     overflow: scroll;
     border: 2px solid var(--black);
-}
-.menuTable {
-    min-width: 500px;
-    max-width: 85vw;
 }
 .menuTableHeaders {
     font-size: 16px !important;

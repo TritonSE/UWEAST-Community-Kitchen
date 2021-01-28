@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -16,6 +16,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
+const config = require('../config');
+const BACKEND_URL = config.backend.uri;
+
 function createData(itemName, imgSource, categoryName, options, baseprice, description) {
   return {
         "itemName": itemName, 
@@ -26,8 +29,6 @@ function createData(itemName, imgSource, categoryName, options, baseprice, descr
         "description": description
     };
 }
-
-
 
 // Renders modal that asks the user if they want to remove the item from the menu
 const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation) => {
@@ -66,6 +67,50 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation) => {
             </Modal>
         );
 }
+// fetches all items from the database
+async function fetchItems(){
+    const rows = [
+            createData('Brioche French Toast', 
+                'https://d1e3z2jco40k3v.cloudfront.net/-/media/mccormick-us/recipes/mccormick/q/800/quick_and_easy_french_toast_new_800x800.jpg?rev=7ec5983cd3674050aac15327c66935dc&vd=20200628T071104Z&hash=E2A73229EE45D0D9AD547240FE366160',
+                'Appetizer', ['Family', 'Gluten Free'], 14.50, 'Item description'),
+            createData('Italian Pizza',
+                'https://thefoodellers.com/wp-content/uploads/2019/05/Italian-Pizza-Recipe.jpeg',
+                'Main Dish', ['Family', 'Vegetarian'], 19.99, 'Item description'),
+            createData('Drink', 
+                'https://zdnet2.cbsistatic.com/hub/i/r/2020/06/09/2eacd230-d144-4224-9e64-aa012e900877/resize/1200x900/1e8024904299314d9378f958f86e920c/coca-cola-coke-coca-cola.jpg',
+                'Drink', ['Individual'], 2.00, 'Item description'),
+            createData('Cookies', 
+                'https://celebratingsweets.com/wp-content/uploads/2018/12/MM-Cookies-1-500x500.jpg',
+                'Side', ['Individual', 'Family'], 3.50, 'Item description'),
+        ];
+    return rows;
+    /* 
+    return fetch(`${BACKEND_URL}item/`, {
+                method: "GET",
+                headers: {
+                    "content-type": "application/json",
+                },
+            }).then((res) => {
+                if(res.ok){
+                    console.log(res);
+                    // put all items into rows
+                    rows = res.body.map((item) => {
+                        return createData();
+                    })
+                } else {
+                    alert("EEE")
+                }
+            })
+            .catch(() => {
+                alert("Error");
+            });*/
+}
+
+// Takes in an item id, removes the corresponding item from the database
+async function deleteRowById(){
+
+}
+
 // Renders table of items based on what is passed in through displayContent
 function menuTable(displayContent) {
     return (
@@ -119,49 +164,62 @@ export default function AdminMenuItems (props) {
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState("All");
-    // create testing data
-    const rows = [
-            createData('Brioche French Toast', 
-                'https://d1e3z2jco40k3v.cloudfront.net/-/media/mccormick-us/recipes/mccormick/q/800/quick_and_easy_french_toast_new_800x800.jpg?rev=7ec5983cd3674050aac15327c66935dc&vd=20200628T071104Z&hash=E2A73229EE45D0D9AD547240FE366160',
-                'Appetizer', ['Family', 'Gluten Free'], 14.50, 'Item description'),
-            createData('Italian Pizza',
-                'https://thefoodellers.com/wp-content/uploads/2019/05/Italian-Pizza-Recipe.jpeg',
-                'Main Dish', ['Family', 'Vegetarian'], 19.99, 'Item description'),
-            createData('Drink', 
-                'https://zdnet2.cbsistatic.com/hub/i/r/2020/06/09/2eacd230-d144-4224-9e64-aa012e900877/resize/1200x900/1e8024904299314d9378f958f86e920c/coca-cola-coke-coca-cola.jpg',
-                'Drink', ['Individual'], 2.00, 'Item description'),
-            createData('Cookies', 
-                'https://celebratingsweets.com/wp-content/uploads/2018/12/MM-Cookies-1-500x500.jpg',
-                'Side', ['Individual', 'Family'], 3.50, 'Item description'),
-        ];
-    const [displayContent, setDisplayContent] = useState(rows);
+    const [displayContent, setDisplayContent] = useState([]);
+    const [itemList, setItemList] = useState([]);
+    console.log("render");
     // Fetch all menu items to display in table
+    useEffect(() => {
+        async function fetchData(){
+            // fetch all menu items
+            const items = await fetchItems();
+            setItemList(items);
+            setDisplayContent(items);
+        }
+        
+        
+        fetchData();
 
+    }, [setItemList, setDisplayContent])
 
     // update display contents based on search term
     const handleSearch = (searchTerm) => {
+        // Empty search term, so we want to reset the displayed items to those of the current category
         if(searchTerm === ""){
-            setDisplayContent(rows.filter(x => x.categoryName === filter));
+            if(filter === "All"){        
+                setDisplayContent(itemList); 
+            }
+            else {
+                setDisplayContent(itemList.filter(x => x.categoryName === filter));
+            }
         }
         else{
-            setDisplayContent(displayContent.filter(x => x.itemName.toLowerCase().includes(searchTerm.toLowerCase()))); 
+            // Filters the current display content to show those that contain the
+            // search term in the name AND correspond to current filter
+            if(filter === "All"){
+                setDisplayContent(itemList.filter(x => x.itemName.toLowerCase().includes(searchTerm.toLowerCase()))); 
+            }
+            else {
+                // Filter based on search term and filter term
+                setDisplayContent(itemList.filter(x => 
+                    x.itemName.toLowerCase().includes(searchTerm.toLowerCase())
+                    && x.categoryName === filter
+                )); 
+            }
         }
     }
     // update display contents based on filter term
     // possible terms are: Main Dish, Appetizer, Drink, Side
     const handleFilterChange = (filter) => {
-
-        console.log("handleFilter " + filter)
+        // clear search
+        setSearchTerm("");
         if(filter === "All"){        
-            setDisplayContent(rows); 
+            setDisplayContent(itemList); 
         }
         else{
             const newRows = [];
-            for(var index in rows) { 
-                // console.log(rows[index])
-                if (rows[index]["categoryName"] === filter){
-                    console.log("pushing " + rows[index]);
-                    newRows.push(rows[index]); 
+            for(var index in itemList) { 
+                if (itemList[index]["categoryName"] === filter){
+                    newRows.push(itemList[index]); 
                 }
             }
             console.log(newRows)
