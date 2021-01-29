@@ -33,11 +33,11 @@ function createData(itemName, imgSource, categoryName, options, baseprice, descr
 }
 
 // Renders modal that asks the user if they want to remove the item from the menu
-const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation) => {
+const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent) => {
     return (
         <Modal 
-            show={deleteConfirmation !== ""} 
-            onHide={() => setDeleteConfirmation("")} 
+            show={deleteConfirmation !== []} 
+            onHide={() => setDeleteConfirmation(["", ""])} 
             backdrop='static'
         >
                 <Modal.Header closeButton>
@@ -45,7 +45,7 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation) => {
                 </Modal.Header>
                 <Modal.Body>
                     <div>
-                        <p>Are you sure you want to remove {deleteConfirmation} from the menu?</p>
+                        <p>Are you sure you want to remove {deleteConfirmation[0]} from the menu?</p>
                     </div>
                 </Modal.Body>
                 
@@ -55,13 +55,13 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation) => {
                         console.log("removing item from menu")
                         
                         // Call database, remove item from menu
-                        
-                        setDeleteConfirmation("");
+                        handleRemoveByID(deleteConfirmation[1], itemList, setItemList, displayContent, setDisplayContent);
+                        setDeleteConfirmation(["", ""]);
                     }}>
                         Remove Item
                     </Button>
                     <Button variant="secondary" onClick={() => {
-                        setDeleteConfirmation("");
+                        setDeleteConfirmation(["", ""]);
                     }}>
                         Cancel
                     </Button>
@@ -71,7 +71,7 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation) => {
 }
 
 // Renders table of items based on what is passed in through displayContent
-function menuTable(itemList, setItemList, displayContent, setDisplayContent) {
+function menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation) {
     return (
         <TableContainer component={Paper} className="menuTableContainer">
             <Table aria-label="simple table" stickyHeader className="menuTable">
@@ -111,7 +111,7 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent) {
                                     <IconButton>
                                         <EditIcon style={{"marginRight": "5px"}}/>
                                     </IconButton>
-                                    <IconButton aria-label="delete item" onClick={() => handleRemoveByID(row.id, itemList, setItemList, displayContent, setDisplayContent)}>
+                                    <IconButton aria-label="delete item" onClick={() => setDeleteConfirmation([row.itemName, row.id])}>
                                         <DeleteIcon style={{"marginLeft": "5px"}}/>
                                     </IconButton>
                                 </TableCell>
@@ -146,7 +146,7 @@ async function handleRemoveByID(id, itemList, setItemList, displayContent, setDi
     
 }
 export default function AdminMenuItems (props) {
-    const [deleteConfirmation, setDeleteConfirmation] = useState("");
+    const [deleteConfirmation, setDeleteConfirmation] = useState(["", ""]);
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState("All");
     const [displayContent, setDisplayContent] = useState([]);
@@ -236,6 +236,7 @@ export default function AdminMenuItems (props) {
     if(loaded){
         return (  
             <div>
+                {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
                 <div className="aboveTableContainer">
                     <Button className="menuAddButton">
                         <AddCircleIcon className="menuAddButtonIcon" />
@@ -268,7 +269,7 @@ export default function AdminMenuItems (props) {
                         />
                     </span>
                 </div>
-                {menuTable(itemList, setItemList, displayContent, setDisplayContent)}
+                {menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation)}
             </div>
         )
     }
