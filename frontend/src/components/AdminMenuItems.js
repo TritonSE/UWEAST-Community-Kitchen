@@ -10,23 +10,25 @@ import Paper from "@material-ui/core/Paper";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import SearchBar from "material-ui-search-bar";
-
-import '../css/AdminMenuItems.css';
+import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
+import '../css/AdminMenuItems.css';
+
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
-function createData(itemName, imgSource, categoryName, options, baseprice, description) {
+function createData(itemName, imgSource, categoryName, options, baseprice, description, id) {
   return {
         "itemName": itemName, 
         "imgSource": imgSource,
         "categoryName": categoryName, 
         "options": options, 
         "basePrice": baseprice, 
-        "description": description
+        "description": description,
+        "id": id,
     };
 }
 
@@ -67,52 +69,9 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation) => {
             </Modal>
         );
 }
-// fetches all items from the database
-async function fetchItems(){
-    const rows = [
-            createData('Brioche French Toast', 
-                'https://d1e3z2jco40k3v.cloudfront.net/-/media/mccormick-us/recipes/mccormick/q/800/quick_and_easy_french_toast_new_800x800.jpg?rev=7ec5983cd3674050aac15327c66935dc&vd=20200628T071104Z&hash=E2A73229EE45D0D9AD547240FE366160',
-                'Appetizer', ['Family', 'Gluten Free'], 14.50, 'Item description'),
-            createData('Italian Pizza',
-                'https://thefoodellers.com/wp-content/uploads/2019/05/Italian-Pizza-Recipe.jpeg',
-                'Main Dish', ['Family', 'Vegetarian'], 19.99, 'Item description'),
-            createData('Drink', 
-                'https://zdnet2.cbsistatic.com/hub/i/r/2020/06/09/2eacd230-d144-4224-9e64-aa012e900877/resize/1200x900/1e8024904299314d9378f958f86e920c/coca-cola-coke-coca-cola.jpg',
-                'Drink', ['Individual'], 2.00, 'Item description'),
-            createData('Cookies', 
-                'https://celebratingsweets.com/wp-content/uploads/2018/12/MM-Cookies-1-500x500.jpg',
-                'Side', ['Individual', 'Family'], 3.50, 'Item description'),
-        ];
-    return rows;
-    /* 
-    return fetch(`${BACKEND_URL}item/`, {
-                method: "GET",
-                headers: {
-                    "content-type": "application/json",
-                },
-            }).then((res) => {
-                if(res.ok){
-                    console.log(res);
-                    // put all items into rows
-                    rows = res.body.map((item) => {
-                        return createData();
-                    })
-                } else {
-                    alert("EEE")
-                }
-            })
-            .catch(() => {
-                alert("Error");
-            });*/
-}
-
-// Takes in an item id, removes the corresponding item from the database
-async function deleteRowById(){
-
-}
 
 // Renders table of items based on what is passed in through displayContent
-function menuTable(displayContent) {
+function menuTable(itemList, setItemList, displayContent, setDisplayContent) {
     return (
         <TableContainer component={Paper} className="menuTableContainer">
             <Table aria-label="simple table" stickyHeader className="menuTable">
@@ -132,7 +91,7 @@ function menuTable(displayContent) {
                     {displayContent.map((row, index) => {
                         const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
                         return (
-                            <TableRow key={row.itemName + "" + row.index + "" + row.categoryName} className={bgColor}>
+                            <TableRow key={row.id} className={bgColor}>
                                 <TableCell component="th" scope="row" className="menuRowText">
                                     {index}
                                 </TableCell>
@@ -149,8 +108,12 @@ function menuTable(displayContent) {
                                 <TableCell align="left" className="menuRowText">{row.basePrice}</TableCell>
                                 <TableCell align="left" className="menuRowText">{row.description}</TableCell>
                                 <TableCell align="left" className="menuRowText">
-                                    <EditIcon style={{"marginRight": "5px"}}/>
-                                    <DeleteIcon style={{"marginLeft": "5px"}}/>
+                                    <IconButton>
+                                        <EditIcon style={{"marginRight": "5px"}}/>
+                                    </IconButton>
+                                    <IconButton aria-label="delete item" onClick={() => handleRemoveByID(row.id, itemList, setItemList, displayContent, setDisplayContent)}>
+                                        <DeleteIcon style={{"marginLeft": "5px"}}/>
+                                    </IconButton>
                                 </TableCell>
                             </TableRow>
                     )})}
@@ -159,28 +122,72 @@ function menuTable(displayContent) {
         </TableContainer>
     );
 }
-
+// handle remove based on id passed in through params
+async function handleRemoveByID(id, itemList, setItemList, displayContent, setDisplayContent){
+    // remove from database
+    console.log("Removing " + id);
+    await fetch(`${BACKEND_URL}item/remove`, {
+            method: "DELETE",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                "_id": id
+            })
+        }).then(res => {
+            if(res.ok){
+                console.log("Remove successful!")
+                // remove from rows
+                setItemList(itemList.filter(x => x.id !== id));
+                // remove from filtered rows
+                setDisplayContent(displayContent.filter(x => x.id !== id));
+            }
+        })
+    
+}
 export default function AdminMenuItems (props) {
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState("All");
     const [displayContent, setDisplayContent] = useState([]);
     const [itemList, setItemList] = useState([]);
-    console.log("render");
+    const [loaded, setLoaded] = useState(false);
     // Fetch all menu items to display in table
     useEffect(() => {
-        async function fetchData(){
-            // fetch all menu items
-            const items = await fetchItems();
-            setItemList(items);
-            setDisplayContent(items);
+        var data = null;
+        const fetchData = async () => {
+            const res = await fetch(`${BACKEND_URL}item/`, {
+                method: "GET",
+                headers: {
+                    "content-type": "application/json",
+                },
+            })
+            data = await res.json();
+            console.log(data.items);
+            const rows = [];
+            data.items.forEach(element => {
+                console.log(element);
+                const price = element.Prices.Individual;
+                var attributes = element.Accomodations.map(e => e.Description);
+                attributes = [attributes, ...Object.keys(element.Prices)]
+                rows.push(
+                    createData(
+                        element.Name,
+                        element.pictureURL, 
+                        element.Category, 
+                        attributes,
+                        price, 
+                        element.Description,
+                        element._id,
+                ));
+            });
+            setItemList(rows);
+            setDisplayContent(rows);
+            setLoaded(true);
         }
         
-        
         fetchData();
-
-    }, [setItemList, setDisplayContent])
-
+    }, [setLoaded])
     // update display contents based on search term
     const handleSearch = (searchTerm) => {
         // Empty search term, so we want to reset the displayed items to those of the current category
@@ -226,42 +233,48 @@ export default function AdminMenuItems (props) {
             setDisplayContent(newRows); 
         }
     }
-    return (
-        <div>
-            <div className="aboveTableContainer">
-                <Button className="menuAddButton">
-                    <AddCircleIcon className="menuAddButtonIcon" />
-                    Add Item
-                </Button>
-                <span style={{"display": "flex", "flexDirection": "row"}}>
-                    <Select
-                        className="menuFilterSelect"
-                        id="item-filter-select"
-                        defaultValue="All"
-                        displayEmpty="false"
-                        variant="outlined"
-                        value={filter}
-                        onChange={(v) => {
-                            setFilter(v.target.value);
-                            handleFilterChange(v.target.value);
-                        }}
-                    >
-                        <MenuItem value="All">All</MenuItem>
-                        <MenuItem value="Appetizer">Appetizer</MenuItem>
-                        <MenuItem value="Main Dish">Main Dish</MenuItem>
-                        <MenuItem value="Side">Side</MenuItem>
-                        <MenuItem value="Drink">Drink</MenuItem>
-                    </Select>
-                    <SearchBar
-                        className="menuSearchBar"
-                        value={searchTerm}
-                        onChange={(newValue) => setSearchTerm(newValue)}
-                        onRequestSearch={() => handleSearch(searchTerm)}
-                    />
-                </span>
+    if(loaded){
+        return (  
+            <div>
+                <div className="aboveTableContainer">
+                    <Button className="menuAddButton">
+                        <AddCircleIcon className="menuAddButtonIcon" />
+                        Add Item
+                    </Button>
+                    <span style={{"display": "flex", "flexDirection": "row"}}>
+                        <Select
+                            className="menuFilterSelect"
+                            id="item-filter-select"
+                            defaultValue="All"
+                            displayEmpty="false"
+                            variant="outlined"
+                            value={filter}
+                            onChange={(v) => {
+                                setFilter(v.target.value);
+                                handleFilterChange(v.target.value);
+                            }}
+                        >
+                            <MenuItem value="All">All</MenuItem>
+                            <MenuItem value="Appetizer">Appetizer</MenuItem>
+                            <MenuItem value="Main Dish">Main Dish</MenuItem>
+                            <MenuItem value="Side">Side</MenuItem>
+                            <MenuItem value="Drink">Drink</MenuItem>
+                        </Select>
+                        <SearchBar
+                            className="menuSearchBar"
+                            value={searchTerm}
+                            onChange={(newValue) => setSearchTerm(newValue)}
+                            onRequestSearch={() => handleSearch(searchTerm)}
+                        />
+                    </span>
+                </div>
+                {menuTable(itemList, setItemList, displayContent, setDisplayContent)}
             </div>
-            {menuTable(displayContent)}
-        </div>
-        
-    );
+        )
+    }
+    else{
+        return (
+            <div> </div>
+        )
+    }
 }
