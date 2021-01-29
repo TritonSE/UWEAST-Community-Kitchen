@@ -266,6 +266,10 @@ export default function AdminMenuItems (props) {
                             value={searchTerm}
                             onChange={(newValue) => setSearchTerm(newValue)}
                             onRequestSearch={() => handleSearch(searchTerm)}
+                            onCancelSearch={() => {
+                                setSearchTerm(""); 
+                                handleSearch("");
+                            }}
                         />
                     </span>
                 </div>

@@ -30,11 +30,13 @@
 }
 .menuFilterSelect {
     margin-right: 20px;
-    width: 10vw;
+    min-width: 100px;
+    max-width: 200px;
     height: 100%;
 }
 .menuSearchBar {
-    width: 10vw;
+    min-width: 100px;
+    max-width: 200px;
     height: 100%;
 }
 .menuTableContainer {
