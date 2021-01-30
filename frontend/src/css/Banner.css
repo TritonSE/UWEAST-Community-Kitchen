@@ -1,10 +1,9 @@
 .banner 
 {
-  position: fixed;
   display: grid;
   justify-content: center;
   background-color: white;
-  width: 100vw;
+  width: 100%;
   color: #f9ce1d; 
   height: 28px;
   font-weight: bold;
@@ -16,13 +15,14 @@
 @media only screen and (max-width: 768px) {
   .banner 
   {
-    top: 56px;
+    position: relative;
   }
 }
 
 @media only screen and (min-width: 768px) {
   .banner 
   {
+    position: fixed;
     top: 64px;
   }
 }
