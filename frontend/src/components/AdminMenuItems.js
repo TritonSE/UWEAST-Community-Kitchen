@@ -14,13 +14,14 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import '../css/AdminMenuItems.css';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
-function createData(itemName, imgSource, categoryName, options, baseprice, description, id) {
+function createData(itemName, imgSource, categoryName, options, baseprice, description, id, featured) {
   return {
         "itemName": itemName, 
         "imgSource": imgSource,
@@ -29,6 +30,7 @@ function createData(itemName, imgSource, categoryName, options, baseprice, descr
         "basePrice": baseprice, 
         "description": description,
         "id": id,
+        "isFeatured": featured,
     };
 }
 
@@ -71,19 +73,20 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
 }
 
 // Renders table of items based on what is passed in through displayContent
-function menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation) {
+function menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange) {
+    
     return (
         <TableContainer component={Paper} className="menuTableContainer">
             <Table aria-label="simple table" stickyHeader className="menuTable">
                 <TableHead>
                     <TableRow >
-                        <TableCell className="menuTableHeaders">#</TableCell>
+                        <TableCell className="menuTableHeaders">Feature</TableCell>
                         <TableCell className="menuTableHeaders" align="center">Item Image</TableCell>
                         <TableCell className="menuTableHeaders" align="left">Item Name</TableCell>
                         <TableCell className="menuTableHeaders" align="left">Category Name</TableCell>
-                        <TableCell className="menuTableHeaders" align="left">Size/Options</TableCell>
+                        <TableCell className="menuTableHeaders" align="left">Size</TableCell>
                         <TableCell className="menuTableHeaders" align="left">Base Price</TableCell>
-                        <TableCell className="menuTableHeaders" align="left">Description</TableCell>
+                        <TableCell className="menuTableHeaders" align="left">Add-ons</TableCell>
                         <TableCell className="menuTableHeaders" align="left">Edit</TableCell>
                     </TableRow>
                 </TableHead>
@@ -91,9 +94,17 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
                     {displayContent.map((row, index) => {
                         const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
                         return (
-                            <TableRow key={row.id} className={bgColor}>
+                            <TableRow key={row._id} className={bgColor}>
                                 <TableCell component="th" scope="row" className="menuRowText">
-                                    {index}
+                                    <Checkbox
+                                        id={row._id + "checkbox"}
+                                        checked={row.isFeatured}
+                                        onChange={(e) => {
+                                            handleFeatureChange(row);
+                                        }}
+                                        name={row.itemName}
+                                        color="primary"
+                                    />
                                 </TableCell>
                                 <TableCell align="center" className="menuRowText">
                                     <img src={row.imgSource} alt={row.itemName} className="menuItemImage"/>
@@ -152,6 +163,7 @@ export default function AdminMenuItems (props) {
     const [displayContent, setDisplayContent] = useState([]);
     const [itemList, setItemList] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    const [checkboxUpdate, setCheckboxUpdate] = useState("");
     // Fetch all menu items to display in table
     useEffect(() => {
         var data = null;
@@ -179,6 +191,7 @@ export default function AdminMenuItems (props) {
                         price, 
                         element.Description,
                         element._id,
+                        element.isFeatured,
                 ));
             });
             setItemList(rows);
@@ -187,7 +200,7 @@ export default function AdminMenuItems (props) {
         }
         
         fetchData();
-    }, [setLoaded])
+    }, [setLoaded,])
     // update display contents based on search term
     const handleSearch = (searchTerm) => {
         // Empty search term, so we want to reset the displayed items to those of the current category
@@ -233,6 +246,41 @@ export default function AdminMenuItems (props) {
             setDisplayContent(newRows); 
         }
     }
+    const handleFeatureChange = async (row) => {
+        const itemID = row.id;
+        const newValue = !row.isFeatured;
+        row.isFeatured = newValue;
+        // update item's feature property in local (displayContent and itemList)
+        var itemListIndex = -1;
+        itemList.forEach((x, index) => {
+            itemListIndex = x.id === itemID ? index : itemListIndex;
+        })
+        if(itemListIndex !== -1){
+            setItemList(prev => {
+                prev[itemListIndex].isFeatured = newValue;
+                return prev;
+            })
+        }
+        var displayContentIndex = displayContent.findIndex(x => x.id === itemID);
+        if(displayContentIndex !== -1){
+            displayContent[displayContentIndex].isFeatured = newValue;
+            setDisplayContent(displayContent);
+        }
+        setCheckboxUpdate(row.itemName + "" + newValue);
+
+        // update item's feature property in database
+        await fetch(`${BACKEND_URL}item/feature`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                "_id": itemID,
+                "isFeatured": newValue
+            })
+        })
+    }
+    console.log("rerender");
     if(loaded){
         return (  
             <div>
@@ -273,7 +321,7 @@ export default function AdminMenuItems (props) {
                         />
                     </span>
                 </div>
-                {menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation)}
+                {menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange)}
             </div>
         )
     }
