@@ -1,3 +1,4 @@
+const mongodb = require("mongodb");
 const { Order } = require("../models/order");
 
 // save order to DB
@@ -11,32 +12,44 @@ async function addOrder(raw_order) {
   }
 }
 
-// find orders based on start and end dates
-async function findOrders(startDate, endDate) {
+// update isCompleted
+async function updateStatus(id, update) {
   try {
-    // if the startDate and endDate are not given return all orders
-    if (startDate === undefined && endDate == undefined) {
-      return Order.find({}).exec();
-    } else if (startDate === undefined) {
+    return await Order.updateOne(
+      { _id: new mongodb.ObjectID(id) },
+      { $set: { isCompleted: update } }
+    ).exec();
+  } catch (err) {
+    return false;
+  }
+}
+
+// find orders based on start and end dates
+async function findOrders(o_isCompleted, Customer) {
+  try {
+    if (Customer !== undefined) {
+      if (o_isCompleted !== undefined) {
+        // return all orders based on customer name and whether it is completed
+        return Order.find({
+          "Customer.Name": Customer.Name,
+          isCompleted: o_isCompleted,
+        }).exec();
+      }
+      // return all orders based on customer name
       return Order.find({
-        Pickup: {
-          $lte: endDate,
-        },
-      }).exec();
-    } else if (endDate === undefined) {
-      return Order.find({
-        Pickup: {
-          $gte: startDate,
-        },
+        "Customer.Name": Customer.Name,
       }).exec();
     }
-    // return orders between startDate and endDate
-    return Order.find({
-      Pickup: {
-        $gte: startDate,
-        $lte: endDate,
-      },
-    }).exec();
+
+    // if isCompleted is not passed in return all orders
+    if (o_isCompleted === undefined) {
+      return Order.find({}).exec();
+    } else {
+      // return all orders based on isCompleted T/F
+      return Order.find({
+        isCompleted: o_isCompleted,
+      }).exec();
+    }
   } catch (err) {
     console.log(err);
     return false;
@@ -46,4 +59,5 @@ async function findOrders(startDate, endDate) {
 module.exports = {
   addOrder,
   findOrders,
+  updateStatus,
 };
