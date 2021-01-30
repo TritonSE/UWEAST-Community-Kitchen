@@ -105,7 +105,7 @@ const MenuSection = () => {
         </div>
         <div className="menu-cart">
           cart
-      </div>
+        </div>
       </div>
     </div>
   )

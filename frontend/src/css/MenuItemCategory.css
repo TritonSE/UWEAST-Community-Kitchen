@@ -14,21 +14,25 @@
   font-weight: bold;
 }
 
+.menu-item-category-grid 
+{
+  display: grid;
+}
 
-
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 768px) 
+{
   .menu-item-category-grid 
   {
-    display: grid;
-    grid-template-columns: minmax(200px, auto);
-    grid-gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 35px;
+    padding-bottom: 25px;
   }
 }
 
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 768px) 
+{
   .menu-item-category-grid 
   {
-    display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
   }
