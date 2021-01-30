@@ -36,8 +36,8 @@ const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 //   }
 // );
 
-// @body: startDate, endDate
-// returns emails between the given dates
+// @body: isCompleted, Customer
+// returns orders based on isCompleted or Customer
 router.post(
   "/",
   [
@@ -48,7 +48,7 @@ router.post(
   async (req, res, next) => {
     try {
       const { isCompleted, Customer } = req.body;
-      // returns emails or error if there is an error
+      // returns orders or error if there is an error
       const orders = await findOrders(isCompleted, Customer);
       res.status(200).json({
         orders: orders,
@@ -60,15 +60,15 @@ router.post(
   }
 );
 
-// @body: startDate, endDate
-// returns emails between the given dates
+// @body: _id, isCompleted
+// updates isCompleted of the orderss model
 router.post(
   "/updateStatus",
   [body("_id").isString(), body("isCompleted").isBoolean(), isValidated],
   async (req, res, next) => {
     try {
       const { _id, isCompleted } = req.body;
-      // returns emails or error if there is an error
+      // returns updated orders or error if there is an error
       const orders = await updateStatus(_id, isCompleted);
       if (orders === false) {
         return res.status(400).json({

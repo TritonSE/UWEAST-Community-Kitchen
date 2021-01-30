@@ -24,7 +24,7 @@ async function updateStatus(id, update) {
   }
 }
 
-// find orders based on start and end dates
+// find orders based on isCompleted and/or Customer
 async function findOrders(o_isCompleted, Customer) {
   try {
     if (Customer !== undefined) {
