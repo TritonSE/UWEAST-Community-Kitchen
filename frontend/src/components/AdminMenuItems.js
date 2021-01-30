@@ -80,22 +80,23 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
             <Table aria-label="simple table" stickyHeader className="menuTable">
                 <TableHead>
                     <TableRow >
-                        <TableCell className="menuTableHeaders">Feature</TableCell>
-                        <TableCell className="menuTableHeaders" align="center">Item Image</TableCell>
-                        <TableCell className="menuTableHeaders" align="left">Item Name</TableCell>
-                        <TableCell className="menuTableHeaders" align="left">Category Name</TableCell>
-                        <TableCell className="menuTableHeaders" align="left">Size</TableCell>
-                        <TableCell className="menuTableHeaders" align="left">Base Price</TableCell>
-                        <TableCell className="menuTableHeaders" align="left">Add-ons</TableCell>
-                        <TableCell className="menuTableHeaders" align="left">Edit</TableCell>
+                        <TableCell className="menuTableHeaders" width="5%">Feature</TableCell>
+                        <TableCell className="menuTableHeaders" width="15%" align="center">Item Image</TableCell>
+                        <TableCell className="menuTableHeaders" width="15%" align="left">Item Name</TableCell>
+                        <TableCell className="menuTableHeaders" width="12%" align="left">Category Name</TableCell>
+                        <TableCell className="menuTableHeaders" width="12%" align="left">Size</TableCell>
+                        <TableCell className="menuTableHeaders" width="12%" align="left">Base Price</TableCell>
+                        <TableCell className="menuTableHeaders" width="12%" align="left">Add-ons</TableCell>
+                        <TableCell className="menuTableHeaders" width="12%" align="left">Edit</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {displayContent.map((row, index) => {
                         const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
+                        console.log(row);
                         return (
                             <TableRow key={row._id} className={bgColor}>
-                                <TableCell component="th" scope="row" className="menuRowText">
+                                <TableCell component="th" scope="row" className="menuRowText" width="5%">
                                     <Checkbox
                                         id={row._id + "checkbox"}
                                         checked={row.isFeatured}
@@ -103,22 +104,32 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
                                             handleFeatureChange(row);
                                         }}
                                         name={row.itemName}
-                                        color="primary"
+                                        style ={{
+                                            color: "#747474",
+                                        }}
                                     />
                                 </TableCell>
-                                <TableCell align="center" className="menuRowText">
+                                <TableCell align="center" className="menuRowText" width="15%">
                                     <img src={row.imgSource} alt={row.itemName} className="menuItemImage"/>
                                 </TableCell>
-                                <TableCell className="menuRowText">{row.itemName}</TableCell>
-                                <TableCell align="left" className="menuRowText">{row.categoryName}</TableCell>
-                                <TableCell align="left" className="menuRowText">
-                                    {row.options.map((v) => {
-                                        return (<p>{v}</p>)
-                                    })}
+                                <TableCell className="menuRowText" width="15%">{row.itemName}</TableCell>
+                                <TableCell align="left" className="menuRowText" width="12%">{row.categoryName}</TableCell>
+                                <TableCell align="left" className="menuRowText" width="12%">
+                                {
+                                    row.basePrice.map((v) => {return (<p>{v[0]}</p>)})
+                                }
                                 </TableCell>
-                                <TableCell align="left" className="menuRowText">{row.basePrice}</TableCell>
-                                <TableCell align="left" className="menuRowText">{row.description}</TableCell>
-                                <TableCell align="left" className="menuRowText">
+                                <TableCell align="left" className="menuRowText" width="12%">
+                                {
+                                    row.basePrice.map((v) => <p>${v[1]}</p>)
+                                }
+                                </TableCell>
+                                <TableCell align="left" className="menuRowText" width="12%">
+                                {
+                                    row.options.map((v) => <p>{v[1].Description}</p>)
+                                }
+                                </TableCell>
+                                <TableCell align="left" className="menuRowText" width="12%">
                                     <IconButton>
                                         <EditIcon style={{"marginRight": "5px"}}/>
                                     </IconButton>
@@ -179,16 +190,13 @@ export default function AdminMenuItems (props) {
             const rows = [];
             data.items.forEach(element => {
                 console.log(element);
-                const price = element.Prices.Individual;
-                var attributes = element.Accomodations.map(e => e.Description);
-                attributes = [attributes, ...Object.keys(element.Prices)]
                 rows.push(
                     createData(
                         element.Name,
                         element.pictureURL, 
                         element.Category, 
-                        attributes,
-                        price, 
+                        Object.entries(element.Accomodations),
+                        Object.entries(element.Prices), 
                         element.Description,
                         element._id,
                         element.isFeatured,
@@ -280,7 +288,6 @@ export default function AdminMenuItems (props) {
             })
         })
     }
-    console.log("rerender");
     if(loaded){
         return (  
             <div>
