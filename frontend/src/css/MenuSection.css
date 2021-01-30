@@ -39,7 +39,15 @@
   }
 }
 
-@media only screen and (min-width: 768px)
+@media only screen and (min-width: 768px) and (max-width: 1023px) 
+{
+  .menu-section
+  {
+    grid-template-columns: 150px minmax(auto, 900px) 150px;
+  }
+}
+
+@media only screen and (min-width: 1023px)
 {
   .menu-section
   {
