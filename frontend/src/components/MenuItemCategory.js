@@ -19,6 +19,7 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
         const json = await result.json();
 
         for(var i = 0; i < json.items.length; i++) {
+          // since "featured" isn't a category, we need to handle it differently
           let isCategoryEqual = json.items[i].category == categoryName;
           let isFeatured = (categoryName == "Featured") && (json.items[i].featured);
 
