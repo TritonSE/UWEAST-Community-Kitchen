@@ -39,6 +39,7 @@
 {
   overflow: scroll;
   overflow-x: hidden;
+  word-break: break-word;
 }
 
 .menu-text::-webkit-scrollbar {
@@ -52,6 +53,14 @@
   font-weight: bold;
   margin: 0px;
   padding: 0px;
+}
+
+/** This stops the first line of the title from being obscured by the price. **/
+.menu-text h3:before {
+  content: '';
+  float: right;
+  width: 60px;
+  height: 1em;
 }
 
 .menu-text p 
