@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 //Datatable
 import MUIDataTable from "mui-datatables";
 import Table from "@material-ui/core/Table";
@@ -12,6 +12,8 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import '../css/Orders.css';
+
+import OrdersStatus from './OrdersStatus';
 
 import {
   createMuiTheme,
@@ -40,26 +42,28 @@ const renderRow = (rowData, rowMeta) => {
     return (
         <React.Fragment>
           <TableRow>
-            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
+            <TableCell style={{ padding: 0 }} colSpan={8}>
               <TableContainer>
                 <Table aria-label="simple table">
                 {/* The dropdown header */}
                   <TableHead>
-                    <TableRow>
-                      <TableCell style={{width: 'calc(5vw)'}}>Items</TableCell>
-                      <TableCell style={{width: 'calc(5vw)'}}>Special Instructions</TableCell>
-                      <TableCell style={{width: 'calc(5vw)'}}>Size</TableCell>
-                      <TableCell style={{width: 'calc(5vw)'}}>Quantity</TableCell>
+                    <TableRow style={{border: 'none'}}>
+                      <TableCell></TableCell>
+                      <TableCell style={{width: 'calc(23.5%)'}}>Items</TableCell>
+                      <TableCell style={{width: 'calc(31%)'}}>Special Instructions</TableCell>
+                      <TableCell style={{width: 'calc(28.6%)'}}>Size</TableCell>
+                      <TableCell>Quantity</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                   {/* The dropdown row data */}
                     {rows.map(row => (
                       <TableRow key={row.name}>
-                        <TableCell style={{width: 'calc(5vw)'}}>{row.name}</TableCell>
-                        <TableCell style={{width: 'calc(5vw)'}}>{row.description}</TableCell>
-                        <TableCell style={{width: 'calc(5vw)'}}>{row.size}</TableCell>
-                        <TableCell style={{width: 'calc(5vw)'}}>{row.quantity}</TableCell>
+                        <TableCell style={{width: 'calc(48px)'}}></TableCell>
+                        <TableCell>{row.name}</TableCell>
+                        <TableCell>{row.description}</TableCell>
+                        <TableCell>{row.size}</TableCell>
+                        <TableCell>{row.quantity}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -135,6 +139,18 @@ const DisplayDateFilters = (filterList, onChange, index, column) => {
       </DateRangePicker>
     </div>
   );
+}
+
+/**
+ * This renders the status dropdown
+ * 
+ * @param {boolean} value - The value to pass in
+ * @param {object} tableMeta - Information about the row
+ */
+const renderStatus = (value, tableMeta, updateValue) => {
+  return (
+    <OrdersStatus value={value} rowInfo={tableMeta} />
+  )
 }
 
 //The column headers for the table
@@ -225,54 +241,80 @@ const columns = [
       display: DisplayDateFilters
     }
   }  
-}];
+},
+{
+  name: "Order Status",
+  options: {
+    filter: true,
+    filterType: 'dropdown',
+    customBodyRender: renderStatus,
+    filterOptions: {
+      names: ["Pending Orders", "Completed Orders"],
+      logic(date, filters) {
+
+        if (filters[0] === "Completed Orders") {
+          console.log('here');
+          return date === false;
+        } else if (filters[0] === "Pending Orders") {
+          return date === true;
+        }
+        return false;
+      },
+    }
+  }  
+},
+{
+  name: "Row ID",
+  options: {
+    display: false, 
+    viewColumns: false, 
+    filter: false
+  }
+}
+];
 
 export default function OrdersTable(props) {
+  
   const options = {
     filter: true,
     filterType: 'textField',
     expandableRowsOnClick: true,
     expandableRows: true,
-    selectableRows: "none",
+    selectableRows: 'none',
     rowsPerPageOptions: [10, 25, 50],
     renderExpandableRow: renderRow,
     searchOpen: true,
   };
 
- const getMuiTheme = () =>
- createMuiTheme({
-   overrides: {
-     MUIDataTable: {
-       paper: {
-         boxShadow: 'none',
-       },
-     },
-     MuiTableRow: {
-      root: {
-        '&$selected': {
-          backgroundColor: '#F1f1f1'
+  const getMuiTheme = () =>
+  createMuiTheme({
+    overrides: {
+      MUIDataTable: {
+        paper: {
+          boxShadow: 'none',
+        },
+      },
+      MuiTableRow: {
+        root: {
+          borderLeft: '2px solid #CCCCCC',
+          borderRight: '2px solid #CCCCCC',
+        }
+      },
+      MuiTableCell: {
+        root: {
+          fontFamily: 'Roboto, sans-serif',
+          fontSize: 'calc(16px)',
+          borderBottom: '2px solid #CCCCCC',
         }
       }
     },
-     MUIDataTableHeadCell: {
-       root: {
-        fontFamily: 'Roboto, sans-serif',
-        fontSize: 'calc(16px)',
-        fontWeight: 'bold'  
-       }
-     },
-     MUIDataTableBodyCell: {
-      root: {
-       fontFamily: 'Roboto, sans-serif',
-       fontSize: 'calc(16px)'
-      }
-    }
-   },
- });
+  });
 
+  console.log(props.orders);
   return (
       <MuiThemeProvider theme={getMuiTheme()}>
         <MUIDataTable
+          title={"Past Orders"}
           data={props.orders}
           columns={columns}
           options={options}

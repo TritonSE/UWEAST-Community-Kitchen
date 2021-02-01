@@ -17,32 +17,32 @@ export default class Orders extends React.Component {
             getOrders: [],
             Loading: true,
         }
+
         this.formatTime = this.formatTime.bind(this);
+        this.formatDate = this.formatDate.bind(this);
     }
 
     formatTime(time) {
         time = time.split(':'); // convert to array
-
-        // fetch
+        
         let hours = Number(time[0]);
         let minutes = Number(time[1]);
-
-        // calculate
         let timeValue;
 
-        if (hours > 0 && hours <= 12) {
-        timeValue = "" + hours;
-        } else if (hours > 12) {
-        timeValue = "" + (hours - 12);
-        } else if (hours == 0) {
-        timeValue = "12";
-        }
+        if (hours > 0 && hours <= 12) timeValue = "" + hours; 
+        else if (hours > 12) timeValue = "" + (hours - 12);
+        else if (hours == 0) timeValue = "12";
         
         timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
         timeValue += (hours >= 12) ? " P.M." : " A.M.";  // get AM/PM
 
-        // show  
         return timeValue;
+    }
+
+    formatDate(getDate) {
+        const monthSubmission = getDate.getMonth()+1 >= 10 ? getDate.getMonth()+1 : ("0" + (getDate.getMonth() + 1)).slice(-2);
+        const dateSubmission = monthSubmission + "/" + getDate.getDate() + "/" + getDate.getFullYear();   
+        return dateSubmission 
     }
 
     componentDidMount() {
@@ -54,6 +54,7 @@ export default class Orders extends React.Component {
         }).then(res => res.json())
         .then(data => {
             const getOrdersList = data.orders;
+            console.log(getOrdersList);
             const length = getOrdersList.length
             let createArr = [];
 
@@ -62,14 +63,12 @@ export default class Orders extends React.Component {
                 //Get the date from the database
                 let getDate = new Date(getOrdersList[i].Pickup);
                 const formatCurrtime = this.formatTime(getDate.getHours() + ":" + getDate.getMinutes() + ":" + getDate.getSeconds());
-                const month = getDate.getMonth()+1 >= 10 ? getDate.getMonth()+1 : ("0" + (getDate.getMonth() + 1)).slice(-2);
-                const date = month + "/" + getDate.getDate() + "/" + getDate.getFullYear();
+                const date = this.formatDate(getDate);
 
                 //Format for the submission date
                 let getDateSubmission = new Date(getOrdersList[i].createdAt);
                 const formatCurrtimeSubmission = this.formatTime(getDateSubmission.getHours() + ":" + getDateSubmission.getMinutes() + ":" + getDateSubmission.getSeconds());
-                const monthSubmission = getDate.getMonth()+1 >= 10 ? getDate.getMonth()+1 : ("0" + (getDate.getMonth() + 1)).slice(-2);
-                const dateSubmission = monthSubmission + "/" + getDateSubmission.getDate() + "/" + getDateSubmission.getFullYear();
+                const dateSubmission = this.formatDate(getDateSubmission);
 
                 arr.push(date + `\n${formatCurrtime}`);
                 arr.push(getOrdersList[i].Customer.Name);
@@ -77,7 +76,9 @@ export default class Orders extends React.Component {
                 arr.push(getOrdersList[i].Customer.Phone);
                 arr.push(getOrdersList[i].PayPal.Amount);
                 arr.push(getOrdersList[i].Order);
-                arr.push(dateSubmission + `\n${formatCurrtimeSubmission}`)
+                arr.push(dateSubmission + `\n${formatCurrtimeSubmission}`);
+                arr.push(getOrdersList[i].isCompleted);
+                arr.push(getOrdersList[i]._id);
 
                 createArr.push(arr);
             }
