@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import '../css/MenuItemPopup.css';
 
-const MenuItemPopup = ({ values, togglePopup, processForm }) => {
+const MenuItemPopup = ({ values, togglePopup, processForm, onItemAdded }) => {
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(parseInt(values.get("price")));
   const indvidualPrice = parseInt(values.get("price"));
   const familyPrice = parseInt(indvidualPrice);
 
   let currPrice = indvidualPrice;
+
+  var item = {
+    name: values.get("title"),
+    quantity: quantity,
+    price: totalPrice,
+    description: values.get("description")
+  }
 
   // handles changing price and quantity states
   const changeQuantity = sign => {
@@ -88,6 +95,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
             <input name="name" type="hidden" value={values.get("title")} />
             <input name="price" type="hidden" value={totalPrice} />
             <input name="quantity" type="hidden" value={quantity} />
+            <input name="description" type="hidden" value={values.get("description")} />
             <input className="submit-order-button" type="submit" value={"Add " + quantity + " to cart $" + totalPrice} />
           </form>
         </div>

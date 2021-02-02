@@ -5,13 +5,14 @@ const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
 
-const MenuItems = ({ foodCategories, processForm, popupVisible, popupValues, togglePopup }) => {
+const MenuItems = ({ foodCategories, processForm, popupVisible, popupValues, togglePopup, onItemAdd }) => {
+
   return (
 
       <div className="menu-items">
         {/** generates categories in the menu */}
         {foodCategories.map((categoryName, key) => {
-          return <MenuItemCategory key={key} categoryName={categoryName} key={key} processForm={processForm} popupVisible={popupVisible} popupValues={popupValues} togglePopup={togglePopup} />
+          return <MenuItemCategory key={key} categoryName={categoryName} key={key} processForm={processForm} popupVisible={popupVisible} popupValues={popupValues} togglePopup={togglePopup} onItemAdd={onItemAdd}/>
         })}
       </div>
 
