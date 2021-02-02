@@ -12,11 +12,13 @@ class Menu extends Component {
     constructor(props) {
         super(props);
 
+        //stores items currently in the cart
         this.state = {
-            items: [{name: "Salad", quantity: 2, price: "00.00", description: "vegan and some more ingredients on top to help show some support"}]
+            items: []
         }
     }
 
+    //adds item from popup to the cart
     handleAdd = (item) => {
         this.setState({items: [...this.state.items, item]});
         console.log(this.state.items);
@@ -27,9 +29,7 @@ class Menu extends Component {
       return (
           <div>
               <Navbar currentPage="menu"/>
-              {/* <div style={{marginTop: "30px"}}>
-                  This is the Menu Page.
-              </div>            */}
+              {/* cart preview is floated on the bottom right of the screen */}
               <CartPreview key={this.state.items} items={this.state.items}/> 
               {/** search section is the top, non-menu half of the page */}
               <SearchSection/>

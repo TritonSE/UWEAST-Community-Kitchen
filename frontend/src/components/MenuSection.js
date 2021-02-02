@@ -69,6 +69,7 @@ const MenuSection = ({onItemAdd}) => {
     // converts the FormData to a JSON string, optional
     var json = JSON.stringify(object);
 
+    // calls parent function to add item from popup to cart
     onItemAdd(object);
     
     // when submit button is clicked, the popup is closed
@@ -103,7 +104,7 @@ const MenuSection = ({onItemAdd}) => {
         </div>
         <div className="menu-items">
           {/** parameters are states being passed down */}
-          <MenuItems foodCategories={visibleCategories} processForm={processForm} popupVisible={popupVisible} popupValues={popupValues} togglePopup={togglePopup} onItemAdd={onItemAdd}/>
+          <MenuItems foodCategories={visibleCategories} processForm={processForm} popupVisible={popupVisible} popupValues={popupValues} togglePopup={togglePopup}/>
         </div>
         <div className="menu-cart">
       </div>

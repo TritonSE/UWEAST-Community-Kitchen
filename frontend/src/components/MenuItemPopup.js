@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../css/MenuItemPopup.css';
 
-const MenuItemPopup = ({ values, togglePopup, processForm, onItemAdded }) => {
+const MenuItemPopup = ({ values, togglePopup, processForm }) => {
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(parseInt(values.get("price")));
   const indvidualPrice = parseInt(values.get("price"));

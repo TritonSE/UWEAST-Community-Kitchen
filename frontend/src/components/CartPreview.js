@@ -6,10 +6,6 @@ class CartPreview extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // items: [{name: "Salad", quantity: 2, price: 10, description: "vegan"}, 
-            // {name: "Bread", quantity: 3, price: 5, description: ""}, 
-            // {name: "Sandwich", quantity: 1, price: 8, description: "Extra sauce"},
-            // {name: "Burger", quantity: 2, price: 15, description: "gluten free"}]
             items: this.props.items,
             subTotal: "00.00",
             tax: "00.00",
@@ -18,15 +14,18 @@ class CartPreview extends Component {
 
         this.loadItems = this.loadItems.bind(this);
     }
-
+    
+    //displays items currently in the cart and updates subtotal and total
     loadItems() {
         return(
             <div>
                 {this.state.items.map((item, ind) => {
+
                     this.state.subTotal = parseFloat(this.state.subTotal) + parseFloat(item.price);
                     this.state.subTotal = parseFloat(this.state.subTotal).toFixed(2);
-                    this.state.totalPrice = this.state.subTotal + this.state.tax;
+                    this.state.totalPrice = parseFloat(this.state.subTotal) + parseFloat(this.state.tax);
                     this.state.totalPrice = parseFloat(this.state.totalPrice).toFixed(2);
+
                         return (
                             <div class="summary-item row">
                                 <span class="thumbnail thumb-img">{ind+1}</span>
@@ -50,6 +49,7 @@ class CartPreview extends Component {
                     </div>
                     <div>
                         <div class="fixed-scroll">
+                            {/* loads and displays all items currently in the cart */}
                             {this.loadItems()}
                         </div>
                         <div class="order-totals">
@@ -57,9 +57,6 @@ class CartPreview extends Component {
                             Subtotal: ${this.state.subTotal}<br/>
                             Tax: ${this.state.tax}
                         </div>
-                        {/* <button id="cart-modal" type="button">
-                            Review Order
-                        </button> */}
                         <Button>Review Order</Button>
                     </div>
                     <div class="order-summary">

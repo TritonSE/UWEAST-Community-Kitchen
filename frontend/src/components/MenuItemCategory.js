@@ -6,7 +6,7 @@ const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
 
-const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues, togglePopup, onItemAdd }) => {
+const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues, togglePopup }) => {
   // array that stores menu items for the current category
   const [menuItems, setMenuItems] = useState(new Array());
   const menuItemValues = [];
@@ -41,7 +41,7 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
   return (
       <>
         {/** popup is created here, if it is visible it is rendered */}
-        {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} onItemAdded={onItemAdd}/> : null}
+        {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm}/> : null}
         <div className="menu-item-category">
           <h2> {categoryName} </h2>
           <div className="menu-item-category-grid">
