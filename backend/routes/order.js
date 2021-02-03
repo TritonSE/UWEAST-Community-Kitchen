@@ -2,7 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const router = express.Router();
-const { addOrder, findOrders } = require("../db/services/order");
+const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 
 // @body: Customer (with Name, Email, Phone), Pickup, Timestamps,
 // @body: PayPal(with Amount and transactionID),
@@ -36,22 +36,47 @@ const { addOrder, findOrders } = require("../db/services/order");
 //   }
 // );
 
-// @body: startDate, endDate
-// returns emails between the given dates
+// @body: isCompleted, Customer
+// returns orders based on isCompleted or Customer
 router.post(
   "/",
   [
-    body("startDate").isISO8601().optional(),
-    body("endDate").isISO8601().optional(),
+    body("isCompleted").notEmpty().optional(),
+    body("Customer").notEmpty().optional(),
     isValidated,
   ],
   async (req, res, next) => {
     try {
-      const { startDate, endDate } = req.body;
-      // returns emails or error if there is an error
-      const orders = await findOrders(startDate, endDate);
+      const { isCompleted, Customer } = req.body;
+      // returns orders or error if there is an error
+      const orders = await findOrders(isCompleted, Customer);
       res.status(200).json({
         orders: orders,
+      });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server err");
+    }
+  }
+);
+
+// @body: _id, isCompleted
+// updates isCompleted of the orderss model
+router.post(
+  "/updateStatus",
+  [body("_id").isString(), body("isCompleted").isBoolean(), isValidated],
+  async (req, res, next) => {
+    try {
+      const { _id, isCompleted } = req.body;
+      // returns updated orders or error if there is an error
+      const orders = await updateStatus(_id, isCompleted);
+      if (orders === false) {
+        return res.status(400).json({
+          response: "id does not exist/ failure",
+        });
+      }
+      res.status(200).json({
+        success: orders.ok,
       });
     } catch (err) {
       console.error(err.message);
