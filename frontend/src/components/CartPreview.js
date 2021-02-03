@@ -27,12 +27,12 @@ class CartPreview extends Component {
                     this.state.totalPrice = parseFloat(this.state.totalPrice).toFixed(2);
 
                         return (
-                            <div class="summary-item row">
-                                <span class="thumbnail thumb-img">{ind+1}</span>
-                                <span class="item-info">{item.quantity} X {item.name}<br/>
-                                <span class="item-description">{item.description}</span></span>
-                                <span class="thumbnail summary-price">${item.price}</span>
-                                <span class="item-divider"></span>
+                            <div key={ind} className="summary-item row">
+                                <span className="thumbnail thumb-img">{ind+1}</span>
+                                <span className="item-info">{item.quantity} X {item.name}<br/>
+                                <span className="item-description">{item.description}</span></span>
+                                <span className="thumbnail summary-price">${item.price}</span>
+                                <span className="item-divider"></span>
                             </div>
                         )
                 })}
@@ -42,25 +42,25 @@ class CartPreview extends Component {
 
     render() {
         return (
-            <div class="cart-container">
+            <div className="cart-container">
                 <div id="order-summary-div">
-                    <div class="order-summary">
+                    <div className="order-summary">
                         Order Summary
                     </div>
                     <div>
-                        <div class="fixed-scroll">
+                        <div className="fixed-scroll">
                             {/* loads and displays all items currently in the cart */}
                             {this.loadItems()}
                         </div>
-                        <div class="order-totals">
+                        <div className="order-totals">
                             <br/>
                             Subtotal: ${this.state.subTotal}<br/>
                             Tax: ${this.state.tax}
                         </div>
                         <Button>Review Order</Button>
                     </div>
-                    <div class="order-summary">
-                        <span>Total Price</span><span class="add-price">${this.state.totalPrice}</span>
+                    <div className="order-summary">
+                        <span>Total Price</span><span className="add-price">${this.state.totalPrice}</span>
                     </div>
                 </div>
             </div>

@@ -12,15 +12,17 @@ class Menu extends Component {
     constructor(props) {
         super(props);
 
-        //stores items currently in the cart
+        //stores items currently in the cart using local storage
         this.state = {
-            items: []
+            items: JSON.parse(localStorage.getItem('cartItems')) || []
         }
     }
 
-    //adds item from popup to the cart
+    //adds item from popup to the cart and updates local storage
     handleAdd = (item) => {
-        this.setState({items: [...this.state.items, item]});
+        this.setState({items: [...this.state.items, item]}, () => {
+            localStorage.setItem('cartItems', JSON.stringify(this.state.items))
+        });
         console.log(this.state.items);
     }
 
