@@ -7,7 +7,10 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+<<<<<<< HEAD
 import Paper from "@material-ui/core/Paper";
+=======
+>>>>>>> 2f325513d2a4ebcba71e33d5870716f7960fbfe7
 
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -41,16 +44,27 @@ const renderRow = (rowData, rowMeta) => {
     return (
         <React.Fragment>
           <TableRow>
+<<<<<<< HEAD
             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+=======
+            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
+>>>>>>> 2f325513d2a4ebcba71e33d5870716f7960fbfe7
               <TableContainer>
                 <Table aria-label="simple table">
                 {/* The dropdown header */}
                   <TableHead>
                     <TableRow>
+<<<<<<< HEAD
                       <TableCell style={{width: 'calc(5vw)'}}><b>Items</b></TableCell>
                       <TableCell style={{width: 'calc(5vw)'}}><b>Special Instructions</b></TableCell>
                       <TableCell style={{width: 'calc(5vw)'}}><b>Size</b></TableCell>
                       <TableCell style={{width: 'calc(5vw)'}}><b>Quantity</b></TableCell>
+=======
+                      <TableCell style={{width: 'calc(5vw)'}}>Items</TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}>Special Instructions</TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}>Size</TableCell>
+                      <TableCell style={{width: 'calc(5vw)'}}>Quantity</TableCell>
+>>>>>>> 2f325513d2a4ebcba71e33d5870716f7960fbfe7
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -127,7 +141,11 @@ const DisplayDateFilters = (filterList, onChange, index, column) => {
 
   return (
     <div style={{width: '20vw'}}>
+<<<<<<< HEAD
       <label>Submission dates</label>
+=======
+      <label>{index === 0 ? 'Pick Up Details' : 'Submission Details'}</label>
+>>>>>>> 2f325513d2a4ebcba71e33d5870716f7960fbfe7
       <DateRangePicker
         initialSettings={{ startDate: filterList[index][0] || startDate, endDate: filterList[index][1] || endDate}}
         onApply={saveDate}
@@ -152,12 +170,22 @@ const columns = [
     filterOptions: {
       names: [],
       logic(date, filters) {
+<<<<<<< HEAD
         if (filters[0] && filters[1]) {
           return date < filters[0] || date > filters[1];
         } else if (filters[0]) {
           return date < filters[0];
         } else if (filters[1]) {
           return date > filters[1];
+=======
+        const getDate = date.split("\n")[0];
+        if (filters[0] && filters[1]) {
+          return getDate < filters[0] || getDate > filters[1];
+        } else if (filters[0]) {
+          return getDate < filters[0];
+        } else if (filters[1]) {
+          return getDate > filters[1];
+>>>>>>> 2f325513d2a4ebcba71e33d5870716f7960fbfe7
         }
         return false;
       },
@@ -199,6 +227,35 @@ const columns = [
     viewColumns: false, 
     filter: false
   }
+<<<<<<< HEAD
+=======
+},
+{
+  name: "Submission Details",
+  options: {
+    filter: true,
+    filterType: 'custom',
+    customFilterListOptions: {
+      render: renderDateFilters,
+      update: updateDateFilters
+    },
+    filterOptions: {
+      names: [],
+      logic(date, filters) {
+        const getDate = date.split("\n")[0];
+        if (filters[0] && filters[1]) {
+          return getDate < filters[0] || getDate > filters[1];
+        } else if (filters[0]) {
+          return getDate < filters[0];
+        } else if (filters[1]) {
+          return getDate > filters[1];
+        }
+        return false;
+      },
+      display: DisplayDateFilters
+    }
+  }  
+>>>>>>> 2f325513d2a4ebcba71e33d5870716f7960fbfe7
 }];
 
 export default function OrdersTable(props) {
@@ -207,7 +264,11 @@ export default function OrdersTable(props) {
     filterType: 'textField',
     expandableRowsOnClick: true,
     expandableRows: true,
+<<<<<<< HEAD
     selectableRows: "single",
+=======
+    selectableRows: "none",
+>>>>>>> 2f325513d2a4ebcba71e33d5870716f7960fbfe7
     rowsPerPageOptions: [10, 25, 50],
     renderExpandableRow: renderRow,
     searchOpen: true,
@@ -217,13 +278,39 @@ export default function OrdersTable(props) {
  createMuiTheme({
    overrides: {
      MUIDataTable: {
+<<<<<<< HEAD
        root: {
          backgroundColor: '#AAF',
        },
+=======
+>>>>>>> 2f325513d2a4ebcba71e33d5870716f7960fbfe7
        paper: {
          boxShadow: 'none',
        },
      },
+<<<<<<< HEAD
+=======
+     MuiTableRow: {
+      root: {
+        '&$selected': {
+          backgroundColor: '#F1f1f1'
+        }
+      }
+    },
+     MUIDataTableHeadCell: {
+       root: {
+        fontFamily: 'Roboto, sans-serif',
+        fontSize: 'calc(16px)',
+        fontWeight: 'bold'  
+       }
+     },
+     MUIDataTableBodyCell: {
+      root: {
+       fontFamily: 'Roboto, sans-serif',
+       fontSize: 'calc(16px)'
+      }
+    }
+>>>>>>> 2f325513d2a4ebcba71e33d5870716f7960fbfe7
    },
  });
 

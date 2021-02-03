@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+:root {
+    --yellow: #f9ce1d;
+    --black: black;
+    --lightgrey: #CCCCCC;
+    --darkgrey: #747474;
+    --white: #FFFFFF;
+    --offwhite: #F1f1f1;
+}
+
+.orders-table {
+    width: calc(100%);
+    margin-top: calc(4vh);
+    display: flex;
+    justify-content: center;
+}
+
+.justify-table-center {
+    width: calc(95%);
+}
+
+/* Sets the background color for the toolbar at the top */
+.orders-page-container > div > div > div > div.MuiToolbar-root.MuiToolbar-regular.MUIDataTableToolbar-root-100.MuiToolbar-gutters {
+    background-color: var(--yellow);
+}
+
+/* Sets the background color for the table header column */
+.orders-page-container > div > div > div > div.MUIDataTable-responsiveBase-92 > table > thead > tr > th {
+    background-color: var(--yellow);
+}
+
+.orders-page-container > div > div > div > div.MUIDataTable-responsiveBase-5 > table > thead > tr > th > span > div > div.MUIDataTableHeadCell-data-54 {
+    font-weight: bold;
+}
+
+/* Sets the background color for the rows in the dropdown row */
+.orders-page-container > div > div > div > div.MUIDataTable-responsiveBase-5 > table > tbody > tr > td > div > table > tbody > tr > td {
+    background-color: var(--offwhite);    
+}
+
+/* Sets the background color for the header in the dropdown row */
+.orders-page-container > div > div > div > div.MUIDataTable-responsiveBase-5 > table > tbody > tr > td > div > table > thead > tr > th {
+    background-color: var(--offwhite);   
+}
+
+/* The background color and styling for the filters */
+.orders-page-container > div > div > div > div.MUIDataTableFilterList-root-119 {
+    background-color: var(--yellow);
+    margin-left: 0;
+    padding-left: calc(1vw);
+    width: 100%;
+}
+
+.orders-page-container > div > div > div > div.MUIDataTable-responsiveBase-5 > table > thead > tr > th,
+.orders-page-container > div > div > div > div.MuiToolbar-root.MuiToolbar-regular.MUIDataTableToolbar-root-13.MuiToolbar-gutters {
+    background-color: var(--yellow);
+}
+
+.spinner-orders-page {
+    width: calc(100%);
+    display: flex;
+    justify-content: center;
+    margin-top: calc(20%);
+}
+
+.orders-page-container > div > div {
+    color: var(--yellow);
+}
+
+/* Allows for the time information to be on seperate lines */
+td { 
+    white-space:pre 
+}
