@@ -4,6 +4,7 @@ import {
   TextField, Button, Grid, 
   Snackbar, Typography 
 } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import { isAuthenticated, setJWT, setUser } from '../util/auth';
 import Navbar from '../components/NavBar';
@@ -18,15 +19,24 @@ const useStyles = makeStyles((theme) => ({
   form: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      width: '100%'
+      width: '95%'
+    },
+    '& .MuiFormLabel-root': {
+        color: 'black',
+      },
+    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+        border: '1px solid black'
     },
     '& .MuiTypography-root': {
       margin: theme.spacing(1),
       width: '100%'
     },
+
     '& .MuiButton-root': {
       margin: theme.spacing(3),
-      //backgroundColor: "red"
+      color: 'black',
+      background: '#F9CE1D',
+      width:'30%'
     }
   },
   title: {
@@ -131,10 +141,13 @@ export default function Register() {
                 spacing={0}
                 alignItems="center"
                 justify="center"
+                style={{position: "absolute", top:"15%"}}
                 >
                 <Grid item md={6} xs={12}>
+                <Box border={8} borderColor="#F9CE1D" style={{padding: "2vw"}}>
+                 
                     <Typography variant="h4" className={classes.title}>
-                    Register Account
+                    Register New Account
                     </Typography>
                     <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
@@ -146,6 +159,7 @@ export default function Register() {
                         <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Register</Button>
                     </div>
                     </form>
+                    </Box>
                 </Grid>   
                 <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
             </Grid> 
