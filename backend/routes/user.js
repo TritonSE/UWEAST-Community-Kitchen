@@ -175,7 +175,7 @@ router.post(
       //Send an automated email to the user containing their new randomly generated password
       const locals = {
         password: randomlyGeneratedPass,
-        resetLink: 'https://stackoverflow.com/questions/51869135/pug-variable-not-evaluated-on-a-href-tag'
+        resetLink: 'http://localhost:3000/reset-password'
       }
 
       sendEmail('forgot-password', email, locals, res);
