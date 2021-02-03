@@ -14,7 +14,6 @@ const MenuItem = ( {description, image, price, title, togglePopup, dietaryInfo} 
         </div>
         <div className="menu-absolutes">
           <p className="menu-price">${price}</p>
-          <div className="menu-plus-button"><span className="menu-plus">+</span></div>
         </div>
       </div>
     );

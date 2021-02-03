@@ -21,7 +21,7 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
         for(var i = 0; i < json.items.length; i++) {
           // since "featured" isn't a category, we need to handle it differently
           let isCategoryEqual = json.items[i].category == categoryName;
-          let isFeatured = (categoryName == "Featured") && (json.items[i].featured);
+          let isFeatured = (categoryName == "Featured") && (json.items[i].isFeatured);
 
           // is stored only if the category name is the same as json's category
           if((json.items != undefined) && (isCategoryEqual || isFeatured)) {

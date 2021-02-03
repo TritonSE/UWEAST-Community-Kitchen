@@ -55,14 +55,6 @@
   padding: 0px;
 }
 
-/** This stops the first line of the title from being obscured by the price. **/
-.menu-text h3:before {
-  content: '';
-  float: right;
-  width: 60px;
-  height: 1em;
-}
-
 .menu-text p 
 {
   font-size: 16px;
@@ -74,34 +66,12 @@
 {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   background-color: #f1f1f1;
   width: 60px;
   text-align: center;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 0px;
   font-weight: bold;
   color: black;
-}
-
-.menu-plus-button 
-{
-  display: flex;
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 30px;
-  height: 30px;
-  background-color: #1edc31;
-  border-radius: 15px;
-  color: white;
-  font-size: 30px;
-  justify-content: center;
-  align-items: center;
-}
-
-.menu-plus 
-{
-  display: flex;
-  align-self: center;
-  margin-top: -6px;
 }
