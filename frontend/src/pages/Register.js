@@ -13,17 +13,21 @@ const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
 const useStyles = makeStyles((theme) => ({
+
   centered: {
     textAlign: 'center'
   },
   form: {
+    //Input Field - General Layout
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
       width: '95%'
     },
+    //Input Field - Label Layout 
     '& .MuiFormLabel-root': {
         color: 'black',
       },
+      //Input Field - Border Layout 
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
         border: '1px solid black'
     },
@@ -60,10 +64,14 @@ export default function Register() {
     form_disabled: false
   });
 
+  // Updates given state with given value 
   const handleChange = (prop) => (event) => {
     setState({ ...state, [prop]: event.target.value });
   };
 
+  // Handles submission of the form (button click)
+  // Validates form data for completion/length, making a backend request to Users DB for secret key autentication + 
+  // email uniqueness. If register succeeds, user is redirected to admin page and added to user DB. Otherwise, an error message appears. 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setState({ ...state, form_disabled: true });
@@ -126,6 +134,7 @@ export default function Register() {
     }
   };
 
+  //Error Message Display: Auto close itself by updating its states
   const handleSnackClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -133,6 +142,7 @@ export default function Register() {
     setState({...state, snack: {...state.snack, open: false}});
   };
 
+  //If user is already logged in, then redirect to Admin Page. Else display Register page. 
   return isAuthenticated() ? <Redirect to="/admin"/> : ( 
       <div>
           <Navbar/>

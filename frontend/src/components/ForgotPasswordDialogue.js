@@ -13,7 +13,7 @@ const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
 export default function FormDialog() {
-  //const [open, setOpen] = React.useState(false);
+  
   const [state, setState] = React.useState({
     open: false,
     email: '',
@@ -23,6 +23,9 @@ export default function FormDialog() {
     }
   });
 
+  // Handles submission of the form (button click)
+  // Validates form data for valid email address (must be a user's email address). If valid, 
+  // it autogenerates a random password and sends it as an email to the user. If invalid, an error is displayed. 
   const handleSend = async() => {
       const submission = {
           email: state.email
@@ -33,6 +36,7 @@ export default function FormDialog() {
         setState({...state, error:{display: true, message: "Field cannot be empty!"}})
         return;
     }
+    //Backend call
     try{
       const response = await fetch(`${BACKEND_URL}user/forgotPassword`, {
         method: 'POST',
@@ -61,18 +65,22 @@ export default function FormDialog() {
 
   }
 
+  //Display pop-up
   const handleClickOpen = () => {
     setState({...state, email:'', open: true, error:{display: false}});
   };
 
+  //Close pop-up
   const handleClose = () => {
     setState({...state, open: false, error:{display: false}});
   };
 
+  //track the email address put in the text field
   const handleEmailChange = (event) => {
     setState({...state, email: event.target.value, open: true});
   }
 
+  //Render component 
   return (
     <div>
       <Link onClick={handleClickOpen}><Typography>Forgot Password?</Typography></Link>

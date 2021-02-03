@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 const crypto = require("crypto");
 
-//Used for random password generation
+//Used for random password generation (Route: /resetPassword)
 const MIN_PASS_LENGTH = 6;
 const MAX_PASS_LENGTH = 15;
 
@@ -124,6 +124,7 @@ const mail = config.uweast.user === "" ? null : new Email({
 
 //Populates given email template with req.body and sends it to to_email
 async function sendEmail(template, to_email , locals, res) {
+  //Sends email only if mail has been successfully setup
   if (mail != null) {
     await mail.send({
       template: template,
@@ -139,6 +140,9 @@ async function sendEmail(template, to_email , locals, res) {
   }
 }
 
+//@body: email that denotes an existing user's email in the DB (required string)
+//@response: If user exists in DB, reset their password to something randomly generated, and send them an email
+// stating this new password. Otherwise, thrown an error status
 router.post(
   "/forgotPassword",
   [
@@ -190,6 +194,12 @@ router.post(
   }
 );
 
+//@body: email that denotes an existing user's email in the DB (required string)
+//        oldPassword that denotes an existing user's current password in DB (required string)
+//        newPassword that denotes what an existing user's password will be changed to (required string)
+//
+//@response: If user exists in DB (email and oldPassword match), then that user's password is updated to the
+// newPassword passed in. Else, an error status is thrown. 
 router.post(
   "/resetPassword",
   [

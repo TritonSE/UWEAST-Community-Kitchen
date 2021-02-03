@@ -20,13 +20,16 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center'
   },
   form: {
+    //Input Field - General Layout
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
       width: '95%'
     },
+    //Input Field - Label Layout 
     '& .MuiFormLabel-root': {
         color: 'black',
       },
+      //Input Field - Border Layout 
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
         border: '1px solid black'
     },
@@ -61,10 +64,15 @@ export default function Login() {
     form_disabled: false
   });
 
+  // Updates given state with given value 
   const handleChange = (prop) => (event) => {
     setState({ ...state, [prop]: event.target.value });
   };
 
+  
+  // Handles submission of the form (button click)
+  // Validates form data for completion/length, making a backend request to Users DB for user authetnication. If
+  // user is authenticated, user is redirected to admin page. Otherwise, an error message appears. 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setState({ ...state, form_disabled: true });
@@ -114,6 +122,7 @@ export default function Login() {
     }
   };
 
+  //Error Message Display: Auto close itself by updating its states
   const handleSnackClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -121,7 +130,7 @@ export default function Login() {
     setState({...state, snack: {...state.snack, open: false}});
   };
 
-  //If user is already logged in, then redirect to Admin Page
+  //If user is already logged in, then redirect to Admin Page. Else display Login page. 
   return isAuthenticated() ? <Redirect to="/admin"/> : ( 
       <div>
             <Navbar/>
@@ -144,7 +153,6 @@ export default function Login() {
                                 <form className={classes.form} onSubmit={handleSubmit}>
                                 <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
                                 <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
-                                {/* <Link to="forgot-password"><Typography>Forgot your password?</Typography></Link> */}
                                 <Link to="register" className="Child"><Typography>Register Account</Typography></Link>
                                 <Link to="reset-password"><Typography>Reset Password</Typography></Link>
                                 <div className={classes.centered}>

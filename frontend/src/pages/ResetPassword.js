@@ -1,12 +1,11 @@
 import React from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { 
   TextField, Button, Grid, 
   Snackbar, Typography 
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import { isAuthenticated, setJWT, setUser } from '../util/auth';
 import Navbar from '../components/NavBar';
 import ForgotPasswordDialogue from '../components/ForgotPasswordDialogue';
 
@@ -15,17 +14,21 @@ const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
 const useStyles = makeStyles((theme) => ({
+
   centered: {
     textAlign: 'center'
   },
   form: {
+    //Input Field - General Layout
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
       width: '95%'
     },
+    //Input Field - Label Layout 
     '& .MuiFormLabel-root': {
         color: 'black',
       },
+      //Input Field - Border Layout 
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
         border: '1px solid black'
     },
@@ -38,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(3),
       color: 'black',
       background: '#F9CE1D',
-      width:'20%'
+      width:'30%'
     }
   },
   title: {
@@ -62,10 +65,14 @@ export default function ResetPassword() {
     form_disabled: false,
   });
 
+  // Updates given state with given value 
   const handleChange = (prop) => (event) => {
     setState({ ...state, [prop]: event.target.value });
   };
 
+  // Handles submission of the form (button click)
+  // Validates form data for completion/length, making a backend request to Users DB for email + password match. If 
+  // it succeeds, user's password is updated in Users DB. Otherwise, an error message appears. 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setState({ ...state, form_disabled: true });
@@ -127,6 +134,7 @@ export default function ResetPassword() {
     }
   };
 
+  //Error Message Display: Auto close itself by updating its states
   const handleSnackClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -134,8 +142,8 @@ export default function ResetPassword() {
     setState({...state, snack: {...state.snack, open: false}});
   };
 
-  //If user is already logged in, then redirect to Admin Page
-  return isAuthenticated() ? <Redirect to="/admin"/> : ( 
+  //Render Page
+  return ( 
       <div>
           <Navbar/>
            <Grid
