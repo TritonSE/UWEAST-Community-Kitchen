@@ -39,7 +39,8 @@ class About extends Component {
                 individual_price: "6.00",
                 individual_tax: "1.50",
             },
-        ]
+        ],
+        pickup_date: "2021-02-04"
     }
       return (
 

@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(3),
       color: 'black',
       background: '#F9CE1D',
-      width:'30%'
+      width:'20%'
     }
   },
   title: {
