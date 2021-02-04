@@ -6,8 +6,8 @@ const itemSchema = new mongoose.Schema({
   Description: { type: String, required: true },
   Category: { type: String, required: true },
   Prices: {
-    Individual: { type: String },
-    Family: { type: String },
+    Individual: { type: Number },
+    Family: { type: Number },
   },
   isFeatured: { type: Boolean, default: false },
   Accomodations: {

@@ -7,21 +7,11 @@ const {
   setFeatured,
   // setNotFeatured,
 } = require("../db/services/item");
-const { body } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const router = express.Router();
 
-// function buildItemJSON(body) {
-//   body.vegan = body.vegan !== undefined;
-//   body.vegetarian = body.vegetarian !== undefined;
-//   body.glutenFree = body.glutenFree !== undefined;
-//   // body.ingredients = body.ingredients.split(', ');
-//   body.price = parseFloat(body.price);
-
-//   return body;
-// }
-
-// get all menu items
+// returns all menu items in the DB
 router.get("/", async (req, res, next) => {
   const items = await getAllMenuItems();
   if (!items) {
@@ -31,7 +21,22 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// Post data, log data to terminal.
+// num: string representation of money
+// checks the string to conform to positive decimals
+function checkNumeral(num) {
+  const regex = /^\d*(\.)?\d{0,2}$/;
+  if (num === undefined) return false;
+  // round to two decimal places
+  if (num.indexOf(".") !== -1) num = num.substring(0, num.indexOf(".") + 3);
+  if (!regex.test(num)) return false;
+  return true;
+}
+
+// @body Name, pictureURL, Description, Category, Prices: required
+//       at least one of Individual or Family Prices: required
+//       isFeatured, Accommodations: not required
+//
+// inserts an item into the Item DB
 router.post(
   "/insert",
   [
@@ -39,31 +44,60 @@ router.post(
     body("pictureURL").isString(),
     body("Description").isString(),
     body("Category").isString(),
+    body("Prices").custom((value) => {
+      // require at least one of Family or Individual Pricing
+      if (value.Individual === undefined && value.Family === undefined)
+        return false;
+
+      // check for numeric values with 2 decimal places
+      let family = checkNumeral(value.Family);
+      let indiv = checkNumeral(value.Individual);
+
+      // if both Family and Indiv are provided make sure they passed the checkNumeral
+      if (value.Family !== undefined && value.Individual !== undefined) {
+        if (family === false || indiv === false) {
+          return false;
+        }
+      }
+      // only family was provided and invalid numeral
+      else if (value.Family !== undefined && family === false) {
+        return false;
+      }
+      // only individual was provided and invalid numeral
+      else if (value.Individual !== undefined && indiv === false) {
+        return false;
+      }
+      // validation successful
+      return true;
+    }),
     isValidated,
   ],
   async (req, res, next) => {
     try {
+      // addedItem if successful or false if error
       const addedItem = await addNewItem(req.body);
       if (!addedItem) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Insert unsuccessful" }] });
+        return res.status(400).json({
+          errors: [{ msg: "Insert unsuccessful/ enter valid Item data" }],
+        });
       } else {
         return res.status(200).json({ item_id: addedItem._id });
       }
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server err");
+      res.status(500).send("Server err/ enter valid Item data");
     }
   }
 );
 
-// given _id deletes
+// @body _id: id of object to be deleted
+// deletes an item for the Item DB
 router.delete(
   "/remove",
   [body("_id").notEmpty(), isValidated],
   async (req, res, next) => {
     try {
+      // deleted object response check if deletedCount is 1
       const deleted = await deleteItem(req.body._id);
       if (deleted && deleted.deletedCount !== 1) {
         return res
@@ -79,12 +113,46 @@ router.delete(
   }
 );
 
-// @body id and any of the attributes of the item object
+// @body id of object to be edited and any of the attributes of the item object
+// edits any of the item attributes, the only required attribute is _id
 router.post(
   "/edit",
-  [body("_id").notEmpty(), isValidated],
+  [
+    body("_id").notEmpty(),
+    body("Prices").custom((value) => {
+      // return true if both attributes are false because we do not require them
+      if (
+        value === undefined ||
+        (value.Individual === undefined && value.Family === undefined)
+      )
+        return true;
+
+      // check for numeric values with 2 decimal places
+      let family = checkNumeral(value.Family);
+      let indiv = checkNumeral(value.Individual);
+
+      // if both Family and Indiv are provided make sure they passed the checkNumeral
+      if (value.Family !== undefined && value.Individual !== undefined) {
+        if (family === false || indiv === false) {
+          return false;
+        }
+      }
+      // only family was provided and invalid numeral
+      else if (value.Family !== undefined && family === false) {
+        return false;
+      }
+      // only individual was provided and invalid numeral
+      else if (value.Individual !== undefined && indiv === false) {
+        return false;
+      }
+      // validation successful
+      return true;
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     const edit = await editItem(req.body._id, req.body);
+    console.log(edit);
     // if there is an error or item is not found
     if (edit === false || (edit && edit.n !== 1)) {
       res
@@ -96,6 +164,9 @@ router.post(
   }
 );
 
+// @body _id: id of the item to be featured/unfeatured
+//       isFeatured: T/F to set to object
+// sets the isFeatured atribute of the object associated with the id
 router.post(
   "/feature",
   [body("_id").notEmpty(), body("isFeatured").notEmpty(), isValidated],
@@ -109,17 +180,6 @@ router.post(
     } else {
       res.status(200).json({ success: true });
     }
-    // getAllMenuItems()
-    //   .then((allItems) => {
-    //     for (const key in allItems) {
-    //       if (req.body[allItems[key]._id]) setFeatured(allItems[key]._id);
-    //       else setNotFeatured(allItems[key]._id);
-    //     }
-    //     res.sendStatus(200);
-    //   })
-    //   .catch((error) => {
-    //     res.sendStatus(error.status || 500);
-    //   });
   }
 );
 
