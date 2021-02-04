@@ -15,9 +15,15 @@
   overflow-x: hidden;
 }
 
-.menu-item::-webkit-scrollbar {
+.menu-item::-webkit-scrollbar 
+{
   display: none;
   width: 0px;
+}
+
+.menu-image
+{
+  overflow: hidden;
 }
 
 .menu-image img
