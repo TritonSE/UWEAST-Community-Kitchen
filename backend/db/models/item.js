@@ -9,12 +9,14 @@ const itemSchema = new mongoose.Schema({
     Individual: {
       type: String,
       set: (v) => {
+        if (v === "") return "";
         return (+v).toFixed(2);
       },
     },
     Family: {
       type: String,
       set: (v) => {
+        if (v === "") return "";
         return (+v).toFixed(2);
       },
     },
@@ -33,6 +35,7 @@ const itemSchema = new mongoose.Schema({
         Price: {
           type: String,
           set: (v) => {
+            if (v === "") return "";
             return (+v).toFixed(2);
           },
         },

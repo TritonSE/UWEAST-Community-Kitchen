@@ -43,6 +43,7 @@ router.post(
     body("Description").isString(),
     body("Category").isString(),
     body("Prices").custom((value) => {
+      if (value.Family === "" && value.Individual === "") return false;
       // check for numeric values with regex to be price conforming
       return (
         value &&
@@ -114,7 +115,7 @@ router.post(
     body("Prices").custom((value) => {
       // if Prices is not passed in
       if (value === undefined) return true;
-
+      if (value.Family === "" && value.Individual === "") return false;
       // check for numeric values with 2 decimal places
       return (
         value &&
