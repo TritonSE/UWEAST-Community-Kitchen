@@ -9,6 +9,12 @@ const itemSchema = new mongoose.Schema({
     Individual: { type: Number },
     Family: { type: Number },
   },
+  specialInstructions: { type: String, default: "" },
+  dietaryInfo: {
+    vegan: { type: Boolean, default: false },
+    vegetarian: { type: Boolean, default: false },
+    glutenFree: { type: Boolean, default: false },
+  },
   isFeatured: { type: Boolean, default: false },
   Accomodations: {
     type: [

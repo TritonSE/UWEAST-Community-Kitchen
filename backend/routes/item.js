@@ -120,12 +120,12 @@ router.post(
   [
     body("_id").notEmpty(),
     body("Prices").custom((value) => {
-      // return true if both attributes are false because we do not require them
-      if (
-        value === undefined ||
-        (value.Individual === undefined && value.Family === undefined)
-      )
-        return true;
+      // if Prices is not passed in
+      if (value === undefined) return true;
+
+      // return false if both attributes are undefined but Prices is not
+      if (value.Individual === undefined && value.Family === undefined)
+        return false;
 
       // check for numeric values with 2 decimal places
       let family = checkNumeral(value.Family);
@@ -152,7 +152,6 @@ router.post(
   ],
   async (req, res, next) => {
     const edit = await editItem(req.body._id, req.body);
-    console.log(edit);
     // if there is an error or item is not found
     if (edit === false || (edit && edit.n !== 1)) {
       res
