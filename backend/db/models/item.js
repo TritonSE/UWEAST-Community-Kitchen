@@ -30,7 +30,12 @@ const itemSchema = new mongoose.Schema({
     type: [
       {
         Description: String,
-        Price: String,
+        Price: {
+          type: String,
+          set: (v) => {
+            return (+v).toFixed(2);
+          },
+        },
       },
     ],
     default: [],

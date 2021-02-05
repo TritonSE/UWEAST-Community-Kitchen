@@ -24,10 +24,8 @@ router.get("/", async (req, res, next) => {
 // num: string representation of money
 // checks the string to conform to positive decimals
 function checkNumeral(num) {
-  const regex = /^\d*(\.)?\d{0,2}$/;
+  const regex = /^\d*(\.)?\d*$/;
   if (num === undefined) return false;
-  // round to two decimal places
-  if (num.indexOf(".") !== -1) num = num.substring(0, num.indexOf(".") + 3);
   if (!regex.test(num)) return false;
   return true;
 }
@@ -45,7 +43,7 @@ router.post(
     body("Description").isString(),
     body("Category").isString(),
     body("Prices").custom((value) => {
-      // check for numeric values with 2 decimal places
+      // check for numeric values with regex to be price conforming
       return (
         value &&
         ((checkNumeral(value.Family) && !value.Individual) ||
@@ -53,6 +51,17 @@ router.post(
           (checkNumeral(value.Family) && checkNumeral(value.Individual)))
       );
     }),
+    body("Accomodations")
+      .custom((value) => {
+        // check for numeric values with regex to be price conforming
+        // for each price in Accomodations array
+        for (val of value) {
+          let success = checkNumeral(val.Price) ? true : false;
+          if (success === false) return false;
+        }
+        return true;
+      })
+      .optional(),
     isValidated,
   ],
   async (req, res, next) => {
@@ -114,6 +123,17 @@ router.post(
           (checkNumeral(value.Family) && checkNumeral(value.Individual)))
       );
     }),
+    body("Accomodations")
+      .custom((value) => {
+        // check for numeric values with regex to be price conforming
+        // for each price in Accomodations array
+        for (val of value) {
+          let success = checkNumeral(val.Price) ? true : false;
+          if (success === false) return false;
+        }
+        return true;
+      })
+      .optional(),
     isValidated,
   ],
   async (req, res, next) => {
