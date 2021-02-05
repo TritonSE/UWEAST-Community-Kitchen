@@ -46,7 +46,12 @@ router.post(
     body("Category").isString(),
     body("Prices").custom((value) => {
       // check for numeric values with 2 decimal places
-      return checkNumeral(value.Family) || checkNumeral(value.Individual);
+      return (
+        value &&
+        ((checkNumeral(value.Family) && !value.Individual) ||
+          (checkNumeral(value.Individual) && !value.Family) ||
+          (checkNumeral(value.Family) && checkNumeral(value.Individual)))
+      );
     }),
     isValidated,
   ],
@@ -102,7 +107,12 @@ router.post(
       if (value === undefined) return true;
 
       // check for numeric values with 2 decimal places
-      return checkNumeral(value.Family) || checkNumeral(value.Individual);
+      return (
+        value &&
+        ((checkNumeral(value.Family) && !value.Individual) ||
+          (checkNumeral(value.Individual) && !value.Family) ||
+          (checkNumeral(value.Family) && checkNumeral(value.Individual)))
+      );
     }),
     isValidated,
   ],
