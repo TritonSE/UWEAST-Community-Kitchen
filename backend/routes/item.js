@@ -53,22 +53,7 @@ router.post(
       let family = checkNumeral(value.Family);
       let indiv = checkNumeral(value.Individual);
 
-      // if both Family and Indiv are provided make sure they passed the checkNumeral
-      if (value.Family !== undefined && value.Individual !== undefined) {
-        if (family === false || indiv === false) {
-          return false;
-        }
-      }
-      // only family was provided and invalid numeral
-      else if (value.Family !== undefined && family === false) {
-        return false;
-      }
-      // only individual was provided and invalid numeral
-      else if (value.Individual !== undefined && indiv === false) {
-        return false;
-      }
-      // validation successful
-      return true;
+      return family || indiv;
     }),
     isValidated,
   ],
@@ -131,22 +116,7 @@ router.post(
       let family = checkNumeral(value.Family);
       let indiv = checkNumeral(value.Individual);
 
-      // if both Family and Indiv are provided make sure they passed the checkNumeral
-      if (value.Family !== undefined && value.Individual !== undefined) {
-        if (family === false || indiv === false) {
-          return false;
-        }
-      }
-      // only family was provided and invalid numeral
-      else if (value.Family !== undefined && family === false) {
-        return false;
-      }
-      // only individual was provided and invalid numeral
-      else if (value.Individual !== undefined && indiv === false) {
-        return false;
-      }
-      // validation successful
-      return true;
+      return family || indiv;
     }),
     isValidated,
   ],
