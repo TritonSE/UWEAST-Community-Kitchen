@@ -45,15 +45,8 @@ router.post(
     body("Description").isString(),
     body("Category").isString(),
     body("Prices").custom((value) => {
-      // require at least one of Family or Individual Pricing
-      if (value.Individual === undefined && value.Family === undefined)
-        return false;
-
       // check for numeric values with 2 decimal places
-      let family = checkNumeral(value.Family);
-      let indiv = checkNumeral(value.Individual);
-
-      return family || indiv;
+      return checkNumeral(value.Family) || checkNumeral(value.Individual);
     }),
     isValidated,
   ],
@@ -108,15 +101,8 @@ router.post(
       // if Prices is not passed in
       if (value === undefined) return true;
 
-      // return false if both attributes are undefined but Prices is not
-      if (value.Individual === undefined && value.Family === undefined)
-        return false;
-
       // check for numeric values with 2 decimal places
-      let family = checkNumeral(value.Family);
-      let indiv = checkNumeral(value.Individual);
-
-      return family || indiv;
+      return checkNumeral(value.Family) || checkNumeral(value.Individual);
     }),
     isValidated,
   ],
