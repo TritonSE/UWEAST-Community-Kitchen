@@ -13,6 +13,7 @@ const orderSchema = new mongoose.Schema(
       transactionID: { type: String, required: true },
     },
     Order: [{ item: String, quantity: Number, extra: [String] }],
+    isCompleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
