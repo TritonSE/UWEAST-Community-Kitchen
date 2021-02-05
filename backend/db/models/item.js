@@ -6,8 +6,24 @@ const itemSchema = new mongoose.Schema({
   Description: { type: String, required: true },
   Category: { type: String, required: true },
   Prices: {
-    Individual: { type: String },
-    Family: { type: String },
+    Individual: {
+      type: String,
+      set: (v) => {
+        return (+v).toFixed(2);
+      },
+    },
+    Family: {
+      type: String,
+      set: (v) => {
+        return (+v).toFixed(2);
+      },
+    },
+  },
+  specialInstructions: { type: String, default: "" },
+  dietaryInfo: {
+    vegan: { type: Boolean, default: false },
+    vegetarian: { type: Boolean, default: false },
+    glutenFree: { type: Boolean, default: false },
   },
   isFeatured: { type: Boolean, default: false },
   Accomodations: {
