@@ -2,7 +2,7 @@
 :root {
     --yellow: #f9ce1d;
     --black: black;
-    --lightgrey: #CCCCCC;
+    --lightgrey: #cccccc;
     --darkgrey: #747474;
     --white: #FFFFFF;
     --offwhite: #F1f1f1;
@@ -17,27 +17,39 @@
     align-items: center;
     justify-content: space-between;
 }
+.searchFilterContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
 .menuAddButton {
     font-family: 'Roboto', sans-serif !important;
     background-color: var(--yellow) !important;
     border: 1px solid var(--yellow) !important;
     color: var(--black) !important;
     font-weight: bold !important;
+
+    width: 150px;
+    height: 50px;
 }
 .menuAddButtonIcon {
     color: var(--white) !important;
     margin-right: 10px;
 }
 .menuFilterSelect {
-    margin-right: 20px;
-    min-width: 100px;
-    max-width: 200px;
-    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    margin-right: 40px;
+    width: 200px;
+    height: 50px;
 }
 .menuSearchBar {
-    min-width: 100px;
-    max-width: 200px;
-    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    width: 200px;
+    height: 50px;
 }
 .menuTableContainer {
     min-width: 900px;

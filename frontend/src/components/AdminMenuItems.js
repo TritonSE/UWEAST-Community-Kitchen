@@ -41,6 +41,7 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
             show={deleteConfirmation !== []} 
             onHide={() => setDeleteConfirmation(["", ""])} 
             backdrop='static'
+            style={{"marginTop": "30vh"}}
         >
                 <Modal.Header closeButton>
                     <Modal.Title>Delete Menu Item</Modal.Title>
@@ -52,7 +53,7 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
                 </Modal.Body>
                 
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => {
+                    <Button variant="primary" className="menuAddButton" onClick={() => {
                         // REMOVE ITEM FROM MENU
                         console.log("removing item from menu")
                         
@@ -74,7 +75,6 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
 
 // Renders table of items based on what is passed in through displayContent
 function menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange) {
-    
     return (
         <TableContainer component={Paper} className="menuTableContainer">
             <Table aria-label="simple table" stickyHeader className="menuTable">
@@ -254,6 +254,7 @@ export default function AdminMenuItems (props) {
             setDisplayContent(newRows); 
         }
     }
+    // Called when a set featured checkbox is clicked
     const handleFeatureChange = async (row) => {
         const itemID = row.id;
         const newValue = !row.isFeatured;
@@ -297,7 +298,7 @@ export default function AdminMenuItems (props) {
                         <AddCircleIcon className="menuAddButtonIcon" />
                         Add Item
                     </Button>
-                    <span style={{"display": "flex", "flexDirection": "row"}}>
+                    <div className="searchFilterContainer">
                         <Select
                             className="menuFilterSelect"
                             id="item-filter-select"
@@ -326,7 +327,7 @@ export default function AdminMenuItems (props) {
                                 handleSearch("");
                             }}
                         />
-                    </span>
+                    </div>
                 </div>
                 {menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange)}
             </div>
