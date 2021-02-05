@@ -13,50 +13,10 @@ async function getAllMenuItems() {
   }
 }
 
-// function itemFromInfo(info) {
-//   return {
-//     name: info.name,
-//     description: info.description,
-//     price: info.price,
-//     category: info.category,
-//     image: info.image,
-//     cuisine: info.cuisine,
-//     tags: info.tags,
-//     vegan: info.vegan,
-//     vegetarian: info.vegetarian,
-//     glutenFree: info.glutenFree,
-//     ingredients: info.ingredients,
-//   };
-// }
-
-// rounds price to two decimal places or false if undefined
-function priceSet(num) {
-  if (num !== undefined && num.indexOf(".") !== -1) {
-    return num.substring(0, num.indexOf(".") + 3);
-  }
-  return false;
-}
-
 // @body: info conforming to the item schema
 // adds a new item object to the Item DB
 async function addNewItem(info) {
   try {
-    let family = false;
-    let individual = false;
-
-    // round prices if they exist
-    if (info.Prices !== undefined) {
-      family = priceSet(info.Prices.Family);
-      individual = priceSet(info.Prices.Individual);
-    }
-
-    // if prices exist set them to be apart of the creation (with their rounded values)
-    if (family !== false) {
-      info.Prices.Family = family;
-    }
-    if (individual !== false) {
-      info.Prices.Individual = individual;
-    }
     return Item.create(info);
   } catch (err) {
     return false;
@@ -75,23 +35,6 @@ async function deleteItem(id) {
 // edits any aspect of the item object and updates to DB
 async function editItem(id, info) {
   try {
-    let family = false;
-    let individual = false;
-
-    // round prices if they exist
-    if (info.Prices !== undefined) {
-      family = priceSet(info.Prices.Family);
-      individual = priceSet(info.Prices.Individual);
-    }
-
-    // if prices exist set them to be edited
-    if (family !== false) {
-      info.Prices.Family = family;
-    }
-    if (individual !== false) {
-      info.Prices.Individual = individual;
-    }
-
     // edit the item
     return await Item.updateOne(
       { _id: new mongodb.ObjectID(id) },
