@@ -9,14 +9,14 @@ const itemSchema = new mongoose.Schema({
     Individual: {
       type: String,
       set: (v) => {
-        if (v === "") return "";
+        if (v === "") return;
         return (+v).toFixed(2);
       },
     },
     Family: {
       type: String,
       set: (v) => {
-        if (v === "") return "";
+        if (v === "") return;
         return (+v).toFixed(2);
       },
     },
