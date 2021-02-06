@@ -5,9 +5,9 @@ import minus from '../media/minus.svg';
 
 const MenuItemPopup = ({ values, togglePopup, processForm }) => {
     const [quantity, setQuantity] = useState(1);
-    const [totalPrice, setTotalPrice] = useState(values.get("Prices").Individual);
     // if individual price exists, use that as default; otherwise, use family
     const [currPrice, setCurrPrice] = useState(("Individual" in values.get("Prices")) ? values.get("Prices").Individual : values.get("Prices").Family);
+    const [totalPrice, setTotalPrice] = useState(currPrice);
     const [accommodationCost, setAccommodationCost] = useState(0);
 
     // handles changing price and quantity states
