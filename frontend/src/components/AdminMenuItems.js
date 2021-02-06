@@ -116,12 +116,12 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
                                 <TableCell align="left" className="menuRowText" width="12%">{row.categoryName}</TableCell>
                                 <TableCell align="left" className="menuRowText" width="12%">
                                 {
-                                    row.basePrice.map((v) => {return (<p>{v[0]}</p>)})
+                                    row.basePrice.map((v) => {return (<>{v[0]}<br /></>)})
                                 }
                                 </TableCell>
                                 <TableCell align="left" className="menuRowText" width="12%">
                                 {
-                                    row.basePrice.map((v) => <p>${v[1]}</p>)
+                                    row.basePrice.map((v) => <>${v[1]}</>)
                                 }
                                 </TableCell>
                                 <TableCell align="left" className="menuRowText" width="12%">
