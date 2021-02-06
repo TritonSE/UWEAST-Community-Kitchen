@@ -39,7 +39,7 @@
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1023px) 
+@media only screen and (min-width: 769px) and (max-width: 1022px) 
 {
   .menu-section
   {
@@ -52,5 +52,6 @@
   .menu-section
   {
     grid-template-columns: 150px minmax(auto, 900px) 150px;
+    margin-top: 55px;
   }
 }
