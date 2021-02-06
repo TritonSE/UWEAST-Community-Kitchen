@@ -401,7 +401,7 @@ const columns = [
   return (
       <MuiThemeProvider theme={getMuiTheme()}>
         <MUIDataTable
-          title={"Past Orders"}
+          title={"Order History"}
           data={props.orders}
           columns={columns}
           options={options}
