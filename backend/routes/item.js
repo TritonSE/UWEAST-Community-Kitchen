@@ -25,7 +25,7 @@ router.get("/", async (req, res, next) => {
 // checks the string to conform to positive decimals
 function checkNumeral(num) {
   const regex = /^\d*(\.)?\d*$/;
-  if (num === undefined) return false;
+  if (num === undefined || num.trim() === "") return false;
   if (!regex.test(num)) return false;
   return true;
 }
