@@ -11,6 +11,29 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
   const [menuItems, setMenuItems] = useState(new Array());
   const menuItemValues = [];
 
+  /*
+  Expected popupValues input to popup:
+  */
+  const popup = new Map();
+  popup.set("Name", "Chicken");
+  popup.set("pictureURL", "https://www.onceuponachef.com/images/2020/05/best-grilled-chicken-scaled.jpg");
+  popup.set("Description", "this is a chicken!");
+  popup.set("Prices", {
+    "Individual": "4.20",
+    "Family": "10.23"
+  });
+  popup.set("dietaryInfo", {
+    "vegan": true,
+    "vegetarian": false,
+    "glutenFree": true
+  });
+  popup.set("Accomodations", [ 
+    {
+      "Description": "gluten free",
+      "Price": "10.08"
+    }
+  ]);
+
   // useEffect() is called to get information from database
   useEffect(() => {
     fetch("http://localhost:9000/item/")
@@ -41,7 +64,7 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
   return (
       <>
         {/** popup is created here, if it is visible it is rendered */}
-        {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
+        {popupVisible ? <MenuItemPopup values={popup} togglePopup={togglePopup} processForm={processForm} /> : null}
         <div className="menu-item-category">
           <h2> {categoryName} </h2>
           <div className="menu-item-category-grid">
