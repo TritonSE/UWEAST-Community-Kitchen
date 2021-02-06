@@ -121,7 +121,7 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
                                 </TableCell>
                                 <TableCell align="left" className="menuRowText" width="12%">
                                 {
-                                    row.basePrice.map((v) => <>${v[1]}</>)
+                                    row.basePrice.map((v) => <>${v[1]}<br /></>)
                                 }
                                 </TableCell>
                                 <TableCell align="left" className="menuRowText" width="12%">
