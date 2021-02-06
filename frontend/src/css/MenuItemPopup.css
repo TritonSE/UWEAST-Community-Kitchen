@@ -34,8 +34,8 @@
 .close-button 
 {
   position: absolute;
-  right: 1px;
-  margin-top: -10px;
+  right: 2px;
+  top: -8px;
   transform: rotate(45deg);
   font-size: 30px;
 }
