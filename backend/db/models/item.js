@@ -31,7 +31,7 @@ const itemSchema = new mongoose.Schema({
   Accomodations: {
     type: [
       {
-        Description: String,
+        Description: { type: String, required: true },
         Price: {
           type: String,
           set: (v) => {
