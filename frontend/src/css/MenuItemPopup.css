@@ -15,8 +15,6 @@
 {
   width: 975px;
   background-color: white;
-  display: grid;
-  grid-template-columns: 60% 40%;
   min-height: 630px;
   overflow-x: hidden;
   position: fixed;
@@ -26,6 +24,11 @@
   transform: translate(-50%, -50%);
   padding: 25px;
   z-index: 2;
+}
+
+.group-popup {
+  display: flex;
+  flex-direction: row;
 }
 
 .close-button 
@@ -43,6 +46,7 @@
 }
 
 .left-popup {
+  flex: 4;
   margin-right: 30px;
 }
 
@@ -124,6 +128,7 @@
   overflow: scroll;
   overflow-x: hidden;
   display: flex;
+  flex: 3;
 }
 
 .right-popup::-webkit-scrollbar {
@@ -222,11 +227,13 @@
 /* iPads (landscape) ----------- */
 @media only screen and (max-width : 1024px) {
   .menu-item-popup {
-    display: flex;
-    flex-direction: column;
     width: 500px;
     height: 90vh;
     gap: 30px;
+  }
+
+  .group-popup {
+    flex-direction: column;
   }
 
   .left-popup {
