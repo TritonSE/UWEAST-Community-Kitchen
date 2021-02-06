@@ -3,7 +3,7 @@ import {
   GoogleMap,
   useLoadScript,
   Marker,
-  infoWindow
+  InfoWindow
 } from "@react-google-maps/api";
 
 const mapContainerStyle = {
@@ -12,7 +12,7 @@ const mapContainerStyle = {
 }
 
 const center = {
-  lat: 32.75471130774189, 
+  lat: 32.75871130774189, 
   lng: -117.05553043117615
 }
 
@@ -30,7 +30,20 @@ export const ContactMap = () => {
   if(!isLoaded) return "loading...";
 
   return (
-    <GoogleMap mapContainerStyle={mapContainerStyle} zoom={15} center={center}options={options}></GoogleMap>
+    <>
+      <GoogleMap mapContainerStyle={mapContainerStyle} zoom={15} center={center}options={options}>
+        <InfoWindow position={{lat: 32.75471130774189, lng: -117.05553043117615}}>
+          <div className="info-wrapper">
+            <p className="info-label">Email us at</p>
+            <p className="info-value">miriam@uweast.org</p>
+            <p className="info-label">Call us at</p>
+            <p className="info-value">(619) 831-7883</p>
+            <p className="info-label">Find us at</p>
+            <p className="info-value">6523 University Ave <br/> San Diego, CA 92115</p>
+          </div>
+        </InfoWindow>
+      </GoogleMap>
+    </>
   )
 }
 

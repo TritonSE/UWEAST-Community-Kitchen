@@ -109,4 +109,19 @@
     width: 100%;
     width: calc(50vw - 110px);
   }
+
+  .info-wrapper
+  {
+    padding: 20px;
+  }
+
+  .info-label 
+  {
+    margin: 0px;
+  }
+
+  .info-value 
+  {
+    font-weight: bold;
+  }
 }
