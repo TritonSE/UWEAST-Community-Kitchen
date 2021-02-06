@@ -21,7 +21,7 @@ const options = {
   gestureHandling: "greedy"
 }
 
-export const ContactMap = () => {
+const ContactMap = () => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyAYe12_fPCYzLJawQNeabZORGYE5a5GnEU"
   })

@@ -14,11 +14,7 @@
   display: grid;
   box-shadow: 2px 2px #e4e4e4;
   overflow: scroll;
-}
-
-.contact-form form 
-{
-  width: 100%;
+  border: 5px solid #f9ce1d;
 }
 
 .contact-form-text h1
@@ -58,20 +54,82 @@
   border-radius: 3px;
 }
 
+.contact-form-section
+{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.contact-form 
+{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.info-label 
+{
+  margin: 0px;
+}
+
+.info-value 
+{
+  font-weight: bold;
+}
+
 @media only screen and (max-width: 768px) 
 {
   .contact-wrapper
   {
-    height: calc(100vh - 70px);
+    height: calc(100vh - 56px);
+    grid-template-areas:
+     "top"
+     "bottom";
+    grid-template-rows: auto 50vh;
+    overflow-x: hidden;
   }
 
   .contact-map-section
   {
+    grid-area: bottom;
     height: 100%;
+    width: 100vw;
+  }
+
+  .contact-form-section 
+  {
+    display: grid;
+    grid-area: top;
+    width: calc(100%);
+    height: calc(100vh - 54px);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .contact-form 
+  {
+    justify-self: center;
+    height: calc(100% - 80px);
+    width: calc(100% - 40px)
+  }
+
+  .contact-form form 
+  {
+    width: calc(100vw - 20px);
+  }
+
+  .info-wrapper
+  {
+    padding-left: 30px;
+    padding-right: 30px;
   }
 }
 
-@media only screen and (min-width: 768px) 
+@media only screen and (min-width: 769px) 
 {
   .contact-wrapper
   {
@@ -84,24 +142,15 @@
     height: 100%;
   }
 
-  .contact-form-section
-  {
-    display: grid;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-  }
-
   .contact-form 
   {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border: 5px solid #f9ce1d;
     height: calc(100% - 100px);
     width: calc(50vw - 100px);
+  }
+
+  .contact-form form 
+  {
+    width: 100%;
   }
 
   .contact-form-text 
@@ -112,16 +161,6 @@
 
   .info-wrapper
   {
-    padding: 20px;
-  }
-
-  .info-label 
-  {
-    margin: 0px;
-  }
-
-  .info-value 
-  {
-    font-weight: bold;
+    padding: 30px;
   }
 }
