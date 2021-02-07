@@ -1,7 +1,9 @@
 import React from 'react';
-import {useHistory} from "react-router-dom";
-import {Navbar, Nav} from 'react-bootstrap';
-import {isAuthorized, removeJWT} from '../util/auth.js';
+import { useHistory } from "react-router-dom";
+import { Navbar, Nav } from 'react-bootstrap';
+import { isAuthorized, removeJWT } from '../util/auth.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import Logo from "../util/UWEAST_Logo_Detail_Transparent.png";
 import '../css/NavBar.css';
 
@@ -42,17 +44,18 @@ export default function NavBar (props) {
                 {/* Bootstrap Resources */}
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
             </head>
-            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="md" variant="dark" fixed="top" 
+            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="md" variant="dark" 
                 style={window.innerWidth > 768 ? {maxHeight: 'calc(75px)'} : null} >
                 
                 {/* Left Hand Side of Navbar - Title & Image linked to Menu Page */}
                 <Navbar.Brand href="/">
-                    <img src={Logo} className="logo-img" alt="UWEAST Logo" width={window.innerWidth > 768 ? '90' : '75'} 
-                        height={window.innerWidth > 768 ? '90' : '75'} />
+                    <img src={Logo} className="logo-img" alt="UWEAST Logo" width={window.innerWidth > 768 ? '90' : '80'} 
+                        height={window.innerWidth > 768 ? '90' : '80'} />
                 </Navbar.Brand>
 
+                {/* The shopping cart will only render if it is a mobile component */}
                 <div className="cart-icon">
-                    <h1>hello</h1>
+                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} />
                 </div>
 
                 {/* Triggers on Collapse - Hamburger Icon replaces pages */}

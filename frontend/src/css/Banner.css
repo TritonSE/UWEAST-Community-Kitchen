@@ -3,6 +3,7 @@
   display: grid;
   justify-content: center;
   background-color: white;
+  margin-top: calc(1.1vh);
   width: 100%;
   color: black; 
   height: 28px;

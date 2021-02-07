@@ -7,7 +7,7 @@
 }
 
 .cart-icon {
-    display: inline-block;
+    display: none;
 }
 
 .navbar-bg-color { 
@@ -26,4 +26,21 @@
 
 .active {
     color: #F9CE1D !important;
+}
+
+@media only screen and (max-width: 768px) 
+{
+    .navbar-brand {
+        padding-left: 0;
+    }
+
+    .cart-icon {
+        display: inline-block;
+        transform: scale(2);
+        -webkit-transform: scale(2);
+    }
+    
+    .cart-icon svg{
+        margin-left: calc(6.5vh);
+    }
 }
