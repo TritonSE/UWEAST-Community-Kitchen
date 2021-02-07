@@ -21,12 +21,11 @@
   padding-bottom: 30px;
 }
 
-@media only screen and (max-width: 768px) 
+@media only screen and (max-width: 767px) 
 {
   .menu-section
   {
     grid-template-columns: minmax(auto, 900px);
-    margin-top: 55px;
   }
 
   .menu-filter-wrapper
@@ -40,7 +39,7 @@
   }
 }
 
-@media only screen and (min-width: 769px) and (max-width: 1022px) 
+@media only screen and (min-width: 768px) and (max-width: 1022px) 
 {
   .menu-section
   {
