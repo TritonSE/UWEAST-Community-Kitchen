@@ -6,6 +6,10 @@
     padding-right: 1em;
 }
 
+.cart-icon {
+    display: inline-block;
+}
+
 .navbar-bg-color { 
     background-color: rgb(51,51,51);
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import {useHistory} from "react-router-dom";
 import {Navbar, Nav} from 'react-bootstrap';
 import {isAuthorized, removeJWT} from '../util/auth.js';
+import Logo from "../util/UWEAST_Logo_Detail_Transparent.png";
 import '../css/NavBar.css';
 
 
@@ -41,11 +42,18 @@ export default function NavBar (props) {
                 {/* Bootstrap Resources */}
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
             </head>
-            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="md" variant="dark">
+            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="md" variant="dark" fixed="top" 
+                style={window.innerWidth > 768 ? {maxHeight: 'calc(75px)'} : null} >
+                
                 {/* Left Hand Side of Navbar - Title & Image linked to Menu Page */}
                 <Navbar.Brand href="/">
-                    <img src="" className="d-inline-block align-top" alt="UWEAST Logo"/>
+                    <img src={Logo} className="logo-img" alt="UWEAST Logo" width={window.innerWidth > 768 ? '90' : '75'} 
+                        height={window.innerWidth > 768 ? '90' : '75'} />
                 </Navbar.Brand>
+
+                <div className="cart-icon">
+                    <h1>hello</h1>
+                </div>
 
                 {/* Triggers on Collapse - Hamburger Icon replaces pages */}
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -62,16 +70,13 @@ export default function NavBar (props) {
                         {/* About Page */}
                         <Nav.Link className={"nav-link" + isPageActive("about")} href="/about">About</Nav.Link>
 
-                        {/* Admin Page - only visible when isAuthorized()*/}
-                        <Nav.Link className={adminContentClass + isPageActive("admin")} href="/admin">Admin</Nav.Link>
+                        {window.innerWidth > 768 ? <Nav.Link className={adminContentClass + isPageActive("admin")} href="/admin">Admin</Nav.Link> : null}
 
-                        <Nav.Link className={adminContentClass + isPageActive("admin")} href="/orders">Orders</Nav.Link>
+                        {window.innerWidth > 768 ? <Nav.Link className={adminContentClass + isPageActive("admin")} href="/orders">Orders</Nav.Link> : null}
 
-                        {/* Logout Button - starts logout operation, only visible when isAuthorized() */}
-                        <Nav.Link className={adminContentClass} onClick={logout}>Logout</Nav.Link>
+                        {window.innerWidth > 768 ? <Nav.Link className={adminContentClass} onClick={logout}>Logout</Nav.Link> : null}
 
-                        {/* Login Page - only visible when not isAuthorized()*/}
-                        <Nav.Link className={loginButtonClass + isPageActive("login")} href="/login">Login</Nav.Link>        
+                        {window.innerWidth > 768 ? <Nav.Link className={loginButtonClass + isPageActive("login")} href="/login">Login</Nav.Link> : null} 
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
