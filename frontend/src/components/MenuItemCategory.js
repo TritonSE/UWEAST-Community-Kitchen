@@ -11,29 +11,6 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
   const [menuItems, setMenuItems] = useState(new Array());
   const menuItemValues = [];
 
-  /*
-  Expected popupValues input to popup:
-  */
-  const popup = new Map();
-  popup.set("Name", "Chicken");
-  popup.set("pictureURL", "https://www.onceuponachef.com/images/2020/05/best-grilled-chicken-scaled.jpg");
-  popup.set("Description", "this is a chicken!");
-  popup.set("Prices", {
-    "Individual": "4.20",
-    "Family": "10.23"
-  });
-  popup.set("dietaryInfo", {
-    "vegan": true,
-    "vegetarian": false,
-    "glutenFree": true
-  });
-  popup.set("Accomodations", [ 
-    {
-      "Description": "gluten free",
-      "Price": "10.08"
-    }
-  ]);
-
   // useEffect() is called to get information from database
   useEffect(() => {
     fetch("http://localhost:9000/item/")
@@ -42,9 +19,12 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
         const json = await result.json();
 
         for(var i = 0; i < json.items.length; i++) {
+          // since "featured" isn't a category, we need to handle it differently
+          let isCategoryEqual = json.items[i].Category === categoryName;
+          let isFeatured = (categoryName === "Featured") && (json.items[i].isFeatured);
 
           // is stored only if the category name is the same as json's category
-          if((json.items != undefined) && (json.items[i].category == categoryName)) {
+          if((json.items !== undefined) && (isCategoryEqual || isFeatured)) {
             menuItemValues.push(json.items[i]);
           }
         }
@@ -64,24 +44,25 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
   return (
       <>
         {/** popup is created here, if it is visible it is rendered */}
-        {popupVisible ? <MenuItemPopup values={popup} togglePopup={togglePopup} processForm={processForm} /> : null}
+        {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
         <div className="menu-item-category">
           <h2> {categoryName} </h2>
           <div className="menu-item-category-grid">
             {/** generate menu items based off of array */}
             {menuItems.map((menuItem, key) => {
-              let title = menuItem.name;
-              let image = menuItem.image;
-              let description = menuItem.description;
-              let price = menuItem.price;
-              let dietaryInfo = [menuItem.vegan, menuItem.vegetarian, menuItem.glutenFree];
+              let title = menuItem.Name;
+              let image = menuItem.pictureURL;
+              let description = menuItem.Description;
+              let price = menuItem.Accomodations[0].Price;
+              let priceOptions = menuItem.Prices;
+              let dietaryInfo = menuItem.dietaryInfo;
 
-              return <MenuItem title={title} image={image} price={price} description={description} togglePopup={togglePopup} key={key} dietaryInfo={dietaryInfo} />
+              return <MenuItem title={title} image={image} price={price} description={description} togglePopup={togglePopup} key={key} dietaryInfo={dietaryInfo} priceOptions={priceOptions} />
             })}
           </div>
         </div>
       </>
   )
 }
-  
-  export default MenuItemCategory;
+
+export default MenuItemCategory;

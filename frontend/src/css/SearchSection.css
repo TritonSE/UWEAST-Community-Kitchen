@@ -37,3 +37,18 @@
   border-radius: 5px;
   width: 250px;
 }
+
+@media only screen and (min-width: 768px) 
+{
+  .navbar-wrapper nav {
+      position: fixed !important;
+      width: 100%;
+      z-index: 1;
+  }
+
+  .search-section
+  {
+    position: relative;
+    top: 65px;
+  }
+}
