@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../css/MenuItemPopup.css';
 
-const MenuItemPopup = ({ values, togglePopup, processForm }) => {
+const MenuItemPopup = ({ values, togglePopup, processForm, dietaryInfo, priceOptions }) => {
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(parseInt(values.get("price")));
   const indvidualPrice = parseInt(values.get("price"));
@@ -50,9 +50,6 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                * 2. vegatarian
                * 3. gluten-free
                */}
-              {(values.get("dietary-info")[0]) ? "vegan " : null}
-              {(values.get("dietary-info")[1]) ? "vegetarian " : null}
-              {(values.get("dietary-info")[2]) ? "gluten-free " : null}
             </p>
             <div className="size-section">
               <div className="section-title">
