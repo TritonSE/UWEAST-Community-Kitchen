@@ -25,7 +25,33 @@ const mail = config.uweast.user === "" ? null : new Email({
 });
 
 //Populates given email template with req.body and sends it to to_email
-async function sendEmail(template, to_email, uw_email, req, res) {
+// async function sendEmail(template, to_email, uw_email, req, res) {
+//   if (mail != null) {
+//     await mail.send({
+//       template: template,
+//       message: {
+//         from: config.uweast.user,
+//         to: to_email
+//       },
+//       locals: {
+//         name: req.body.Customer.Name,
+//         number: req.body.Customer.Phone,
+//         email: req.body.Customer.Email,
+//         date: new Date(req.body.Pickup).toLocaleDateString(),
+//         time: new Date(req.body.Pickup).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'}),
+//         order: req.body.Order,
+//         dbemail: uw_email
+//       }
+//     });
+//     console.log(`Email ${template} has been sent to ${to_email}.`);
+//   } else {
+//     return res.status(500).send("Server err");
+//   }
+// }
+
+//Populates given email template with req.body and sends it to to_email
+async function sendEmail(template, to_email , locals, res) {
+  //Sends email only if mail has been successfully setup
   if (mail != null) {
     await mail.send({
       template: template,
@@ -33,15 +59,7 @@ async function sendEmail(template, to_email, uw_email, req, res) {
         from: config.uweast.user,
         to: to_email
       },
-      locals: {
-        name: req.body.Customer.Name,
-        number: req.body.Customer.Phone,
-        email: req.body.Customer.Email,
-        date: new Date(req.body.Pickup).toLocaleDateString(),
-        time: new Date(req.body.Pickup).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'}),
-        order: req.body.Order,
-        dbemail: uw_email
-      }
+      locals: locals
     });
     console.log(`Email ${template} has been sent to ${to_email}.`);
   } else {
@@ -101,7 +119,8 @@ router.post('/automate',
       return res.status(400).json({ errors: [{ msg: "no emails found" }] });
     } else {
       dbemail = emails[0].email;
-      sendEmail('uweast-receipt', dbemail, dbemail, req, res);
+
+      sendEmail('uweast-receipt', dbemail, req, res);
     }
   } catch (err) {
     console.error(err.message);
@@ -109,7 +128,7 @@ router.post('/automate',
   }
 
   //send customer copy of order receipt
-  sendEmail('customer-email', req.body.Customer.Email, dbemail, req, res);
+  sendEmail('customer-email', req.body.Customer.Email, req, res);
 
   return res.status(200).json({success: true});
 });

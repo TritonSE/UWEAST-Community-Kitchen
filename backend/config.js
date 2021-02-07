@@ -10,7 +10,7 @@ module.exports = {
     jwt_secret: process.env.JWT_SECRET || 'keyboard cat'
   },
   db: {
-    uri: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017'
+    uri: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/UWEAST-CK'
   },
   uweast: {
     user: process.env.UWEAST_USER_EMAIL || "",
