@@ -8,10 +8,10 @@ const config = require('../config');
 // MenuSection is responsible for managing states for most of the menu
 const MenuSection = () => {
   // filterCategories populates the filter buttons
-  const filterCategories = ["Whole Menu", "Appetizers", "Main Dishes", "Sides", "Drinks"];
+  const filterCategories = ["Whole Menu", "Featured", "Appetizers", "Main Dishes", "Sides", "Drinks"];
 
   // populates the menu item categories
-  const defaultCategories = ["Appetizers", "Main Dishes", "Sides", "Drinks"];
+  const defaultCategories = ["Featured", "Appetizers", "Main Dishes", "Sides", "Drinks"];
 
   // stores all the categories currently visible
   let displayedCategories = [];
@@ -105,7 +105,7 @@ const MenuSection = () => {
         </div>
         <div className="menu-cart">
           cart
-      </div>
+        </div>
       </div>
     </div>
   )
