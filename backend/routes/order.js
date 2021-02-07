@@ -36,8 +36,11 @@ const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 //   }
 // );
 
-// @body: isCompleted, Customer
-// returns orders based on isCompleted or Customer
+// @body: isCompleted, Customer: neither required
+// isCompleted: T/F based on whether an order is completed (default: false)
+// Customer: JSON which contains name, email and phone of customer
+// finds orders filtered on isCompleted and/or Customer
+// returns all orders if body is not provided to filter or error
 router.post(
   "/",
   [
@@ -60,8 +63,10 @@ router.post(
   }
 );
 
-// @body: _id, isCompleted
-// updates isCompleted of the orderss model
+// @body: _id, isCompleted: both required
+// _id: id of order to be updated - required
+// isCompleted: T/F based on whether an order is completed (default: false) - required
+// updates the order's isCompleted boolean to the value passed in
 router.post(
   "/updateStatus",
   [body("_id").isString(), body("isCompleted").isBoolean(), isValidated],

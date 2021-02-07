@@ -7,21 +7,11 @@ const {
   setFeatured,
   // setNotFeatured,
 } = require("../db/services/item");
-const { body } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const router = express.Router();
 
-// function buildItemJSON(body) {
-//   body.vegan = body.vegan !== undefined;
-//   body.vegetarian = body.vegetarian !== undefined;
-//   body.glutenFree = body.glutenFree !== undefined;
-//   // body.ingredients = body.ingredients.split(', ');
-//   body.price = parseFloat(body.price);
-
-//   return body;
-// }
-
-// get all menu items
+// returns all menu items in the DB
 router.get("/", async (req, res, next) => {
   const items = await getAllMenuItems();
   if (!items) {
@@ -31,7 +21,20 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// Post data, log data to terminal.
+// num: string representation of money
+// checks the string to conform to positive decimals
+function checkNumeral(num) {
+  const regex = /^\d*(\.)?\d*$/;
+  if (num === undefined || num.trim() === "") return false;
+  if (!regex.test(num)) return false;
+  return true;
+}
+
+// @body Name, pictureURL, Description, Category, Prices: required
+//       at least one of Individual or Family Prices: required
+//       isFeatured, Accommodations: not required
+//
+// inserts an item into the Item DB
 router.post(
   "/insert",
   [
@@ -39,31 +42,55 @@ router.post(
     body("pictureURL").isString(),
     body("Description").isString(),
     body("Category").isString(),
+    body("Prices").custom((value) => {
+      if (value.Family === "" && value.Individual === "") return false;
+      // check for numeric values with regex to be price conforming
+      return (
+        value &&
+        ((checkNumeral(value.Family) && !value.Individual) ||
+          (checkNumeral(value.Individual) && !value.Family) ||
+          (checkNumeral(value.Family) && checkNumeral(value.Individual)))
+      );
+    }),
+    body("Accomodations")
+      .custom((value) => {
+        // check for numeric values with regex to be price conforming
+        // for each price in Accomodations array
+        for (val of value) {
+          let success = checkNumeral(val.Price) ? true : false;
+          if (success === false) return false;
+        }
+        return true;
+      })
+      .optional(),
     isValidated,
   ],
   async (req, res, next) => {
     try {
+      // addedItem if successful or false if error
       const addedItem = await addNewItem(req.body);
       if (!addedItem) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Insert unsuccessful" }] });
+        return res.status(400).json({
+          errors: [{ msg: "Insert unsuccessful/ enter valid Item data" }],
+        });
       } else {
         return res.status(200).json({ item_id: addedItem._id });
       }
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server err");
+      res.status(500).send("Server err/ enter valid Item data");
     }
   }
 );
 
-// given _id deletes
+// @body _id: id of object to be deleted
+// deletes an item for the Item DB
 router.delete(
   "/remove",
   [body("_id").notEmpty(), isValidated],
   async (req, res, next) => {
     try {
+      // deleted object response check if deletedCount is 1
       const deleted = await deleteItem(req.body._id);
       if (deleted && deleted.deletedCount !== 1) {
         return res
@@ -79,10 +106,37 @@ router.delete(
   }
 );
 
-// @body id and any of the attributes of the item object
+// @body id of object to be edited and any of the attributes of the item object
+// edits any of the item attributes, the only required attribute is _id
 router.post(
   "/edit",
-  [body("_id").notEmpty(), isValidated],
+  [
+    body("_id").notEmpty(),
+    body("Prices").custom((value) => {
+      // if Prices is not passed in
+      if (value === undefined) return true;
+      if (value.Family === "" && value.Individual === "") return false;
+      // check for numeric values with 2 decimal places
+      return (
+        value &&
+        ((checkNumeral(value.Family) && !value.Individual) ||
+          (checkNumeral(value.Individual) && !value.Family) ||
+          (checkNumeral(value.Family) && checkNumeral(value.Individual)))
+      );
+    }),
+    body("Accomodations")
+      .custom((value) => {
+        // check for numeric values with regex to be price conforming
+        // for each price in Accomodations array
+        for (val of value) {
+          let success = checkNumeral(val.Price) ? true : false;
+          if (success === false) return false;
+        }
+        return true;
+      })
+      .optional(),
+    isValidated,
+  ],
   async (req, res, next) => {
     const edit = await editItem(req.body._id, req.body);
     // if there is an error or item is not found
@@ -96,6 +150,9 @@ router.post(
   }
 );
 
+// @body _id: id of the item to be featured/unfeatured
+//       isFeatured: T/F to set to object
+// sets the isFeatured atribute of the object associated with the id
 router.post(
   "/feature",
   [body("_id").notEmpty(), body("isFeatured").notEmpty(), isValidated],
@@ -109,17 +166,6 @@ router.post(
     } else {
       res.status(200).json({ success: true });
     }
-    // getAllMenuItems()
-    //   .then((allItems) => {
-    //     for (const key in allItems) {
-    //       if (req.body[allItems[key]._id]) setFeatured(allItems[key]._id);
-    //       else setNotFeatured(allItems[key]._id);
-    //     }
-    //     res.sendStatus(200);
-    //   })
-    //   .catch((error) => {
-    //     res.sendStatus(error.status || 500);
-    //   });
   }
 );
 
