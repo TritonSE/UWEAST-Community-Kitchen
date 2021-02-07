@@ -71,15 +71,13 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #f1f1f1;
+  background-color: white;
   width: 60px;
   text-align: center;
   border-bottom-right-radius: 5px;
   border-top-left-radius: 0px;
   font-weight: bold;
   color: black;
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
 }
 
 @media only screen and (max-width: 768px) 

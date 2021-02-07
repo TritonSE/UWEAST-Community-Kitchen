@@ -14,7 +14,9 @@ class Menu extends Component {
 
       return (
           <div>
-              <Navbar currentPage="menu"/>
+              <div className="navbar-wrapper">
+                <Navbar currentPage="menu"/>
+              </div>
               <Banner/>
               {/** search section is the top, non-menu half of the page */}
               <SearchSection/>
