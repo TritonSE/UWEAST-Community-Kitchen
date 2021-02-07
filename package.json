@@ -1,7 +1,6 @@
 {
   "dependencies": {
-    "@react-google-maps/api": "^2.1.1",
-    "google-maps-react": "^2.0.6",
-    "react-google-maps": "^9.4.5"
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "material-ui-search-bar": "^1.0.0"
   }
 }

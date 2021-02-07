@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button} from 'react-bootstrap';
 import Navbar from '../components/NavBar';
+import AdminMenuItems from "../components/AdminMenuItems";
 import '../css/Admin.css';
 
 const config = require('../config');
@@ -688,7 +689,7 @@ class Admin extends Component {
                         <p>View placed orders and mark them as fulfilled.</p>
                         <a class="btn btn-primary" href="/orders" role="button">Orders</a>
                     </div> */}
-
+                    <AdminMenuItems />
                     <br />
 
                     <div class="col-12">
