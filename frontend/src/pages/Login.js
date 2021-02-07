@@ -20,7 +20,19 @@ class Login extends Component {
      */
     fetchUsersWithFetchAPI =  () => {
         this.setState({isFetching: true});
-        fetch(BACKEND_URL)
+        let submision = {
+            name: "a",
+            email: "aksingh@ucsd.edu",
+            message: "Let's hang girl! We haven't talked in like forever...."
+        }
+        fetch(BACKEND_URL + 'autoEmails/contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: JSON.stringify(submision)
+        })
             //Make sure to make the request asynchronous else you will get promises/errors
             .then(async result => {
                 if (result.ok){
