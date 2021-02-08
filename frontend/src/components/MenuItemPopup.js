@@ -155,7 +155,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                                     <i>optional</i>
                                 </div>
                                 <p className="instructions-note">Special accommodations can be made for orders placed in advanced but are not guaranteed, please <a href="/contact">contact us</a> directly for more info.</p>
-                                <textarea name="instructions" className="instructions-textarea" />
+                                <textarea name="instructions" maxLength="75" className="instructions-textarea" />
                             </div>
 
                             {/** quantity selection */}
