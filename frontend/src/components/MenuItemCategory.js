@@ -53,16 +53,18 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
               let title = menuItem.Name;
               let image = menuItem.pictureURL;
               let description = menuItem.Description;
-              let price = menuItem.Accomodations[0].Price;
+              // since some items will only have a family pricing option, we use individual as the default; if individual doesnt exist, use family instead
+              let price = ("Individual" in menuItem.Prices) ? menuItem.Prices.Individual : menuItem.Prices.Family
+              let accommodations = menuItem.Accomodations;
               let priceOptions = menuItem.Prices;
               let dietaryInfo = menuItem.dietaryInfo;
 
-              return <MenuItem title={title} image={image} price={price} description={description} togglePopup={togglePopup} key={key} dietaryInfo={dietaryInfo} priceOptions={priceOptions} />
+              return <MenuItem title={title} image={image} price={price} description={description} togglePopup={togglePopup} key={key} dietaryInfo={dietaryInfo} priceOptions={priceOptions} accommodations={accommodations} />
             })}
           </div>
         </div>
       </>
   )
 }
-  
-  export default MenuItemCategory;
+
+export default MenuItemCategory;
