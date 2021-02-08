@@ -288,7 +288,7 @@ class Admin extends Component {
         let updateField = this.state.getItemInfo;
         
         //Delete the object so the form wil check for empty inputs
-        if(e.target.value == "") delete updateField[e.target.name];
+        if(e.target.value === "") delete updateField[e.target.name];
         else updateField[field] = e.target.value;
 
         this.setState({ getItemInfo: updateField });
@@ -443,6 +443,7 @@ class Admin extends Component {
 
     //Method used for updating state for inserting item
     updateInsertField(e, isIngredients) {
+        console.log("updateInsertField");
         const getState = this.state.insertItem;
 
         //Check for ingredients key, so then it will split values into array
@@ -460,6 +461,7 @@ class Admin extends Component {
     //Same concept as updateInsertField but for the three checkboxes
     //which are vegan, vegetarian, and glutenFree
     updateInsertFieldCheckbox(e) {
+                console.log("updateInsertFieldCheckbox");
         const getState = this.state.insertItem;
         getState[e.target.name] = !this.state.insertItem[e.target.name];
 

@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import React, {useState} from 'react';
+import { Button} from 'react-bootstrap';
 import TextField from '@material-ui/core/TextField';
 
 import '../css/ChangeEmailScreen.css';
@@ -10,6 +10,12 @@ const BACKEND_URL = config.backend.uri;
 
 // calls email change route
 async function handleFormSubmit(email, setInputError){
+    // validate to make sure email is an email. We do this here because
+    // we don't want to overload the server with invalid emails
+    if (email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+        setInputError(true);
+        return;
+    }
     await fetch(`${BACKEND_URL}email/change`, {
             method: "POST",
             headers: {
@@ -35,15 +41,28 @@ export default function AdminMenuItems (props) {
     // catch enter rerendeing entire admin page
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            
+
+            handleFormSubmit(inputEmail, setInputError)
         }
+    }
+    const validate = values => {
+        const errors = {}
+        const requiredFields = [ 'firstName', 'lastName', 'email', 'favoriteColor', 'notes' ]
+        requiredFields.forEach(field => {
+            if (!values[ field ]) {
+            errors[ field ] = 'Required'
+            }
+        })
+        if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+            errors.email = 'Invalid email address'
+        }
+        return errors
     }
     return (
         <div> 
             <br />
             <h1 className="emailHeading">Change Email</h1>
             <p className="emailDescription">Order confirmations will be sent to this email</p>
-            <form noValidate autoComplete="off">
                 <br />
                 <TextField id="email-input" 
                     error={inputError} 
@@ -63,7 +82,6 @@ export default function AdminMenuItems (props) {
                 >
                     Update
                 </Button>
-            </form>
         </div>
     )
 }
