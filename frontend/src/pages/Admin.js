@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Modal, Button} from 'react-bootstrap';
 import Navbar from '../components/NavBar';
 import AdminMenuItems from "../components/AdminMenuItems";
+import OrdersTable from "../components/OrdersTable";
+import ChangeEmailScreen from "../components/ChangeEmailScreen";
 import '../css/Admin.css';
 
 const config = require('../config');
@@ -719,9 +721,9 @@ class Admin extends Component {
                         <p>View placed orders and mark them as fulfilled.</p>
                         <a class="btn btn-primary" href="/orders" role="button">Orders</a>
                     </div> */}
-                    {this.state.currentScreen === "orders"}
-                    {this.state.currentScreen === "menu"}
-                    {this.state.currentScreen === "email"}
+                    {this.state.currentScreen === "orders" && <OrdersTable />}
+                    {this.state.currentScreen === "menu" && <AdminMenuItems />}
+                    {this.state.currentScreen === "email" && <ChangeEmailScreen />}
 
                     <div class="col-12">
                         <h2 class="admin-title">Menu Items</h2>
