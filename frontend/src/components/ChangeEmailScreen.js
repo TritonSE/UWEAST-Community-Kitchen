@@ -41,39 +41,27 @@ export default function AdminMenuItems (props) {
     // catch enter rerendeing entire admin page
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-
             handleFormSubmit(inputEmail, setInputError)
         }
-    }
-    const validate = values => {
-        const errors = {}
-        const requiredFields = [ 'firstName', 'lastName', 'email', 'favoriteColor', 'notes' ]
-        requiredFields.forEach(field => {
-            if (!values[ field ]) {
-            errors[ field ] = 'Required'
-            }
-        })
-        if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-            errors.email = 'Invalid email address'
-        }
-        return errors
     }
     return (
         <div> 
             <br />
+            <br />
             <h1 className="emailHeading">Change Email</h1>
-            <p className="emailDescription">Order confirmations will be sent to this email</p>
+            <p className="emailDescription">Order confirmations and customer inquiries will be sent to this email.</p>
                 <br />
-                <TextField id="email-input" 
-                    error={inputError} 
-                    value={inputEmail} 
-                    type="email" 
-                    className="emailUpdateInput" 
-                    onChange={(e) => setInputEmail(e.target.value)} 
-                    onKeyDown={(e) => handleKeyDown(e)}
-                    label="email" 
-                    variant="outlined"
-                />
+                    <TextField id="email-input" 
+                        size="small"
+                        error={inputError} 
+                        value={inputEmail} 
+                        type="email" 
+                        className="emailUpdateInput" 
+                        onChange={(e) => setInputEmail(e.target.value)} 
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        label="Email" 
+                        variant="outlined"
+                    />
                 <br />
                 <br />
                 <Button id="submit" 

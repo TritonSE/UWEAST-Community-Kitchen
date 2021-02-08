@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
 :root {
     --yellow: #f9ce1d;
     --black: black;
@@ -16,7 +18,7 @@
 .emailDescription {
     font-family: 'Roboto', sans-serif !important;
     color: var(--black) !important;
-    font-weight: light !important;
+    font-weight: 300;
     font-size: 16px;
 }
 .emailUpdateInput {
@@ -24,7 +26,6 @@
     color: var(--black) !important;
     font-weight: light !important;
     font-size: 16px;
-    height: 45px;
     width: 250px;
 }
 .emailUpdateButton {
@@ -33,6 +34,8 @@
     border: 1px solid var(--yellow) !important;
     color: var(--black) !important;
     font-weight: bold !important;
-    font-size: 16px;
-    height: 40px;
+    padding: 0px !important;
+    font-size: 16px !important;
+    height: 30px !important;
+    width: 120px;
 }

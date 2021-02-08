@@ -13,15 +13,14 @@
 
   max-width: 40vw; 
   min-width: 600px;
-  padding-bottom: 10px;
-  font-size: 12px;
+  padding-bottom: 40px;
 }
 .adminNavUnselected {
   display: inline-block; 
   margin-right: 40px;
 
   font-family: 'Roboto', sans-serif !important;
-  font-size: 24px;
+  font-size: 20px;
   color: var(--darkgrey) !important;
   font-weight: bold !important;
 
@@ -38,7 +37,7 @@
   margin-right: 40px;
 
   font-family: 'Roboto', sans-serif !important;
-  font-size: 24px;
+  font-size: 20px;
   color: var(--black) !important;
   font-weight: bold !important;
   text-decoration: underline;
@@ -48,7 +47,7 @@
 }
 
 .admin-section {
-  padding-top: 50px;
+  padding-top: 30px;
   padding-left: 80px;
 }
 
