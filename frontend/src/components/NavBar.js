@@ -44,8 +44,7 @@ export default function NavBar (props) {
                 {/* Bootstrap Resources */}
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
             </head>
-            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="md" variant="dark" 
-                style={window.innerWidth > 768 ? {maxHeight: 'calc(75px)'} : null} >
+            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="md" variant="dark">
                 
                 {/* Left Hand Side of Navbar - Title & Image linked to Menu Page */}
                 <Navbar.Brand href="/">
@@ -55,7 +54,8 @@ export default function NavBar (props) {
 
                 {/* The shopping cart will only render if it is a mobile component */}
                 <div className="cart-icon">
-                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} />
+                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
+                        onClick={() => console.log('clicked')} />
                 </div>
 
                 {/* Triggers on Collapse - Hamburger Icon replaces pages */}
@@ -73,13 +73,21 @@ export default function NavBar (props) {
                         {/* About Page */}
                         <Nav.Link className={"nav-link" + isPageActive("about")} href="/about">About</Nav.Link>
 
-                        {window.innerWidth > 768 ? <Nav.Link className={adminContentClass + isPageActive("admin")} href="/admin">Admin</Nav.Link> : null}
+                        <span className="desktop-tabs">
+                            <Nav.Link className={adminContentClass + isPageActive("admin")} href="/admin">Admin</Nav.Link>
+                        </span>
 
-                        {window.innerWidth > 768 ? <Nav.Link className={adminContentClass + isPageActive("admin")} href="/orders">Orders</Nav.Link> : null}
+                        <span className="desktop-tabs">
+                            <Nav.Link className={adminContentClass + isPageActive("admin")} href="/orders">Orders</Nav.Link>
+                        </span>
 
-                        {window.innerWidth > 768 ? <Nav.Link className={adminContentClass} onClick={logout}>Logout</Nav.Link> : null}
+                        <span className="desktop-tabs">
+                            <Nav.Link className={adminContentClass} onClick={logout}>Logout</Nav.Link>
+                        </span>
 
-                        {window.innerWidth > 768 ? <Nav.Link className={loginButtonClass + isPageActive("login")} href="/login">Login</Nav.Link> : null} 
+                        <span className="desktop-tabs">
+                            <Nav.Link className={loginButtonClass + isPageActive("login")} href="/login">Login</Nav.Link> 
+                        </span>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
