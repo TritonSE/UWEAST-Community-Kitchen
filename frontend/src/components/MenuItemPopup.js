@@ -45,8 +45,8 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         return(
             /** conditionally displays family size as an "add-on" if both are possible */
             <label className="choice-label">
-                <input onClick={() => handleSize(price)} type="radio" name="size" value={name} checked={(name == "Individual" || !("Individual" in values.get("price")))} required />
-                <span onClick={() => handleSize(price)} className="label-title">{(hasBothPrices) ? name + " +(" + (price - values.get("price").Individual) + ")": name}</span>
+                <input onClick={() => handleSize(price)} type="radio" name="size" value={name} defaultChecked={(name == "Individual" || !("Individual" in values.get("price")))} required />
+                <span onClick={() => handleSize(price)} className="label-title">{(hasBothPrices) ? name + " +($" + parseFloat(price - values.get("price").Individual).toFixed(2) + ")": name}</span>
             </label>
         );
     }
@@ -114,7 +114,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                                 </div>
                                 {/** default "regular" option */}
                                 <label className="choice-label">
-                                    <input type="checkbox" name="accommodations" value="regular" checked={true} required />
+                                    <input type="checkbox" name="accommodations" value="regular" defaultChecked={true} required />
                                     <span className="label-title">Regular</span>
                                 </label>
                                 {/** Note that Accomodations is spelled wrong in the item schema... it should have two m's */}
