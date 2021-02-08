@@ -52,10 +52,15 @@ export default function NavBar (props) {
                         height={window.innerWidth > 768 ? '90' : '80'} />
                 </Navbar.Brand>
 
+                <div className="brand-name">
+                    <p>Community Kitchen</p>
+                </div>
+
                 {/* The shopping cart will only render if it is a mobile component */}
                 <div className="cart-icon">
                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
                         onClick={() => console.log('clicked')} />
+
                 </div>
 
                 {/* Triggers on Collapse - Hamburger Icon replaces pages */}

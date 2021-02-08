@@ -1,5 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400&display=swap');
+
+:root {
+    --yellow: #f9ce1d;
+    --black: black;
+    --lightgrey: #CCCCCC;
+    --darkgrey: #747474;
+    --white: #FFFFFF;
+    --offwhite: #F1f1f1;
+}
+
 .navbar-brand {
     padding-left: 1em;
+}
+
+.brand-name {
+    display: inline-block;
+    max-width: calc(6vw);
+    font-size: calc(20px);
+    text-align: center;
+    justify-content: center;
+    color: #ffdf69;
+    font-family: 'Roboto Slab', serif;
+    margin-left: calc(-1.5vw);
+    margin-top: calc(1.3vh);
+}
+
+.brand-name p {
+    font-size: calc(23px);
+    font-style: italic;
+    font-family: 'Roboto Slab', serif;
 }
 
 .navbar.navbar-bg-color {
@@ -43,6 +73,10 @@
     }
 
     .navbar.navbar-bg-color .desktop-tabs {
+        display: none;
+    }
+
+    .brand-name {
         display: none;
     }
 
