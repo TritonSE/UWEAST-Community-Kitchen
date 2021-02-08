@@ -58,6 +58,58 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         setTotalPrice((parseFloat(accommodationCost) + newPrice * (quantity)).toFixed(2));
     }
 
+    const renderAccommodations = () => {
+        // return nothing if there are no accommodations
+        if(values.get("accommodations").length == 0) return;
+        else {
+            return (
+                /** Header */
+                <div className="section accommodations-section">
+                <div className="section-title">
+                    <h3>Accommodations</h3>
+                    <i>optional</i>
+                </div>
+                {/* map through and render all accommodations */}
+                {values.get("accommodations").map((accommodation) => {
+                    return(
+                        <label className="choice-label">
+                            <input type="checkbox" name="accommodations" value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e, accommodation.Price)} required />
+                            <span className="label-title">{accommodation.Description + " +($" + parseFloat(accommodation.Price).toFixed(2) + ")"}</span>
+                        </label>
+                    );
+                })}
+                </div>
+            );
+        }
+    }
+
+    const numDietaryInfo = () => {
+        const dietaryInfo = Object.entries(values.get("dietary-info"));
+        var count = 0;
+        for (const [key, value] of dietaryInfo) {
+            if(value) count++;
+        }
+        return count;
+    }
+
+    const renderDietaryInfo = () => {
+        if (numDietaryInfo() == 0) return;
+        else {
+            return (
+                <>
+                <hr/>
+                <p className="dietary-info">
+                    {(values.get("dietary-info").vegan) ? "*Vegan" : null}
+                    {(values.get("dietary-info").vegan) ? <br/> : null}
+                    {(values.get("dietary-info").vegetarian) ? "*Vegetarian" : null}
+                    {(values.get("dietary-info").vegetarian) ? <br/> : null}
+                    {(values.get("dietary-info").glutenFree) ? "*Gluten-free" : null}
+                </p>
+                </>
+            );
+        }
+    }
+
     return (
         <>
             {/** div that fades out the background */}
@@ -74,20 +126,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                         <div className="popup-item-info">
                             <h3 className="title-popup">{values.get("title")}</h3>
                             <p className="desc-popup">{values.get("description")}</p>
-                            <hr />
-                            <p className="dietary-info">
-                                {/**
-                                 * dietary info is an array list with 3 boolean values:
-                                 * 1. vegan
-                                 * 2. vegatarian
-                                 * 3. gluten-free
-                                 */}
-                                {(values.get("dietary-info").vegan) ? "*Vegan" : null}
-                                {(values.get("dietary-info").vegan) ? <br/> : null}
-                                {(values.get("dietary-info").vegetarian) ? "*Vegetarian" : null}
-                                {(values.get("dietary-info").vegetarian) ? <br/> : null}
-                                {(values.get("dietary-info").glutenFree) ? "*Gluten-free" : null}
-                            </p>
+                            {renderDietaryInfo()}
                         </div>
                     </div>
 
@@ -107,28 +146,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                             </div>
 
                             {/** accommodations options */}
-                            <div className="section accommodations-section">
-                                <div className="section-title">
-                                    <h3>Accommodations</h3>
-                                    <i>required</i>
-                                </div>
-                                {/** default "regular" option */}
-                                <label className="choice-label">
-                                    <input type="checkbox" name="accommodations" value="regular" defaultChecked={true} required />
-                                    <span className="label-title">Regular</span>
-                                </label>
-                                {/** Note that Accomodations is spelled wrong in the item schema... it should have two m's */}
-                                {
-                                values.get("accommodations").map((accommodation) => {
-                                    return(
-                                        <label className="choice-label">
-                                            <input type="checkbox" name="accommodations" value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e, accommodation.Price)} required />
-                                            <span className="label-title">{accommodation.Description + " +($" + parseFloat(accommodation.Price).toFixed(2) + ")"}</span>
-                                        </label>
-                                    );
-                                })
-                                }
-                            </div>
+                            {renderAccommodations()}
 
                             {/** custom instructions text area */}
                             <div className="section instructions-section">
