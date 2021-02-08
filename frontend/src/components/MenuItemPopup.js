@@ -6,7 +6,7 @@ import minus from '../media/minus.svg';
 const MenuItemPopup = ({ values, togglePopup, processForm }) => {
     const [quantity, setQuantity] = useState(1);
     // if individual price exists, use that as default; otherwise, use family
-    const [currPrice, setCurrPrice] = useState(("Individual" in values.get("Prices")) ? values.get("Prices").Individual : values.get("Prices").Family);
+    const [currPrice, setCurrPrice] = useState(("Individual" in values.get("price")) ? values.get("price").Individual : values.get("price").Family);
     const [totalPrice, setTotalPrice] = useState(currPrice);
     const [accommodationCost, setAccommodationCost] = useState(0);
 
@@ -42,14 +42,11 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
 
     // helper function to render the 
     const renderSize = (name, price, hasBothPrices) => {
-        console.log("rendering price for: ");
-        console.log(name);
-        console.log(price);
         return(
             /** conditionally displays family size as an "add-on" if both are possible */
             <label className="choice-label">
                 <input onClick={() => handleSize(price)} type="radio" name="size" value={name} required />
-                <span onClick={() => handleSize(price)} className="label-title">{(hasBothPrices) ? name + " +(" + (price - values.get("Prices").Individual) + ")": name}</span>
+                <span onClick={() => handleSize(price)} className="label-title">{(hasBothPrices) ? name + " +(" + (price - values.get("price").Individual) + ")": name}</span>
             </label>
         );
     }
@@ -71,12 +68,12 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
 
                     {/** Left side with dish details */}
                     <div className="left-popup">
-                        <div className="popup-image" style={{backgroundImage: "url(" + values.get("pictureURL") + ")"}}>
+                        <div className="popup-image" style={{backgroundImage: "url(" + values.get("image") + ")"}}>
                             <div className="popup-image-price"><h3>{"$" + currPrice}</h3></div>
                         </div>
                         <div className="popup-item-info">
-                            <h3 className="title-popup">{values.get("Name")}</h3>
-                            <p className="desc-popup">{values.get("Description")}</p>
+                            <h3 className="title-popup">{values.get("title")}</h3>
+                            <p className="desc-popup">{values.get("description")}</p>
                             <hr />
                             <p className="dietary-info">
                                 {/**
@@ -85,11 +82,11 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                                  * 2. vegatarian
                                  * 3. gluten-free
                                  */}
-                                {(values.get("dietaryInfo").vegan) ? "*Vegan" : null}
-                                {(values.get("dietaryInfo").vegan) ? <br/> : null}
-                                {(values.get("dietaryInfo").vegetarian) ? "*Vegetarian" : null}
-                                {(values.get("dietaryInfo").vegetarian) ? <br/> : null}
-                                {(values.get("dietaryInfo").glutenFree) ? "*Gluten-free" : null}
+                                {(values.get("dietary-info").vegan) ? "*Vegan" : null}
+                                {(values.get("dietary-info").vegan) ? <br/> : null}
+                                {(values.get("dietary-info").vegetarian) ? "*Vegetarian" : null}
+                                {(values.get("dietary-info").vegetarian) ? <br/> : null}
+                                {(values.get("dietary-info").glutenFree) ? "*Gluten-free" : null}
                             </p>
                         </div>
                     </div>
@@ -105,8 +102,8 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                                     <i>required</i>
                                 </div>
                                 {/** checks to ensure individual/family sizes exist; conditionally displays family size as an "add-on" if both are possible */}
-                                {("Individual" in values.get("Prices")) ? renderSize("Individual", values.get("Prices").Individual, false) : null}
-                                {("Family" in values.get("Prices")) ? renderSize("Family", values.get("Prices").Family, ("Individual" in values.get("Prices"))) : null}
+                                {("Individual" in values.get("price")) ? renderSize("Individual", values.get("price").Individual, false) : null}
+                                {("Family" in values.get("price")) ? renderSize("Family", values.get("price").Family, ("Individual" in values.get("price"))) : null}
                             </div>
 
                             {/** accommodations options */}
@@ -122,7 +119,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                                 </label>
                                 {/** Note that Accomodations is spelled wrong in the item schema... it should have two m's */}
                                 {
-                                values.get("Accomodations").map((accommodation) => {
+                                values.get("accommodations").map((accommodation) => {
                                     return(
                                         <label className="choice-label">
                                             <input type="checkbox" name="accommodations" value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e, accommodation.Price)} required />
