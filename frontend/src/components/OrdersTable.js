@@ -380,6 +380,9 @@ const columns = [
       MUIDataTable: {
         paper: {
           boxShadow: 'none',
+          minWidth: '900px',
+          maxWidth: '85vw',
+          maxHeight: '65vh'
         },
       },
       MuiTableRow: {
