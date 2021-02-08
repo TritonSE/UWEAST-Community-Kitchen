@@ -25,7 +25,8 @@ class Admin extends Component {
                 glutenFree: false
             },
             featureList: {},
-            deleteItemsArray: []
+            deleteItemsArray: [],
+            currentScreen: "orders"
         }
 
         //Modals
@@ -34,6 +35,7 @@ class Admin extends Component {
         this.addItemModal = this.addItemModal.bind(this);
         this.deleteItemModal = this.deleteItemModal.bind(this);
         this.editItemDetails = this.editItemDetails.bind(this);
+        this.adminNavBar = this.adminNavBar.bind(this);
 
         //Helper methods
         this.updateField = this.updateField.bind(this);
@@ -668,6 +670,39 @@ class Admin extends Component {
             </Modal>
         )
     }
+    // Renders the admin page navigation bar between orders, menu, and email screens
+    // currentScreen takes values "orders", "menu", and "email"
+    adminNavBar(){
+        var currentScreen = this.state.currentScreen;
+        return(
+            <div className="adminNavContainer">
+                { currentScreen === "orders" ? 
+                    <h2 className="adminNavSelected" onClick={() => this.setState({currentScreen: "orders"})}>
+                        All Orders
+                    </h2> : 
+                    <h2 className="adminNavUnselected" onClick={() => this.setState({currentScreen: "orders"})}>
+                        All Orders
+                    </h2>
+                }
+                { currentScreen === "menu" ? 
+                    <h2 className="adminNavSelected" onClick={() => this.setState({currentScreen: "menu"})}>
+                        Menu Items
+                    </h2> : 
+                    <h2 className="adminNavUnselected" onClick={() => this.setState({currentScreen: "menu"})}>
+                        Menu Items
+                    </h2>
+                }
+                { currentScreen === "email" ? 
+                    <h2 className="adminNavSelected" onClick={() => this.setState({currentScreen: "email"})}>
+                        Email
+                    </h2> : 
+                    <h2 className="adminNavUnselected" onClick={() => this.setState({currentScreen: "email"})}>
+                        Email
+                    </h2>
+                }
+            </div>
+        );
+    }
 
     render() {
       return (
@@ -677,20 +712,16 @@ class Admin extends Component {
 
               {/* This is the contents on the admin page */}
               <div class="admin-section">
-                    <div class="col-12">
-                        <h2 class="admin-title">Admin Panel</h2>
-                        <p>Please use this page to edit what is displayed on the website to customers.</p>
-                    </div>
-
-                    <br />
+                    {this.adminNavBar()}
 
                     {/* <div class="col-12">
                         <h2 class="admin-title">Orders</h2>
                         <p>View placed orders and mark them as fulfilled.</p>
                         <a class="btn btn-primary" href="/orders" role="button">Orders</a>
                     </div> */}
-                    <AdminMenuItems />
-                    <br />
+                    {this.state.currentScreen === "orders"}
+                    {this.state.currentScreen === "menu"}
+                    {this.state.currentScreen === "email"}
 
                     <div class="col-12">
                         <h2 class="admin-title">Menu Items</h2>
