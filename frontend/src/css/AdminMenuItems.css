@@ -11,7 +11,7 @@
 .aboveTableContainer{
     min-width: 85vw;
     max-width: 85vw;
-    padding-bottom: 40px;
+    padding-bottom: 15px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -54,7 +54,7 @@
 .menuTableContainer {
     min-width: 900px;
     max-width: 85vw;
-    max-height: 80vh;
+    max-height: 65vh;
     overflow: scroll;
     border: 2px solid var(--black);
 }
@@ -66,8 +66,8 @@
 .menuItemImage {
     border-radius: 10px;
     object-fit: cover;
-    width: 150px;
-    height: 150px;
+    width: 130px;
+    height: 130px;
 }
 .menuRowText {
     color: var(--darkgrey) !important;
