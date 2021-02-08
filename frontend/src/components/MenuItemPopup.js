@@ -69,7 +69,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                     {/** Left side with dish details */}
                     <div className="left-popup">
                         <div className="popup-image" style={{backgroundImage: "url(" + values.get("image") + ")"}}>
-                            <div className="popup-image-price"><h3>{"$" + currPrice}</h3></div>
+                            <div className="popup-image-price"><h3>{"$" + parseFloat(currPrice).toFixed(2)}</h3></div>
                         </div>
                         <div className="popup-item-info">
                             <h3 className="title-popup">{values.get("title")}</h3>
@@ -123,7 +123,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                                     return(
                                         <label className="choice-label">
                                             <input type="checkbox" name="accommodations" value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e, accommodation.Price)} required />
-                                            <span className="label-title">{accommodation.Description + " +($" + accommodation.Price + ")"}</span>
+                                            <span className="label-title">{accommodation.Description + " +($" + parseFloat(accommodation.Price).toFixed(2) + ")"}</span>
                                         </label>
                                     );
                                 })
@@ -154,7 +154,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
 
                             {/** hidden fields to pass along to the total price and  quantity */}
                             <input name="name" type="hidden" value={values.get("title")} />
-                            <input name="price" type="hidden" value={totalPrice} />
+                            <input name="price" type="hidden" value={parseFloat(totalPrice).toFixed(2)} />
                             <input name="quantity" type="hidden" value={quantity} />
                             <input className="submit-order-button" type="submit" value={"Add " + quantity + " to cart: $" + totalPrice} />
                         </form>
