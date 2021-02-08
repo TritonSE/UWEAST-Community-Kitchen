@@ -15,7 +15,7 @@
 {
   width: 975px;
   background-color: white;
-  min-height: 630px;
+  max-height: 630px;
   overflow-x: hidden;
   position: fixed;
   top: 0;
