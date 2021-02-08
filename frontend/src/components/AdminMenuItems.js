@@ -79,7 +79,7 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
         <TableContainer component={Paper} className="menuTableContainer">
             <Table aria-label="simple table" stickyHeader className="menuTable">
                 <TableHead>
-                    <TableRow >
+                    <TableRow style={{"overflow": "hidden"}}>
                         <TableCell className="menuTableHeaders" width="5%">Feature</TableCell>
                         <TableCell className="menuTableHeaders" width="15%" align="center">Item Image</TableCell>
                         <TableCell className="menuTableHeaders" width="15%" align="left">Item Name</TableCell>
