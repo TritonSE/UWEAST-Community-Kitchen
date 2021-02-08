@@ -726,28 +726,6 @@ class Admin extends Component {
                     {this.state.currentScreen === "orders" && <OrdersTable />}
                     {this.state.currentScreen === "menu" && <AdminMenuItems />}
                     {this.state.currentScreen === "email" && <ChangeEmailScreen />}
-
-                    <div class="col-12">
-                        <h2 class="admin-title">Menu Items</h2>
-                        <p>Adjust what items are on the website.</p>
-                        <Button onClick={() => this.setState({renderAddItems: true})}>
-                            Add
-                        </Button>
-                        <Button onClick={() => this.setState({renderEditItems: true})}>
-                            Edit
-                        </Button>
-                        <Button onClick={() => this.setState({renderDeleteItems: true})}>
-                            Delete
-                        </Button>
-                    </div>
-
-                    <br />
-
-                    <div class="col-12">
-                        <h2 class="admin-title">Featured Item</h2>
-                        <p>Choose the featured item to display at the top of the site.</p>
-                        <Button onClick={() => this.setState({renderFeaturedItems: true})} >Edit</Button>
-                    </div>
                 </div>       
 
                 {/* These are the modals used on the page. They will conditionally render */}
