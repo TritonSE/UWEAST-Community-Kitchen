@@ -16,18 +16,17 @@
 
 .brand-name {
     display: inline-block;
-    max-width: calc(6vw);
     font-size: calc(20px);
     text-align: center;
     justify-content: center;
     color: #ffdf69;
     font-family: 'Roboto Slab', serif;
-    margin-left: calc(-1.5vw);
-    margin-top: calc(1.3vh);
+    margin-left: calc(-1vw);
+    margin-top: calc(2vh);
 }
 
 .brand-name p {
-    font-size: calc(23px);
+    font-size: calc(3.5vh);
     font-style: italic;
     font-family: 'Roboto Slab', serif;
 }
