@@ -109,7 +109,6 @@ export default class Orders extends React.Component {
     render() {
         return (
             <div className="orders-page-container">
-                <NavBar />
                 {/* Render a progress spinner to show it is loading */}
                 {this.state.Loading ? 
                 <div className="spinner-orders-page">
