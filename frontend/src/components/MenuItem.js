@@ -2,9 +2,9 @@ import React from 'react';
 import "../css/MenuItem.css";
 const config = require('../config');
 
-const MenuItem = ( {description, image, price, title, togglePopup, dietaryInfo} ) => {
+const MenuItem = ( {description, image, price, title, togglePopup, dietaryInfo, priceOptions, accommodations} ) => {
     return (
-      <div className="menu-item" onClick={() => togglePopup(title, description, price, image, dietaryInfo)}>
+      <div className="menu-item" onClick={() => togglePopup(title, description, priceOptions, image, dietaryInfo, accommodations)}>
         <div className="menu-image">
           <img src={image}></img>
         </div>
