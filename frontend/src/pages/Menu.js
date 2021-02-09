@@ -1,6 +1,7 @@
-import React, { Component} from 'react';
+import React, { Component, useState} from 'react';
 import Navbar from '../components/NavBar';
 import CartPreview from '../components/CartPreview';
+import CartSummary from '../components/CartSummary';
 import SearchSection from '../components/SearchSection';
 import MenuSection from '../components/MenuSection';
 import MenuItemPopup from '../components/MenuItemPopup'
@@ -14,8 +15,15 @@ class Menu extends Component {
 
         //stores items currently in the cart using local storage
         this.state = {
-            items: JSON.parse(localStorage.getItem('cartItems')) || []
+            items: JSON.parse(localStorage.getItem('cartItems')) || [],
+            cartPopupVisible: false,
+            subTotal: "00.00",
+            tax: "00.00",
+            totalPrice: "00.00"
         }
+
+        this.toggleCart = this.toggleCart.bind(this);
+
     }
 
     //adds item from popup to the cart and updates local storage
@@ -24,6 +32,15 @@ class Menu extends Component {
             localStorage.setItem('cartItems', JSON.stringify(this.state.items))
         });
         console.log(this.state.items);
+
+        // this.state.subTotal = parseFloat(this.state.subTotal) + parseFloat(item.price);
+        //             this.state.subTotal = parseFloat(this.state.subTotal).toFixed(2);
+        //             this.state.totalPrice = parseFloat(this.state.subTotal) + parseFloat(this.state.tax);
+        //             this.state.totalPrice = parseFloat(this.state.totalPrice).toFixed(2);
+    }
+
+    toggleCart() {
+        this.setState({cartPopupVisible: !this.state.cartPopupVisible});
     }
 
     render (){
@@ -31,8 +48,9 @@ class Menu extends Component {
       return (
           <div>
               <Navbar currentPage="menu"/>
+              {this.state.cartPopupVisible ? <CartSummary items={this.state.items} toggleCart={this.toggleCart}/> : null}
               {/* cart preview is floated on the bottom right of the screen */}
-              <CartPreview key={this.state.items} items={this.state.items}/> 
+              <CartPreview key={this.state.items} items={this.state.items} total={this.state.totalPrice} tax={this.state.tax} subtotal={this.state.subTotal} toggleCart={this.toggleCart}/> 
               {/** search section is the top, non-menu half of the page */}
               <SearchSection/>
               <MenuSection onItemAdd={this.handleAdd}/> 

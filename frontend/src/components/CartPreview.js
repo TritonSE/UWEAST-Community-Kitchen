@@ -57,7 +57,7 @@ class CartPreview extends Component {
                             Subtotal: ${this.state.subTotal}<br/>
                             Tax: ${this.state.tax}
                         </div>
-                        <Button>Review Order</Button>
+                        <Button onClick={this.props.toggleCart}>Review Order</Button>
                     </div>
                     <div className="order-summary">
                         <span>Total Price</span><span className="add-price">${this.state.totalPrice}</span>
