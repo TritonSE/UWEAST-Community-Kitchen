@@ -83,10 +83,6 @@ export default function NavBar (props) {
                         </span>
 
                         <span className="desktop-tabs">
-                            <Nav.Link className={adminContentClass + isPageActive("admin")} href="/orders">Orders</Nav.Link>
-                        </span>
-
-                        <span className="desktop-tabs">
                             <Nav.Link className={adminContentClass} onClick={logout}>Logout</Nav.Link>
                         </span>
 
