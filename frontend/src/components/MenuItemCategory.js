@@ -19,9 +19,12 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
         const json = await result.json();
 
         for(var i = 0; i < json.items.length; i++) {
+          // since "featured" isn't a category, we need to handle it differently
+          let isCategoryEqual = json.items[i].Category === categoryName;
+          let isFeatured = (categoryName === "Featured") && (json.items[i].isFeatured);
 
           // is stored only if the category name is the same as json's category
-          if((json.items != undefined) && (json.items[i].category == categoryName)) {
+          if((json.items !== undefined) && (isCategoryEqual || isFeatured)) {
             menuItemValues.push(json.items[i]);
           }
         }
@@ -41,24 +44,27 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
   return (
       <>
         {/** popup is created here, if it is visible it is rendered */}
-        {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm}/> : null}
+        {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
         <div className="menu-item-category">
           <h2> {categoryName} </h2>
           <div className="menu-item-category-grid">
             {/** generate menu items based off of array */}
             {menuItems.map((menuItem, key) => {
-              let title = menuItem.name;
-              let image = menuItem.image;
-              let description = menuItem.description;
-              let price = menuItem.price;
-              let dietaryInfo = [menuItem.vegan, menuItem.vegetarian, menuItem.glutenFree];
+              let title = menuItem.Name;
+              let image = menuItem.pictureURL;
+              let description = menuItem.Description;
+              // since some items will only have a family pricing option, we use individual as the default; if individual doesnt exist, use family instead
+              let price = ("Individual" in menuItem.Prices) ? menuItem.Prices.Individual : menuItem.Prices.Family
+              let accommodations = menuItem.Accomodations;
+              let priceOptions = menuItem.Prices;
+              let dietaryInfo = menuItem.dietaryInfo;
 
-              return <MenuItem title={title} image={image} price={price} description={description} togglePopup={togglePopup} key={key} dietaryInfo={dietaryInfo} />
+              return <MenuItem title={title} image={image} price={price} description={description} togglePopup={togglePopup} key={key} dietaryInfo={dietaryInfo} priceOptions={priceOptions} accommodations={accommodations} />
             })}
           </div>
         </div>
       </>
   )
 }
-  
-  export default MenuItemCategory;
+
+export default MenuItemCategory;

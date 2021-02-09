@@ -3,7 +3,7 @@ import Navbar from '../components/NavBar';
 import CartPreview from '../components/CartPreview';
 import SearchSection from '../components/SearchSection';
 import MenuSection from '../components/MenuSection';
-import MenuItemPopup from '../components/MenuItemPopup'
+import Banner from '../components/Banner';
 const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
@@ -30,7 +30,10 @@ class Menu extends Component {
 
       return (
           <div>
-              <Navbar currentPage="menu"/>
+              <div className="navbar-wrapper">
+                <Navbar currentPage="menu"/>
+              </div>
+              <Banner/>
               {/* cart preview is floated on the bottom right of the screen */}
               <CartPreview key={this.state.items} items={this.state.items}/> 
               {/** search section is the top, non-menu half of the page */}

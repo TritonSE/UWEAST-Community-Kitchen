@@ -7,12 +7,7 @@ const BACKEND_URL = config.backend.uri;
 
 const SearchSection = () => {
     return (
-      <div className="search-section">
-        <div className="searchbar-box">
-          <h2>Order food online now!</h2>
-          <SearchBar />
-        </div>
-      </div>
+      <div className="search-section"></div>
     );
 }
   
