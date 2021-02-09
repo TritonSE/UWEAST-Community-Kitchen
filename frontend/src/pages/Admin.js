@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from '../components/NavBar';
 import AdminMenuItems from "../components/AdminMenuItems";
-import OrdersTable from "../components/OrdersTable";
+import Orders from "./Orders";
 import ChangeEmailScreen from "../components/ChangeEmailScreen";
 import '../css/Admin.css';
 
@@ -66,7 +66,7 @@ class Admin extends Component {
                         <p>View placed orders and mark them as fulfilled.</p>
                         <a class="btn btn-primary" href="/orders" role="button">Orders</a>
                     </div> */}
-                    {this.state.currentScreen === "orders" && <OrdersTable />}
+                    {this.state.currentScreen === "orders" && <Orders />}
                     {this.state.currentScreen === "menu" && <AdminMenuItems />}
                     {this.state.currentScreen === "email" && <ChangeEmailScreen />}
                 </div>       
