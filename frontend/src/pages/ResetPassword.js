@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     margin: theme.spacing(2),
-    textAlign: 'center'
+    textAlign: 'center',
   }
 }));
 
@@ -154,7 +154,7 @@ export default function ResetPassword() {
                 style={{position: "absolute", top:"15%"}}
                 >
                 <Grid 
-                // item md={6} xs={12}
+                item md={6} xs={12}
                 >
                 <Box border={8} borderColor="#F9CE1D" style={{padding: "2vw"}}>
                       <Typography variant="h4" className={classes.title}>

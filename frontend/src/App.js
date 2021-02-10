@@ -44,10 +44,6 @@ function App() {
         <Route exact path="/admin">
           <Admin/>
         </Route>
-        {/* Orders page */}
-        <Route exact path="/orders">
-          <Orders />
-        </Route>
         {/* Any other URL is automatically matched to Menu Page */}
         <Route path="/">
           <Menu/>

@@ -8,10 +8,10 @@ const config = require('../config');
 // MenuSection is responsible for managing states for most of the menu
 const MenuSection = () => {
   // filterCategories populates the filter buttons
-  const filterCategories = ["Whole Menu", "Appetizers", "Main Dishes", "Sides", "Drinks"];
+  const filterCategories = ["Whole Menu", "Featured", "Appetizers", "Main Dishes", "Sides", "Drinks"];
 
   // populates the menu item categories
-  const defaultCategories = ["Appetizers", "Main Dishes", "Sides", "Drinks"];
+  const defaultCategories = ["Featured", "Appetizers", "Main Dishes", "Sides", "Drinks"];
 
   // stores all the categories currently visible
   let displayedCategories = [];
@@ -74,7 +74,7 @@ const MenuSection = () => {
   }
   
   // closes popup when open and opens popup when closed
-  const togglePopup = (title, description, price, image, dietaryInfo) => {
+  const togglePopup = (title, description, price, image, dietaryInfo, accommodations) => {
     setPopupVisible(!popupVisible);
     
     // sets the values of the map based on passed-in information
@@ -82,7 +82,8 @@ const MenuSection = () => {
     popupValues.set("description", description);
     popupValues.set("price", price);
     popupValues.set("image", image);
-    popupValues.set("dietary-info", dietaryInfo)
+    popupValues.set("dietary-info", dietaryInfo);
+    popupValues.set("accommodations", accommodations);
 
     setPopupValues(popupValues);
   }
@@ -105,7 +106,7 @@ const MenuSection = () => {
         </div>
         <div className="menu-cart">
           cart
-      </div>
+        </div>
       </div>
     </div>
   )
