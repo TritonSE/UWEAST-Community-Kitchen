@@ -3,8 +3,6 @@ import MenuFilterButton from './MenuFilterButton';
 import "../css/MenuFilter.css";
 const config = require('../config');
 
-const BACKEND_URL = config.backend.uri;
-
 const MenuFilter = ( {foodCategories, changeVisibleCategories, toggledFilter, setToggledFilter} ) => {
     return (
       <div className="menu-filter">

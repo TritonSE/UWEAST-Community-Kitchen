@@ -5,26 +5,31 @@ import {
   InfoWindow
 } from "@react-google-maps/api";
 
+const config = require("../config");
+
 const mapContainerStyle = {
   width: "100%",
   height: "100%"
 }
 
+// latitude/longitude is slightly offset to account for the infobox size
 const center = {
   lat: 32.75871130774189, 
   lng: -117.05553043117615
 }
 
 const options = {
+  // hide all Google UI
   disableDefaultUI: true,
   gestureHandling: "greedy"
 }
 
 const ContactMap = () => {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyAYe12_fPCYzLJawQNeabZORGYE5a5GnEU"
+    googleMapsApiKey: config.google.MAPS_API_CODE
   })
 
+  // used to adjust the email in the infobox
   const [contactEmail, setContactEmail] = useState("none"); 
 
   useEffect(() => {
@@ -33,6 +38,7 @@ const ContactMap = () => {
       if (result.ok) {
         const json = await result.json();
 
+        // get the first email in the db if it exists
         if(json.emails !== undefined) {
           setContactEmail(json.emails[0].email);
         }
@@ -50,6 +56,7 @@ const ContactMap = () => {
     <>
       <GoogleMap mapContainerStyle={mapContainerStyle} zoom={15} center={center}options={options}>
         <InfoWindow position={{lat: 32.75471130774189, lng: -117.05553043117615}}>
+          {/** conditionally render email only if one is found in db */}
           <div className="info-wrapper">
             {
               contactEmail !== "none" ? 

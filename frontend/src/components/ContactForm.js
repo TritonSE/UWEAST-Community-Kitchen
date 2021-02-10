@@ -7,11 +7,10 @@ const sendMessage = e => {
   const formData = new FormData(e.target);
   let data = {};
   
+  // make FormData into a js object to pass to route
   for(var [key, value] of formData.entries()) {
     data[key] = value;
   }
-
-  console.log(data);
 
   fetch("http://localhost:9000/autoEmails/contact", {
     method: "POST",
@@ -22,6 +21,8 @@ const sendMessage = e => {
   });
 
   alert("Message sent!");
+
+  // reload window to clear input boxes 
   window.location.reload();
 }
 
@@ -36,6 +37,7 @@ const ContactForm = () => {
         <br />
         <input type="text" name="email" className="contact-form-input" placeholder="Your Email" required />
         <br />
+        {/** automatically-resizing textarea component */}
         <TextareaAutosize className="contact-form-input" name="message" placeholder="Your message" maxRows={3} required />
         <br />
         <input type="submit" className="contact-form-submit" value="Submit"  />
