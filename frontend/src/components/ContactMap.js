@@ -39,7 +39,7 @@ const ContactMap = () => {
         const json = await result.json();
 
         // get the first email in the db if it exists
-        if(json.emails !== undefined) {
+        if(json.emails[0] !== undefined) {
           setContactEmail(json.emails[0].email);
         }
       }

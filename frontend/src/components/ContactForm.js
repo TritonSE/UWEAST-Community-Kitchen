@@ -18,12 +18,18 @@ const sendMessage = e => {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(data)
+  })
+  .then(function(result) {
+    if(result.ok) {
+      alert("Message sent!");
+
+      // reload window to clear input boxes 
+      window.location.reload();
+    }
+    else {
+      alert("Message not sent!");
+    }
   });
-
-  alert("Message sent!");
-
-  // reload window to clear input boxes 
-  window.location.reload();
 }
 
 const ContactForm = () => {
