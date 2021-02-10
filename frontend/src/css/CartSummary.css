@@ -10,34 +10,143 @@
 }
 
 .cart-popup {
-    max-width: 800px;
+    width: 32.5vw;
     background-color: white;
-    display: grid;
-    grid-template-columns: 50% 50%;
-    height: 500px;
+    max-height: 70vw;
     overflow-x: hidden;
+    overflow-y: scroll;
     position: fixed;
     top: 0;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    padding: 10px;
     z-index: 2;
 }
 
-.summary-title {
-
+.pickup-title {
+    font-weight: bold;
+    padding-left: 2vw;
+    font-size: 1.3vw;
 }
 
-.fixed-scroll {
+.date-picker {
+    padding: 1vw 0vw 0vw 3vw;
+}
 
+.time-picker {
+    padding: 1vw 2vw 0vw 9vw;
+}
+
+.pickup-date-info {
+    width: 11vw;
+    height: auto;
+    font-size: 0.7vw;
+    margin-left: 2vw;
+}
+
+.summary-title {
+    font-weight: bold;
+    padding: 1vw 0vw 1vw 2vw;
+    font-size: 1.3vw;
+}
+
+.cart-items {
+    margin-left: 2vw;
+    width: 29vw;
+    height: 23.8vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.summary-item {
+    width: 29vw;
+}
+
+.edit-button {
+    display: inline-flex;
+    justify-content: center;
+    margin-top: 0.5vw;
+    width: auto;
+    height: 4.3vh;
+    border-radius: 0.5vw;
+    border-width: 0vw;
+    color: #F9CE1D;
+    padding: 0.7vw;
+    font-size: 0.8vw;
+    align-items: center;
+    text-align: center;
+}
+
+.remove-button {
+    margin-left: 1vw;
+    display: inline-flex;
+    justify-content: center;
+    width: auto;
+    border-radius: 0.5vw;
+    border-width: 0vw;
+    color: black;
+    padding: 0.7vw;
+    font-size: 0.8vw;
+    align-items: center;
+    text-align: center;
+    height: 4.3vh;
+    margin-top: 0.5vw;
+}
+
+.summary-price {
+    margin-left: 1vw;
 }
 
 .order-totals {
+    margin-top: 2vw;
+    margin-right: 2.5vw;
+}
 
+.thumbnail {
+    background-color: #CCCCCC;
+}
+
+.item-divide {
+    width: 28vw;
+    margin-top: 0.8vw;
+    border-bottom: 1px solid #000000;
 }
 
 .return-button {
-
+    width: 28vw;
+    margin-top: 2vw;
+    margin-left: 2vw;
+    margin-bottom: 2vw;
 }
 
+.thumbnail-background {
+    border-radius: 0.5vw;
+    background-color: #F1F1F1;
+    font-weight: bold;
+    justify-content: center;
+    display: inline-flex;
+    text-align: center;
+    align-items: center;
+    padding: 0.7vw;
+    font-size: 0.8vw;
+}
+
+.item-name {
+    font-size: 1vw;
+    font-weight: bold;
+    height: auto;
+    width: 11vw;
+    margin-left: 0.3vw;
+    margin-top: 0.6vw;
+    margin-bottom: 0.2vw;
+}
+
+.item-description {
+    font-size: 0.8vw;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.summary-price {
+    width: 4vw;
+}

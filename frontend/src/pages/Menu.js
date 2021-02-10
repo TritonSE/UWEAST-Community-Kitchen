@@ -4,7 +4,7 @@ import CartPreview from '../components/CartPreview';
 import CartSummary from '../components/CartSummary';
 import SearchSection from '../components/SearchSection';
 import MenuSection from '../components/MenuSection';
-import MenuItemPopup from '../components/MenuItemPopup'
+import Banner from '../components/Banner';
 const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
@@ -47,7 +47,10 @@ class Menu extends Component {
 
       return (
           <div>
-              <Navbar currentPage="menu"/>
+              <div className="navbar-wrapper">
+                <Navbar currentPage="menu"/>
+              </div>
+              <Banner/>
               {this.state.cartPopupVisible ? <CartSummary items={this.state.items} toggleCart={this.toggleCart}/> : null}
               {/* cart preview is floated on the bottom right of the screen */}
               <CartPreview key={this.state.items} items={this.state.items} total={this.state.totalPrice} tax={this.state.tax} subtotal={this.state.subTotal} toggleCart={this.toggleCart}/> 
