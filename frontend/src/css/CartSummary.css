@@ -97,9 +97,14 @@
     margin-left: 1vw;
 }
 
-.order-totals {
+.order-totalprices {
     margin-top: 2vw;
     margin-right: 2.5vw;
+    text-align: right;
+    font-size: 70%;
+    font-weight: bold;
+    padding-bottom: 0.4vw;
+    padding-right: 0.4vw;
 }
 
 .thumbnail {

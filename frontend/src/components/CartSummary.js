@@ -121,7 +121,7 @@ class CartSummary extends Component {
                         {/* loads and displays all items currently in the cart */}
                         {this.loadItems()}
                     </div>
-                    <div className="order-totals">
+                    <div className="order-totalprices">
                         <br />
                             Subtotal: ${this.state.subTotal}<br />
                             Tax: ${this.state.tax}<br />
