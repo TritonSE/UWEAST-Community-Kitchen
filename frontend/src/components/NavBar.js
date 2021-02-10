@@ -1,11 +1,11 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
-import { isAuthorized, removeJWT } from '../util/auth.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
-import Logo from "../util/UWEAST_Logo_Detail_Transparent.png";
+import Logo from "../media/UWEAST_Logo_Detail_Transparent.png";
 import '../css/NavBar.css';
+import { isAuthenticated, logout} from '../util/auth';
 
 
 export default function NavBar (props) {
@@ -18,14 +18,14 @@ export default function NavBar (props) {
     var loginButtonClass;
 
     {/* removes login token and redirects to menu page */}
-    function logout() {
-        removeJWT();
-        history.push("/");
+    function Logout() {
+        logout();
+        history.push("/login");
         history.go(0);
     }
 
     {/* Hides admin content (admin page + logout) or login button depending on whether user is logged in */}
-    if(isAuthorized()) {
+    if(isAuthenticated()) {
         adminContentClass = "nav-link";
         loginButtonClass = "nav-link d-none";
     } else {
@@ -83,7 +83,7 @@ export default function NavBar (props) {
                         </span>
 
                         <span className="desktop-tabs">
-                            <Nav.Link className={adminContentClass} onClick={logout}>Logout</Nav.Link>
+                            <Nav.Link className={adminContentClass} onClick={Logout}>Logout</Nav.Link>
                         </span>
 
                         <span className="desktop-tabs">

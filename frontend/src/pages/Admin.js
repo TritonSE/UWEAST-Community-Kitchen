@@ -3,6 +3,8 @@ import Navbar from '../components/NavBar';
 import AdminMenuItems from "../components/AdminMenuItems";
 import Orders from "./Orders";
 import ChangeEmailScreen from "../components/ChangeEmailScreen";
+import { isAuthenticated } from '../util/auth';
+import {Redirect} from 'react-router-dom';
 import '../css/Admin.css';
 
 class Admin extends Component {
@@ -47,12 +49,21 @@ class Admin extends Component {
                         Email
                     </h2>
                 }
+                 { currentScreen === "resetPassword" ? 
+                    <h2 className="adminNavSelected" onClick={() => this.setState({currentScreen: "resetPassword"})}>
+                        Reset Password
+                    </h2> : 
+                    <h2 className="adminNavUnselected" onClick={() => this.setState({currentScreen: "resetPassword"})}>
+                        Reset Password
+                    </h2>
+                }
             </div>
         );
     }
 
-    render() {
-      return (
+    render() { 
+        //Redirect to login if user is trying to access admin panel without being logged in 
+      return !isAuthenticated() ? <Redirect to="/login"/> : (
           <div>
             {/* The navbar on top of the page */}
               <Navbar currentPage="admin"/>
@@ -69,6 +80,7 @@ class Admin extends Component {
                     {this.state.currentScreen === "orders" && <Orders />}
                     {this.state.currentScreen === "menu" && <AdminMenuItems />}
                     {this.state.currentScreen === "email" && <ChangeEmailScreen />}
+                    {this.state.currentScreen === "resetPassword" && <Redirect to="/reset-password"/>}
                 </div>       
           </div>
 

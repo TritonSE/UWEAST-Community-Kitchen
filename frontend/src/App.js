@@ -11,6 +11,8 @@ import About from './pages/About';
 import Admin from './pages/Admin';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
+import Register from './pages/Register';
+import ResetPassword from './pages/ResetPassword';
 import Orders from './pages/Orders';
 
 function App() {
@@ -21,6 +23,14 @@ function App() {
         {/* Login Page */}
         <Route exact path="/login">
           <Login/>
+        </Route>
+        {/* Register Page */}
+        <Route exact path="/register">
+          <Register/>
+        </Route>
+        {/* Reset Password Page */}
+        <Route exact path="/reset-password">
+          <ResetPassword/>
         </Route>
         {/* About Page */}
         <Route exact path="/about">
