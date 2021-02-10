@@ -15,7 +15,12 @@ async function findOneUser(incomingEmail) {
   return User.findOne({ email: incomingEmail }).exec();
 }
 
+async function updateOneUser(updated_user){
+  return updated_user.save();
+}
+
 module.exports = {
   addNewUser,
   findOneUser,
+  updateOneUser
 };

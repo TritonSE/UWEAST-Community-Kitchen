@@ -5,7 +5,7 @@ import '../css/MenuSection.css';
 const config = require('../config');
 
 // MenuSection is responsible for managing states for most of the menu
-const MenuSection = () => {
+const MenuSection = ({onItemAdd}) => {
   // filterCategories populates the filter buttons
   const filterCategories = ["Whole Menu", "Featured", "Appetizers", "Main Dishes", "Sides", "Drinks"];
 
@@ -69,6 +69,9 @@ const MenuSection = () => {
 
     // converts the FormData to a JSON string, optional
     var json = JSON.stringify(object);
+
+    // calls parent function to add item from popup to cart
+    onItemAdd(object);
     
     // when submit button is clicked, the popup is closed
     togglePopup();
@@ -103,11 +106,10 @@ const MenuSection = () => {
         </div>
         <div className="menu-items">
           {/** parameters are states being passed down */}
-          <MenuItems foodCategories={visibleCategories} processForm={processForm} popupVisible={popupVisible} popupValues={popupValues} togglePopup={togglePopup} />
+          <MenuItems foodCategories={visibleCategories} processForm={processForm} popupVisible={popupVisible} popupValues={popupValues} togglePopup={togglePopup}/>
         </div>
         <div className="menu-cart">
-          cart
-        </div>
+      </div>
       </div>
     </div>
   )

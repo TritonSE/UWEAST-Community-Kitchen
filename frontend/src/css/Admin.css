@@ -1,5 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+:root {
+    --yellow: #f9ce1d;
+    --black: black;
+    --lightgrey: #cccccc;
+    --darkgrey: #747474;
+    --white: #FFFFFF;
+    --offwhite: #F1f1f1;
+}
+.adminNavContainer {
+  display: flex;
+  flex-direction: row;
+
+  max-width: 40vw; 
+  min-width: 600px;
+  padding-bottom: 40px;
+}
+.adminNavUnselected {
+  display: inline-block; 
+  margin-right: 40px;
+
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 20px;
+  color: var(--darkgrey) !important;
+  font-weight: bold !important;
+
+  cursor: pointer;
+  transition: text-decoration 1s;
+
+}
+.adminNavUnselected:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--darkgrey);
+}
+.adminNavSelected {
+  display: inline-block; 
+  margin-right: 40px;
+
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 20px;
+  color: var(--black) !important;
+  font-weight: bold !important;
+  text-decoration: underline;
+  text-decoration-color: var(--yellow);
+
+  cursor: pointer;
+}
+
 .admin-section {
-  padding-top: 50px;
+  padding-top: 30px;
   padding-left: 80px;
 }
 

@@ -73,7 +73,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                 {values.get("accommodations").map((accommodation) => {
                     return(
                         <label className="choice-label">
-                            <input type="checkbox" name="accommodations" value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e, accommodation.Price)} required />
+                            <input type="checkbox" name="accommodations" value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e, accommodation.Price)} />
                             <span className="label-title">{accommodation.Description + " +($" + parseFloat(accommodation.Price).toFixed(2) + ")"}</span>
                         </label>
                     );
@@ -174,6 +174,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                             <input name="name" type="hidden" value={values.get("title")} />
                             <input name="price" type="hidden" value={parseFloat(totalPrice).toFixed(2)} />
                             <input name="quantity" type="hidden" value={quantity} />
+                            <input name="description" type="hidden" value={values.get("description")} />
                             <input className="submit-order-button" type="submit" value={"Add " + quantity + " to cart: $" + totalPrice} />
                         </form>
                     </div>
