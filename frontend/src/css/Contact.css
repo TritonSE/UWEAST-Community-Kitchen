@@ -85,7 +85,7 @@
 {
   .contact-wrapper
   {
-    height: calc(100vh - 56px);
+    height: calc(100vh - 116px);
     grid-template-areas:
      "top"
      "bottom";
@@ -105,7 +105,7 @@
     display: grid;
     grid-area: top;
     width: calc(100%);
-    height: calc(100vh - 54px);
+    height: calc(100vh - 116px);
     justify-content: center;
     align-items: center;
   }
@@ -133,7 +133,7 @@
 {
   .contact-wrapper
   {
-    height: calc(100vh - 65px);
+    height: calc(100vh - 75px);
     grid-template-columns: 50vw 50vw;
   }
 
