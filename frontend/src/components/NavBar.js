@@ -1,10 +1,9 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
-import { isAuthorized, removeJWT } from '../util/auth.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
-import Logo from "../util/UWEAST_Logo_Detail_Transparent.png";
+import Logo from "../media/UWEAST_Logo_Detail_Transparent.png";
 import '../css/NavBar.css';
 import { isAuthenticated, logout} from '../util/auth';
 
