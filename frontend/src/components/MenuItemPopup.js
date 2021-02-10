@@ -174,6 +174,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                             <input name="name" type="hidden" value={values.get("title")} />
                             <input name="price" type="hidden" value={parseFloat(totalPrice).toFixed(2)} />
                             <input name="quantity" type="hidden" value={quantity} />
+                            <input name="description" type="hidden" value={values.get("description")} />
                             <input className="submit-order-button" type="submit" value={"Add " + quantity + " to cart: $" + totalPrice} />
                         </form>
                     </div>
