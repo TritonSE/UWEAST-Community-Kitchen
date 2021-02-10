@@ -5,3 +5,8 @@
   top: calc(50vh + 40px);
   width: 150px;
 }
+
+.toggled-filter 
+{
+  color: #f9ce1d;
+}
