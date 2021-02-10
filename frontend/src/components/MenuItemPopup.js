@@ -73,7 +73,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                 {values.get("accommodations").map((accommodation) => {
                     return(
                         <label className="choice-label">
-                            <input type="checkbox" name="accommodations" value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e, accommodation.Price)} required />
+                            <input type="checkbox" name="accommodations" value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e, accommodation.Price)} />
                             <span className="label-title">{accommodation.Description + " +($" + parseFloat(accommodation.Price).toFixed(2) + ")"}</span>
                         </label>
                     );
