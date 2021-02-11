@@ -17,7 +17,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import '../css/AdminMenuItems.css';
-
+import AddMenuItemModal from './AddMenuItemModal.js';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -175,6 +175,7 @@ export default function AdminMenuItems (props) {
     const [itemList, setItemList] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const [checkboxUpdate, setCheckboxUpdate] = useState("");
+    const [addItemModal, setAddItemModal] = useState(false)
     // Fetch all menu items to display in table
     useEffect(() => {
         var data = null;
@@ -293,8 +294,9 @@ export default function AdminMenuItems (props) {
         return (  
             <div>
                 {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
+                {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} />}
                 <div className="aboveTableContainer">
-                    <Button className="menuAddButton">
+                    <Button className="menuAddButton" onClick={() => {setAddItemModal(true)}}>
                         <AddCircleIcon className="menuAddButtonIcon" />
                         Add Item
                     </Button>
