@@ -8,5 +8,6 @@
 
 .toggled-filter 
 {
-  color: #f9ce1d;
+  border-color: #f9ce1d;
+  border-width: 2px;
 }
