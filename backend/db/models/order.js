@@ -12,7 +12,14 @@ const orderSchema = new mongoose.Schema(
       Amount: { type: String, required: true },
       transactionID: { type: String, required: true },
     },
-    Order: [{ item: String, quantity: Number, extra: [String] }],
+    Order: [
+      {
+        item: String,
+        quantity: Number,
+        Accommodations: { type: String, default: "" },
+        specialInstructions: { type: String, default: "" },
+      },
+    ],
     isCompleted: { type: Boolean, default: false },
   },
   { timestamps: true }
