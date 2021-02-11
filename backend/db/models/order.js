@@ -17,7 +17,7 @@ const orderSchema = new mongoose.Schema(
         item: { type: String, required: true },
         quantity: { type: Number, required: true },
         size: { type: String, required: true },
-        Accommodations: { type: String, default: "" },
+        accommodations: { type: String, default: "" },
         specialInstructions: { type: String, default: "" },
       },
     ],
