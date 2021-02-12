@@ -5,3 +5,9 @@
   top: calc(50vh + 40px);
   width: 150px;
 }
+
+.toggled-filter 
+{
+  border-color: #f9ce1d;
+  border-width: 2px;
+}

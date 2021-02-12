@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import MenuFilter from './MenuFilter';
 import MenuItems from './MenuItems';
-import MenuItemPopup from './MenuItemPopup';
 import '../css/MenuSection.css';
 const config = require('../config');
 
@@ -18,6 +17,8 @@ const MenuSection = ({onItemAdd}) => {
 
   // states that are managed and passed down to components
   const [visibleCategories, setVisibleCategories] = useState(defaultCategories);
+
+  const [toggledFilter, setToggledFilter] = useState("none");
 
   // stores whether or not the popup is currently visible
   const [popupVisible, setPopupVisible] = useState(false);
@@ -101,7 +102,7 @@ const MenuSection = ({onItemAdd}) => {
     <div className="menu-section-wrapper">
       <div className="menu-section">
         <div className="menu-filter-wrapper">
-          <MenuFilter foodCategories={filterCategories} changeVisibleCategories={() => changeVisibleCategories} />
+          <MenuFilter toggledFilter={toggledFilter} setToggledFilter={setToggledFilter} foodCategories={filterCategories} changeVisibleCategories={() => changeVisibleCategories} />
         </div>
         <div className="menu-items">
           {/** parameters are states being passed down */}
