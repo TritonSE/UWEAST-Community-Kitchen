@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+:root {
+    --yellow: #f9ce1d;
+    --black: black;
+    --lightgrey: #cccccc;
+    --darkgrey: #747474;
+    --white: #FFFFFF;
+    --offwhite: #F1f1f1;
+}
+
+.modalContainer{
+    
+    font-family: 'Roboto', sans-serif !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modalBackground{
+    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height: auto;
+    background-color: white;
+    padding: 20px;
+    overflow: scroll;
+
+}
+.formItem{
+    font-size: 16px !important;
+}
+.formLongItem{
+    font-size: 16px !important; 
+}
+.formTextInput{
+    height: 28px !important;
+}
+.formLongInput{
+    height: 78px !important;
+}
+.formSelectInput{
+    height: 28px !important;
+}
+.formLabelText {
+    font-weight: bold;
+    margin: 0;
+}
+.priceSizeContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-top: 20px;
+}
+.priceContainer{
+    width: 40%;
+}
+.sizeContainer{
+    width: 40%;
+}
+
+.modalFooter {
+    padding-top: 20px;
+    height: 70px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+.modalFooter > * {
+    margin-left: 10px;
+}
+.addAddOnButton {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: var(--black) !important;
+    border: 1px solid var(--black) !important;
+    color: var(--white) !important;
+    font-weight: bold !important;
+    width: 100px;
+    height: 40px !important;
+}
+.menuAddButton {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: var(--yellow) !important;
+    border: 1px solid var(--yellow) !important;
+    color: var(--black) !important;
+    font-weight: bold !important;
+    width: 150px;
+    height: 40px !important;
+}
+.cancelButton {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: var(--darkgrey) !important;
+    border: 1px solid var(--darkgrey) !important;
+    color: var(--white) !important;
+    font-weight: bold !important;
+    width: 150px;
+    height: 40px !important;
+}
