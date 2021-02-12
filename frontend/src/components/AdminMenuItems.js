@@ -18,6 +18,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import '../css/AdminMenuItems.css';
 import AddMenuItemModal from './AddMenuItemModal.js';
+import EditMenuItemModal from './EditMenuItemModal.js';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -74,7 +75,7 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
 }
 
 // Renders table of items based on what is passed in through displayContent
-function menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange) {
+function menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem) {
     return (
         <TableContainer component={Paper} className="menuTableContainer">
             <Table aria-label="simple table" stickyHeader className="menuTable">
@@ -131,7 +132,7 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
                                 </TableCell>
                                 <TableCell align="left" className="menuRowText" width="12%">
                                     <IconButton>
-                                        <EditIcon style={{"marginRight": "5px"}}/>
+                                        <EditIcon style={{"marginRight": "5px"}} onClick={() => setCurrentEditItem(row.id)}/>
                                     </IconButton>
                                     <IconButton aria-label="delete item" onClick={() => setDeleteConfirmation([row.itemName, row.id])}>
                                         <DeleteIcon style={{"marginLeft": "5px"}}/>
@@ -175,7 +176,8 @@ export default function AdminMenuItems (props) {
     const [itemList, setItemList] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const [checkboxUpdate, setCheckboxUpdate] = useState("");
-    const [addItemModal, setAddItemModal] = useState(false)
+    const [addItemModal, setAddItemModal] = useState(false);
+    const [currentEditItem, setCurrentEditItem] = useState("");
     // Fetch all menu items to display in table
     useEffect(() => {
         var data = null;
@@ -293,6 +295,7 @@ export default function AdminMenuItems (props) {
     if(loaded){
         return (  
             <div>
+                {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded}/>}
                 {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
                 {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} />}
                 <div className="aboveTableContainer">
@@ -331,13 +334,13 @@ export default function AdminMenuItems (props) {
                         />
                     </div>
                 </div>
-                {menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange)}
+                {menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem)}
             </div>
         )
     }
     else{
         return (
-            <div> </div>
+            <div>Loading...</div>
         )
     }
 }
