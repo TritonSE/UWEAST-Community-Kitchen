@@ -179,13 +179,13 @@ export default function EditMenuItemModal (props) {
                                 size="small"
                                 displayEmpty
                             >
-                                <MenuItem value="Appetizer">Appetizer</MenuItem>
-                                <MenuItem value="Main Dish">Main Dish</MenuItem>
-                                <MenuItem value="Side">Side</MenuItem>
-                                <MenuItem value="Drink">Drink</MenuItem>
+                                <MenuItem value="Appetizers">Appetizers</MenuItem>
+                                <MenuItem value="Main Dishes">Main Dishes</MenuItem>
+                                <MenuItem value="Sides">Sides</MenuItem>
+                                <MenuItem value="Drinks">Drinks</MenuItem>
                             </Select>
                         </FormControl>
-                        {/* Item Sizing and Price*/}
+                        {/* Item Sizing and Price */}
                         <div className="priceSizeContainer">
                             <div className="sizeContainer">
                                 <p className="formLabelText">Size</p>
@@ -229,7 +229,7 @@ export default function EditMenuItemModal (props) {
                                 </FormControl>
                             </div>
                         </div>
-                        {/* Item Addons*/}
+                        {/* Item Addons */}
                         <div className="priceSizeContainer">
                             <div className="sizeContainer">
                                 <p className="formLabelText">Name</p>

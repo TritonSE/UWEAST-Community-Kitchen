@@ -319,10 +319,10 @@ export default function AdminMenuItems (props) {
                             }}
                         >
                             <MenuItem value="All">All</MenuItem>
-                            <MenuItem value="Appetizer">Appetizer</MenuItem>
-                            <MenuItem value="Main Dish">Main Dish</MenuItem>
-                            <MenuItem value="Side">Side</MenuItem>
-                            <MenuItem value="Drink">Drink</MenuItem>
+                            <MenuItem value="Appetizers">Appetizers</MenuItem>
+                            <MenuItem value="Main Dishes">Main Dishes</MenuItem>
+                            <MenuItem value="Sides">Sides</MenuItem>
+                            <MenuItem value="Drinks">Drinks</MenuItem>
                         </Select>
                         <SearchBar
                             className="menuSearchBar"
