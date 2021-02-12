@@ -94,7 +94,7 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
                 <TableBody>
                     {displayContent.map((row, index) => {
                         const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
-                        console.log(row);
+                        // console.log(row);
                         return (
                             <TableRow key={row._id} className={bgColor}>
                                 <TableCell component="th" scope="row" className="menuRowText" width="5%">
@@ -131,8 +131,8 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
                                 }
                                 </TableCell>
                                 <TableCell align="left" className="menuRowText" width="12%">
-                                    <IconButton>
-                                        <EditIcon style={{"marginRight": "5px"}} onClick={() => setCurrentEditItem(row.id)}/>
+                                    <IconButton onClick={() => setCurrentEditItem(row.id)}>
+                                        <EditIcon style={{"marginRight": "5px"}}/>
                                     </IconButton>
                                     <IconButton aria-label="delete item" onClick={() => setDeleteConfirmation([row.itemName, row.id])}>
                                         <DeleteIcon style={{"marginLeft": "5px"}}/>
@@ -192,7 +192,7 @@ export default function AdminMenuItems (props) {
             console.log(data.items);
             const rows = [];
             data.items.forEach(element => {
-                console.log(element);
+                // log(element);
                 rows.push(
                     createData(
                         element.Name,
