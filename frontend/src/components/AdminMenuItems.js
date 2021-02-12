@@ -209,7 +209,7 @@ export default function AdminMenuItems (props) {
         }
         
         fetchData();
-    }, [setLoaded,])
+    }, [loaded])
     // update display contents based on search term
     const handleSearch = (searchTerm) => {
         // Empty search term, so we want to reset the displayed items to those of the current category
@@ -294,7 +294,7 @@ export default function AdminMenuItems (props) {
         return (  
             <div>
                 {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
-                {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} />}
+                {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} />}
                 <div className="aboveTableContainer">
                     <Button className="menuAddButton" onClick={() => {setAddItemModal(true)}}>
                         <AddCircleIcon className="menuAddButtonIcon" />

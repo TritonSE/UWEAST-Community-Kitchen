@@ -3,10 +3,13 @@ import { Button } from 'react-bootstrap';
 import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment } from '@material-ui/core';
 import '../css/AddMenuItemModal.css';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+const config = require('../config');
+const BACKEND_URL = config.backend.uri;
 
 export default function AddMenuItemModal (props) {
     const showModal = props.addItemModal;
     const setShowModal = props.setAddItemModal;
+    const setLoaded = props.setLoaded;
 
     // form states
     const [itemName, setItemName] = useState("")
@@ -31,8 +34,101 @@ export default function AddMenuItemModal (props) {
     const [dairyFree, setDairyFree] = useState(false);
 
     const [menuError, setMenuError] = useState(false);
-    const handleSubmit = () => {
+    // function validURL(str) {
+    //     var pattern = new RegExp('/^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/'); // fragment locator
+    //     return !!pattern.test(str);
+    // }
+    const handleSubmit = async () => {
+        // validate basic input
+        if(itemName === "" || 
+            itemCategory === "" || 
+            (individualItemPrice === "" && familyItemPrice === "") || 
+            itemImageURL === "" || itemDescription === ""
+        ){
+            // if(!validURL(itemImageURL)){
+            //     console.log("fail url");
+            //     setMenuError(true);
+            //     return;
+            // }
+            console.log("fail basic");
+            setMenuError(true);
+            return;
+        }
+        // validate addons
+        let failAddOn = false;
+        addOns.forEach(item => {
+            if((item.price === "" && item.name !== "") || (item.price !== "" && item.name === "")){
+                // error
+                console.log("fail add on");
+                failAddOn = true;
+                setMenuError(true);
+                return;
+            }
+            else if(item.name !== "" && parseFloat(item.price) < 0){
+                //negative number
+                console.log("add on price was negative");
+                failAddOn = true;
+                setMenuError(true);
+                return;
+            }
+        })
+        if(failAddOn){
+            setMenuError(true);
+            return;
+        }
+        // send to db
+        console.log("sending to database");
 
+        // format data into item object
+        let pricesObj = {};
+        if(individualItemPrice !== ""){
+            pricesObj.Individual = individualItemPrice;
+        }
+        if(familyItemPrice !== ""){
+            pricesObj.Family = familyItemPrice;
+        }
+        let accomodations = [];
+        addOns.forEach(addon => {
+            if(addon.name !== "" && addon.price !== ""){
+                accomodations.push({"Description": addon.name, "Price": addon.price});
+            }
+        })
+        const dietaryInfo = {
+            "vegan": vegan,
+            "vegetarian": vegetarian,
+            "glutenFree": glutenFree,
+            "containsDairy": !dairyFree,
+        };
+        const itemObject = {
+            "Name": itemName,
+            "pictureURL": itemImageURL,
+            "Description": itemDescription,
+            "Category": itemCategory,
+            "Prices": pricesObj,
+            "isFeatured": false,
+            "isCompleted": false,
+            "accomodations": accomodations,
+            "dietaryInfo": dietaryInfo
+        }
+        // push to database
+        await fetch(`${BACKEND_URL}item/insert`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify(itemObject)
+        }).then(res => {
+            if(res.ok){
+                alert("Your item was added!");
+                //refetch
+                setLoaded(false);
+                setShowModal(false);
+            }
+            else{
+                alert("There was an error. Recheck your inputs and try again");
+            }
+        })
+        
     }
     return (
 
@@ -111,7 +207,7 @@ export default function AddMenuItemModal (props) {
                                         type="number"
                                         value={individualItemPrice}
                                         startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                                        onChange={(e) => setIndividualItemPrice(e.target.value)}
+                                        onChange={(e) => {if(e.target.value >= 0) {setIndividualItemPrice(e.target.value)}}}
                                         size="small"
                                     /> 
                                 </FormControl>
@@ -120,7 +216,7 @@ export default function AddMenuItemModal (props) {
                                         type="number"
                                         value={familyItemPrice}
                                         startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                                        onChange={(e) => setFamilyItemPrice(e.target.value)}
+                                        onChange={(e) => {if(e.target.value >= 0) {setFamilyItemPrice(e.target.value)}}}
                                         size="small"
                                     /> 
                                 </FormControl>
@@ -135,6 +231,7 @@ export default function AddMenuItemModal (props) {
                                         <FormControl margin='dense'>
                                             <OutlinedInput id={item.name + "nameinput"} name={item.name + "nameinput"} className="formTextInput"
                                                 required 
+                                                
                                                 onChange={e => {
                                                         const addontemp = [...addOns];
                                                         addontemp[index].name = e.target.value;
@@ -154,7 +251,7 @@ export default function AddMenuItemModal (props) {
                                         <FormControl margin='dense'>
                                             <OutlinedInput id={item.name + "priceinput"} name={item.name + "priceinput"} className="formTextInput"
                                                 required 
-                                                type="numeric"
+                                                type="number"
                                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                                                 onChange={e => {
                                                         const addontemp = [...addOns];
@@ -170,10 +267,25 @@ export default function AddMenuItemModal (props) {
                                     style={{"marginTop": "10px", "width": "100%"}}
                                     className="addAddOnButton"
                                     onClick={() => {
-                                        console.log("inserting new add on");
                                         const addontemp = [...addOns];
-                                        addontemp.push({name: "", price: ""});
-                                        setAddOns(addontemp);
+                                        if(addontemp.length === 0){
+                                            // add an empty addon for editing if there are none
+                                            addontemp.push({name: "", price: ""});
+                                            setAddOns(addontemp);
+                                        }
+                                        else{
+                                            // you can only add a new add on if the past ones are valid
+                                            let valid = true;
+                                            addontemp.forEach(item => {
+                                                if(item.name === "" || item.price === ""){
+                                                    valid = false;
+                                                }
+                                            })
+                                            if(valid){
+                                                addontemp.push({name: "", price: ""});
+                                                setAddOns(addontemp);
+                                            }
+                                        }
                                     }}
                                 >
                                     <AddCircleIcon className="menuAddButtonIcon" />
@@ -249,6 +361,7 @@ export default function AddMenuItemModal (props) {
                                 value={itemDescription}
                                 multiline={true}
                                 rows={3}
+                                required
                                 onChange={(e) => setItemDescription(e.target.value)}
                                 size="small"
                             />
@@ -258,7 +371,7 @@ export default function AddMenuItemModal (props) {
                         <Button className="cancelButton" onClick={() => setShowModal(false)}>
                             Close
                         </Button>
-                        <Button className="menuAddButton" onClick={() => handleSubmit}>
+                        <Button className="menuAddButton" onClick={() => handleSubmit()}>
                             <AddCircleIcon className="menuAddButtonIcon" />
                             Add Item
                         </Button>
