@@ -107,7 +107,7 @@ export default function AddMenuItemModal (props) {
             "Prices": pricesObj,
             "isFeatured": false,
             "isCompleted": false,
-            "accomodations": accomodations,
+            "Accomodations": accomodations,
             "dietaryInfo": dietaryInfo
         }
         // push to database
@@ -226,16 +226,16 @@ export default function AddMenuItemModal (props) {
                         <div className="priceSizeContainer">
                             <div className="sizeContainer">
                                 <p className="formLabelText">Name</p>
-                                {addOns.map((item,index) => {
+                                {addOns.map((item,index) => {  
                                     return(
                                         <FormControl margin='dense'>
                                             <OutlinedInput id={item.name + "nameinput"} name={item.name + "nameinput"} className="formTextInput"
                                                 required 
-                                                
+                                                value={item.name}
                                                 onChange={e => {
-                                                        const addontemp = [...addOns];
+                                                        let addontemp = [...addOns];
                                                         addontemp[index].name = e.target.value;
-                                                        setAddOns(addOns);
+                                                        setAddOns(addontemp);
                                                     }} 
                                                 size="small"
                                             />
@@ -252,11 +252,12 @@ export default function AddMenuItemModal (props) {
                                             <OutlinedInput id={item.name + "priceinput"} name={item.name + "priceinput"} className="formTextInput"
                                                 required 
                                                 type="number"
+                                                value={item.price}
                                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                                                 onChange={e => {
                                                         const addontemp = [...addOns];
                                                         addontemp[index].price = e.target.value;
-                                                        setAddOns(addOns);
+                                                        setAddOns(addontemp);
                                                     }} 
                                                 size="small"
                                             />
@@ -292,7 +293,6 @@ export default function AddMenuItemModal (props) {
                                     Add
                                 </Button>
                             </div>
-                            
                         </div>
                         
                         {/* Item Dietary Information */}

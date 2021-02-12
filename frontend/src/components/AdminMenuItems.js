@@ -22,7 +22,7 @@ import EditMenuItemModal from './EditMenuItemModal.js';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
-function createData(itemName, imgSource, categoryName, options, baseprice, description, id, featured) {
+function createData(itemName, imgSource, categoryName, options, baseprice, description, id, featured, dietaryInfo) {
   return {
         "itemName": itemName, 
         "imgSource": imgSource,
@@ -32,6 +32,7 @@ function createData(itemName, imgSource, categoryName, options, baseprice, descr
         "description": description,
         "id": id,
         "isFeatured": featured,
+        "dietaryInfo": dietaryInfo
     };
 }
 
@@ -203,6 +204,7 @@ export default function AdminMenuItems (props) {
                         element.Description,
                         element._id,
                         element.isFeatured,
+                        element.dietaryInfo
                 ));
             });
             setItemList(rows);

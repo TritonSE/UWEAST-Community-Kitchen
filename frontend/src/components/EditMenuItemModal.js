@@ -10,9 +10,6 @@ export default function EditMenuItemModal (props) {
     // currently glitches with dietary information because the object doesn't exist in item.
     // Need to update the item being passed in from AdminMenuItems.js to include dietary info
     
-    // Also glitches with Add Ons. They create an input line but are not populated, and will cause
-    // errors becuase they are empty. Need to change how the values are represented in state
-    // and change the values represented by the text fields
     const showModal = props.showModal;
     const setShowModal = props.setCurrentEditItem;
     const setLoaded = props.setLoaded;
@@ -304,7 +301,6 @@ export default function EditMenuItemModal (props) {
                                     Add
                                 </Button>
                             </div>
-                            
                         </div>
                         
                         {/* Item Dietary Information */}
