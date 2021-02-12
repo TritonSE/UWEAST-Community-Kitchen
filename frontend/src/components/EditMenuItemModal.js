@@ -7,10 +7,15 @@ const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
 export default function EditMenuItemModal (props) {
+    // currently glitches with dietary information because the object doesn't exist in item.
+    // Need to update the item being passed in from AdminMenuItems.js to include dietary info
+    
+    // Also glitches with Add Ons. They create an input line but are not populated, and will cause
+    // errors becuase they are empty. Need to change how the values are represented in state
+    // and change the values represented by the text fields
     const showModal = props.showModal;
     const setShowModal = props.setCurrentEditItem;
     const setLoaded = props.setLoaded;
-    console.log(props.item);
     // form states
     const [itemName, setItemName] = useState(props.item.itemName);
     const [itemCategory, setItemCategory] = useState(props.item.categoryName)
@@ -30,7 +35,7 @@ export default function EditMenuItemModal (props) {
     */
     let tempaddon = [];
     props.item.options.forEach(item => {
-        tempaddon.push({"name": item.Description, "price": item.Price});
+        tempaddon.push({"name": item[1].Description, "price": item[1].Price});
     })
     const [addOns, setAddOns] = useState(tempaddon);
     
@@ -41,10 +46,7 @@ export default function EditMenuItemModal (props) {
     const [dairyFree, setDairyFree] = useState(props.item.dietaryInfo !== undefined ? !props.item.dietaryInfo.containsDairy : false);
 
     const [menuError, setMenuError] = useState(false);
-    // function validURL(str) {
-    //     var pattern = new RegExp('/^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/'); // fragment locator
-    //     return !!pattern.test(str);
-    // }
+
     const handleSubmit = async () => {
         // validate basic input
         if(itemName === "" || 
@@ -235,15 +237,16 @@ export default function EditMenuItemModal (props) {
                             <div className="sizeContainer">
                                 <p className="formLabelText">Name</p>
                                 {addOns.map((item,index) => {
+                                    
                                     return(
                                         <FormControl margin='dense'>
                                             <OutlinedInput id={item.name + "nameinput"} name={item.name + "nameinput"} className="formTextInput"
                                                 required 
-                                                placeholder={item.name}
+                                                value={item.name}
                                                 onChange={e => {
-                                                        const addontemp = [...addOns];
+                                                        let addontemp = [...addOns];
                                                         addontemp[index].name = e.target.value;
-                                                        setAddOns(addOns);
+                                                        setAddOns(addontemp);
                                                     }} 
                                                 size="small"
                                             />
@@ -260,12 +263,12 @@ export default function EditMenuItemModal (props) {
                                             <OutlinedInput id={item.name + "priceinput"} name={item.name + "priceinput"} className="formTextInput"
                                                 required 
                                                 type="number"
-                                                placeholder={item.price}
+                                                value={item.price}
                                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                                                 onChange={e => {
                                                         const addontemp = [...addOns];
                                                         addontemp[index].price = e.target.value;
-                                                        setAddOns(addOns);
+                                                        setAddOns(addontemp);
                                                     }} 
                                                 size="small"
                                             />
