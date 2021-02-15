@@ -1,10 +1,17 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment } from '@material-ui/core';
+import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment, FormHelperText } from '@material-ui/core';
 import '../css/AddMenuItemModal.css';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
+
+// renders a red asterix that indicates a required field
+function requiredAsterix(){
+    return (
+        <p className="requiredAsterix">*</p>
+    );
+}
 
 export default function EditMenuItemModal (props) {
     // currently glitches with dietary information because the object doesn't exist in item.
@@ -149,8 +156,8 @@ export default function EditMenuItemModal (props) {
                 <form autocomplete="off">
                     <div className="modalBody">
                         {/* Item Name */}
+                        <p className="formLabelText">Name {requiredAsterix()}</p>
                         <FormControl fullWidth error={menuError && itemName === ""} className="formItem" margin='dense'>
-                            <p className="formLabelText">Name</p>
                             <OutlinedInput name="name" id="name" className="formTextInput"
                                 required 
                                 value={itemName}
@@ -159,8 +166,8 @@ export default function EditMenuItemModal (props) {
                             />
                         </FormControl>
                         {/* Item Image URL */}
+                        <p className="formLabelText">Image Link {requiredAsterix()}</p>
                         <FormControl fullWidth error={menuError && itemImageURL === ""} className="formItem" margin='dense'>
-                            <p className="formLabelText">Image Link</p>
                             <OutlinedInput name="imageURL" id="imageURL" className="formTextInput"
                                 required 
                                 value={itemImageURL}
@@ -170,8 +177,8 @@ export default function EditMenuItemModal (props) {
                         </FormControl>
 
                         {/* Item Category */}
+                        <p className="formLabelText">Category Name {requiredAsterix()}</p>
                         <FormControl fullWidth error={menuError && itemCategory === ""} className="formItem" margin='dense' variant="outlined">
-                            <p className="formLabelText">Category Name</p>
                             <Select name="category" type="text" id="category" className="formSelectInput" required 
                                 placeholder=""
                                 value={itemCategory}
@@ -205,6 +212,7 @@ export default function EditMenuItemModal (props) {
                                         disabled
                                     />
                                 </FormControl>
+                                <FormHelperText>{requiredAsterix()} At least one required</FormHelperText>
                             </div>
                             
                             <div className="priceContainer">
@@ -230,13 +238,20 @@ export default function EditMenuItemModal (props) {
                             </div>
                         </div>
                         {/* Item Addons */}
+                        <p className="formLabelText" style={{"marginTop": "20px", "marginBottom": "-10px"}}>Accomodations</p>
                         <div className="priceSizeContainer">
                             <div className="sizeContainer">
-                                <p className="formLabelText">Name</p>
+                                <p className="formLabelText">Description</p>
                                 {addOns.map((item,index) => {
                                     
                                     return(
-                                        <FormControl margin='dense'>
+                                        <FormControl margin='dense'
+                                            error = 
+                                            {   menuError && 
+                                                ((item.name === "" && item.price !== "") || 
+                                                (item.name !== "" && item.price === ""))
+                                            }
+                                        >
                                             <OutlinedInput id={item.name + "nameinput"} name={item.name + "nameinput"} className="formTextInput"
                                                 required 
                                                 value={item.name}
@@ -256,12 +271,18 @@ export default function EditMenuItemModal (props) {
                                 <p className="formLabelText">Price</p>
                                 {addOns.map((item,index) => {
                                     return(
-                                        <FormControl margin='dense'>
+                                        <FormControl margin='dense'
+                                            error = 
+                                            {   menuError && 
+                                                ((item.name === "" && item.price !== "") || 
+                                                (item.name !== "" && item.price === ""))
+                                            }
+                                        >
                                             <OutlinedInput id={item.name + "priceinput"} name={item.name + "priceinput"} className="formTextInput"
                                                 required 
                                                 type="number"
                                                 value={item.price}
-                                                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                                startAdornment={<InputAdornment position="start">+$</InputAdornment>}
                                                 onChange={e => {
                                                         const addontemp = [...addOns];
                                                         addontemp[index].price = e.target.value;
@@ -363,8 +384,10 @@ export default function EditMenuItemModal (props) {
                         </FormControl>
                         
                         {/* Item Description */}
-                        <FormControl fullWidth className="formLongItem" margin='dense'>
-                            <p className="formLabelText">Description</p>
+                        <p className="formLabelText">Description {requiredAsterix()}</p>
+                        <FormControl fullWidth className="formLongItem" margin='dense'
+                            error={menuError && itemDescription === ""}
+                        >
                             <OutlinedInput name="description" id="description" className="formLongInput" 
                                 value={itemDescription}
                                 multiline={true}
@@ -381,7 +404,7 @@ export default function EditMenuItemModal (props) {
                         </Button>
                         <Button className="menuAddButton" onClick={() => handleSubmit()}>
                             <AddCircleIcon className="menuAddButtonIcon" />
-                            Add Item
+                            Save
                         </Button>
                     </div>
                 </form>

@@ -9,7 +9,6 @@
 }
 
 .modalContainer{
-    
     font-family: 'Roboto', sans-serif !important;
     display: flex;
     align-items: center;
@@ -24,7 +23,6 @@
     background-color: white;
     padding: 20px;
     overflow: scroll;
-
 }
 .formItem{
     font-size: 16px !important;
@@ -42,8 +40,10 @@
     height: 28px !important;
 }
 .formLabelText {
+    display: inline-block;
     font-weight: bold;
     margin: 0;
+
 }
 .priceSizeContainer{
     display: flex;
@@ -59,7 +59,7 @@
 }
 
 .modalFooter {
-    padding-top: 20px;
+    padding-top: 3px;
     height: 70px;
     display: flex;
     flex-direction: row-reverse;
@@ -93,4 +93,12 @@
     font-weight: bold !important;
     width: 150px;
     height: 40px !important;
+}
+.requiredAsterix {
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    color: red;
+    font-weight: bold;
+    margin: 0;
+    font-size: 16px;
 }
