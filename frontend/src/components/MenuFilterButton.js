@@ -1,15 +1,20 @@
-import React, { Component} from 'react';
+import React from 'react';
 import '../css/MenuFilterButton.css';
-const config = require('../config');
 
-const BACKEND_URL = config.backend.uri;
+const MenuFilterButton = ( {categoryName, changeVisibleCategories, toggledFilter, setToggledFilter} ) => {
 
-const MenuFilterButton = ( {categoryName, changeVisibleCategories} ) => {
+    function updateFilters() {
+      changeVisibleCategories(categoryName);
+      setToggledFilter(categoryName);
+    }
+
+    // logic to check whether or not the filter button should be highlighted
+    let filterMatch = (categoryName === toggledFilter) && (categoryName != "Whole Menu");
 
     return (
       <button 
-        className="menu-filter-button" 
-        onClick={() => changeVisibleCategories(categoryName)}>
+        className={`menu-filter-button ${filterMatch ? "toggled-filter": ""}`}
+        onClick={() => (updateFilters())}>
         {categoryName} 
       </button>
     )
