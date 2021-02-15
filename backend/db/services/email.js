@@ -4,7 +4,9 @@ const { Email } = require("../models/email");
 async function changePrimaryEmail(raw_email) {
   try {
     // find and replace the primary email
-    let email = await Email.findOneAndUpdate({}, raw_email, { new: true });
+    let email = await Email.findOneAndUpdate({ isPrimary: true }, raw_email, {
+      new: true,
+    });
     // if there are no emails in database insert one
     if (email === null) {
       email = new Email(raw_email);
