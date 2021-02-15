@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import '../css/Login.css';
 import { isAuthenticated, setJWT, setUser } from '../util/auth';
 import Navbar from '../components/NavBar';
+import { useEffect } from 'react';
 const config = require('../config');
 
 
@@ -54,6 +55,7 @@ export default function Login() {
   const classes = useStyles();
   const history = useHistory();
   const [state, setState] = React.useState({
+    isUserAuthenticated: false,
     email: '',
     password: '',
     snack: {
@@ -66,6 +68,12 @@ export default function Login() {
     },
     form_disabled: false
   });
+
+  useEffect(() => {
+    isAuthenticated().then(async result => {
+      setState({...state, isUserAuthenticated: result});
+    })
+  }, []);
 
   // Updates given state with given value 
   const handleChange = (prop) => (event) => {
@@ -144,7 +152,7 @@ export default function Login() {
   };
 
   //If user is already logged in, then redirect to Admin Page. Else display Login page. 
-  return isAuthenticated() ? <Redirect to="/admin"/> : ( 
+  return state.isUserAuthenticated ? <Redirect to="/admin"/> : ( 
       <div>
             <Navbar/>
             <div className="Main">

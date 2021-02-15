@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { 
   TextField, Button, Grid, 
   Snackbar, Typography 
 } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import { isAuthenticated, setJWT, setUser } from '../util/auth';
 import Navbar from '../components/NavBar';
@@ -54,6 +53,7 @@ export default function Register() {
   const classes = useStyles();
   const history = useHistory();
   const [state, setState] = React.useState({
+    isUserAuthenticated: false,
     email: '',
     password: '',
     passwordConfirmation: '',
@@ -70,6 +70,12 @@ export default function Register() {
     },
     form_disabled: false
   });
+
+  useEffect(() => {
+    isAuthenticated().then(async result => {
+      setState({...state, isUserAuthenticated: result});
+    })
+  }, []);
 
   // Updates given state with given value 
   const handleChange = (prop) => (event) => {
@@ -167,7 +173,7 @@ export default function Register() {
   };
 
   //If user is already logged in, then redirect to Admin Page. Else display Register page. 
-  return isAuthenticated() ? <Redirect to="/admin"/> : ( 
+  return state.isUserAuthenticated ? <Redirect to="/admin"/> : ( 
       <div>
           <Navbar/>
            <Grid

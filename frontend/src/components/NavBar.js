@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useHistory } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -13,6 +13,10 @@ export default function NavBar (props) {
     {/* history hook to redirect on logout */}
     const history = useHistory();
 
+    const [state, setState] = React.useState({
+        isUserAuthenticated: false
+      });
+
     {/* stores class names to toggle whether content is shown */}
     var adminContentClass;
     var loginButtonClass;
@@ -24,8 +28,15 @@ export default function NavBar (props) {
         history.go(0);
     }
 
+    useEffect(() => {
+        isAuthenticated().then(async result => {
+        //   alert(result);
+          setState({...state, isUserAuthenticated: result});
+        })
+      }, []);
+
     {/* Hides admin content (admin page + logout) or login button depending on whether user is logged in */}
-    if(isAuthenticated()) {
+    if(state.isUserAuthenticated) {
         adminContentClass = "nav-link";
         loginButtonClass = "nav-link d-none";
     } else {

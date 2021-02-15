@@ -22,17 +22,17 @@ router.post(
             //Could not verify --> Error
             if(err){
                 res.status(401).send(err.message | "Unverified");
-                console.log("Legit")
+                console.log("Fraud JWT Token")
               //Verified --> Success
             } else {
                 res.status(200).send("Verified");
-                console.log("Fraud")
+                console.log("Valid JWT Token")
             }
           });
         //Catch any validation/other errors here 
       } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server error");
+        res.status(500).send("Unable to verify JWT Token (Error)");
       }
     }
   );
