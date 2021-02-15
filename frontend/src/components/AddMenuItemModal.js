@@ -38,7 +38,7 @@ export default function AddMenuItemModal (props) {
     const [vegan, setVegan] = useState(false);
     const [vegetarian, setVegetarian] = useState(false);
     const [glutenFree, setGlutenFree] = useState(false);
-    const [dairyFree, setDairyFree] = useState(false);
+    const [containsDairy, setContainsDairy] = useState(false);
 
     const [menuError, setMenuError] = useState(false);
     // function validURL(str) {
@@ -104,7 +104,7 @@ export default function AddMenuItemModal (props) {
             "vegan": vegan,
             "vegetarian": vegetarian,
             "glutenFree": glutenFree,
-            "containsDairy": !dairyFree,
+            "containsDairy": containsDairy,
         };
         const itemObject = {
             "Name": itemName,
@@ -362,15 +362,15 @@ export default function AddMenuItemModal (props) {
                                 <FormControlLabel
                                     control={
                                         <Checkbox 
-                                            checked={dairyFree} 
+                                            checked={containsDairy} 
                                             style ={{
                                                 color: "#747474",
                                             }}
-                                            onChange={(e) => setDairyFree(e.target.checked)} 
-                                            name="dairyFree" 
+                                            onChange={(e) => setContainsDairy(e.target.checked)} 
+                                            name="containsDairy" 
                                         />
                                     }
-                                    label="Dairy Free"
+                                    label="Contains Dairy"
                                 />
                             </FormGroup>
                         </FormControl>

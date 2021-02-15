@@ -47,7 +47,7 @@ export default function EditMenuItemModal (props) {
     const [vegan, setVegan] = useState(props.item.dietaryInfo !== undefined ? props.item.dietaryInfo.vegan : false);
     const [vegetarian, setVegetarian] = useState(props.item.dietaryInfo !== undefined ? props.item.dietaryInfo.vegetarian : false);
     const [glutenFree, setGlutenFree] = useState(props.item.dietaryInfo !== undefined ? props.item.dietaryInfo.glutenFree : false);
-    const [dairyFree, setDairyFree] = useState(props.item.dietaryInfo !== undefined ? !props.item.dietaryInfo.containsDairy : false);
+    const [containsDairy, setContainsDairy] = useState(props.item.dietaryInfo !== undefined ? props.item.dietaryInfo.containsDairy : false);
 
     const [menuError, setMenuError] = useState(false);
 
@@ -110,7 +110,7 @@ export default function EditMenuItemModal (props) {
             "vegan": vegan,
             "vegetarian": vegetarian,
             "glutenFree": glutenFree,
-            "containsDairy": !dairyFree,
+            "containsDairy": containsDairy,
         };
         const itemObject = {
             "_id": props.item.id,
@@ -370,15 +370,15 @@ export default function EditMenuItemModal (props) {
                                 <FormControlLabel
                                     control={
                                         <Checkbox 
-                                            checked={dairyFree} 
+                                            checked={containsDairy} 
                                             style ={{
                                                 color: "#747474",
                                             }}
-                                            onChange={(e) => setDairyFree(e.target.checked)} 
-                                            name="dairyFree" 
+                                            onChange={(e) => setContainsDairy(e.target.checked)} 
+                                            name="containsDairy" 
                                         />
                                     }
-                                    label="Dairy Free"
+                                    label="Contains Dairy"
                                 />
                             </FormGroup>
                         </FormControl>
