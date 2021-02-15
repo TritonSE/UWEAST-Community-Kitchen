@@ -199,7 +199,7 @@ export default function AdminMenuItems (props) {
                         element.Name,
                         element.pictureURL, 
                         element.Category, 
-                        Object.entries(element.Accomodations),
+                        Object.entries(element.Accommodations),
                         Object.entries(element.Prices), 
                         element.Description,
                         element._id,

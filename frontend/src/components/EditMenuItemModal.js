@@ -151,7 +151,7 @@ export default function EditMenuItemModal (props) {
             "Prices": pricesObj,
             "isFeatured": false,
             "isCompleted": false,
-            "Accomodations": accommodations,
+            "Accommodations": accommodations,
             "dietaryInfo": dietaryInfo
         }
         // push to database
