@@ -25,12 +25,21 @@ const useStyles = makeStyles((theme) => ({
       width: '95%'
     },
     //Input Field - Label Layout 
-    '& .MuiFormLabel-root': {
-        color: 'black',
-      },
-      //Input Field - Border Layout 
-    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-        border: '1px solid black'
+    // '& .MuiFormLabel-root': {
+    //     color: 'black',
+    //   },
+    //   //Input Field - Border Layout 
+    // '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+    //     border: '1px solid black'
+    // },
+    // "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+    //   borderColor: "red"
+    // },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "black"
+    },
+    "& .MuiInputLabel-outlined.Mui-focused": {
+      color: "black"
     },
     '& .MuiTypography-root': {
       margin: theme.spacing(1),
@@ -64,6 +73,12 @@ export default function Register() {
       message: '',
       open: false
     },
+    errors: {
+      email: false,
+      password: false,
+      passwordConfirmation: false,
+      secret: false
+    },
     form_disabled: false
   });
 
@@ -85,20 +100,49 @@ export default function Register() {
       secret: state.secret
     };
 
+    let email = false;
+    let password = false; 
+    let passwordConfirmation = false;
+    let secret = false; 
+
+    
+
     //Check if any field is empty
-    if (state.email === '' || state.password === '' || state.secret === ''){
-        setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
+    if (state.email === ''){
+        email = true;
+    }
+    if (state.password === ''){
+        password = true;
+    }
+    if (state.passwordConfirmation === ''){
+      passwordConfirmation = true;
+    }
+    if (state.secret === ''){
+      secret = true;
+    }
+    if(email + password + passwordConfirmation + secret > 0){
+        setState({...state, errors: {email: email, password: password, passwordConfirmation: passwordConfirmation, secret: secret}, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
         return;
     }
+    
+
+    // if (state.email === '' || state.password === '' || state.secret === ''){
+    //   setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
+    //   return;
+    // }
+    // if (state.email === '' || state.password === '' || state.secret === ''){
+    //   setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
+    //   return;
+    // }
     //Check Password Length
     if (submission.password.length < 6) {
-      setState({...state, form_disabled: false, snack: {message: 'Password must be at least 6 characters long.', open: true}});
+      setState({...state, errors: {email: false, password: true, passwordConfirmation: false, secret: false}, form_disabled: false,  snack: {message: 'Password must be at least 6 characters long.', open: true}});
       return;
     }
 
     //Check Passwords Match
     if (state.password !== state.passwordConfirmation) {
-      setState({...state, form_disabled: false, snack: {message: 'Passwords Do Not Match.', open: true}});
+      setState({...state,errors: {email: false, password: true, passwordConfirmation: true, secret: false}, form_disabled: false, snack: {message: 'Passwords Do Not Match.', open: true}});
       return;
     }
 
@@ -119,21 +163,21 @@ export default function Register() {
       }
       //Invalid Credentials 
       else if (response.status === 401) {
-        setState({...state, form_disabled: false, snack: {message: 'Could not register account: Invalid Secret Key!', open: true}});
+        setState({...state, errors: {email: false, password: false, passwordConfirmation: false, secret: true}, form_disabled: false, snack: {message: 'Could not register account: Invalid Secret Key!', open: true}});
       }
        //Duplicate User 
       else if (response.status === 409) {
-        setState({...state, form_disabled: false, snack: {message: 'Could not register account: Email already in use!', open: true}});
+        setState({...state, form_disabled: false, errors: {email: true, password: false, passwordConfirmation: false, secret: false}, snack: {message: 'Could not register account: Email already in use!', open: true}});
       }
       //Any other server response
       else {
         const text = await response.text();
-        setState({...state, form_disabled: false, snack: {message: `Could not register account: ${text}`, open: true}});
+        setState({...state, errors: {email: false, password: false, passwordConfirmation: false, secret: false}, form_disabled: false, snack: {message: `Could not register account: ${text}`, open: true}});
       }
     } 
     //General Error
     catch (error) {
-      setState({...state, form_disabled: false, snack: {message: `An error occurred: ${error.message}`, open: true}});
+      setState({...state, errors: {email: false, password: false, passwordConfirmation: false, secret: false}, form_disabled: false, snack: {message: `An error occurred: ${error.message}`, open: true}});
     }
   };
 
@@ -163,17 +207,18 @@ export default function Register() {
                     </Typography>
                     <p className={classes.centered} style={{color: "#8d8d8d"}}> Fill out the fields below to create a new account </p>
                     <form className={classes.form} onSubmit={handleSubmit}>
-                    <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
-                    <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
-                    <TextField label='Confirm Password' variant='outlined' type='password' onChange={handleChange('passwordConfirmation')}/>
-                    <TextField label='Secret Key' variant='outlined' type='password' onChange={handleChange('secret')}/>
+                    <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}
+                     error={state.errors.email}
+                    />
+                    <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')} error={state.errors.password}/>
+                    <TextField label='Confirm Password' variant='outlined' type='password' onChange={handleChange('passwordConfirmation')} error={state.errors.passwordConfirmation}/>
+                    <TextField label='Secret Key' variant='outlined' type='password' onChange={handleChange('secret')} error={state.errors.secret}/>
                     <Link to="login"><Typography>Already have an account? Sign-In</Typography></Link>
                     <div className={classes.centered}>
                         <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Register</Button>
                     </div>
                     </form>
-                  </div>
-                    
+                  </div>         
                 </Grid>   
                 <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
             </Grid> 
