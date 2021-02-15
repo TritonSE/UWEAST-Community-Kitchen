@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+:root {
+    --yellow: #f9ce1d;
+    --black: black;
+    --lightgrey: #CCCCCC;
+    --darkgrey: #747474;
+    --white: #FFFFFF;
+    --offwhite: #F1f1f1;
+}
+
+.orders-table {
+    width: calc(100%);
+    margin-top: calc(-2vh);
+    display: flex;
+    justify-content: center;
+    margin-left: calc(-55px);
+    font-family: 'roboto', sans-serif;
+}
+
+.justify-table-center {
+    width: calc(92%);
+}
+
+/* Sets the background color for the table header column */
+.orders-page-container > div > div > div > div:nth-child(3) > table > thead > tr > th {
+    background-color: var(--yellow);
+    font-weight: bold;
+    font-family: 'roboto', sans-serif;
+}
+
+/* Styles the table and dropdown headers  */
+.orders-page-container > div > div > div > div:nth-child(3) > table > thead > tr > th > span > div > div.MUIDataTableHeadCell-data-54 {
+    font-weight: bold;
+    font-family: 'roboto', sans-serif;
+}
+
+/* Sets the background color for the rows in the dropdown row */
+.orders-page-container > div > div > div > div:nth-child(3) > table > tbody > tr > td > div > table > thead > tr > th {
+    background-color: var(--offwhite);   
+    border: none;
+    font-weight: bold;
+    font-family: 'roboto', sans-serif; 
+}
+
+/* Deals with the border in the dropdown rows */
+.orders-page-container > div > div > div > div:nth-child(3) > table > tbody > tr > td {
+    border: none;
+}
+
+.orders-page-container > div > div > div > div:nth-child(3) > table > tbody > tr > td > div {
+    overflow: hidden;
+}
+
+.orders-page-container > div > div > div > div:nth-child(3) > table > tbody > tr > td > div > table > tbody > tr {
+    border: none;
+}
+/* End of the border styling in the dropdown */
+
+/* Styles the body in the dropdown row */
+.orders-page-container > div > div > div > div:nth-child(3) > table > tbody > tr > td > div > table > tbody > tr > td {
+    background-color: var(--offwhite);   
+    font-family: 'roboto', sans-serif;
+    border: none;
+}
+
+/* The background color and styling for the filters */
+.orders-page-container > div > div > div > div:nth-child(2) {
+    background-color: var(--yellow);
+    margin-left: 0;
+    padding-left: calc(1vw);
+    width: 100%;
+    padding-bottom: calc(1vh);
+    margin-top: calc(-1vh);
+}
+
+/* This makes the loading spinner yellow */
+.spinner-orders-page {
+    width: calc(100%);
+    display: flex;
+    justify-content: center;
+    margin-top: calc(20%);
+}
+
+.orders-page-container > div > div {
+    color: var(--yellow);
+}
+
+/* Allows for the time information to be on seperate lines */
+td { 
+    white-space: pre; 
+}
+
+
+/**********************************************************/
+/* This is the CSS styling for the OrdersStatus component */
+/**********************************************************/
+
+/* Background for the select dropdown options */
+.orders-status option {
+    background-color: var(--offwhite);
+    font-family: 'roboto', sans-serif;
+    cursor: pointer;
+}
+
+/* Styling for 'pending' orders dropdown */
+.orders-status .dropdown-menu-pending {
+    border: none;
+    background-color: var(--yellow);
+    padding: calc(0.4vw);
+    border-radius: calc(1vh);
+    cursor: pointer;
+}
+
+/* Styling for 'completed' orders dropdown */
+.orders-status .dropdown-menu-completed {
+    border: none;
+    background-color: var(--offwhite);
+    padding: calc(0.4vw);
+    border-radius: calc(1vh);
+    cursor: pointer;
+}

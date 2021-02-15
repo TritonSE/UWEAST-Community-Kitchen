@@ -47,9 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     margin: theme.spacing(2),
-    textAlign: 'center',
-    fontWeight: 'bolder',
-    textTransform: 'uppercase'
+    textAlign: 'center'
   }
 }));
 
@@ -136,24 +134,36 @@ export default function Login() {
   return isAuthenticated() ? <Redirect to="/admin"/> : ( 
       <div>
             <Navbar/>
-            <div className="Main">
-              <div className="Border">
-                <Typography variant="h4" className={classes.title} style={{fontSize: "2.5rem"}} > Login </Typography>
-                <p className={classes.centered} style={{color: "#8d8d8d"}}> Sign-in into an existing account below </p>
-                <form className={classes.form} onSubmit={handleSubmit}>
-                      <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
-                      <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
-                      <Link to="register" className="Child"><Typography>Register Account</Typography></Link>
-                      <Link to="reset-password"><Typography>Reset Password</Typography></Link>
-                      <div className={classes.centered}>
-                          <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}
-                          style={{fontWeight: "bolder", borderRadius: "3px", fontSize: "16px"}}
-                          >Login</Button>
-                      </div>
-                  </form>
-                </div>
-              </div>
-              <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
+            <Grid
+                    container
+                    spacing={0}
+                    alignItems="center"
+                    justify="center"
+                    style={{position: "absolute", top:"20%"}}
+                    >
+                    <Grid container
+                    spacing={0}
+                    alignItems="center"
+                    justify="center"
+                    //item md={6} xs={12}
+                    >
+                        <Box border={8} borderColor="#F9CE1D" style={{padding: "2vw"}}>
+                        
+                            <Typography variant="h4" className={classes.title} > Login </Typography>
+                                <form className={classes.form} onSubmit={handleSubmit}>
+                                <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
+                                <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
+                                <Link to="register" className="Child"><Typography>Register Account</Typography></Link>
+                                <Link to="reset-password"><Typography>Reset Password</Typography></Link>
+                                <div className={classes.centered}>
+                                    <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Login</Button>
+                                </div>
+                            </form>
+
+                        </Box>
+                    </Grid> 
+                    <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
+                </Grid> 
       </div>
    
   )
