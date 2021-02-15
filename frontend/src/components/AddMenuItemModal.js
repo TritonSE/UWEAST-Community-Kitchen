@@ -6,6 +6,30 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
+/*
+    This file contains the modal for adding an item into the menu. It's split
+    into sections for each of the form items, including name, image url, category,
+    prices, accommodations, and description. It uses MaterialUI's form control
+    to create the form. 
+    The required fields are name, image url, category, description, and price.
+    Price is considered to be filled out if one of the prices is complete (so
+    one of the prices can be empty).
+    Also, a given accommodations is considered to be filled out if it has
+    0 or 2 fields completed. If 0, it is removed, if 1, it is considered incomplete.
+
+    Errors are thrown under the following cases:
+        1. one of the required fields is empty
+        2. one of the accommodations fields has one of the fields filled out
+        3. none of the prices are filled out
+    
+    A new accommodation field can be added if both fields of the previous one
+    has values, if not it will not be added.
+
+    Disclaimer: This file seems really long (it is), but it isn't very hard to
+    understand. A lot of the bulk comes from Material UI's form control handling
+    and general HTML property tags.
+*/
+
 // renders a red asterix that indicates a required field
 function requiredAsterix(){
     return (
@@ -94,10 +118,10 @@ export default function AddMenuItemModal (props) {
         if(familyItemPrice !== ""){
             pricesObj.Family = familyItemPrice;
         }
-        let accomodations = [];
+        let accommodations = [];
         addOns.forEach(addon => {
             if(addon.name !== "" && addon.price !== ""){
-                accomodations.push({"Description": addon.name, "Price": addon.price});
+                accommodations.push({"Description": addon.name, "Price": addon.price});
             }
         })
         const dietaryInfo = {
@@ -114,7 +138,7 @@ export default function AddMenuItemModal (props) {
             "Prices": pricesObj,
             "isFeatured": false,
             "isCompleted": false,
-            "Accomodations": accomodations,
+            "Accomodations": accommodations,
             "dietaryInfo": dietaryInfo
         }
         // push to database
@@ -231,7 +255,7 @@ export default function AddMenuItemModal (props) {
                             </div>
                         </div>
                         {/* Item Addons*/}
-                        <p className="formLabelText" style={{"marginTop": "20px", "marginBottom": "-10px"}}>Accomodations</p>
+                        <p className="formLabelText" style={{"marginTop": "20px", "marginBottom": "-10px"}}>Accommodations</p>
                         <div className="priceSizeContainer">
                             <div className="sizeContainer">
                                 <p className="formLabelText">Description</p>
@@ -311,7 +335,7 @@ export default function AddMenuItemModal (props) {
                                     }}
                                 >
                                     <AddCircleIcon className="menuAddButtonIcon" />
-                                    Add
+                                    Add Accommodation
                                 </Button>
                             </div>
                         </div>
