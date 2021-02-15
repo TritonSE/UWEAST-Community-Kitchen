@@ -60,6 +60,10 @@ export default function Login() {
       message: '',
       open: false
     },
+    errors: {
+      email: false,
+      password: false
+    },
     form_disabled: false
   });
 
@@ -81,13 +85,23 @@ export default function Login() {
     };
 
     //Check if either field is empty
-    if (state.email === '' || state.password === ''){
-        setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
+    let email = false;
+    let password = false; 
+
+    if(state.email === ''){
+        email = true;
+    }
+    if(state.password === ''){
+        password = true;
+    }
+    if(email + password > 0){
+        setState({...state, errors: {email: email, password: password}, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
         return;
     }
+   
     //Check Password Length
     if (submission.password.length < 6) {
-      setState({...state, form_disabled: false, snack: {message: 'Password must be at least 6 characters long.', open: true}});
+      setState({...state, errors: {email: false, password: true}, form_disabled: false, snack: {message: 'Password must be at least 6 characters long.', open: true}});
       return;
     }
     try {
@@ -107,17 +121,17 @@ export default function Login() {
       }
       //Invalid Credentials
       else if (response.status === 401) {
-        setState({...state, form_disabled: false, snack: {message: 'Email or password not recognized.', open: true}});
+        setState({...state, errors: {email: true, password: true}, form_disabled: false, snack: {message: 'Invalid Login: Email or password not recognized.', open: true}});
       }
       //Any other server response
       else {
         const text = await response.text();
-        setState({...state, form_disabled: false, snack: {message: `Could not log in: ${text}`, open: true}});
+        setState({...state, form_disabled: false, errors: {email: false, password: false}, snack: {message: `Could not log in: ${text}`, open: true}});
       }
     } 
     //General Error
     catch (error) {
-      setState({...state, form_disabled: false, snack: {message: `An error occurred: ${error.message}`, open: true}});
+      setState({...state, form_disabled: false, errors: {email: false, password: false}, snack: {message: `An error occurred: ${error.message}`, open: true}});
     }
   };
 
@@ -138,8 +152,8 @@ export default function Login() {
                 <Typography variant="h4" className={classes.title} style={{fontSize: "2.5rem"}} > Login </Typography>
                 <p className={classes.centered} style={{color: "#8d8d8d"}}> Sign-in into an existing account below </p>
                 <form className={classes.form} onSubmit={handleSubmit}>
-                      <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
-                      <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
+                      <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')} error={state.errors.email}/>
+                      <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')} error={state.errors.password}/>
                       <Link to="register" className="Child"><Typography>Register Account</Typography></Link>
                       <Link to="reset-password"><Typography>Reset Password</Typography></Link>
                       <div className={classes.centered}>
