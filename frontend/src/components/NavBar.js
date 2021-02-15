@@ -91,6 +91,13 @@ export default function NavBar (props) {
                         </span>
                     </Nav>
                 </Navbar.Collapse>
+
+                {/* The shopping cart will only render for smaller desktop screens/tablets */}
+                <div className="cart-icon-smaller-desktop">
+                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
+                        onClick={() => console.log('clicked')} />
+
+                </div>
             </Navbar>
         </html>
     )

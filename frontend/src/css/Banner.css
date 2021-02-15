@@ -3,7 +3,7 @@
   display: grid;
   justify-content: center;
   background-color: white;
-  margin-top: calc(1.4vh);
+  margin-top: calc(1.3vh);
   width: 100%;
   color: black; 
   height: 28px;
@@ -18,7 +18,7 @@
   .banner 
   {
     position: fixed;
-    top: calc(65px);
+    top: calc(63px);
   }
 }
 
