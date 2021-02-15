@@ -24,13 +24,11 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       width: '95%'
     },
-    //Input Field - Label Layout 
-    '& .MuiFormLabel-root': {
-        color: 'black',
-      },
-      //Input Field - Border Layout 
-    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-        border: '1px solid black'
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "black"
+    },
+    "& .MuiInputLabel-outlined.Mui-focused": {
+      color: "black"
     },
     '& .MuiTypography-root': {
       margin: theme.spacing(1),

@@ -24,17 +24,6 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       width: '95%'
     },
-    //Input Field - Label Layout 
-    // '& .MuiFormLabel-root': {
-    //     color: 'black',
-    //   },
-    //   //Input Field - Border Layout 
-    // '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-    //     border: '1px solid black'
-    // },
-    // "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-    //   borderColor: "red"
-    // },
     "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
       borderColor: "black"
     },
@@ -105,8 +94,6 @@ export default function Register() {
     let passwordConfirmation = false;
     let secret = false; 
 
-    
-
     //Check if any field is empty
     if (state.email === ''){
         email = true;
@@ -124,16 +111,6 @@ export default function Register() {
         setState({...state, errors: {email: email, password: password, passwordConfirmation: passwordConfirmation, secret: secret}, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
         return;
     }
-    
-
-    // if (state.email === '' || state.password === '' || state.secret === ''){
-    //   setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
-    //   return;
-    // }
-    // if (state.email === '' || state.password === '' || state.secret === ''){
-    //   setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
-    //   return;
-    // }
     //Check Password Length
     if (submission.password.length < 6) {
       setState({...state, errors: {email: false, password: true, passwordConfirmation: false, secret: false}, form_disabled: false,  snack: {message: 'Password must be at least 6 characters long.', open: true}});
@@ -207,9 +184,7 @@ export default function Register() {
                     </Typography>
                     <p className={classes.centered} style={{color: "#8d8d8d"}}> Fill out the fields below to create a new account </p>
                     <form className={classes.form} onSubmit={handleSubmit}>
-                    <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}
-                     error={state.errors.email}
-                    />
+                    <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')} error={state.errors.email}/>
                     <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')} error={state.errors.password}/>
                     <TextField label='Confirm Password' variant='outlined' type='password' onChange={handleChange('passwordConfirmation')} error={state.errors.passwordConfirmation}/>
                     <TextField label='Secret Key' variant='outlined' type='password' onChange={handleChange('secret')} error={state.errors.secret}/>
