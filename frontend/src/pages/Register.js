@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import { isAuthenticated, setJWT, setUser } from '../util/auth';
 import Navbar from '../components/NavBar';
+import "../css/Register.css";
 const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
@@ -45,7 +46,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     margin: theme.spacing(2),
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: 'bolder',
+    textTransform: 'uppercase'
   }
 }));
 
@@ -151,14 +154,14 @@ export default function Register() {
                 spacing={0}
                 alignItems="center"
                 justify="center"
-                style={{position: "absolute", top:"15%"}}
+                style={{marginTop: "2rem"}}
                 >
                 <Grid item md={6} xs={12}>
-                <Box border={8} borderColor="#F9CE1D" style={{padding: "2vw"}}>
-                 
+                <div className="Border">
                     <Typography variant="h4" className={classes.title}>
                     Register New Account
                     </Typography>
+                    <p className={classes.centered} style={{color: "#8d8d8d"}}> Fill out the fields below to create a new account </p>
                     <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
                     <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
@@ -169,7 +172,8 @@ export default function Register() {
                         <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Register</Button>
                     </div>
                     </form>
-                    </Box>
+                  </div>
+                    
                 </Grid>   
                 <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
             </Grid> 

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { 
-  TextField, Button, Grid, 
+  TextField, Button,  
   Snackbar, Typography 
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
 import '../css/Login.css';
 import { isAuthenticated, setJWT, setUser } from '../util/auth';
 import Navbar from '../components/NavBar';
@@ -147,7 +146,7 @@ export default function Login() {
                       <Link to="reset-password"><Typography>Reset Password</Typography></Link>
                       <div className={classes.centered}>
                           <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}
-                          style={{fontWeight: "bolder", borderRadius: "3px", fontSize: "16px"}}
+                          // style={{fontWeight: "bolder", borderRadius: "3px", fontSize: "16px"}}
                           >Login</Button>
                       </div>
                   </form>
