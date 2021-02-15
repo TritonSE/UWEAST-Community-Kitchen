@@ -8,6 +8,30 @@ const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
 
+const obj = {
+    Customer: {
+        Name: 'lithuania',
+        Email: 'lithuania@ucsd.edu',
+        Phone: '8758883333'
+    },
+    Pickup: new Date(),
+    Timestamps: true,
+    PayPal: {
+        Amount: '10.00',
+        transactionID: '123456789'
+    },
+    isCompleted: false,
+    Order: [
+        {
+            item: 'clean',
+            quantity: 4,
+            size: 'individual',
+            accommodations: 'No cheese',
+            specialInstructions: 'No cheese'
+        },
+    ]
+}
+
 export default class Orders extends React.Component {
     constructor(props) {
         super(props);
@@ -76,6 +100,17 @@ export default class Orders extends React.Component {
      * Get all the orders from the database
      */
     componentDidMount() {
+        // fetch(`${BACKEND_URL}order/insert`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(obj)
+        // }).then(res => res.json())
+        // .then(data => {
+        //     console.log(data);
+        // });
+
         fetch(`${BACKEND_URL}order`, {
             method: 'POST',
             headers: {

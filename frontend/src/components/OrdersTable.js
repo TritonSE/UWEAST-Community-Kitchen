@@ -18,8 +18,8 @@ import {
 } from "@material-ui/core/styles";
 
 //Converts the data to an object list
-function createData(name, description, size, quantity) {
-  return { name, description, size, quantity };
+function createData(name, accommodations, specialInstructions, size, quantity) {
+  return { name, accommodations, specialInstructions, size, quantity };
 }
 
 /**
@@ -32,10 +32,10 @@ function createData(name, description, size, quantity) {
 const renderRow = (rowData, rowMeta) => {
     const rows = []
     const length = rowData[5].length;
-
     //Format the row information
     for(let i = 0; i < length; i++) {
-      rows.push(createData(rowData[5][i].item, rowData[5][i].extra, rowData[5][i].size, rowData[5][i].quantity));
+      console.log(rowData[5][i]);
+      rows.push(createData(rowData[5][i].item, rowData[5][i].accommodations, rowData[5][i].specialInstructions, rowData[5][i].size, rowData[5][i].quantity));
     }
 
     return (
@@ -48,9 +48,10 @@ const renderRow = (rowData, rowMeta) => {
                   <TableHead>
                     <TableRow style={{border: 'none'}}>
                       <TableCell></TableCell>
-                      <TableCell style={{width: 'calc(23.5%)'}}>Items</TableCell>
-                      <TableCell style={{width: 'calc(31%)'}}>Special Instructions</TableCell>
-                      <TableCell style={{width: 'calc(28.6%)'}}>Size</TableCell>
+                      <TableCell style={{width: 'calc(14.3%)'}}>Items</TableCell>
+                      <TableCell style={{width: 'calc(24.5%)'}}>Accommodations</TableCell>
+                      <TableCell style={{width: 'calc(27.6%)'}}>Special Instructions</TableCell>
+                      <TableCell style={{width: 'calc(17.8%)'}}>Size</TableCell>
                       <TableCell>Quantity</TableCell>
                     </TableRow>
                   </TableHead>
@@ -60,7 +61,8 @@ const renderRow = (rowData, rowMeta) => {
                       <TableRow key={row.name}>
                         <TableCell style={{width: 'calc(48px)'}}></TableCell>
                         <TableCell>{row.name}</TableCell>
-                        <TableCell>{row.description}</TableCell>
+                        <TableCell>{row.accommodations}</TableCell>
+                        <TableCell>{row.specialInstructions}</TableCell>
                         <TableCell>{row.size}</TableCell>
                         <TableCell>{row.quantity}</TableCell>
                       </TableRow>

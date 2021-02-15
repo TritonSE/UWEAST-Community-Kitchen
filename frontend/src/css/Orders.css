@@ -23,10 +23,12 @@
 }
 
 /* Sets the background color for the table header column */
-.orders-page-container > div > div > div > div:nth-child(3) > table > thead > tr > th {
+.orders-page-container > div > div > div > div:nth-child(3) > table > thead > tr > th,
+.orders-page-container > div > div > div > div:nth-child(3) > table > thead > tr > th > span > button > span.MuiButton-label > div > div:nth-child(1) {
     background-color: var(--yellow);
     font-weight: bold;
     font-family: 'roboto', sans-serif;
+    font-size: calc(16px);
 }
 
 /* Styles the table and dropdown headers  */
