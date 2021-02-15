@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment, FormHelperText } from '@material-ui/core';
+import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment, FormHelperText, Snackbar } from '@material-ui/core';
 import '../css/AddMenuItemModal.css';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 const config = require('../config');
@@ -40,7 +40,6 @@ function requiredAsterix(){
         <p className="requiredAsterix">*</p>
     );
 }
-
 export default function EditMenuItemModal (props) {
 
     const showModal = props.showModal;
@@ -76,6 +75,7 @@ export default function EditMenuItemModal (props) {
     const [containsDairy, setContainsDairy] = useState(props.item.dietaryInfo !== undefined ? props.item.dietaryInfo.containsDairy : false);
 
     const [menuError, setMenuError] = useState(false);
+    const [errorSnackbar, setErrorSnackbar] = useState(false);
 
     const handleSubmit = async () => {
         // validate basic input
@@ -91,6 +91,7 @@ export default function EditMenuItemModal (props) {
             // }
             console.log("fail basic");
             setMenuError(true);
+            setErrorSnackbar(true);
             return;
         }
         // validate addons
@@ -101,6 +102,7 @@ export default function EditMenuItemModal (props) {
                 console.log("fail add on");
                 failAddOn = true;
                 setMenuError(true);
+                setErrorSnackbar(true);
                 return;
             }
             else if(item.name !== "" && parseFloat(item.price) < 0){
@@ -108,11 +110,13 @@ export default function EditMenuItemModal (props) {
                 console.log("add on price was negative");
                 failAddOn = true;
                 setMenuError(true);
+                setErrorSnackbar(true);
                 return;
             }
         })
         if(failAddOn){
             setMenuError(true);
+            setErrorSnackbar(true);
             return;
         }
         // send to db
@@ -171,270 +175,282 @@ export default function EditMenuItemModal (props) {
         
     }
     return (
+        <>
+            {/* Failure Snackbar */}
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                open={errorSnackbar}
+                autoHideDuration={5000}
+                onClose={() => setErrorSnackbar(false)}
+                message={<span id="message-id">There was an error in the form</span>}
+            />
+            <Modal open={showModal} onClose={() => setShowModal("")} 
+                className="modalContainer"
+            >
+                <div className="modalBackground">
+                    {/* <div className="modalHeader">
+                        <Button onClick={() =>setShowModal(false)}>X</Button>
+                    </div> */}
+                    <form autocomplete="off">
+                        <div className="modalBody">
+                            {/* Item Name */}
+                            <p className="formLabelText">Name {requiredAsterix()}</p>
+                            <FormControl fullWidth error={menuError && itemName === ""} className="formItem" margin='dense'>
+                                <OutlinedInput name="name" id="name" className="formTextInput"
+                                    required 
+                                    value={itemName}
+                                    onChange={(e) => setItemName(e.target.value)}
+                                    size="small"
+                                />
+                            </FormControl>
+                            {/* Item Image URL */}
+                            <p className="formLabelText">Image Link {requiredAsterix()}</p>
+                            <FormControl fullWidth error={menuError && itemImageURL === ""} className="formItem" margin='dense'>
+                                <OutlinedInput name="imageURL" id="imageURL" className="formTextInput"
+                                    required 
+                                    value={itemImageURL}
+                                    onChange={(e) => setItemImageURL(e.target.value)}
+                                    size="small"
+                                />
+                            </FormControl>
 
-        <Modal open={showModal} onClose={() => setShowModal("")} 
-            className="modalContainer"
-        >
-            <div className="modalBackground">
-                {/* <div className="modalHeader">
-                    <Button onClick={() =>setShowModal(false)}>X</Button>
-                </div> */}
-                <form autocomplete="off">
-                    <div className="modalBody">
-                        {/* Item Name */}
-                        <p className="formLabelText">Name {requiredAsterix()}</p>
-                        <FormControl fullWidth error={menuError && itemName === ""} className="formItem" margin='dense'>
-                            <OutlinedInput name="name" id="name" className="formTextInput"
-                                required 
-                                value={itemName}
-                                onChange={(e) => setItemName(e.target.value)}
-                                size="small"
-                            />
-                        </FormControl>
-                        {/* Item Image URL */}
-                        <p className="formLabelText">Image Link {requiredAsterix()}</p>
-                        <FormControl fullWidth error={menuError && itemImageURL === ""} className="formItem" margin='dense'>
-                            <OutlinedInput name="imageURL" id="imageURL" className="formTextInput"
-                                required 
-                                value={itemImageURL}
-                                onChange={(e) => setItemImageURL(e.target.value)}
-                                size="small"
-                            />
-                        </FormControl>
-
-                        {/* Item Category */}
-                        <p className="formLabelText">Category Name {requiredAsterix()}</p>
-                        <FormControl fullWidth error={menuError && itemCategory === ""} className="formItem" margin='dense' variant="outlined">
-                            <Select name="category" type="text" id="category" className="formSelectInput" required 
-                                placeholder=""
-                                value={itemCategory}
-                                onChange={(e) => setItemCategory(e.target.value)}
-                                size="small"
-                                displayEmpty
-                            >
-                                <MenuItem value="Appetizers">Appetizers</MenuItem>
-                                <MenuItem value="Main Dishes">Main Dishes</MenuItem>
-                                <MenuItem value="Sides">Sides</MenuItem>
-                                <MenuItem value="Drinks">Drinks</MenuItem>
-                            </Select>
-                        </FormControl>
-                        {/* Item Sizing and Price */}
-                        <div className="priceSizeContainer">
-                            <div className="sizeContainer">
-                                <p className="formLabelText">Size</p>
-                                <FormControl margin='dense'>
-                                    <OutlinedInput name="name" id="individuallabel" className="formTextInput"
-                                        required 
-                                        value={"Individual"}
-                                        size="small"
-                                        disabled
-                                    />
-                                </FormControl>
-                                <FormControl margin='dense'>
-                                    <OutlinedInput name="name" id="familylabel" className="formTextInput"
-                                        required 
-                                        value={"Family"}
-                                        size="small"
-                                        disabled
-                                    />
-                                </FormControl>
-                                <FormHelperText>{requiredAsterix()} At least one required</FormHelperText>
+                            {/* Item Category */}
+                            <p className="formLabelText">Category Name {requiredAsterix()}</p>
+                            <FormControl fullWidth error={menuError && itemCategory === ""} className="formItem" margin='dense' variant="outlined">
+                                <Select name="category" type="text" id="category" className="formSelectInput" required 
+                                    placeholder=""
+                                    value={itemCategory}
+                                    onChange={(e) => setItemCategory(e.target.value)}
+                                    size="small"
+                                    displayEmpty
+                                >
+                                    <MenuItem value="Appetizers">Appetizers</MenuItem>
+                                    <MenuItem value="Main Dishes">Main Dishes</MenuItem>
+                                    <MenuItem value="Sides">Sides</MenuItem>
+                                    <MenuItem value="Drinks">Drinks</MenuItem>
+                                </Select>
+                            </FormControl>
+                            {/* Item Sizing and Price */}
+                            <div className="priceSizeContainer">
+                                <div className="sizeContainer">
+                                    <p className="formLabelText">Size</p>
+                                    <FormControl margin='dense'>
+                                        <OutlinedInput name="name" id="individuallabel" className="formTextInput"
+                                            required 
+                                            value={"Individual"}
+                                            size="small"
+                                            disabled
+                                        />
+                                    </FormControl>
+                                    <FormControl margin='dense'>
+                                        <OutlinedInput name="name" id="familylabel" className="formTextInput"
+                                            required 
+                                            value={"Family"}
+                                            size="small"
+                                            disabled
+                                        />
+                                    </FormControl>
+                                    <FormHelperText>{requiredAsterix()} At least one required</FormHelperText>
+                                </div>
+                                
+                                <div className="priceContainer">
+                                    <p className="formLabelText">Price</p>
+                                    <FormControl error={menuError && individualItemPrice === "" && familyItemPrice === ""} margin='dense' variant="outlined">
+                                        <OutlinedInput name="name" id="individualprice" className="formTextInput"
+                                            type="number"
+                                            value={individualItemPrice}
+                                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                            onChange={(e) => {if(e.target.value >= 0) {setIndividualItemPrice(e.target.value)}}}
+                                            size="small"
+                                        /> 
+                                    </FormControl>
+                                    <FormControl error={menuError && individualItemPrice === "" && familyItemPrice === ""} margin='dense' variant="outlined">
+                                        <OutlinedInput name="name" id="familyprice" className="formTextInput"
+                                            type="number"
+                                            value={familyItemPrice}
+                                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                            onChange={(e) => {if(e.target.value >= 0) {setFamilyItemPrice(e.target.value)}}}
+                                            size="small"
+                                        /> 
+                                    </FormControl>
+                                </div>
                             </div>
-                            
-                            <div className="priceContainer">
-                                <p className="formLabelText">Price</p>
-                                <FormControl error={menuError && individualItemPrice === "" && familyItemPrice === ""} margin='dense' variant="outlined">
-                                    <OutlinedInput name="name" id="individualprice" className="formTextInput"
-                                        type="number"
-                                        value={individualItemPrice}
-                                        startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                                        onChange={(e) => {if(e.target.value >= 0) {setIndividualItemPrice(e.target.value)}}}
-                                        size="small"
-                                    /> 
-                                </FormControl>
-                                <FormControl error={menuError && individualItemPrice === "" && familyItemPrice === ""} margin='dense' variant="outlined">
-                                    <OutlinedInput name="name" id="familyprice" className="formTextInput"
-                                        type="number"
-                                        value={familyItemPrice}
-                                        startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                                        onChange={(e) => {if(e.target.value >= 0) {setFamilyItemPrice(e.target.value)}}}
-                                        size="small"
-                                    /> 
-                                </FormControl>
-                            </div>
-                        </div>
-                        {/* Item Addons */}
-                        <p className="formLabelText" style={{"marginTop": "20px", "marginBottom": "-10px"}}>Accommodations</p>
-                        <div className="priceSizeContainer">
-                            <div className="sizeContainer">
-                                <p className="formLabelText">Description</p>
-                                {addOns.map((item,index) => {
-                                    
-                                    return(
-                                        <FormControl margin='dense'
-                                            error = 
-                                            {   menuError && 
-                                                ((item.name === "" && item.price !== "") || 
-                                                (item.name !== "" && item.price === ""))
-                                            }
-                                        >
-                                            <OutlinedInput id={item.name + "nameinput"} name={item.name + "nameinput"} className="formTextInput"
-                                                required 
-                                                value={item.name}
-                                                onChange={e => {
-                                                        let addontemp = [...addOns];
-                                                        addontemp[index].name = e.target.value;
-                                                        setAddOns(addontemp);
-                                                    }} 
-                                                size="small"
-                                            />
-                                        </FormControl>
-                                    );
-                                })}
-                            </div>
-                            
-                            <div className="priceContainer">
-                                <p className="formLabelText">Price</p>
-                                {addOns.map((item,index) => {
-                                    return(
-                                        <FormControl margin='dense'
-                                            error = 
-                                            {   menuError && 
-                                                ((item.name === "" && item.price !== "") || 
-                                                (item.name !== "" && item.price === ""))
-                                            }
-                                        >
-                                            <OutlinedInput id={item.name + "priceinput"} name={item.name + "priceinput"} className="formTextInput"
-                                                required 
-                                                type="number"
-                                                value={item.price}
-                                                startAdornment={<InputAdornment position="start">+$</InputAdornment>}
-                                                onChange={e => {
-                                                        const addontemp = [...addOns];
-                                                        addontemp[index].price = e.target.value;
-                                                        setAddOns(addontemp);
-                                                    }} 
-                                                size="small"
-                                            />
-                                        </FormControl>
-                                    )
-                                })}
-                                <Button
-                                    style={{"marginTop": "10px", "width": "100%"}}
-                                    className="addAddOnButton"
-                                    onClick={() => {
-                                        const addontemp = [...addOns];
-                                        if(addontemp.length === 0){
-                                            // add an empty addon for editing if there are none
-                                            addontemp.push({name: "", price: ""});
-                                            setAddOns(addontemp);
-                                        }
-                                        else{
-                                            // you can only add a new add on if the past ones are valid
-                                            let valid = true;
-                                            addontemp.forEach(item => {
-                                                if(item.name === "" || item.price === ""){
-                                                    valid = false;
+                            {/* Item Addons */}
+                            <p className="formLabelText" style={{"marginTop": "20px", "marginBottom": "-10px"}}>Accommodations</p>
+                            <div className="priceSizeContainer">
+                                <div className="sizeContainer">
+                                    <p className="formLabelText">Description</p>
+                                    {addOns.map((item,index) => {
+                                        
+                                        return(
+                                            <FormControl margin='dense'
+                                                error = 
+                                                {   menuError && 
+                                                    ((item.name === "" && item.price !== "") || 
+                                                    (item.name !== "" && item.price === ""))
                                                 }
-                                            })
-                                            if(valid){
+                                            >
+                                                <OutlinedInput id={item.name + "nameinput"} name={item.name + "nameinput"} className="formTextInput"
+                                                    required 
+                                                    value={item.name}
+                                                    onChange={e => {
+                                                            let addontemp = [...addOns];
+                                                            addontemp[index].name = e.target.value;
+                                                            setAddOns(addontemp);
+                                                        }} 
+                                                    size="small"
+                                                />
+                                            </FormControl>
+                                        );
+                                    })}
+                                </div>
+                                
+                                <div className="priceContainer">
+                                    <p className="formLabelText">Price</p>
+                                    {addOns.map((item,index) => {
+                                        return(
+                                            <FormControl margin='dense'
+                                                error = 
+                                                {   menuError && 
+                                                    ((item.name === "" && item.price !== "") || 
+                                                    (item.name !== "" && item.price === ""))
+                                                }
+                                            >
+                                                <OutlinedInput id={item.name + "priceinput"} name={item.name + "priceinput"} className="formTextInput"
+                                                    required 
+                                                    type="number"
+                                                    value={item.price}
+                                                    startAdornment={<InputAdornment position="start">+$</InputAdornment>}
+                                                    onChange={e => {
+                                                            const addontemp = [...addOns];
+                                                            addontemp[index].price = e.target.value;
+                                                            setAddOns(addontemp);
+                                                        }} 
+                                                    size="small"
+                                                />
+                                            </FormControl>
+                                        )
+                                    })}
+                                    <Button
+                                        style={{"marginTop": "10px", "width": "100%"}}
+                                        className="addAddOnButton"
+                                        onClick={() => {
+                                            const addontemp = [...addOns];
+                                            if(addontemp.length === 0){
+                                                // add an empty addon for editing if there are none
                                                 addontemp.push({name: "", price: ""});
                                                 setAddOns(addontemp);
                                             }
-                                        }
-                                    }}
-                                >
-                                    <AddCircleIcon className="menuAddButtonIcon" />
-                                    Add Accommodation
-                                </Button>
+                                            else{
+                                                // you can only add a new add on if the past ones are valid
+                                                let valid = true;
+                                                addontemp.forEach(item => {
+                                                    if(item.name === "" || item.price === ""){
+                                                        valid = false;
+                                                    }
+                                                })
+                                                if(valid){
+                                                    addontemp.push({name: "", price: ""});
+                                                    setAddOns(addontemp);
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        <AddCircleIcon className="menuAddButtonIcon" />
+                                        Add Accommodation
+                                    </Button>
+                                </div>
                             </div>
+                            
+                            {/* Item Dietary Information */}
+                            <FormControl fullWidth className="formItem" margin='dense' variant="outlined">
+                                <p className="formLabelText">Dietary Info</p>
+                                <FormGroup row>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox 
+                                                checked={vegan} 
+                                                style ={{
+                                                    color: "#747474",
+                                                }}
+                                                onChange={(e) => setVegan(e.target.checked)} 
+                                                name="vegan" 
+                                            />
+                                        }
+                                        label="Vegan"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox 
+                                                checked={vegetarian} 
+                                                style ={{
+                                                    color: "#747474",
+                                                }}
+                                                onChange={(e) => setVegetarian(e.target.checked)} 
+                                                name="vegetarian" 
+                                            />
+                                        }
+                                        label="Vegetarian"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox 
+                                                checked={glutenFree} 
+                                                style ={{
+                                                    color: "#747474",
+                                                }}
+                                                onChange={(e) => setGlutenFree(e.target.checked)} 
+                                                name="glutenFree" 
+                                            />
+                                        }
+                                        label="Gluten Free"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox 
+                                                checked={containsDairy} 
+                                                style ={{
+                                                    color: "#747474",
+                                                }}
+                                                onChange={(e) => setContainsDairy(e.target.checked)} 
+                                                name="containsDairy" 
+                                            />
+                                        }
+                                        label="Contains Dairy"
+                                    />
+                                </FormGroup>
+                            </FormControl>
+                            
+                            {/* Item Description */}
+                            <p className="formLabelText">Description {requiredAsterix()}</p>
+                            <FormControl fullWidth className="formLongItem" margin='dense'
+                                error={menuError && itemDescription === ""}
+                            >
+                                <OutlinedInput name="description" id="description" className="formLongInput" 
+                                    value={itemDescription}
+                                    multiline={true}
+                                    rows={3}
+                                    required
+                                    onChange={(e) => setItemDescription(e.target.value)}
+                                    size="small"
+                                />
+                            </FormControl>
                         </div>
-                        
-                        {/* Item Dietary Information */}
-                        <FormControl fullWidth className="formItem" margin='dense' variant="outlined">
-                            <p className="formLabelText">Dietary Info</p>
-                            <FormGroup row>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox 
-                                            checked={vegan} 
-                                            style ={{
-                                                color: "#747474",
-                                            }}
-                                            onChange={(e) => setVegan(e.target.checked)} 
-                                            name="vegan" 
-                                        />
-                                    }
-                                    label="Vegan"
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox 
-                                            checked={vegetarian} 
-                                            style ={{
-                                                color: "#747474",
-                                            }}
-                                            onChange={(e) => setVegetarian(e.target.checked)} 
-                                            name="vegetarian" 
-                                        />
-                                    }
-                                    label="Vegetarian"
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox 
-                                            checked={glutenFree} 
-                                            style ={{
-                                                color: "#747474",
-                                            }}
-                                            onChange={(e) => setGlutenFree(e.target.checked)} 
-                                            name="glutenFree" 
-                                        />
-                                    }
-                                    label="Gluten Free"
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox 
-                                            checked={containsDairy} 
-                                            style ={{
-                                                color: "#747474",
-                                            }}
-                                            onChange={(e) => setContainsDairy(e.target.checked)} 
-                                            name="containsDairy" 
-                                        />
-                                    }
-                                    label="Contains Dairy"
-                                />
-                            </FormGroup>
-                        </FormControl>
-                        
-                        {/* Item Description */}
-                        <p className="formLabelText">Description {requiredAsterix()}</p>
-                        <FormControl fullWidth className="formLongItem" margin='dense'
-                            error={menuError && itemDescription === ""}
-                        >
-                            <OutlinedInput name="description" id="description" className="formLongInput" 
-                                value={itemDescription}
-                                multiline={true}
-                                rows={3}
-                                required
-                                onChange={(e) => setItemDescription(e.target.value)}
-                                size="small"
-                            />
-                        </FormControl>
-                    </div>
-                    <div className="modalFooter">
-                        <Button className="cancelButton" onClick={() => setShowModal("")}>
-                            Close
-                        </Button>
-                        <Button className="menuAddButton" onClick={() => handleSubmit()}>
-                            <AddCircleIcon className="menuAddButtonIcon" />
-                            Save
-                        </Button>
-                    </div>
-                </form>
-            </div>
-        </Modal>
+                        <div className="modalFooter">
+                            <Button className="cancelButton" onClick={() => setShowModal("")}>
+                                Close
+                            </Button>
+                            <Button className="menuAddButton" onClick={() => handleSubmit()}>
+                                <AddCircleIcon className="menuAddButtonIcon" />
+                                Save
+                            </Button>
+                        </div>
+                    </form>
+                </div>
+            </Modal>
+        </>
     );
 }
