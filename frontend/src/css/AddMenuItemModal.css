@@ -52,12 +52,31 @@
     padding-top: 20px;
 }
 .priceContainer{
-    width: 40%;
+    width: 35%;
 }
 .sizeContainer{
-    width: 40%;
+    width: 35%;
 }
+.removeAddOnContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 40px;
+    margin: 0;
+    padding: 0;
+    padding-top: 20px;
+}
+.removeAddOnButton {
+    background-color: var(--white) !important;
+    border: 1px solid var(--white) !important;
+    color: var(--black) !important;
+    width: 40px !important;
+    height: 29px !important;
+    font-size: 12px !important;
+    margin: 0 !important;
+    padding: 0 !important;
 
+}
 .modalFooter {
     padding-top: 3px;
     height: 70px;
@@ -73,9 +92,10 @@
     border: 1px solid var(--black) !important;
     color: var(--white) !important;
     font-weight: bold !important;
-    width: 100px;
-    height: 40px !important;
+    width: 100%;
+    height: auto !important;
     font-size: 12px !important;
+    margin-top: -10px;
 }
 .menuAddButton {
     font-family: 'Roboto', sans-serif !important;

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment, FormHelperText, Snackbar } from '@material-ui/core';
+import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment, FormHelperText, Snackbar, IconButton } from '@material-ui/core';
 import '../css/AddMenuItemModal.css';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import ClearIcon from '@material-ui/icons/Clear';
+
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -334,37 +336,47 @@ export default function EditMenuItemModal (props) {
                                             </FormControl>
                                         )
                                     })}
+                                    
+                                </div>
+                                <div className="removeAddOnContainer">
+                                    {addOns.map((item,index) => {
+                                        return(
+                                            <FormControl margin='dense'>
+                                                <IconButton
+                                                    className="removeAddOnButton"
+                                                    onClick={() => {
+                                                        // remove item from addOns
+                                                        const addontemp = [...addOns];
+                                                        addontemp.splice(index, 1);
+                                                        setAddOns(addontemp);
+                                                    }}
+                                                >
+                                                    <ClearIcon/>
+                                                </IconButton> 
+                                            </FormControl>
+                                        )
+                                    })}
+                                   
+                                </div>
+                                
+                            </div>
+                            <div className="priceSizeContainer">
+                                <div className="sizeContainer">
                                     <Button
-                                        style={{"marginTop": "10px", "width": "100%"}}
                                         className="addAddOnButton"
                                         onClick={() => {
                                             const addontemp = [...addOns];
-                                            if(addontemp.length === 0){
-                                                // add an empty addon for editing if there are none
-                                                addontemp.push({name: "", price: ""});
-                                                setAddOns(addontemp);
-                                            }
-                                            else{
-                                                // you can only add a new add on if the past ones are valid
-                                                let valid = true;
-                                                addontemp.forEach(item => {
-                                                    if(item.name === "" || item.price === ""){
-                                                        valid = false;
-                                                    }
-                                                })
-                                                if(valid){
-                                                    addontemp.push({name: "", price: ""});
-                                                    setAddOns(addontemp);
-                                                }
-                                            }
+                                            addontemp.push({name: "", price: ""});
+                                            setAddOns(addontemp);
                                         }}
                                     >
                                         <AddCircleIcon className="menuAddButtonIcon" />
                                         Add Accommodation
                                     </Button>
                                 </div>
+                                <div className="priceContainer"> </div>
+                                <div className="removeAddOnContainer"></div>
                             </div>
-                            
                             {/* Item Dietary Information */}
                             <FormControl fullWidth className="formItem" margin='dense' variant="outlined">
                                 <p className="formLabelText">Dietary Info</p>
