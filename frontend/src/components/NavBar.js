@@ -1,4 +1,10 @@
 import React, {useEffect} from 'react';
+/**
+ * The NavBar component. Renders at the top of the website and is fixed to the top.
+ * Contains all the relevant tabs that route the user to the specified page.
+ * Cart Icon is used for the mobile/tablet rendering of the webpage. 
+ * 
+ */
 import { useHistory } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -62,6 +68,7 @@ export default function NavBar (props) {
                         height={window.innerWidth > 768 ? '90' : '80'} />
                 </Navbar.Brand>
 
+                {/* Text to complement the logo */}
                 <div className="brand-name">
                     <p>Community Kitchen</p>
                 </div>
@@ -88,19 +95,29 @@ export default function NavBar (props) {
                         {/* About Page */}
                         <Nav.Link className={"nav-link" + isPageActive("about")} href="/about">About</Nav.Link>
 
+                        {/* Admin Page */}
                         <span className="desktop-tabs">
                             <Nav.Link className={adminContentClass + isPageActive("admin")} href="/admin">Admin</Nav.Link>
                         </span>
 
+                        {/* Logout */}
                         <span className="desktop-tabs">
                             <Nav.Link className={adminContentClass} onClick={Logout}>Logout</Nav.Link>
                         </span>
 
+                        {/* Login */}
                         <span className="desktop-tabs">
                             <Nav.Link className={loginButtonClass + isPageActive("login")} href="/login">Login</Nav.Link> 
                         </span>
                     </Nav>
                 </Navbar.Collapse>
+
+                {/* The shopping cart will only render for smaller desktop screens/tablets */}
+                <div className="cart-icon-smaller-desktop">
+                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
+                        onClick={() => console.log('clicked')} />
+
+                </div>
             </Navbar>
         </html>
     )
