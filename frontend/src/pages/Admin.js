@@ -3,7 +3,7 @@ import Navbar from '../components/NavBar';
 import AdminMenuItems from "../components/AdminMenuItems";
 import Orders from "./Orders";
 import ChangeEmailScreen from "../components/ChangeEmailScreen";
-import { isAuthenticated } from '../util/auth';
+import { isAuthenticated } from '../util/Auth';
 import {Redirect} from 'react-router-dom';
 import '../css/Admin.css';
 
@@ -110,32 +110,4 @@ export default function Admin() {
               </div>
             );
         }
-    //   return !state.isUserAuthenticated ? 
-    // //   <Redirect to="/login"/> 
-    //   <div>
-    //        <Navbar currentPage="admin"/>
-    //        <p> Invalid </p>
-    //   </div>
-    //   : (
-    //       <div>
-    //         {/* The navbar on top of the page */}
-    //           <Navbar currentPage="admin"/>
-
-    //           {/* This is the contents on the admin page */}
-    //           <div class="admin-section">
-    //                 {adminNavBar()}
-
-    //                 {/* <div class="col-12">
-    //                     <h2 class="admin-title">Orders</h2>
-    //                     <p>View placed orders and mark them as fulfilled.</p>
-    //                     <a class="btn btn-primary" href="/orders" role="button">Orders</a>
-    //                 </div> */}
-    //                 {state.currentScreen === "orders" && <Orders />}
-    //                 {state.currentScreen === "menu" && <AdminMenuItems />}
-    //                 {state.currentScreen === "email" && <ChangeEmailScreen />}
-    //                 {state.currentScreen === "resetPassword" && <Redirect to="/reset-password"/>}
-    //             </div>       
-    //       </div>
-
-    //   )
   };

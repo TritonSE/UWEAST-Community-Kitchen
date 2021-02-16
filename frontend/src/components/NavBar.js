@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import Logo from "../media/UWEAST_Logo_Detail_Transparent.png";
 import '../css/NavBar.css';
-import { isAuthenticated, logout} from '../util/auth';
+import { isAuthenticated, logout} from '../util/Auth';
 
 
 export default function NavBar (props) {

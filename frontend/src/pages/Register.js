@@ -5,7 +5,7 @@ import {
   Snackbar, Typography 
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { isAuthenticated, setJWT, setUser } from '../util/auth';
+import { isAuthenticated, setJWT } from '../util/Auth';
 import Navbar from '../components/NavBar';
 import "../css/Register.css";
 const config = require('../config');
@@ -141,7 +141,6 @@ export default function Register() {
       if (response.ok) {
         const json = await response.json();
         setJWT(json.token);
-        setUser(json.email);
         history.push("/admin");
       }
       //Invalid Credentials 

@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import '../css/Login.css';
-import { isAuthenticated, setJWT, setUser } from '../util/auth';
+import { isAuthenticated, setJWT} from '../util/Auth';
 import Navbar from '../components/NavBar';
 import { useEffect } from 'react';
 const config = require('../config');
@@ -124,7 +124,6 @@ export default function Login() {
       if (response.ok) {
         const json = await response.json();
         setJWT(json.token);
-        setUser(json.email);
         history.push("/admin");
       }
       //Invalid Credentials
