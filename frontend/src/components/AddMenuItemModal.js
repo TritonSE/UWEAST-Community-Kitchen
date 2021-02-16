@@ -250,7 +250,7 @@ export default function AddMenuItemModal (props) {
                                 </div>
                                 <div className="priceContainer">
                                     <p className="formLabelText">Price</p>
-                                    <FormControl error={menuError && individualItemPrice === "" && familyItemPrice === ""} margin='dense' variant="outlined">
+                                    <FormControl error={menuError && ((individualItemPrice === "" && familyItemPrice === "") || (parseInt(individualItemPrice) < 0))} margin='dense' variant="outlined">
                                         <OutlinedInput name="name" id="individualprice" className="formTextInput"
                                             type="number"
                                             value={individualItemPrice}
@@ -259,7 +259,7 @@ export default function AddMenuItemModal (props) {
                                             size="small"
                                         /> 
                                     </FormControl>
-                                    <FormControl error={menuError && individualItemPrice === "" && familyItemPrice === ""} margin='dense' variant="outlined">
+                                    <FormControl error={menuError && ((individualItemPrice === "" && familyItemPrice === "") || (parseInt(individualItemPrice) < 0))} margin='dense' variant="outlined">
                                         <OutlinedInput name="name" id="familyprice" className="formTextInput"
                                             type="number"
                                             value={familyItemPrice}
@@ -311,7 +311,8 @@ export default function AddMenuItemModal (props) {
                                                 error = 
                                                 {   menuError && 
                                                     ((item.name === "" && item.price !== "") || 
-                                                    (item.name !== "" && item.price === ""))
+                                                    (item.name !== "" && item.price === "")) ||
+                                                    (parseInt(item.price) < 0)
                                                 }
                                             >
                                                 <OutlinedInput id={item.name + "priceinput"} name={item.name + "priceinput"} className="formTextInput"
