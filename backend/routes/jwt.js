@@ -22,7 +22,7 @@ router.post(
             //Could not verify --> Error
             if(err){
                 res.sendStatus(401);
-                console.log("Fraud JWT Token")
+                console.log("Fraud/Expired JWT Token")
               //Verified --> Success
             } else {
                 res.sendStatus(200);
