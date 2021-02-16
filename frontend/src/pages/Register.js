@@ -53,6 +53,7 @@ export default function Register() {
   const classes = useStyles();
   const history = useHistory();
   const [state, setState] = React.useState({
+    isAuthenticatingUser: true,
     isUserAuthenticated: false,
     email: '',
     password: '',
@@ -73,7 +74,7 @@ export default function Register() {
 
   useEffect(() => {
     isAuthenticated().then(async result => {
-      setState({...state, isUserAuthenticated: result});
+      setState({...state, isAuthenticatingUser: false, isUserAuthenticated: result});
     })
   }, []);
 
@@ -171,8 +172,17 @@ export default function Register() {
     setState({...state, snack: {...state.snack, open: false}});
   };
 
-  //If user is already logged in, then redirect to Admin Page. Else display Register page. 
-  return state.isUserAuthenticated ? <Redirect to="/admin"/> : ( 
+  if(state.isAuthenticatingUser){
+    return(
+      <div>
+        <Navbar/>
+        <p> Loading... </p>
+    </div>
+    )
+  } else if(state.isUserAuthenticated){
+    return (<Redirect to="/admin"/>)
+  } else {
+    return (
       <div>
           <Navbar/>
            <Grid
@@ -203,6 +213,6 @@ export default function Register() {
                 <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
             </Grid> 
       </div>
-   
-  )
+    )
+  }
 }

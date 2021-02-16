@@ -55,6 +55,7 @@ export default function Login() {
   const classes = useStyles();
   const history = useHistory();
   const [state, setState] = React.useState({
+    isAuthenticatingUser: true,
     isUserAuthenticated: false,
     email: '',
     password: '',
@@ -71,7 +72,7 @@ export default function Login() {
 
   useEffect(() => {
     isAuthenticated().then(async result => {
-      setState({...state, isUserAuthenticated: result});
+      setState({...state, isAuthenticatingUser: false, isUserAuthenticated: result});
     })
   }, []);
 
@@ -150,29 +151,40 @@ export default function Login() {
     setState({...state, snack: {...state.snack, open: false}});
   };
 
-  //If user is already logged in, then redirect to Admin Page. Else display Login page. 
-  return state.isUserAuthenticated ? <Redirect to="/admin"/> : ( 
+  if(state.isAuthenticatingUser){
+    return(
       <div>
-            <Navbar/>
-            <div className="Main">
-              <div className="Border">
-                <Typography variant="h4" className={classes.title} style={{fontSize: "2.5rem"}} > Login </Typography>
-                <p className={classes.centered} style={{color: "#8d8d8d"}}> Sign-in into an existing account below </p>
-                <form className={classes.form} onSubmit={handleSubmit}>
-                      <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')} error={state.errors.email}/>
-                      <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')} error={state.errors.password}/>
-                      <Link to="register" className="Child"><Typography>Register Account</Typography></Link>
-                      <Link to="reset-password"><Typography>Reset Password</Typography></Link>
-                      <div className={classes.centered}>
-                          <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}
-                          // style={{fontWeight: "bolder", borderRadius: "3px", fontSize: "16px"}}
-                          >Login</Button>
-                      </div>
-                  </form>
-                </div>
-              </div>
-              <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
+        <Navbar/>
+        <p> Loading... </p>
       </div>
-   
-  )
+    )
+  } else if(state.isUserAuthenticated){
+    return(
+      <Redirect to="/admin"/>
+    )
+  } else {
+    return (
+      <div>
+        <Navbar/>
+        <div className="Main">
+          <div className="Border">
+            <Typography variant="h4" className={classes.title} style={{fontSize: "2.5rem"}} > Login </Typography>
+            <p className={classes.centered} style={{color: "#8d8d8d"}}> Sign-in into an existing account below </p>
+            <form className={classes.form} onSubmit={handleSubmit}>
+                  <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')} error={state.errors.email}/>
+                  <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')} error={state.errors.password}/>
+                  <Link to="register" className="Child"><Typography>Register Account</Typography></Link>
+                  <Link to="reset-password"><Typography>Reset Password</Typography></Link>
+                  <div className={classes.centered}>
+                      <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}
+                      // style={{fontWeight: "bolder", borderRadius: "3px", fontSize: "16px"}}
+                      >Login</Button>
+                  </div>
+              </form>
+            </div>
+          </div>
+          <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
+      </div>
+    );
+  }
 }
