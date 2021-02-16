@@ -1,3 +1,13 @@
+/* 
+* Header file for the NavBar styling. This contains all CSS related to
+* The Navbar for Desktop/Tsblet/Mobile.
+*
+* Couple notes:
+* 1) NavBar is collapsable.
+* 2) Cart Icon shows up only for screen width < 1350
+*
+*/
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400&display=swap');
 
