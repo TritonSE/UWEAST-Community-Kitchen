@@ -6,14 +6,14 @@ const { MenuImage } = require("../models/menuImages");
 async function changeMenuImage(raw_menu) {
   try {
     // find and replace the current image in the DB
-    let menu = await MenuImage.findOneAndUpdate({}, raw_menu, {
-      new: true,
-    });
+    let menu = await MenuImage.findOneAndUpdate({}, raw_menu);
     // if there is no current image in the database insert one
     if (menu === null) {
       menu = new MenuImage(raw_menu);
       await menu.save();
     }
+    // duplicate insertion
+    else if (menu.imageUrl === raw_menu.imageUrl) return false;
     return menu;
   } catch (err) {
     return false;
