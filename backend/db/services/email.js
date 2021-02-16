@@ -1,6 +1,7 @@
 // this file allows for interaction with the Email DB
 // with methods that find the primary email, find the secondary emails,
 // delete a secondary email, change the primary email, and a secondaryEmail
+const { raw } = require("express");
 const { Email } = require("../models/email");
 
 // @return: Mongo object email or false on duplicate/error
@@ -8,18 +9,17 @@ const { Email } = require("../models/email");
 async function changePrimaryEmail(raw_email) {
   try {
     // find and replace the primary email
-    let email = await Email.findOneAndUpdate({ isPrimary: true }, raw_email, {
-      new: true,
-    });
+    let email = await Email.findOneAndUpdate({ isPrimary: true }, raw_email);
     // if there are no emails in database insert one
     if (email === null) {
       email = new Email(raw_email);
       await email.save();
-      return email;
-    } else {
-      // duplicate insertion
+    }
+    // duplicate insertion
+    else if (email.email === raw_email.email) {
       return false;
     }
+    return email;
   } catch (err) {
     return false;
   }
