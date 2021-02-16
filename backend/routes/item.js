@@ -52,7 +52,7 @@ router.post(
           (checkNumeral(value.Family) && checkNumeral(value.Individual)))
       );
     }),
-    body("Accomodations")
+    body("Accommodations")
       .custom((value) => {
         // check for numeric values with regex to be price conforming
         // for each price in Accomodations array
@@ -124,10 +124,10 @@ router.post(
           (checkNumeral(value.Family) && checkNumeral(value.Individual)))
       );
     }),
-    body("Accomodations")
+    body("Accommodations")
       .custom((value) => {
         // check for numeric values with regex to be price conforming
-        // for each price in Accomodations array
+        // for each price in Accommodations array
         for (val of value) {
           let success = checkNumeral(val.Price) ? true : false;
           if (success === false) return false;

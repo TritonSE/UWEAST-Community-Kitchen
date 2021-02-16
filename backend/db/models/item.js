@@ -29,7 +29,7 @@ const itemSchema = new mongoose.Schema({
     containsDairy: { type: Boolean, default: false },
   },
   isFeatured: { type: Boolean, default: false },
-  Accomodations: {
+  Accommodations: {
     type: [
       {
         Description: { type: String, required: true },
