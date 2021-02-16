@@ -19,7 +19,22 @@
   display: grid;
 }
 
-@media only screen and (max-width: 768px) 
+.menu-item-category 
+{
+  margin-bottom: 10px;
+}
+
+@media only screen and (max-width: 400px) 
+{
+  .menu-item-category-grid 
+  {
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 35px;
+    padding-bottom: 25px;
+  }
+}
+
+@media only screen and (min-width: 401px) and (max-width: 767px) 
 {
   .menu-item-category-grid 
   {
@@ -35,6 +50,7 @@
   {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 10px;
+    padding-bottom: 20px;
   }
 }
 
@@ -44,5 +60,6 @@
   {
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
+    padding-bottom: 20px;
   }
 }

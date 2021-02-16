@@ -39,16 +39,21 @@
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1022px) 
+@media only screen and (min-width: 768px) and (max-width: 1349px) 
 {
   .menu-section
   {
-    grid-template-columns: 150px minmax(auto, 900px) 150px;
+    grid-template-columns: 150px minmax(auto, 900px);
     margin-top: 55px;
+  }
+
+  .cart-preview
+  {
+    display: none;
   }
 }
 
-@media only screen and (min-width: 1023px)
+@media only screen and (min-width: 1350px)
 {
   .menu-section
   {
