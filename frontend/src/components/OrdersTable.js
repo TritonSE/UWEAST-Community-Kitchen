@@ -1,3 +1,14 @@
+/**
+ * This is the OrdersTable that is imported in the Orders.js file. This
+ * Renders the MUI-datatable that contains all the relevant information
+ * About past orders. 
+ * 
+ * The information layed out in the table: 
+ * Pickup Details, Name, email, Phone number, Price, Submission Date, Order Status,
+ * Items, Quantity, Size, Accommodations, Special Instructions
+ * 
+*/
+
 import React from 'react';
 import MUIDataTable from "mui-datatables";
 import Table from "@material-ui/core/Table";
@@ -49,10 +60,10 @@ const renderRow = (rowData, rowMeta) => {
                     <TableRow style={{border: 'none'}}>
                       <TableCell></TableCell>
                       <TableCell style={{width: 'calc(14.3%)'}}>Items</TableCell>
-                      <TableCell style={{width: 'calc(24.5%)'}}>Accommodations</TableCell>
-                      <TableCell style={{width: 'calc(27.6%)'}}>Special Instructions</TableCell>
-                      <TableCell style={{width: 'calc(17.8%)'}}>Size</TableCell>
-                      <TableCell>Quantity</TableCell>
+                      <TableCell style={{width: 'calc(24.5%)'}}>Quantity</TableCell>
+                      <TableCell style={{width: 'calc(27.5%)'}}>Size</TableCell>
+                      <TableCell style={{width: 'calc(17.6%)'}}>Accommodations</TableCell>
+                      <TableCell>Special Instructions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -61,10 +72,10 @@ const renderRow = (rowData, rowMeta) => {
                       <TableRow key={row.name}>
                         <TableCell style={{width: 'calc(48px)'}}></TableCell>
                         <TableCell>{row.name}</TableCell>
-                        <TableCell>{row.accommodations}</TableCell>
-                        <TableCell>{row.specialInstructions}</TableCell>
-                        <TableCell>{row.size}</TableCell>
                         <TableCell>{row.quantity}</TableCell>
+                        <TableCell>{row.size}</TableCell>
+                        <TableCell>{row.accommodations}</TableCell>
+                        <TableCell>{row.specialInstructions}</TableCell>                        
                       </TableRow>
                     ))}
                   </TableBody>
@@ -78,6 +89,7 @@ const renderRow = (rowData, rowMeta) => {
 
 export default function OrdersTable(props) {
   
+  // Option props to pass into the table
   const options = {
     filter: true,
     expandableRowsOnClick: true,
@@ -88,6 +100,7 @@ export default function OrdersTable(props) {
     searchOpen: true,
   };
 
+  // Styling for the row
   const getMuiTheme = () =>
   createMuiTheme({
     overrides: {
@@ -97,6 +110,11 @@ export default function OrdersTable(props) {
           minWidth: '900px',
           maxWidth: '90vw',
         },
+      },
+      MuiTableHead: {
+        root: {
+          fontWeight: 'bold'
+        }
       },
       MuiTableRow: {
         root: {

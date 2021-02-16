@@ -1,11 +1,26 @@
+/**
+ * Contains all the helper methods used inside the OrdersTableColumn.js file.
+ * 
+ * Each Method does the following: 
+ * 
+ * renderDateFilters- The Node displayed when filtering by Date
+ * updateDateFilters- Called when the user clicks the "X" inside the Node
+ * DisplayStatusFilters- Renders The dropdown for Order Status filtering
+ * DisplayDateFilters- Renders the Date Range picker inside the Filter Dialog
+ * renderStatus- Node displaying the current filter option for Order Status
+ * 
+ * Each method returns a JSX component. 
+ */
+
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import '../css/Orders.css';
-import DateRangePicker from 'react-bootstrap-daterangepicker';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
