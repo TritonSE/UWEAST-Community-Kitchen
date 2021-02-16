@@ -78,7 +78,7 @@ export default function Admin() {
         if(state.isAuthenticatingUser){
             return (
                 <div>
-                    <Navbar currentPage="admin"/>
+                    <Navbar/>
                     <p> Authenticating... </p>
                 </div>
             );
@@ -91,7 +91,7 @@ export default function Admin() {
             return (
                 <div>
                 {/* The navbar on top of the page */}
-                  <Navbar currentPage="admin"/>
+                  <Navbar/>
     
                   {/* This is the contents on the admin page */}
                   <div class="admin-section">

@@ -14,7 +14,7 @@ import '../css/NavBar.css';
 import { isAuthenticated, logout} from '../util/Auth';
 
 
-export default function NavBar (props) {
+export default function NavBar () {
 
     {/* history hook to redirect on logout */}
     const history = useHistory();
@@ -51,7 +51,7 @@ export default function NavBar (props) {
 
     {/* Check current page from props to change active nav-link color */}
     function isPageActive(pageToCheck) {
-        return (pageToCheck === props.currentPage) ? " active" : "";
+        return (pageToCheck === window.location.pathname) ? " active" : "";
     }
 
     return (
@@ -87,17 +87,17 @@ export default function NavBar (props) {
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="ml-auto">
                         {/* Menu Page */}
-                        <Nav.Link className={"nav-link" + isPageActive("menu")} href="/">Menu</Nav.Link>
+                        <Nav.Link className={"nav-link" + isPageActive("/")} href="/">Menu</Nav.Link>
 
                         {/* Contact Page */}
-                        <Nav.Link className={"nav-link" + isPageActive("contact")} href="/contact">Contact</Nav.Link>
+                        <Nav.Link className={"nav-link" + isPageActive("/contact")} href="/contact">Contact</Nav.Link>
 
                         {/* About Page */}
-                        <Nav.Link className={"nav-link" + isPageActive("about")} href="/about">About</Nav.Link>
+                        <Nav.Link className={"nav-link" + isPageActive("/about")} href="/about">About</Nav.Link>
 
                         {/* Admin Page */}
                         <span className="desktop-tabs">
-                            <Nav.Link className={adminContentClass + isPageActive("admin")} href="/admin">Admin</Nav.Link>
+                            <Nav.Link className={adminContentClass + isPageActive("/admin")} href="/admin">Admin</Nav.Link>
                         </span>
 
                         {/* Logout */}
@@ -107,7 +107,7 @@ export default function NavBar (props) {
 
                         {/* Login */}
                         <span className="desktop-tabs">
-                            <Nav.Link className={loginButtonClass + isPageActive("login")} href="/login">Login</Nav.Link> 
+                            <Nav.Link className={loginButtonClass + isPageActive("/login")} href="/login">Login</Nav.Link> 
                         </span>
                     </Nav>
                 </Navbar.Collapse>
