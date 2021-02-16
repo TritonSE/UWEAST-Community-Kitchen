@@ -30,7 +30,6 @@ export default function NavBar (props) {
 
     useEffect(() => {
         isAuthenticated().then(async result => {
-        //   alert(result);
           setState({...state, isUserAuthenticated: result});
         })
       }, []);
