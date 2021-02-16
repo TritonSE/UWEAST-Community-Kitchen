@@ -247,9 +247,7 @@ export default function AddMenuItemModal (props) {
                                             disabled
                                         />
                                     </FormControl>
-                                    <FormHelperText>{requiredAsterix()} At least one required</FormHelperText>
                                 </div>
-                                
                                 <div className="priceContainer">
                                     <p className="formLabelText">Price</p>
                                     <FormControl error={menuError && individualItemPrice === "" && familyItemPrice === ""} margin='dense' variant="outlined">
@@ -272,7 +270,9 @@ export default function AddMenuItemModal (props) {
                                     </FormControl>
                                 </div>
                             </div>
-                            {/* Item Addons*/}
+                            <div className="priceSizeContainer">
+                                <FormHelperText style={{"padding": "0px 40px 0px 38px"}}>{requiredAsterix()} At least one size must be given a price. If you do not want a particular size available for the item, please leave its price field blank.</FormHelperText>
+                            </div>
                             {/* Item Addons */}
                             <p className="formLabelText" style={{"marginTop": "20px", "marginBottom": "-10px"}}>Accommodations</p>
                             <div className="priceSizeContainer">
@@ -359,24 +359,8 @@ export default function AddMenuItemModal (props) {
                                         className="addAddOnButton"
                                         onClick={() => {
                                             const addontemp = [...addOns];
-                                            if(addontemp.length === 0){
-                                                // add an empty addon for editing if there are none
-                                                addontemp.push({name: "", price: ""});
-                                                setAddOns(addontemp);
-                                            }
-                                            else{
-                                                // you can only add a new add on if the past ones are valid
-                                                let valid = true;
-                                                addontemp.forEach(item => {
-                                                    if(item.name === "" || item.price === ""){
-                                                        valid = false;
-                                                    }
-                                                })
-                                                if(valid){
-                                                    addontemp.push({name: "", price: ""});
-                                                    setAddOns(addontemp);
-                                                }
-                                            }
+                                            addontemp.push({name: "", price: ""});
+                                            setAddOns(addontemp);
                                         }}
                                     >
                                         <AddCircleIcon className="menuAddButtonIcon" />

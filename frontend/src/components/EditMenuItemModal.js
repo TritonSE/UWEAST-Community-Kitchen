@@ -255,7 +255,6 @@ export default function EditMenuItemModal (props) {
                                             disabled
                                         />
                                     </FormControl>
-                                    <FormHelperText>{requiredAsterix()} At least one required</FormHelperText>
                                 </div>
                                 
                                 <div className="priceContainer">
@@ -279,6 +278,9 @@ export default function EditMenuItemModal (props) {
                                         /> 
                                     </FormControl>
                                 </div>
+                            </div>
+                            <div className="priceSizeContainer">
+                                <FormHelperText style={{"padding": "0px 40px 0px 38px"}}>{requiredAsterix()} At least one size must be given a price. If you do not want a particular size available for the item, please leave its price field blank.</FormHelperText>
                             </div>
                             {/* Item Addons */}
                             <p className="formLabelText" style={{"marginTop": "20px", "marginBottom": "-10px"}}>Accommodations</p>
