@@ -13,17 +13,20 @@ async function isAuthenticated() {
         jwtToken: localStorage.getItem(ADMIN_TOKEN_ATTRIBUTE)
     }
 
-    const response = await 
-      fetch(`${BACKEND_URL}jwt/verify`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(submission)
-      });
-
-      if(response.ok){
-        return true;
-      }
-      return false;
+    try{
+      const response = await 
+        fetch(`${BACKEND_URL}jwt/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(submission)
+        });
+        if(response.ok){
+          return true;
+        }
+        return false;
+      } catch(err){
+        return false;
+    }
   }
   
   //Retrieves the logged in user's JWT token from local storage
