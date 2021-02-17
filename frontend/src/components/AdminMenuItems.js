@@ -175,6 +175,7 @@ export default function AdminMenuItems (props) {
     const [itemList, setItemList] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const [checkboxUpdate, setCheckboxUpdate] = useState("");
+    const [changeHeaderModal, setChangeHeaderModal] = useState(false);
     // Fetch all menu items to display in table
     useEffect(() => {
         var data = null;
@@ -294,10 +295,15 @@ export default function AdminMenuItems (props) {
             <div>
                 {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
                 <div className="aboveTableContainer">
-                    <Button className="menuAddButton">
-                        <AddCircleIcon className="menuAddButtonIcon" />
-                        Add Item
-                    </Button>
+                    <div>
+                        <Button className="menuAddButton">
+                            <AddCircleIcon className="menuAddButtonIcon" />
+                            Add Item
+                        </Button>
+                        <Button className="menuChangeHeaderButton" onClick={() => {setChangeHeaderModal(true)}}>
+                            Change Header
+                        </Button>
+                    </div>
                     <div className="searchFilterContainer">
                         <Select
                             className="menuFilterSelect"
