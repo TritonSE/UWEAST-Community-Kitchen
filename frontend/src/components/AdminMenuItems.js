@@ -19,6 +19,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import '../css/AdminMenuItems.css';
 import AddMenuItemModal from './AddMenuItemModal.js';
 import EditMenuItemModal from './EditMenuItemModal.js';
+import ChangeHeaderModal from './ChangeHeaderModal.js';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -301,6 +302,7 @@ export default function AdminMenuItems (props) {
                 {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded}/>}
                 {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
                 {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} />}
+                {changeHeaderModal && <ChangeHeaderModal changeHeaderModal={changeHeaderModal} setChangeHeaderModal={setChangeHeaderModal} setLoaded={setLoaded} />}
                 <div className="aboveTableContainer">
                     <div>
                         <Button className="menuAddButton" onClick={() => {setAddItemModal(true)}}>
