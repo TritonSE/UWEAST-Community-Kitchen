@@ -193,9 +193,14 @@ export default function EditMenuItemModal (props) {
                 className="modalContainer"
             >
                 <div className="modalBackground">
-                    {/* <div className="modalHeader">
-                        <Button onClick={() =>setShowModal(false)}>X</Button>
-                    </div> */}
+                    <div className="headerContainer">
+                    <IconButton
+                        className="removeAddOnButton"
+                        onClick={() => setShowModal("")}
+                    >
+                        <ClearIcon/>
+                    </IconButton>
+                    </div>
                     <form autocomplete="off">
                         <div className="modalBody">
                             {/* Item Name */}
@@ -280,7 +285,7 @@ export default function EditMenuItemModal (props) {
                                 </div>
                             </div>
                             <div className="priceSizeContainer">
-                                <FormHelperText style={{"padding": "0px 40px 0px 38px"}}>{requiredAsterix()} At least one size must be given a price. If you do not want a particular size available for the item, please leave its price field blank.</FormHelperText>
+                                <FormHelperText style={{"margin": "0px 40px 10px 40px"}}>{requiredAsterix()} At least one size must be given a price. If you do not want a particular size available for the item, please leave its price field blank.</FormHelperText>
                             </div>
                             {/* Item Addons */}
                             <p className="formLabelText" style={{"marginTop": "20px", "marginBottom": "-10px"}}>Accommodations</p>
@@ -459,7 +464,6 @@ export default function EditMenuItemModal (props) {
                                 Close
                             </Button>
                             <Button className="menuAddButton" onClick={() => handleSubmit()}>
-                                <AddCircleIcon className="menuAddButtonIcon" />
                                 Save
                             </Button>
                         </div>
