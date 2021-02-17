@@ -1,3 +1,5 @@
+// this file creates the routes to allow for interaction with the
+// menuimages DB, routes are /changeMenuImage (POST) and / (GET)
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
@@ -10,7 +12,7 @@ const { changeMenuImage, findMenuImage } = require("../db/services/menuImages");
 // @description: changes the menu image in the DB
 router.post(
   "/changeMenuImage",
-  [body("imageUrl").notEmpty(), isValidated],
+  [body("imageUrl").notEmpty().isURL(), isValidated],
   async (req, res, next) => {
     const { imageUrl } = req.body;
     try {
