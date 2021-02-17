@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+:root {
+    --yellow: #f9ce1d;
+    --black: black;
+    --lightgrey: #cccccc;
+    --darkgrey: #747474;
+    --white: #FFFFFF;
+    --offwhite: #F1f1f1;
+}
+
+.modalContainer{
+    font-family: 'Roboto', sans-serif !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 40px 20px 20px;
+}
+.headerContainer{
+    font-family: 'Roboto', sans-serif !important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+.modalBackground{
+    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height: auto;
+    background-color: white;
+    overflow: scroll;
+    padding: 10px 20px 20px 20px;
+}
+.formItem{
+    font-size: 16px !important;
+    margin: 0 0 20px 0 !important;
+}
+.formLongItem{
+    font-size: 16px !important; 
+    margin: 0 0 10px 0 !important;
+}
+.formTextInput{
+    height: 28px !important;
+}
+.formLongInput{
+    height: 78px !important;
+}
+.formSelectInput{
+    height: 28px !important;
+}
+.formLabelText {
+    display: inline-block;
+    font-weight: bold;
+    margin: 0px !important;
+}
+.priceSizeContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-top: 5px;
+}
+.priceContainer{
+    width: 35%;
+}
+.sizeContainer{
+    width: 35%;
+}
+.removeAddOnContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 40px;
+    margin: 0;
+    padding: 0;
+    padding-top: 20px;
+}
+.removeAddOnButton {
+    background-color: var(--white) !important;
+    border: 1px solid var(--white) !important;
+    color: var(--black) !important;
+    width: 40px !important;
+    height: 29px !important;
+    font-size: 12px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.modalFooter {
+    padding-top: 20px;
+    height: auto;
+    display: flex;
+    flex-direction: row-reverse;
+}
+.modalFooter > * {
+    margin-left: 10px;
+}
+.addAddOnButton {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: var(--black) !important;
+    border: 1px solid var(--black) !important;
+    color: var(--white) !important;
+    font-weight: bold !important;
+    width: 100%;
+    height: auto !important;
+    font-size: 12px !important;
+    margin: 10px 0 20px 0;
+}
+.menuAddButton {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: var(--yellow) !important;
+    border: 1px solid var(--yellow) !important;
+    color: var(--black) !important;
+    font-weight: bold !important;
+    width: 150px;
+    height: 40px !important;
+}
+.cancelButton {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: var(--darkgrey) !important;
+    border: 1px solid var(--darkgrey) !important;
+    color: var(--white) !important;
+    font-weight: bold !important;
+    width: 150px;
+    height: 40px !important;
+}
+.requiredAsterix {
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    color: red;
+    font-weight: bold;
+    margin: 0;
+    font-size: 16px;
+}
