@@ -33,7 +33,7 @@
   }
 }
 
-@media only screen and (min-width: 451px) and (max-width: 767px) 
+@media only screen and (min-width: 451px) and (max-width: 768px) 
 {
   .menu-item-category-grid 
   {
@@ -64,16 +64,11 @@
 }
 
 
-@media only screen and (max-width: 1349px)
+@media only screen and (max-width: 1350px)
 {
   .menu-item-category
   {
     max-width: 1050px;
-    width: calc(100% - 10px);
-    margin-left: 5px;
-    margin-right: 5px;
-    padding: 10px;
-    border-bottom: 1px solid black;
   }
 }
 
@@ -82,10 +77,5 @@
   .menu-item-category
   {
     max-width: 900px;
-    width: calc(100% - 10px);
-    margin-left: 5px;
-    margin-right: 5px;
-    padding: 10px;
-    border-bottom: 1px solid black;
   }
 }
