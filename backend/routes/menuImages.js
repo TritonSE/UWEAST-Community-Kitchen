@@ -6,10 +6,10 @@ const { isValidated } = require("../middleware/validation");
 const router = express.Router();
 const { changeMenuImage, findMenuImage } = require("../db/services/menuImages");
 
+// @description: changes the menu image in the DB
 // @body: imageUrl
 // @return: success:true if imageUrl is changed
 //          "MenuImage change unsuccessful" if duplicate imageUrl
-// @description: changes the menu image in the DB
 router.post(
   "/changeMenuImage",
   [body("imageUrl").notEmpty().isURL(), isValidated],
@@ -35,8 +35,8 @@ router.post(
   }
 );
 
-// @return: imageUrl object
 // @description: returns the imageUrl in the DB
+// @return: imageUrl object
 router.get("/", async (req, res, next) => {
   try {
     // returns image/null or error if there is an error
