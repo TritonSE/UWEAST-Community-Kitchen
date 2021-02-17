@@ -1,5 +1,9 @@
+/**
+ * SearchSection represents the upper portion of the menu page. It is formatted 
+ * to display the background image.
+ */
+
 import React, { Component } from 'react';
-import SearchBar from "./SearchBar";
 import "../css/SearchSection.css";
 const config = require('../config');
 

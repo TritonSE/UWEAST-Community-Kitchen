@@ -1,3 +1,8 @@
+/**
+ * MenuItems is primarily a formatting class that groups MenuItemCategory 
+ * components together.
+ */
+
 import React from 'react';
 import MenuItemCategory from './MenuItemCategory';
 import '../css/MenuItems.css';

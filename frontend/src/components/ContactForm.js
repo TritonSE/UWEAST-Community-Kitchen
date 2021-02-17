@@ -1,3 +1,9 @@
+/**
+ * ContactForm is the component that manages the processing of the form on the 
+ * contact page. In order to function properly, there must be at least one 
+ * email in the db.
+ */
+
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { Snackbar} from '@material-ui/core';

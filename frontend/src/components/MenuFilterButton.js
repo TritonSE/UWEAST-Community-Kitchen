@@ -1,3 +1,9 @@
+/**
+ * MenuFilterButton is the component which is responsible for representing each 
+ * individual button in MenuFilter. This component handles the toggling of the 
+ * categories.
+ */
+
 import React from 'react';
 import '../css/MenuFilterButton.css';
 

@@ -1,3 +1,7 @@
+/**
+ * Banner is the disclaimer banner that appears under the navbar.
+ */
+
 import React from 'react';
 import MenuFilterButton from './MenuFilterButton';
 import "../css/Banner.css";

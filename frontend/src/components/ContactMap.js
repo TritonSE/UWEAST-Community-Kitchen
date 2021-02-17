@@ -1,3 +1,8 @@
+/**
+ * ContactMap is the map that shows up on the contact page. The map using 
+ * Google Map's API whose key can be found in config.js.
+ */
+
 import React, {useState, useEffect} from 'react';
 import {
   GoogleMap,

@@ -1,3 +1,8 @@
+/**
+ * MenuItem is the component that is displayed in the menu. The display of 
+ * popup is also handled here.
+ */
+
 import React from 'react';
 import "../css/MenuItem.css";
 const config = require('../config');

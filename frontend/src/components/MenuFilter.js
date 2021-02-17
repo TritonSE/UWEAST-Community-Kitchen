@@ -1,3 +1,7 @@
+/**
+ * MenuFilter is the component which stores all of the menu filter buttons. 
+ */
+
 import React, { Component} from 'react';
 import MenuFilterButton from './MenuFilterButton';
 import "../css/MenuFilter.css";

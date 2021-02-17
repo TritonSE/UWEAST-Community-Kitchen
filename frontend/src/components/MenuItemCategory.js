@@ -1,3 +1,8 @@
+/**
+ * MenuItemCategory is the overarching component that stores MenuItems. This 
+ * component also handles the fetch call that gets the information from the db.
+ */
+
 import React, { useState, useEffect} from 'react';
 import '../css/MenuItemCategory.css';
 import MenuItem from './MenuItem';

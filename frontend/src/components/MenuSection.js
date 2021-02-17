@@ -1,3 +1,8 @@
+/**
+ * MenuSection is the "hub" for the menu portion of the page. States are all 
+ * elevated to this leveled (with few exceptions).
+ */
+
 import React, { useState } from 'react';
 import MenuFilter from './MenuFilter';
 import MenuItems from './MenuItems';
