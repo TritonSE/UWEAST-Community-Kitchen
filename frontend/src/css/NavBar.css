@@ -1,3 +1,13 @@
+/* 
+* Header file for the NavBar styling. This contains all CSS related to
+* The Navbar for Desktop/Tsblet/Mobile.
+*
+* Couple notes:
+* 1) NavBar is collapsable.
+* 2) Cart Icon shows up only for screen width < 1350
+*
+*/
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400&display=swap');
 
@@ -39,7 +49,7 @@
     padding-right: 1em;
 }
 
-.cart-icon {
+.cart-icon, .cart-icon-smaller-desktop {
     display: none;
 }
 
@@ -59,6 +69,15 @@
 
 .active {
     color: #F9CE1D !important;
+}
+
+@media only screen and (min-width: 767px) and (max-width: 1349px) {
+    .cart-icon-smaller-desktop {
+        display: inline-block;
+        transform: scale(1.7);
+        -webkit-transform: scale(1.7);
+        margin-right: calc(0.5vw);    
+    }
 }
 
 @media only screen and (max-width: 1024px) 
@@ -82,11 +101,6 @@
     .cart-icon {
         display: none;
     }
-    
-    .cart-icon svg {
-        position: relative;
-        margin-left: calc(7vh);
-    }
 }
 
 
@@ -99,26 +113,44 @@
         max-height: none;
     }
 
-    .navbar.navbar-bg-color .desktop-tabs {
+    .navbar.navbar-bg-color .desktop-tabs, .cart-icon-smaller-desktop {
         display: none;
     }
 
     .cart-icon {
         display: inline-block;
+        width: calc(34%);
+        text-align: right;
         transform: scale(2);
         -webkit-transform: scale(2);
-        max-width: auto;
-        margin-left: calc(2vw);
-    }
-    
-    .cart-icon svg {
-        position: relative;
     }
 }
 
-@media only screen and (max-width: 359px) 
+/* Adjusts the distance between the hamburger and cart icon at different levels */
+@media only screen and (max-width: 610px) 
 {
     .cart-icon {
-        margin-left: calc(-7vh);
+        width: calc(30%);
+    }
+} 
+
+@media only screen and (max-width: 532px) 
+{
+    .cart-icon {
+        width: calc(23%);
+    }
+} 
+
+@media only screen and (max-width: 400px) 
+{
+    .cart-icon {
+        width: calc(18%);
+    }
+} 
+
+@media only screen and (max-width: 300px) 
+{
+    .cart-icon {
+        width: calc(10%);
     }
 } 
