@@ -39,7 +39,8 @@ async function sendEmail(template, to_email , locals, res) {
     });
     console.log(`Email ${template} has been sent to ${to_email}.`);
   } else {
-    return res.status(500).send("Server err");
+      console.log(`Error: Email ${template} could not be sent to ${to_email}.`);
+      return res.status(500).send("Server err");
   }
 }
 
@@ -140,7 +141,7 @@ router.post('/contact',
       const emails = await findAllEmails();
       //Error if no emails exist
       if (!emails.length) {
-        return res.status(400).json({ errors: [{ msg: "no emails found" }] });
+        return res.status(500).json({ errors: [{ msg: "no emails found" }] });
       } 
 
       //extract the emails from the JSON objects

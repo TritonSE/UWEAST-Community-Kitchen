@@ -4,7 +4,7 @@ const { isValidated } = require("../middleware/validation");
 const router = express.Router();
 const {
   // addnewEmail,
-  // findAllEmails,
+  findAllEmails,
   // deleteOneEmail,
   changeEmail,
 } = require("../db/services/email");
@@ -84,17 +84,17 @@ router.post(
 //   }
 // );
 
-// router.get("/all", async (req, res, next) => {
-//   try {
-//     // returns emails or error if there is an error
-//     const emails = await findAllEmails();
-//     res.status(200).json({
-//       emails: emails,
-//     });
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send("Server err");
-//   }
-// });
+router.get("/all", async (req, res, next) => {
+  try {
+    // returns emails or error if there is an error
+    const emails = await findAllEmails();
+    res.status(200).json({
+      emails: emails,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server err");
+  }
+});
 
 module.exports = router;
