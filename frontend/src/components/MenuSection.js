@@ -78,7 +78,7 @@ const MenuSection = ({onItemAdd}) => {
   }
   
   // closes popup when open and opens popup when closed
-  const togglePopup = (title, description, price, image, dietaryInfo, accommodations) => {
+  const togglePopup = (title, description, price, image, dietaryInfo, accommodations, fillIns) => {
     setPopupVisible(!popupVisible);
     
     // sets the values of the map based on passed-in information
@@ -88,6 +88,7 @@ const MenuSection = ({onItemAdd}) => {
     popupValues.set("image", image);
     popupValues.set("dietary-info", dietaryInfo);
     popupValues.set("accommodations", accommodations);
+    popupValues.set("fillIns", fillIns);
 
     setPopupValues(popupValues);
   }
