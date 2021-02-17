@@ -49,6 +49,12 @@ const renderRow = (rowData, rowMeta) => {
       rows.push(createData(rowData[5][i].item, rowData[5][i].accommodations, rowData[5][i].specialInstructions, rowData[5][i].size, rowData[5][i].quantity));
     }
 
+    //Styling for the cells in the dropdown, makes the text overflow
+    const stylingCell = {
+      maxWidth: '25ch', 
+      whiteSpace: 'pre-wrap'  
+    }
+
     return (
         <React.Fragment>
           <TableRow>
@@ -71,11 +77,11 @@ const renderRow = (rowData, rowMeta) => {
                     {rows.map(row => (
                       <TableRow key={row.name}>
                         <TableCell style={{width: 'calc(48px)'}}></TableCell>
-                        <TableCell>{row.name}</TableCell>
-                        <TableCell>{row.quantity}</TableCell>
-                        <TableCell>{row.size}</TableCell>
-                        <TableCell>{row.accommodations}</TableCell>
-                        <TableCell>{row.specialInstructions}</TableCell>                        
+                        <TableCell><p style={stylingCell}>{row.name}</p></TableCell>
+                        <TableCell><p style={stylingCell}>{row.quantity}</p></TableCell>
+                        <TableCell><p style={stylingCell}>{row.size}</p></TableCell>
+                        <TableCell><p style={stylingCell}>{row.accommodations}</p></TableCell>
+                        <TableCell><p style={stylingCell}>{row.specialInstructions}</p></TableCell>                        
                       </TableRow>
                     ))}
                   </TableBody>
