@@ -1,12 +1,17 @@
 /**
- * ContactForm is the component that manages the processing of the form on the 
- * contact page. In order to function properly, there must be at least one 
- * email in the db.
+ * Component creating the form on the contact page. Form takes user's 
+ * information and sends an email to UWEAST on their behalf. Error handling 
+ * makes sure that backend response is 200, otherwise notify user.
+ * 
+ * @summary   Form to contact UWEAST found on contact page.
+ * @author    Navid Boloorian, Amrit Kaur Singh
  */
-
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { Snackbar} from '@material-ui/core';
+import { Snackbar } from '@material-ui/core';
+
+const config = require('../config');
+const BACKEND_URL = config.backend.uri;
 
 const ContactForm = () => {
 
@@ -30,7 +35,7 @@ const ContactForm = () => {
   
     try{
   
-      const response = await fetch("http://localhost:9000/autoEmails/contact", {
+      const response = await fetch(`${BACKEND_URL}autoEmails/contact`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -38,28 +43,28 @@ const ContactForm = () => {
           body: JSON.stringify(data)
       });
       
-      //Successful response
+      // successful response
       if (response.status == 200){
         alert("Message sent!");
         // reload window to clear input boxes 
         window.location.reload();
         
-        //Malformed Email
+        // malformed email
       } else if(response.status == 400) {
         setState({...state, snack: {message: 'Invalid Email Address!', open: true}});
 
-        //System Error
+        // system error
       } else {
         setState({...state, snack: {message: 'System Error: Cannot send email!', open: true}});
       }
       
-      //General Error
+      // general error
     } catch(error){
       setState({...state, snack: {message: 'System Error: Cannot send email!', open: true}});
     }
   };
   
-  //Error Message Display: Auto close itself by updating its states
+  // error message display: auto close itself by updating its states
   const handleSnackClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;

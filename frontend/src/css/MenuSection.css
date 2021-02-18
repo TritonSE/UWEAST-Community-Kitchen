@@ -21,7 +21,7 @@
   padding-bottom: 30px;
 }
 
-@media only screen and (max-width: 767px) 
+@media only screen and (max-width: 768px) 
 {
   .menu-section
   {
@@ -45,6 +45,11 @@
   {
     grid-template-columns: 150px minmax(auto, 1050px);
     margin-top: 55px;
+  }
+
+  .menu-filter-wrapper
+  {
+    display: block;
   }
 
   .cart-preview

@@ -1,6 +1,9 @@
 /**
- * MenuItem is the component that is displayed in the menu. The display of 
- * popup is also handled here.
+ * Component responsible for displaying and formatting items on menu. Bases 
+ * information on props and displays them accordingly. 
+ * 
+ * @summary   Component representing items in the menu.
+ * @author    Navid Boloorian
  */
 
 import React from 'react';
