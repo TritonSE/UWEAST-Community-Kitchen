@@ -39,3 +39,63 @@
     height: 30px !important;
     width: 120px;
 }
+
+/* Styling for the secondary emails starts here */
+
+.secondary-emails {
+    position: relative;
+    width: calc(45vw);
+    border: 2px solid var(--darkgrey);
+    min-height: calc(25vh);
+    max-height: calc(25vh);
+    overflow-y: auto;
+}
+
+.secondary-emails div {
+    position: relative;
+    width: calc(100%);
+    display: flex;
+    align-items: center;
+}
+
+.secondary-email-name {
+    padding-top: calc(1vh);
+    padding-left: calc(3vw);
+    width: calc(40vw);
+    font-weight: 600;
+}
+
+.trash-icon {
+    display: none;
+}
+
+.secondary-emails div:hover {
+    background-color: var(--lightgrey);
+}
+
+.secondary-emails div:hover > .trash-icon {
+    display: flex;
+    justify-content: end;
+    margin-left: calc(1vw);
+    cursor: pointer;
+}
+
+.secondary-emails div:hover > .secondary-email-name {
+    font-weight: 700;
+}
+
+.add-secondary-email {
+    margin-top: calc(2vh);
+}
+
+.emailAddButton {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: var(--yellow) !important;
+    border: 1px solid var(--yellow) !important;
+    color: var(--black) !important;
+    font-weight: bold !important;
+    margin-left: calc(1vw);
+    font-size: 16px !important;
+    height: 40px !important;
+    width: 120px;
+}

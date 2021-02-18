@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import Navbar from '../components/NavBar';
 import AdminMenuItems from "../components/AdminMenuItems";
 import Orders from "./Orders";
-import ChangeEmailScreen from "../components/ChangeEmailScreen";
+import Emails from "./Emails";
 import { isAuthenticated } from '../util/auth';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import '../css/Admin.css';
 
 class Admin extends Component {
@@ -79,7 +79,7 @@ class Admin extends Component {
                     </div> */}
                     {this.state.currentScreen === "orders" && <Orders />}
                     {this.state.currentScreen === "menu" && <AdminMenuItems />}
-                    {this.state.currentScreen === "email" && <ChangeEmailScreen />}
+                    {this.state.currentScreen === "email" && <Emails />}
                     {this.state.currentScreen === "resetPassword" && <Redirect to="/reset-password"/>}
                 </div>       
           </div>
