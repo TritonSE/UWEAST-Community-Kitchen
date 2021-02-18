@@ -9,9 +9,11 @@
  * 
  * Order Status contains props for a custom body inside the table
  * Cell. 
+ * 
+ * @summary - Column details for orders table
  */
 
-// Import helper functions from utils
+// import helper functions from utils
 import {
     renderStatus,
     DisplayDateFilters,
@@ -20,7 +22,7 @@ import {
     renderDateFilters    
 } from '../util/OrdersTableFunctions';
 
-//The column headers for the table
+// the column headers for the table
 const columns = [
     {
       name: "Pick up Details",

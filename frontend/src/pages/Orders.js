@@ -2,8 +2,7 @@
  * This file renders the Orders Table on the Admin page.
  * It imports the table from OrdersTable.js. This file
  * 
- * Contains the database calls to fetch all the previous
- * Orders.
+ * @summary - The orders table
  * 
  */
 
@@ -32,11 +31,13 @@ export default class Orders extends React.Component {
 
     /**
      * Formats the data from the fetch() call into the array
-     * @param {Object} list 
-     * @param {String} date 
-     * @param {String} formatCurrTime 
-     * @param {String} dateSubmission 
-     * @param {String} formatCurrTimeSubmission 
+     * 
+     * @param {Object} list - information about order
+     * @param {String} date - pick up date
+     * @param {String} formatCurrTime - pick up time
+     * @param {String} dateSubmission - submission date
+     * @param {String} formatCurrTimeSubmission - submission time
+     * @returns {array} - formated array
      */
     formatArray(list, date, formatCurrTime, dateSubmission, formatCurrTimeSubmission) {
         let val = formatCurrTime;
@@ -51,10 +52,13 @@ export default class Orders extends React.Component {
 
     /**
      * Formats the time in the HH:MM (P.M. OR A.M.)
+     * 
      * @param {String} time 
+     * @returns {String} - the formated time
      */
     formatTime(time) {
-        time = time.split(':'); // convert to array
+        // convert to array
+        time = time.split(':');
         
         let hours = Number(time[0]);
         let minutes = Number(time[1]);
@@ -64,15 +68,19 @@ export default class Orders extends React.Component {
         else if (hours > 12) timeValue = "" + (hours - 12);
         else if (hours === 0) timeValue = "12";
         
-        timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
-        timeValue += (hours >= 12) ? " P.M." : " A.M.";  // get AM/PM
+        // get minutes
+        timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  
+        // get AM/PM
+        timeValue += (hours >= 12) ? " P.M." : " A.M."; 
 
         return timeValue;
     }
 
     /**
      * Formats the date to be in the MM/DD/YYYY format
+     * 
      * @param {String} getDate 
+     * @returns {String} - the formated date
      */
     formatDate(getDate) {
         const monthSubmission = getDate.getMonth()+1 >= 10 ? getDate.getMonth()+1 : ("0" + (getDate.getMonth() + 1)).slice(-2);
@@ -96,12 +104,12 @@ export default class Orders extends React.Component {
             let createArr = [];
 
             for(let i = 0; i < length; i++) {
-                //Get the date from the database
+                // get the date from the database
                 let getDate = new Date(getOrdersList[i].Pickup);
                 const formatCurrtime = this.formatTime(getDate.getHours() + ":" + getDate.getMinutes() + ":" + getDate.getSeconds());
                 const date = this.formatDate(getDate);
 
-                //Format for the submission date
+                // format for the submission date
                 let getDateSubmission = new Date(getOrdersList[i].createdAt);
                 const formatCurrtimeSubmission = this.formatTime(getDateSubmission.getHours() + ":" + getDateSubmission.getMinutes() + ":" + getDateSubmission.getSeconds());
                 const dateSubmission = this.formatDate(getDateSubmission);
