@@ -1,8 +1,19 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-daterangepicker/daterangepicker.css';
-import '../css/Orders.css';
+/**
+ * Contains the details about each column in the Orders Table.
+ * 
+ * Each Column has specific props it requires. For example, 
+ * 
+ * The Pickup Details, Order Status, and Submission Details 
+ * Require their own custom filtering, so they take in props
+ * That allow for custom filtering. 
+ * 
+ * Order Status contains props for a custom body inside the table
+ * Cell. 
+ * 
+ * @summary - Column details for orders table
+ */
 
-// Import helper functions from utils
+// import helper functions from utils
 import {
     renderStatus,
     DisplayDateFilters,
@@ -11,7 +22,7 @@ import {
     renderDateFilters    
 } from '../util/OrdersTableFunctions';
 
-//The column headers for the table
+// the column headers for the table
 const columns = [
     {
       name: "Pick up Details",

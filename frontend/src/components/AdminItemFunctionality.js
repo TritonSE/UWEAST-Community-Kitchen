@@ -179,61 +179,6 @@ class AdminItemFunctionality extends Component {
         this.getItems();
     }
 
-    //This modal will render when the user clicks on "feature" button
-    //Determine the items to be listed as "featured"
-    featuredItemModal() {
-        //List of categories
-        const featuredCategories = ["Appetizers", "Main Dishes", "Sides", "Drinks"];
-
-        return (
-            <Modal show={this.state.renderFeaturedItems} onHide={() => this.setState({renderFeaturedItems: false})} backdrop='static'>
-                <Modal.Header closeButton>
-                    <Modal.Title>Featured Menu Item</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <div>
-                        {featuredCategories.map((category, ind) => (
-                            <div>
-                                <h6>{category}</h6>
-                                <div className="list-group">
-                                    {this.state.getItemsArray.map((item, ind) => {
-                                        if(item.category === category) {
-                                            return (
-                                                <div className="featured-item-checkbox">
-                                                    <input name="menu-item" className="form-check-input" type="checkbox" checked={this.state.featureList[item._id]}
-                                                            onChange={(e) => {
-                                                                const getList = this.state.featureList;
-                                                                getList[item._id] ? delete getList[item._id] : getList[item._id] = item._id;
-                                                                this.setState({
-                                                                    featureList: getList
-                                                                });
-                                                            }}>      
-                                                    </input>
-                                            
-                                                    <label class="form-check-label" >
-                                                        {item.name}
-                                                    </label>
-                                                </div>
-                                            )
-                                        }
-                                    })}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => this.setState({renderFeaturedItems: false })}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={() => this.saveFeatures()}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        )
-    }
-
     //This modal opens when the Admin clicks on "edit"
     //This will allows the admin to edit their menu items
     editItemModal() {
