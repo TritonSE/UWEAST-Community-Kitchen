@@ -17,11 +17,12 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import '../css/AdminMenuItems.css';
-
+import AddMenuItemModal from './AddMenuItemModal.js';
+import EditMenuItemModal from './EditMenuItemModal.js';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
-function createData(itemName, imgSource, categoryName, options, baseprice, description, id, featured) {
+function createData(itemName, imgSource, categoryName, options, baseprice, description, id, featured, dietaryInfo) {
   return {
         "itemName": itemName, 
         "imgSource": imgSource,
@@ -31,6 +32,7 @@ function createData(itemName, imgSource, categoryName, options, baseprice, descr
         "description": description,
         "id": id,
         "isFeatured": featured,
+        "dietaryInfo": dietaryInfo
     };
 }
 
@@ -74,7 +76,7 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
 }
 
 // Renders table of items based on what is passed in through displayContent
-function menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange) {
+function menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem) {
     return (
         <TableContainer component={Paper} className="menuTableContainer">
             <Table aria-label="simple table" stickyHeader className="menuTable">
@@ -93,7 +95,7 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
                 <TableBody>
                     {displayContent.map((row, index) => {
                         const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
-                        console.log(row);
+                        // console.log(row);
                         return (
                             <TableRow key={row._id} className={bgColor}>
                                 <TableCell component="th" scope="row" className="menuRowText" width="5%">
@@ -130,7 +132,7 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
                                 }
                                 </TableCell>
                                 <TableCell align="left" className="menuRowText" width="12%">
-                                    <IconButton>
+                                    <IconButton onClick={() => setCurrentEditItem(row.id)}>
                                         <EditIcon style={{"marginRight": "5px"}}/>
                                     </IconButton>
                                     <IconButton aria-label="delete item" onClick={() => setDeleteConfirmation([row.itemName, row.id])}>
@@ -175,6 +177,8 @@ export default function AdminMenuItems (props) {
     const [itemList, setItemList] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const [checkboxUpdate, setCheckboxUpdate] = useState("");
+    const [addItemModal, setAddItemModal] = useState(false);
+    const [currentEditItem, setCurrentEditItem] = useState("");
     // Fetch all menu items to display in table
     useEffect(() => {
         var data = null;
@@ -189,17 +193,18 @@ export default function AdminMenuItems (props) {
             console.log(data.items);
             const rows = [];
             data.items.forEach(element => {
-                console.log(element);
+                // log(element);
                 rows.push(
                     createData(
                         element.Name,
                         element.pictureURL, 
                         element.Category, 
-                        Object.entries(element.Accomodations),
+                        Object.entries(element.Accommodations),
                         Object.entries(element.Prices), 
                         element.Description,
                         element._id,
                         element.isFeatured,
+                        element.dietaryInfo
                 ));
             });
             setItemList(rows);
@@ -208,7 +213,7 @@ export default function AdminMenuItems (props) {
         }
         
         fetchData();
-    }, [setLoaded,])
+    }, [loaded])
     // update display contents based on search term
     const handleSearch = (searchTerm) => {
         // Empty search term, so we want to reset the displayed items to those of the current category
@@ -292,9 +297,11 @@ export default function AdminMenuItems (props) {
     if(loaded){
         return (  
             <div>
+                {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded}/>}
                 {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
+                {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} />}
                 <div className="aboveTableContainer">
-                    <Button className="menuAddButton">
+                    <Button className="menuAddButton" onClick={() => {setAddItemModal(true)}}>
                         <AddCircleIcon className="menuAddButtonIcon" />
                         Add Item
                     </Button>
@@ -312,10 +319,10 @@ export default function AdminMenuItems (props) {
                             }}
                         >
                             <MenuItem value="All">All</MenuItem>
-                            <MenuItem value="Appetizer">Appetizer</MenuItem>
-                            <MenuItem value="Main Dish">Main Dish</MenuItem>
-                            <MenuItem value="Side">Side</MenuItem>
-                            <MenuItem value="Drink">Drink</MenuItem>
+                            <MenuItem value="Appetizers">Appetizers</MenuItem>
+                            <MenuItem value="Main Dishes">Main Dishes</MenuItem>
+                            <MenuItem value="Sides">Sides</MenuItem>
+                            <MenuItem value="Drinks">Drinks</MenuItem>
                         </Select>
                         <SearchBar
                             className="menuSearchBar"
@@ -329,13 +336,13 @@ export default function AdminMenuItems (props) {
                         />
                     </div>
                 </div>
-                {menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange)}
+                {menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem)}
             </div>
         )
     }
     else{
         return (
-            <div> </div>
+            <div>Loading...</div>
         )
     }
 }
