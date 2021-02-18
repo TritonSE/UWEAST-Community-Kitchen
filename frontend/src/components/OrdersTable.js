@@ -7,7 +7,8 @@
  * Pickup Details, Name, email, Phone number, Price, Submission Date, Order Status,
  * Items, Quantity, Size, Accommodations, Special Instructions
  * 
-*/
+ * @summary - The Orders table implementation 
+ */
 
 import React from 'react';
 import MUIDataTable from "mui-datatables";
@@ -28,14 +29,14 @@ import {
   MuiThemeProvider,
 } from "@material-ui/core/styles";
 
-//Converts the data to an object list
+// converts the data to an object list
 function createData(name, accommodations, specialInstructions, size, quantity) {
   return { name, accommodations, specialInstructions, size, quantity };
 }
 
 /**
- * This function is used to render the row when the table row is clicked. Toggles view onClick
- * Of the original table row. Renders the order details of the selected order.
+ * This function is used to render the dropdown row when the table row is clicked.
+ * It renders the order details of the selected order row.
  * 
  * @param {Object} rowData - info of the row clicked 
  * @param {Object} rowMeta - index of the data
@@ -43,16 +44,16 @@ function createData(name, accommodations, specialInstructions, size, quantity) {
 const renderRow = (rowData, rowMeta) => {
     const rows = []
     const length = rowData[5].length;
-    //Format the row information
+    // format the row information
     for(let i = 0; i < length; i++) {
       console.log(rowData[5][i]);
       rows.push(createData(rowData[5][i].item, rowData[5][i].accommodations, rowData[5][i].specialInstructions, rowData[5][i].size, rowData[5][i].quantity));
     }
 
-    //Styling for the cells in the dropdown, makes the text overflow
+    // styling for the cells in the dropdown
     const stylingCell = {
-      maxWidth: '25ch', 
-      whiteSpace: 'pre-wrap'  
+      maxWidth: 'calc(21vw)', 
+      whiteSpace: 'pre-wrap',
     }
 
     return (
@@ -66,9 +67,9 @@ const renderRow = (rowData, rowMeta) => {
                     <TableRow style={{border: 'none'}}>
                       <TableCell></TableCell>
                       <TableCell style={{width: 'calc(14.3%)'}}>Items</TableCell>
-                      <TableCell style={{width: 'calc(24.5%)'}}>Quantity</TableCell>
-                      <TableCell style={{width: 'calc(27.5%)'}}>Size</TableCell>
-                      <TableCell style={{width: 'calc(17.6%)'}}>Accommodations</TableCell>
+                      <TableCell style={{width: 'calc(8.6%)'}}>Quantity</TableCell>
+                      <TableCell style={{width: 'calc(15.9%)'}}>Size</TableCell>
+                      <TableCell style={{width: 'calc(27.6%)'}}>Accommodations</TableCell>
                       <TableCell>Special Instructions</TableCell>
                     </TableRow>
                   </TableHead>
@@ -95,7 +96,7 @@ const renderRow = (rowData, rowMeta) => {
 
 export default function OrdersTable(props) {
   
-  // Option props to pass into the table
+  // option props to pass into the table
   const options = {
     filter: true,
     expandableRowsOnClick: true,
@@ -106,7 +107,7 @@ export default function OrdersTable(props) {
     searchOpen: true,
   };
 
-  // Styling for the row
+  // styling for the row
   const getMuiTheme = () =>
   createMuiTheme({
     overrides: {
