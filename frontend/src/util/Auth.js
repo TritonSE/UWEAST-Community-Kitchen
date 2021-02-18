@@ -30,9 +30,8 @@ async function isAuthenticated() {
   }
   
   //Retrieves the logged in user's JWT token from local storage
-  async function getJWT() {
-    const response = await isAuthenticated();
-    if (!response) {
+function getJWT() {
+    if (!localStorage.hasOwnProperty(ADMIN_TOKEN_ATTRIBUTE)) {
       return null;
     }
     return localStorage.getItem(ADMIN_TOKEN_ATTRIBUTE);
