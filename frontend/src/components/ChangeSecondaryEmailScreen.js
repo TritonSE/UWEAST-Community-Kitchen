@@ -111,7 +111,7 @@ export default function ChangeSecondaryEmailScreen (props) {
                 setErrorMessage("");
             } else {
                 // error handling
-                if(data.message === "User input is malformed") setErrorMessage("Email already added to List")
+                setErrorMessage("Email already added to List")
                 setInputError(true);
             }
         })
