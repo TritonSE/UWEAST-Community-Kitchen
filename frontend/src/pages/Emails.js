@@ -65,15 +65,6 @@ export default class Emails extends React.Component {
     }
 
     /**
-     * Used to update the state in this class from the child class
-     * 
-     * @param {array} email - primary email
-     */
-    updatePrimaryEmail(emails) {
-        this.setState({ primaryEmail: emails });
-    }
-
-    /**
      * GET the primary email
      */
     getPrimaryEmail() {
