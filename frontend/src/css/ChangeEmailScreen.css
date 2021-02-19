@@ -48,12 +48,17 @@
 
 /* Styling for the secondary emails starts here */
 
+.secondary-emails-container {
+    margin-top: calc(2em);
+    margin-bottom: calc(7vh);
+}
+
 .secondary-emails {
     position: relative;
     width: calc(45vw);
     border: 2px solid var(--darkgrey);
-    min-height: calc(25vh);
-    max-height: calc(25vh);
+    min-height: calc(15.5em);
+    max-height: calc(15.5em);
     overflow-y: auto;
 }
 

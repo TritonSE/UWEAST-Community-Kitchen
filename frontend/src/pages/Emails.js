@@ -35,7 +35,6 @@ export default class Emails extends React.Component {
         this.getSecondaryEmails = this.getSecondaryEmails.bind(this);
         this.getPrimaryEmail = this.getPrimaryEmail.bind(this);
         this.updateSecondaryEmails = this.updateSecondaryEmails.bind(this);
-        this.updatePrimaryEmail = this.updatePrimaryEmail.bind(this);
     }
 
     /**
