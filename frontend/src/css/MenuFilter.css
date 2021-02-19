@@ -1,8 +1,8 @@
 .menu-filter
 {
-  position: fixed;
+  position: sticky;
   width: 100%;
-  top: calc(50vh + 40px);
+  top: 120px;
   width: 150px;
 }
 

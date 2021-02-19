@@ -1,3 +1,12 @@
+/**
+ * Component creating the map on the contact page. Renders a map utilizing the 
+ * Google Maps API centered above UWEAST location. Also renders an infobox with 
+ * information with email, address, and phone number over that location.
+ * 
+ * @summary   Map that shows up on the contact page with Google Maps API.
+ * @author    Navid Boloorian
+ */
+
 import React, {useState, useEffect} from 'react';
 import {
   GoogleMap,
@@ -5,7 +14,8 @@ import {
   InfoWindow
 } from "@react-google-maps/api";
 
-const config = require("../config");
+const config = require('../config');
+const BACKEND_URL = config.backend.uri;
 
 const mapContainerStyle = {
   width: "100%",
@@ -32,8 +42,12 @@ const ContactMap = () => {
   // used to adjust the email in the infobox
   const [contactEmail, setContactEmail] = useState("none"); 
 
+  /**
+   * UseEffect gets the primary email from the database and sets the state 
+   * email variable to that primary email.
+   */
   useEffect(() => {
-    fetch("http://localhost:9000/email/all")
+    fetch(`${BACKEND_URL}/email/all`)
     .then(async result => {
       if (result.ok) {
         const json = await result.json();

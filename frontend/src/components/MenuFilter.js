@@ -1,3 +1,11 @@
+/**
+ * Component that groups all filter buttons together. Responsible for sending 
+ * the relevant props to individual buttons.
+ * 
+ * @summary   Component that groups all filter buttons.
+ * @author    Navid Boloorian
+ */
+
 import React, { Component} from 'react';
 import MenuFilterButton from './MenuFilterButton';
 import "../css/MenuFilter.css";
