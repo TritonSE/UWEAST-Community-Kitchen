@@ -201,11 +201,10 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                             </div>
 
                             {/** hidden fields to pass along to the total price and  quantity */}
-                            <input name="name" type="hidden" value={values.get("title")} />
+                            <input name="popupValues" type="hidden" value={values} />
                             <input name="price" type="hidden" value={parseFloat(totalPrice).toFixed(2)} />
                             <input name="quantity" type="hidden" value={quantity} />
-                            <input name="description" type="hidden" value={values.get("description")} />
-                            <input className="submit-order-button" type="submit" value={"Add " + quantity + " to cart: $" + totalPrice} />
+                            <input className="submit-order-button" type="submit" value={(values.get("fillIns") != undefined) ? "Save Changes" : "Add " + quantity + " to cart: $" + totalPrice} />
                         </form>
                     </div>
 
