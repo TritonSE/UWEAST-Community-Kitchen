@@ -1,18 +1,27 @@
 /**
  * This file contains the code for the "Email" tab
  * under the "Admin" tab on the webpage. This page enables
- * the admin user to update their primary email or add 
+ * the admin user to update their primary email or add/remove
  * secondary emails.
  * 
- * @summary - the email updating page
+ * @summary primary and secondary email updating for the admin user
  */
 
 import React from 'react';
 import ChangeEmailScreen from '../components/ChangeEmailScreen';
 import ChangeSecondaryEmailScreen from '../components/ChangeSecondaryEmailScreen';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import '../css/ChangeEmailScreen.css';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
+
+// provides the red asterix to indicate important note
+function requiredAsterix() {
+    return (
+        <p className="requiredAsterix">*</p>
+    );
+}
 
 export default class Emails extends React.Component {
     constructor(props) {
@@ -26,6 +35,7 @@ export default class Emails extends React.Component {
         this.getSecondaryEmails = this.getSecondaryEmails.bind(this);
         this.getPrimaryEmail = this.getPrimaryEmail.bind(this);
         this.updateSecondaryEmails = this.updateSecondaryEmails.bind(this);
+        this.updatePrimaryEmail = this.updatePrimaryEmail.bind(this);
     }
 
     /**
@@ -55,6 +65,15 @@ export default class Emails extends React.Component {
     }
 
     /**
+     * Used to update the state in this class from the child class
+     * 
+     * @param {array} email - primary email
+     */
+    updatePrimaryEmail(emails) {
+        this.setState({ primaryEmail: emails });
+    }
+
+    /**
      * GET the primary email
      */
     getPrimaryEmail() {
@@ -74,16 +93,23 @@ export default class Emails extends React.Component {
     }
 
     render() {
-
-        console.log(this.state);
         return (
             <div>
+                <div className="disclaimer">
+                    <FormHelperText id="component-helper-text">{requiredAsterix()} 
+                        {' '} Note: An email can be either a Primary Email, 
+                        or a Secondary Email - not both.
+                    </FormHelperText>
+                </div>
                 {/* Primary email section */}
-                <ChangeEmailScreen />
+                <ChangeEmailScreen 
+                    emails={this.state.secondaryEmailsList} 
+                />
 
                 {/* Secondary email section */}
                 <ChangeSecondaryEmailScreen emails={this.state.secondaryEmailsList} 
                     updateSecondaryEmails={this.updateSecondaryEmails}
+                    primaryEmail={this.state.primaryEmail}
                 />
             </div>
         )

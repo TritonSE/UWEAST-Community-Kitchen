@@ -8,24 +8,69 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
+import { makeStyles } from '@material-ui/core/styles';
 
 import '../css/ChangeEmailScreen.css';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
+const useStyles = makeStyles((theme) => ({
+    form: {
+      //Input Field - Label Layout 
+      '& .MuiFormLabel-root': {
+          color: '#747474',
+        },
+        //Input Field - Border Layout 
+      '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+          border: '1.5px solid #747474'
+      }
+    }
+}));
 
-// calls email change route
-async function handleFormSubmit(email, setInputError, setOpen){
-    // validate to make sure email is an email. We do this here because
-    // we don't want to overload the server with invalid emails
-    if (email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-        setInputError(true);
-        return;
+export default function AdminMenuItems (props) {
+    const classes = useStyles();
+    const [inputEmail, setPrimaryEmail] = useState("");
+    const [secondaryEmails, setSecondaryEmails] = useState([]);
+    const [inputError, setInputError] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    // catch enter rerendeing entire admin page
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleFormSubmit(inputEmail, setInputError, setOpen)
+        }
     }
 
-    // change the primary email backend call
-    await fetch(`${BACKEND_URL}email/changePrimary`, {
+    useEffect(() => {
+        setSecondaryEmails(props.emails);
+    }, [props])
+
+    /**
+     * Updates the primary email in the database
+     * 
+     * @param {string} email - Primary email to update
+     * @param {function} setInputError - Error handling 
+     * @param {function} setOpen - Snackbox rendering 
+     */
+    async function handleFormSubmit(email, setInputError, setOpen) {
+        // make sure it is not a secondary email
+        if(secondaryEmails.includes(email)) {
+            setInputError(true);
+            setErrorMessage("This email is already listed as a secondary email.");  
+            return;
+        }
+        
+        // validate to make sure email is an email
+        if (email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+            setInputError(true);
+            setErrorMessage("Enter a valid email address.");
+            return;
+        }
+
+        // change the primary email backend call
+        await fetch(`${BACKEND_URL}email/changePrimary`, {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -37,24 +82,15 @@ async function handleFormSubmit(email, setInputError, setOpen){
             if(res.ok){
                 setInputError(false);
                 setOpen(true);
+                setPrimaryEmail("");
+                setErrorMessage("");
+                props.updatePrimaryEmail(email);
             }
             else {
-                console.log(res);
+                setErrorMessage("This is currently your primary email.");  
                 setInputError(true);
             }
         })
-}
-
-export default function AdminMenuItems (props) {
-    const [inputEmail, setInputEmail] = useState("");
-    const [inputError, setInputError] = useState(false);
-    const [open, setOpen] = useState(false);
-
-    // catch enter rerendeing entire admin page
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            handleFormSubmit(inputEmail, setInputError, setOpen)
-        }
     }
 
     return (
@@ -68,11 +104,13 @@ export default function AdminMenuItems (props) {
                     error={inputError} 
                     value={inputEmail} 
                     type="email" 
-                    className="emailUpdateInput" 
-                    onChange={(e) => setInputEmail(e.target.value)} 
+                    id="emailUpdateInput" 
+                    onChange={(e) => setPrimaryEmail(e.target.value)} 
                     onKeyDown={(e) => handleKeyDown(e)}
                     label="Primary Email" 
                     variant="outlined"
+                    helperText={errorMessage}
+                    className={classes.form}
                 />
             <br />
             <br />

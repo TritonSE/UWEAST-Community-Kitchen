@@ -1,20 +1,49 @@
+/**
+ * This file renders the information related to the secondary emails.
+ * It displays all the current secondary emails that that admin 
+ * user has authorized.
+ * It makes two calls to the backend:
+ * 
+ *  1) POST call to add secondary email
+ *  2) DELETE call to remove a secondary email
+ * 
+ * @summary the functionality of the secondary emails
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import TextField from '@material-ui/core/TextField';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { makeStyles } from '@material-ui/core/styles';
 
 import '../css/ChangeEmailScreen.css';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
+// styling for the MUI form
+const useStyles = makeStyles((theme) => ({
+    form: {
+      //Input Field - Label Layout 
+      '& .MuiFormLabel-root': {
+          color: '#747474',
+        },
+        //Input Field - Border Layout 
+      '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+          border: '1.5px solid #747474'
+      }
+    }
+}));
+
 /**
+ * Renders the node containing the email addresses
  * 
- * @param {string} email
- * @param {array} secondaryEmails 
- * @param {function} setSecondaryEmails 
+ * @param {string} email - secondary email
+ * @param {array} secondaryEmails - list of all current secondary emails
+ * @param {function} setSecondaryEmails - function to update secondary emails list
  * @param {function} updateSecondaryEmails - parent function to update parent state 
+ * @returns {component} - renders the node with email
  */
 const renderNode = (email, secondaryEmails, setSecondaryEmails, updateSecondaryEmails) => {
     // delete the email from the database
@@ -57,8 +86,10 @@ const plusIcon = {
 }
 
 export default function ChangeSecondaryEmailScreen (props) {
+    const classes = useStyles();
     const updateSecondaryEmails = props.updateSecondaryEmails;
     const [secondaryEmails, setSecondaryEmails] = useState([]);
+    const [primaryEmail, setPrimaryEmail] = useState("");
     const [addSecondaryEmail, setAddSecondaryEmail] = useState("");
     const [inputError, setInputError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -73,6 +104,7 @@ export default function ChangeSecondaryEmailScreen (props) {
     // loads all emails from the parent class
     useEffect(() => {
         setSecondaryEmails(props.emails);
+        setPrimaryEmail(props.primaryEmail);
     }, [props])
 
     /**
@@ -81,8 +113,16 @@ export default function ChangeSecondaryEmailScreen (props) {
      * @param {string} addSecondaryEmail - email to add
      */
     const addEmail = (addSecondaryEmail) => {
+        // make sure email is not a primary email 
+        if(addSecondaryEmail === primaryEmail) {
+            setErrorMessage("This is currently your primary email."); 
+            setInputError(true);
+            return;
+        }
+
+        // make sure the email follows proper format
         if (addSecondaryEmail && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(addSecondaryEmail) || addSecondaryEmail.length === 0) {
-            setErrorMessage("Enter a valid Email Address");
+            setErrorMessage("Enter a valid email address.");
             setInputError(true);
             return;
         }
@@ -111,7 +151,7 @@ export default function ChangeSecondaryEmailScreen (props) {
                 setErrorMessage("");
             } else {
                 // error handling
-                setErrorMessage("Email already added to List")
+                setErrorMessage("This email is already listed as a secondary email."); 
                 setInputError(true);
             }
         })
@@ -130,25 +170,27 @@ export default function ChangeSecondaryEmailScreen (props) {
                     renderNode(secondary, secondaryEmails, setSecondaryEmails, updateSecondaryEmails)
                 ))}
             </div>
-
+            
+            {/* The textfield */}
             <div className="add-secondary-email">
                 <TextField id="email-input" 
                     size="small"
                     error={inputError} 
                     value={addSecondaryEmail} 
                     type="email" 
-                    className="emailUpdateInput" 
                     onChange={(e) => setAddSecondaryEmail(e.target.value)} 
                     onKeyDown={(e) => handleKeyDown(e)}
                     label="Add Secondary Email" 
                     variant="outlined"
-                    style={{width: 'calc(25vw)'}}
                     helperText={errorMessage}
+                    className={classes.form} 
+                    id="secondaryEmail"
                 />
 
                 <Button id="submit" className="emailAddButton" 
                     onClick={(e) => addEmail(addSecondaryEmail)}
-                >
+                >   
+                    {/* The "add" icon */}
                     <FontAwesomeIcon icon={faPlusCircle} style={plusIcon} />
                         Add
                 </Button>

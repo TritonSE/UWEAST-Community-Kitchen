@@ -9,6 +9,12 @@
     --white: #FFFFFF;
     --offwhite: #F1f1f1;
 }
+
+.disclaimer {
+    margin-top: calc(-3vh);
+    width: calc(300px);
+}
+
 .emailHeading {
     font-family: 'Roboto', sans-serif !important;
     color: var(--black) !important;
@@ -21,12 +27,12 @@
     font-weight: 300;
     font-size: 16px;
 }
-.emailUpdateInput {
+#emailUpdateInput {
     font-family: 'Roboto', sans-serif !important;
     color: var(--black) !important;
     font-weight: light !important;
     font-size: 16px;
-    width: 250px;
+    width: calc(15vw);
 }
 .emailUpdateButton {
     font-family: 'Roboto', sans-serif !important;
@@ -36,7 +42,7 @@
     font-weight: bold !important;
     padding: 0px !important;
     font-size: 16px !important;
-    height: 30px !important;
+    height: 40px !important;
     width: 120px;
 }
 
@@ -88,14 +94,52 @@
     margin-top: calc(2vh);
 }
 
+#secondaryEmail {
+    width: calc(25vw);
+    font-family: 'Roboto', sans-serif !important;
+    color: var(--black) !important;
+    font-weight: light !important;
+    font-size: 16px;
+}
+
 .emailAddButton {
     font-family: 'Roboto', sans-serif !important;
     background-color: var(--yellow) !important;
     border: 1px solid var(--yellow) !important;
     color: var(--black) !important;
     font-weight: bold !important;
-    margin-left: calc(1vw);
+    margin-left: calc(5vw);
     font-size: 16px !important;
     height: 40px !important;
     width: 120px;
 }
+
+@media only screen and (max-width: 1268px) 
+{
+    .secondary-emails {
+        width: calc(60vw);
+    }
+
+    #emailUpdateInput {
+        width: calc(27vw) !important;
+    }
+
+    #secondaryEmail {
+        width: calc(37vw) !important;    
+    }
+}
+
+/* @media only screen and (max-width: 1500px) 
+{
+    .secondary-emails {
+        width: calc(60vw);
+    }
+
+    #emailUpdateInput {
+        width: calc(27vw) !important;
+    }
+
+    #secondaryEmail {
+        width: calc(37vw) !important;    
+    }
+} */
