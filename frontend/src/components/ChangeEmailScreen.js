@@ -16,19 +16,17 @@ const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
 const useStyles = makeStyles((theme) => ({
-    form: {
-      //Input Field - Label Layout 
-      '& .MuiFormLabel-root': {
-          color: '#747474',
-        },
-        //Input Field - Border Layout 
-      '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-          border: '1.5px solid #747474'
+    span: {
+      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        borderColor: "black"
+      },
+      "& .MuiInputLabel-outlined.Mui-focused": {
+        color: "black"
       }
     }
 }));
 
-export default function AdminMenuItems (props) {
+export default function ChangeEmailScreen (props) {
     const classes = useStyles();
     const [inputEmail, setPrimaryEmail] = useState("");
     const [secondaryEmails, setSecondaryEmails] = useState([]);
@@ -84,7 +82,6 @@ export default function AdminMenuItems (props) {
                 setOpen(true);
                 setPrimaryEmail("");
                 setErrorMessage("");
-                props.updatePrimaryEmail(email);
             }
             else {
                 setErrorMessage("This is currently your primary email.");  
@@ -99,19 +96,21 @@ export default function AdminMenuItems (props) {
             <h1 className="emailHeading">Change Primary Email</h1>
             <p className="emailDescription">Order confirmations and customer inquiries will be sent to this email.</p>
             <br />
-                <TextField id="email-input" 
-                    size="small"
-                    error={inputError} 
-                    value={inputEmail} 
-                    type="email" 
-                    id="emailUpdateInput" 
-                    onChange={(e) => setPrimaryEmail(e.target.value)} 
-                    onKeyDown={(e) => handleKeyDown(e)}
-                    label="Primary Email" 
-                    variant="outlined"
-                    helperText={errorMessage}
-                    className={classes.form}
-                />
+                <span className={classes.span}>
+                    <TextField id="email-input" 
+                        size="small"
+                        error={inputError} 
+                        value={inputEmail} 
+                        type="email" 
+                        id="emailUpdateInput" 
+                        onChange={(e) => setPrimaryEmail(e.target.value)} 
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        label="Primary Email" 
+                        variant="outlined"
+                        helperText={errorMessage}
+                        className={classes.form}
+                    />
+                </span>
             <br />
             <br />
 

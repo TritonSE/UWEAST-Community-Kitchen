@@ -24,14 +24,12 @@ const BACKEND_URL = config.backend.uri;
 
 // styling for the MUI form
 const useStyles = makeStyles((theme) => ({
-    form: {
-      //Input Field - Label Layout 
-      '& .MuiFormLabel-root': {
-          color: '#747474',
-        },
-        //Input Field - Border Layout 
-      '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-          border: '1.5px solid #747474'
+    span: {
+      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        borderColor: "black"
+      },
+      "& .MuiInputLabel-outlined.Mui-focused": {
+        color: "black"
       }
     }
 }));
@@ -170,19 +168,20 @@ export default function ChangeSecondaryEmailScreen (props) {
             
             {/* The textfield */}
             <div className="add-secondary-email">
-                <TextField id="email-input" 
-                    size="small"
-                    error={inputError} 
-                    value={addSecondaryEmail} 
-                    type="email" 
-                    onChange={(e) => setAddSecondaryEmail(e.target.value)} 
-                    onKeyDown={(e) => handleKeyDown(e)}
-                    label="Add Secondary Email" 
-                    variant="outlined"
-                    helperText={errorMessage}
-                    className={classes.form} 
-                    id="secondaryEmail"
-                />
+                <span className={classes.span}>
+                    <TextField id="email-input" 
+                        size="small"
+                        error={inputError} 
+                        value={addSecondaryEmail} 
+                        type="email" 
+                        onChange={(e) => setAddSecondaryEmail(e.target.value)} 
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        label="Add Secondary Email" 
+                        variant="outlined"
+                        helperText={errorMessage}
+                        id="secondaryEmail"
+                    />
+                </span>
 
                 <Button id="submit" className="emailAddButton" 
                     onClick={(e) => addEmail(addSecondaryEmail)}
