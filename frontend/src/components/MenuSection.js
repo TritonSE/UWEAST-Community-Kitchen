@@ -1,10 +1,23 @@
+/**
+ * Hub of menu portion of page. Almost all  states are elevated to this level. 
+ * Defines most of the form processing and renders MenuFilter, MenuItems, and 
+ * MenuCart.
+ * 
+ * @summary   Hub of menu items, most states are elevated to this level.
+ * @author    Navid Boloorian
+ */
+
 import React, { useState } from 'react';
 import MenuFilter from './MenuFilter';
 import MenuItems from './MenuItems';
 import '../css/MenuSection.css';
-const config = require('../config');
 
-// MenuSection is responsible for managing states for most of the menu
+/**
+ * Handle the display of menu categories and sections. Stores states of what is 
+ * currently visible.
+ * 
+ * @param {function} onItemAdd - Function returning boolean
+ */
 const MenuSection = ({onItemAdd}) => {
   // filterCategories populates the filter buttons
   const filterCategories = ["Whole Menu", "Featured", "Appetizers", "Main Dishes", "Sides", "Drinks"];

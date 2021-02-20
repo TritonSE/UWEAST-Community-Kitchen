@@ -36,7 +36,7 @@
 }
 
 .brand-name p {
-    font-size: calc(3.5vh);
+    font-size: calc(30px);
     font-style: italic;
     font-family: 'Roboto Slab', serif;
 }
