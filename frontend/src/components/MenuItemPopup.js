@@ -1,7 +1,7 @@
 /**
  * Popup that displays specified item when MenuItem is clicked. Has form to 
  * pass data to/add items to cart. Popup gives relevant information such as 
- * pricing, description, additional accomodations etc.
+ * pricing, description, additional accommodations etc.
  * 
  * @summary     Displays item information and allows user to add item to cart.
  * @author      Aaron Kirk, Navid Boloorian
