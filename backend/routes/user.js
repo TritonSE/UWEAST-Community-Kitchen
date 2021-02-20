@@ -211,7 +211,6 @@ router.post(
     isValidated,
   ],
   async (req, res, next) => {
-    console.log(req.body);
     const { email, oldPassword, newPassword } = req.body;
     try {
       // check if user email exists
