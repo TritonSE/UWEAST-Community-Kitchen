@@ -42,6 +42,7 @@
 
 .formTextInput{
     height: 28px !important;
+    margin-top: 10px;
 }
 
 .formLabelText {
@@ -62,7 +63,7 @@
 }
 
 .modalFooter {
-    padding-top: 20px;
+    padding-top: 10px;
     height: auto;
     display: flex;
     flex-direction: row;
