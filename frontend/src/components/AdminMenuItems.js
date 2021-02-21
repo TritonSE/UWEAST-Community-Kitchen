@@ -316,11 +316,21 @@ export default function AdminMenuItems (props) {
         if(filter === "All"){        
             setDisplayContent(itemList); 
         }
-        else{
+        else if(filter === "Featured"){
             const newRows = [];
             for(var index in itemList) { 
-                if (itemList[index]["categoryName"] === filter){
+                if (itemList[index].isFeatured){
                     newRows.push(itemList[index]); 
+                }
+            }
+            console.log(newRows)
+            setDisplayContent(newRows); 
+        }
+        else{
+            const newRows = [];
+            for(var i in itemList) { 
+                if (itemList[i]["categoryName"] === filter){
+                    newRows.push(itemList[i]); 
                 }
             }
             console.log(newRows)
@@ -398,6 +408,7 @@ export default function AdminMenuItems (props) {
                             <MenuItem value="Main Dishes">Main Dishes</MenuItem>
                             <MenuItem value="Sides">Sides</MenuItem>
                             <MenuItem value="Drinks">Drinks</MenuItem>
+                            <MenuItem value="Featured">Featured</MenuItem>
                         </Select>
                         <SearchBar
                             className="menuSearchBar"
