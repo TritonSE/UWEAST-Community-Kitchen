@@ -371,7 +371,7 @@ export default function AdminMenuItems (props) {
     
     if(loaded){
         return (  
-            <div>
+            <div className="adminMenuPageContainer">
                 {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded}/>}
                 {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
                 {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} />}

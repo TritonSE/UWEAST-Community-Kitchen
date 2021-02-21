@@ -7,7 +7,14 @@
     --white: #FFFFFF;
     --offwhite: #F1f1f1;
 }
-
+.adminMenuPageContainer{
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-right: 80px;
+}
 .aboveTableContainer{
     min-width: 85vw;
     max-width: 85vw;
@@ -44,7 +51,7 @@
     margin: 0px;
     padding: 0px;
     margin-right: 3vw;
-    margin-left: 3vw;
+    margin-left: 10vw;
     min-width: 100px;
     max-width: 200px;
     height: 40px !important;
