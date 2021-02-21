@@ -1,8 +1,12 @@
-// this file allows for interaction with the MenuImages DB
-// with changeMenuImage and findMenuImage
+/**
+ * This file allows for interaction with the MenuImage DB.
+ * Contains methods that change the MenuImage and that
+ * find the MenuImage.
+ */
 const { MenuImage } = require("../models/menuImages");
 
-// change the current image url in the DB
+// @description - change the current image url in the DB
+// @return - menu object / false on error
 async function changeMenuImage(raw_menu) {
   try {
     // find and replace the current image in the DB
@@ -20,7 +24,8 @@ async function changeMenuImage(raw_menu) {
   }
 }
 
-// finds the imageUrl in the DB
+// @description - finds the imageUrl in the DB
+// @return - the first MenuImage in the DB
 async function findMenuImage() {
   return MenuImage.findOne({}).exec();
 }

@@ -1,3 +1,8 @@
+/**
+ * This file creates the routes to allow for interaction with the orders DB.
+ * Contains route find completed orders or find orders based on customer name.
+ * Also allows for an order's status to be updated
+ */
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");

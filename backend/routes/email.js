@@ -1,6 +1,9 @@
-// this file creates the routes to allow for interaction with the
-// Email DB, routes are /changePrimary /addSecondary /removeSecondary
-// /secondary (GET) /primary (GET)
+/**
+ * This file creates the routes to allow for interaction with the Email DB.
+ * Contains routes to add or change the primary email, add a secondary email, and remove a secondary email.
+ * Also contains get requests to get the primary email and secondary email(s) as well as
+ * delete request to delete a secondary email.
+ */
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");

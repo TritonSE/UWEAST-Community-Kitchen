@@ -1,14 +1,16 @@
-// this file creates the routes to allow for interaction with the
-// menuimages DB, routes are /changeMenuImage (POST) and / (GET)
+/**
+ * This file creates the routes to allow for interaction with the menuImages DB.
+ * Contains routes to change the image and get the image.
+ */
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const router = express.Router();
 const { changeMenuImage, findMenuImage } = require("../db/services/menuImages");
 
-// @description: changes the menu image in the DB
-// @body: imageUrl
-// @return: success:true if imageUrl is changed
+// @description - changes the menu image in the DB
+// @body {string} imageUrl - url to be set
+// @return - success:true if imageUrl is changed
 //          "MenuImage change unsuccessful" if duplicate imageUrl
 router.post(
   "/changeMenuImage",
@@ -35,8 +37,8 @@ router.post(
   }
 );
 
-// @description: returns the imageUrl in the DB
-// @return: imageUrl object
+// @description - returns the imageUrl in the DB
+// @return - imageUrl object
 router.get("/", async (req, res, next) => {
   try {
     // returns image/null or error if there is an error

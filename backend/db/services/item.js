@@ -1,10 +1,14 @@
+/**
+ * This file allows for interaction with the Item DB.
+ * Contains methods that find all menu items, add new items,
+ * delete an item, edit an item, and set an item to be featured.
+ */
 const mongoose = require("mongoose");
 const mongodb = require("mongodb");
 const { Item } = require("../models/item");
 
-//Example of how to write queries/updates: https://github.com/TritonSE/tse-recruitment-backend/blob/master/services/applications.js
-
-// returns all menuItems or false
+// @description - returns all menuItems, false upon err
+// @return - array of menuitems / false
 async function getAllMenuItems() {
   try {
     return Item.find({}).exec();
@@ -13,8 +17,9 @@ async function getAllMenuItems() {
   }
 }
 
-// @body: info conforming to the item schema
-// adds a new item object to the Item DB
+// @description - adds a new item object to the Item DB
+// @param {object} info - conforming to the item schema
+// @return - true on deletion / false
 async function addNewItem(info) {
   try {
     return Item.create(info);
@@ -23,16 +28,17 @@ async function addNewItem(info) {
   }
 }
 
-// @body: id: the id of the object deleted
-// deletes the item specified by id from the Item DB
+// @description - deletes the item specified by id from the Item DB
+// @param {mongoid} id - the id of the object deleted
+// @return - true on deletion / false
 async function deleteItem(id) {
   return await Item.deleteOne({ _id: new mongodb.ObjectID(id) }).exec();
 }
 
-// @body: id, info
-// id: the id of the object to be edited
-// info any subset of the aspects of the Item object
-// edits any aspect of the item object and updates to DB
+// @description - Edits any aspect of the item object and updates to DB
+// @param {mongoid} id - the id of the object deleted
+// @param {object} info - any subset of the aspects of the Item object
+// @return - true on deletion / false
 async function editItem(id, info) {
   try {
     // edit the item
@@ -46,10 +52,10 @@ async function editItem(id, info) {
   }
 }
 
-// @body: id, featured
-// id: the id of the object to be edited
-// featured: T/F value to set for the desired object's isFeatured
-// Sets the isFeatured of an object to T or F
+// @description - Sets the isFeatured of an object to T or F
+// @param {mongoid} id - the id of the object edited
+// @param {boolean} featured - object featured boolean
+// @return - true on deletion / false
 async function setFeatured(id, featured) {
   try {
     return await Item.updateOne(
@@ -61,19 +67,10 @@ async function setFeatured(id, featured) {
   }
 }
 
-// function setNotFeatured(id) {
-//   Item.updateOne(
-//     { _id: new mongodb.ObjectID(id) },
-//     { $set: { featured: false } },
-//     (err, results) => {}
-//   );
-// }
-
 module.exports = {
   getAllMenuItems,
   addNewItem,
   deleteItem,
   editItem,
   setFeatured,
-  // setNotFeatured,
 };

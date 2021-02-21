@@ -1,3 +1,9 @@
+/**
+ * This file creates the routes to allow for interaction with the Item DB.
+ * Contains routes to add, edit or delete an item.
+ * Also contains requests to get the all of the menu items as well as
+ * set an item to be featured.
+ */
 const express = require("express");
 const {
   getAllMenuItems,
@@ -5,7 +11,6 @@ const {
   deleteItem,
   editItem,
   setFeatured,
-  // setNotFeatured,
 } = require("../db/services/item");
 const { body, validationResult } = require("express-validator");
 const { isValidated } = require("../middleware/validation");

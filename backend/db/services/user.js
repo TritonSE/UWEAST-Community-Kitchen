@@ -1,6 +1,13 @@
+/**
+ * This file allows for interaction with the User DB.
+ * Contains methods that add and update a user as well
+ * as find a user.
+ */
 const { User } = require("../models/user");
 
-// if user doesn't exist create and return user otherwise false
+// @description - create a user
+// @param {object} raw_user - user object to add
+// @return - user object / false on error
 async function addNewUser(raw_user) {
   try {
     user = new User(raw_user);
@@ -11,16 +18,22 @@ async function addNewUser(raw_user) {
   }
 }
 
+// @description - find a user
+// @param {object} raw_user - user object to add
+// @return - user object / false on error
 async function findOneUser(incomingEmail) {
   return User.findOne({ email: incomingEmail }).exec();
 }
 
-async function updateOneUser(updated_user){
+// @description - update a user
+// @param {object} updated_user - user object to edit
+// @return - user object / false on error
+async function updateOneUser(updated_user) {
   return updated_user.save();
 }
 
 module.exports = {
   addNewUser,
   findOneUser,
-  updateOneUser
+  updateOneUser,
 };

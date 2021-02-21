@@ -1,11 +1,13 @@
-// this file allows for interaction with the Email DB
-// with methods that find the primary email, find the secondary emails,
-// delete a secondary email, change the primary email, and a secondaryEmail
+/**
+ * This file allows for interaction with the Email DB.
+ * Contains methods that find the primary email, find the secondary emails,
+ * delete a secondary email, change the primary email, and a secondaryEmail.
+ */
 const { raw } = require("express");
 const { Email } = require("../models/email");
 
-// @return: Mongo object email or false on duplicate/error
-// @description: change the primary email in the DB
+// @description - change the primary email in the DB
+// @return - Mongo object email or false on duplicate/error
 async function changePrimaryEmail(raw_email) {
   try {
     // find and replace the primary email
@@ -25,8 +27,8 @@ async function changePrimaryEmail(raw_email) {
   }
 }
 
-// @return: Mongo Object for email or false on failure/duplicate
-// @description: add secondary email if it doesn't already exist
+// @description - add secondary email if it doesn't already exist
+// @return - Mongo Object for email or false on failure/duplicate
 async function addSecondaryEmail(raw_email) {
   try {
     let email = await Email.findOne(raw_email).exec();
@@ -43,20 +45,20 @@ async function addSecondaryEmail(raw_email) {
   }
 }
 
-// @return: Mongo Object for primary email / null
-// @decsription: finds the primary email in the DB
+// @description - finds the primary email in the DB
+// @return - Mongo Object for primary email / null
 async function findPrimaryEmail() {
   return Email.findOne({ isPrimary: true }).exec();
 }
 
-// @return: Array of Mongo Objects for secondary emails
-// @decsription: finds the primary email in the DB
+// @description - finds the primary email in the DB
+// @return - Array of Mongo Objects for secondary emails
 async function findAllSecondaryEmails() {
   return Email.find({ isPrimary: false }).exec();
 }
 
-// @return: true on deletion / false
-// @decsription: delete secondary email
+// @description - delete secondary email
+// @return - true on deletion / false
 async function deleteSecondaryEmail(incomingEmail) {
   let email = await Email.findOne({
     email: incomingEmail,

@@ -1,4 +1,6 @@
-// middleware for express-validator to throw errors
+/**
+ * This file is middleware for express-validator to throw errors
+ */
 const { validationResult } = require("express-validator");
 
 const isValidated = (req, res, next) => {

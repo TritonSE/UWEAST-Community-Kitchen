@@ -1,7 +1,13 @@
+/**
+ * This file allows for interaction with the order DB.
+ * Contains methods that add and update an order as well
+ * as find orders.
+ */
 const mongodb = require("mongodb");
 const { Order } = require("../models/order");
 
-// save order to DB
+// @description - save order to DB
+// @return - order object / false on error
 async function addOrder(raw_order) {
   try {
     order = new Order(raw_order);
@@ -12,7 +18,8 @@ async function addOrder(raw_order) {
   }
 }
 
-// update isCompleted
+// @description - update isCompleted for an order
+// @return - updated order / false on error
 async function updateStatus(id, update) {
   try {
     return await Order.updateOne(
@@ -24,7 +31,8 @@ async function updateStatus(id, update) {
   }
 }
 
-// find orders based on isCompleted and/or Customer
+// @description - find orders based on isCompleted and/or Customer
+// @return - found order(s) / false on error
 async function findOrders(o_isCompleted, Customer) {
   try {
     if (Customer !== undefined) {
