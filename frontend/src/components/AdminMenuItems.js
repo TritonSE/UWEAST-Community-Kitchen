@@ -1,3 +1,14 @@
+/**
+ * This file renders a table filled with each item in the menu. It includes information
+ * such as name, icon, price, addons, sizing, etc. This table is searchable based on name,
+ * and sortable based on item caregory (main dish, appetizer, side, etc.). This table gives
+ * the user the option to edit and remove existing items, and add new items.
+ *
+ * @summary Renders admin menu items table for the Admin page
+ * @author PatrickBrown1
+ */
+
+
 import React, {useState, useEffect} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import Table from "@material-ui/core/Table";
@@ -22,6 +33,22 @@ import EditMenuItemModal from './EditMenuItemModal.js';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
+/**
+ * This function takes in data points from the get item route and formats them into
+ * an object readable by the table.
+ *
+ * @param {string} itemName - name of the item
+ * @param {string} imgSource - url of image source
+ * @param {string} categoryName - item's category
+ * @param {Object[]} options -  array of accommodation objects
+ * @param {Object} baseprice - object with Individual and Family price properties
+ * @param {string} description - description of the item
+ * @param {string} id - item's id in database
+ * @param {boolean} featured - indicates whether or not the item is featured on the menu
+ * @param {Object} dietaryInfo - object containing dairyFree, vegan, vegetarian, and gluten-free boolean properties
+ *
+ * @return {Object} - Object with above parameters formatted in proper order.
+ */
 function createData(itemName, imgSource, categoryName, options, baseprice, description, id, featured, dietaryInfo) {
   return {
         "itemName": itemName, 
@@ -35,8 +62,18 @@ function createData(itemName, imgSource, categoryName, options, baseprice, descr
         "dietaryInfo": dietaryInfo
     };
 }
+/**
+ * Renders modal that asks the user if they want to remove the item from the menu.
+ *
+ * @param {boolean} deleteConfirmation - indicates whether or not to show the delete confirmation modal
+ * @param {function} setDeleteConfirmation - sets value of deleteConfirmation
+ * @param {Object[]} itemList - list of all menu item objects
+ * @param {function} setItemList -  sets itemList
+ * @param {Object} displayContent - list of menu item objects currently being displayed
+ * @param {string} setDisplayContent - sets displayContent
 
-// Renders modal that asks the user if they want to remove the item from the menu
+ * @return modal displaying delete confirmation message
+ */
 const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent) => {
     return (
         <Modal 
@@ -74,9 +111,18 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
             </Modal>
         );
 }
+/**
+ * Renders table of items based on what is passed in through displayContent
+ *
+ * @param {Object} displayContent - list of menu item objects currently being displayed
+ * @param {string} setDisplayContent - sets displayContent
+ * @param {function} setDeleteConfirmation - sets value of deleteConfirmation
+ * @param {function} handleFeatureChange -  function that handles when featured checkbox is toggled
+ * @param {function} setCurrentEditItem - sets the item being edited if edit button is pressed
 
-// Renders table of items based on what is passed in through displayContent
-function menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem) {
+ * @return renders table of menu items
+ */
+function menuTable(displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem) {
     return (
         <TableContainer component={Paper} className="menuTableContainer">
             <Table aria-label="simple table" stickyHeader className="menuTable">
@@ -146,7 +192,17 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
         </TableContainer>
     );
 }
-// handle remove based on id passed in through params
+/**
+ * Removed an item from the database and from page state
+ *
+ * @param {string} id - id of item being removed
+ * @param {Object[]} itemList - list of all menu items
+ * @param {function} setItemList - sets value of itemList
+ * @param {Object[]} displayContent -  list of all menu items being displayed
+ * @param {function} setDisplayContent - sets value of displayContent
+
+ * @return void
+ */
 async function handleRemoveByID(id, itemList, setItemList, displayContent, setDisplayContent){
     // remove from database
     console.log("Removing " + id);
@@ -214,7 +270,14 @@ export default function AdminMenuItems (props) {
         
         fetchData();
     }, [loaded])
-    // update display contents based on search term
+    // 
+    /**
+    * Updates display contents based on search term
+    *
+    * @param {string} searchTerm - string being searched for
+    *
+    * @return void
+    */
     const handleSearch = (searchTerm) => {
         // Empty search term, so we want to reset the displayed items to those of the current category
         if(searchTerm === ""){
@@ -240,8 +303,13 @@ export default function AdminMenuItems (props) {
             }
         }
     }
-    // update display contents based on filter term
-    // possible terms are: Main Dish, Appetizer, Drink, Side
+    /**
+    * Updates display contents based on filter term
+    *
+    * @param {string} filter - filter being used, possible terms are: Main Dish, Appetizer, Drink, Side, Featured
+    *
+    * @return void
+    */
     const handleFilterChange = (filter) => {
         // clear search
         setSearchTerm("");
@@ -259,7 +327,13 @@ export default function AdminMenuItems (props) {
             setDisplayContent(newRows); 
         }
     }
-    // Called when a set featured checkbox is clicked
+    /**
+    * Updates items and database when a feature checkbox is pressed
+    *
+    * @param {Object} row - row being updated
+    *
+    * @return void
+    */
     const handleFeatureChange = async (row) => {
         const itemID = row.id;
         const newValue = !row.isFeatured;
@@ -294,6 +368,7 @@ export default function AdminMenuItems (props) {
             })
         })
     }
+    
     if(loaded){
         return (  
             <div>
@@ -336,7 +411,7 @@ export default function AdminMenuItems (props) {
                         />
                     </div>
                 </div>
-                {menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem)}
+                {menuTable(displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem)}
             </div>
         )
     }

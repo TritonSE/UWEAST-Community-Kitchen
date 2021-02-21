@@ -1,3 +1,27 @@
+/**
+  * This file contains the modal for adding an item into the menu. It's split
+  * into sections for each of the form items, including name, image url, category,
+  * prices, accommodations, and description. It uses MaterialUI's form control
+  * to create the form. 
+  * The required fields are name, image url, category, description, and price.
+  * Price is considered to be filled out if one of the prices is complete (so
+  * one of the prices can be empty).
+  * Also, a given accommodations is considered to be filled out if it has
+  * 0 or 2 fields completed. If 0, it is removed, if 1, it is considered incomplete.
+  * Errors are thrown under the following cases:
+  *     1. one of the required fields is empty
+  *     2. one of the accommodations fields has one of the fields filled out
+  *     3. none of the prices are filled out
+  * A new accommodation field can be added if both fields of the previous one
+  * has values, if not it will not be added.
+  * Disclaimer: This file seems really long (it is), but it isn't very hard to
+  * understand. A lot of the bulk comes from Material UI's form control handling
+  * and general HTML property tags.
+  *
+  * @summary Renders modal for adding an item to the menu
+  * @author PatrickBrown1
+  */
+
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment, FormHelperText, Snackbar, IconButton } from '@material-ui/core';
@@ -7,29 +31,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
-/*
-    This file contains the modal for adding an item into the menu. It's split
-    into sections for each of the form items, including name, image url, category,
-    prices, accommodations, and description. It uses MaterialUI's form control
-    to create the form. 
-    The required fields are name, image url, category, description, and price.
-    Price is considered to be filled out if one of the prices is complete (so
-    one of the prices can be empty).
-    Also, a given accommodations is considered to be filled out if it has
-    0 or 2 fields completed. If 0, it is removed, if 1, it is considered incomplete.
 
-    Errors are thrown under the following cases:
-        1. one of the required fields is empty
-        2. one of the accommodations fields has one of the fields filled out
-        3. none of the prices are filled out
-    
-    A new accommodation field can be added if both fields of the previous one
-    has values, if not it will not be added.
-
-    Disclaimer: This file seems really long (it is), but it isn't very hard to
-    understand. A lot of the bulk comes from Material UI's form control handling
-    and general HTML property tags.
-*/
 
 // renders a red asterix that indicates a required field
 function requiredAsterix(){
@@ -67,10 +69,14 @@ export default function AddMenuItemModal (props) {
 
     const [menuError, setMenuError] = useState(false);
     const [errorSnackbar, setErrorSnackbar] = useState(false);
-    // function validURL(str) {
-    //     var pattern = new RegExp('/^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/'); // fragment locator
-    //     return !!pattern.test(str);
-    // }
+
+    /**
+     * Handles form submit for adding an item. This includes form validation,
+     * error handling, and making a call to the /item/insert route.
+     *
+     * No params
+     * @returns {void}
+     */
     const handleSubmit = async () => {
         // validate basic input
         if(itemName === "" || 
@@ -78,11 +84,6 @@ export default function AddMenuItemModal (props) {
             (individualItemPrice === "" && familyItemPrice === "") || 
             itemImageURL === "" || itemDescription === ""
         ){
-            // if(!validURL(itemImageURL)){
-            //     console.log("fail url");
-            //     setMenuError(true);
-            //     return;
-            // }
             console.log("fail basic");
             setMenuError(true);
             setErrorSnackbar(true);
@@ -113,8 +114,6 @@ export default function AddMenuItemModal (props) {
             setErrorSnackbar(true);
             return;
         }
-        // send to db
-        console.log("sending to database");
 
         // format data into item object
         let pricesObj = {};

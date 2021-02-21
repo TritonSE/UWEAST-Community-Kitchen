@@ -1,3 +1,32 @@
+/**
+ * This file contains the modal for editing an item that exists the menu. It's split
+ * into sections for each of the form items, including name, image url, category,
+ * prices, accommodations, and description. The fields are automatically filled
+ * in with the current information from the item for the user to edit.
+ * 
+ * It uses MaterialUI's form control
+ * to create the form. 
+ * The required fields are name, image url, category, description, and price.
+ * Price is considered to be filled out if one of the prices is complete (so
+ * one of the prices can be empty).
+ * Also, a given accommodations is considered to be filled out if it has
+ * 0 or 2 fields completed. If 0, it is removed, if 1, it is considered incomplete.
+ * 
+ * Errors are thrown under the following cases:
+ *     1. one of the required fields is empty
+ *     2. one of the accommodations fields has one of the fields filled out
+ *     3. none of the prices are filled out
+ *   
+ * A new accommodation field can be added if both fields of the previous one
+ * has values, if not it will not be added.
+ * Disclaimer: This file seems really long (it is), but it isn't very hard to
+ * understand. A lot of the bulk comes from Material UI's form control handling
+ * and general HTML property tags.
+ *
+ * @summary Renders a modal for editing an item existing in the menu
+ * @author PatrickBrown1
+ */
+
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment, FormHelperText, Snackbar, IconButton } from '@material-ui/core';
@@ -7,34 +36,6 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
-
-/*
-    This file contains the modal for editing an item that exists the menu. It's split
-    into sections for each of the form items, including name, image url, category,
-    prices, accommodations, and description. The fields are automatically filled
-    in with the current information from the item for the user to edit.
-    
-    It uses MaterialUI's form control
-    to create the form. 
-    The required fields are name, image url, category, description, and price.
-    Price is considered to be filled out if one of the prices is complete (so
-    one of the prices can be empty).
-    Also, a given accommodations is considered to be filled out if it has
-    0 or 2 fields completed. If 0, it is removed, if 1, it is considered incomplete.
-
-    Errors are thrown under the following cases:
-        1. one of the required fields is empty
-        2. one of the accommodations fields has one of the fields filled out
-        3. none of the prices are filled out
-    
-    A new accommodation field can be added if both fields of the previous one
-    has values, if not it will not be added.
-
-    Disclaimer: This file seems really long (it is), but it isn't very hard to
-    understand. A lot of the bulk comes from Material UI's form control handling
-    and general HTML property tags.
-*/
-
 
 // renders a red asterix that indicates a required field
 function requiredAsterix(){
@@ -78,7 +79,13 @@ export default function EditMenuItemModal (props) {
 
     const [menuError, setMenuError] = useState(false);
     const [errorSnackbar, setErrorSnackbar] = useState(false);
-
+    /**
+     * Handles form submit for editing an item. This includes form validation,
+     * error handling, and making a call to the /item/edit route.
+     *
+     * No params
+     * @returns {void}
+     */
     const handleSubmit = async () => {
         // validate basic input
         if(itemName === "" || 
