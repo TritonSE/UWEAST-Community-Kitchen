@@ -11,6 +11,8 @@ const crypto = require("crypto");
 const MIN_PASS_LENGTH = 6;
 const MAX_PASS_LENGTH = 15;
 
+const JWT_EXPIRY= '1h';
+
 // @body: email, password, secret use middleware to validate
 // @return: json with email and jwt or error
 router.post(
@@ -44,7 +46,7 @@ router.post(
         };
         res.status(200).json({
           email: email,
-          token: jwt.sign(payload, config.auth.jwt_secret),
+          token: jwt.sign(payload, config.auth.jwt_secret, { expiresIn: JWT_EXPIRY}),
         });
       }
     } catch (err) {
@@ -87,7 +89,7 @@ router.post(
         };
         res.status(200).json({
           email: email,
-          token: jwt.sign(payload, config.auth.jwt_secret),
+          token: jwt.sign(payload, config.auth.jwt_secret, { expiresIn: JWT_EXPIRY}),
         });
       });
     } catch (err) {
@@ -209,7 +211,6 @@ router.post(
     isValidated,
   ],
   async (req, res, next) => {
-    console.log(req.body);
     const { email, oldPassword, newPassword } = req.body;
     try {
       // check if user email exists

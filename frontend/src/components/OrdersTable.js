@@ -1,3 +1,15 @@
+/**
+ * This is the OrdersTable that is imported in the Orders.js file. This
+ * Renders the MUI-datatable that contains all the relevant information
+ * About past orders. 
+ * 
+ * The information layed out in the table: 
+ * Pickup Details, Name, email, Phone number, Price, Submission Date, Order Status,
+ * Items, Quantity, Size, Accommodations, Special Instructions
+ * 
+ * @summary - The Orders table implementation 
+ */
+
 import React from 'react';
 import MUIDataTable from "mui-datatables";
 import Table from "@material-ui/core/Table";
@@ -17,14 +29,14 @@ import {
   MuiThemeProvider,
 } from "@material-ui/core/styles";
 
-//Converts the data to an object list
-function createData(name, description, size, quantity) {
-  return { name, description, size, quantity };
+// converts the data to an object list
+function createData(name, accommodations, specialInstructions, size, quantity) {
+  return { name, accommodations, specialInstructions, size, quantity };
 }
 
 /**
- * This function is used to render the row when the table row is clicked. Toggles view onClick
- * Of the original table row. Renders the order details of the selected order.
+ * This function is used to render the dropdown row when the table row is clicked.
+ * It renders the order details of the selected order row.
  * 
  * @param {Object} rowData - info of the row clicked 
  * @param {Object} rowMeta - index of the data
@@ -32,10 +44,16 @@ function createData(name, description, size, quantity) {
 const renderRow = (rowData, rowMeta) => {
     const rows = []
     const length = rowData[5].length;
-
-    //Format the row information
+    // format the row information
     for(let i = 0; i < length; i++) {
-      rows.push(createData(rowData[5][i].item, rowData[5][i].extra, rowData[5][i].size, rowData[5][i].quantity));
+      console.log(rowData[5][i]);
+      rows.push(createData(rowData[5][i].item, rowData[5][i].accommodations, rowData[5][i].specialInstructions, rowData[5][i].size, rowData[5][i].quantity));
+    }
+
+    // styling for the cells in the dropdown
+    const stylingCell = {
+      maxWidth: 'calc(21vw)', 
+      whiteSpace: 'pre-wrap',
     }
 
     return (
@@ -48,10 +66,11 @@ const renderRow = (rowData, rowMeta) => {
                   <TableHead>
                     <TableRow style={{border: 'none'}}>
                       <TableCell></TableCell>
-                      <TableCell style={{width: 'calc(23.5%)'}}>Items</TableCell>
-                      <TableCell style={{width: 'calc(31%)'}}>Special Instructions</TableCell>
-                      <TableCell style={{width: 'calc(28.6%)'}}>Size</TableCell>
-                      <TableCell>Quantity</TableCell>
+                      <TableCell style={{width: 'calc(14.3%)'}}>Items</TableCell>
+                      <TableCell style={{width: 'calc(8.6%)'}}>Quantity</TableCell>
+                      <TableCell style={{width: 'calc(15.9%)'}}>Size</TableCell>
+                      <TableCell style={{width: 'calc(27.6%)'}}>Accommodations</TableCell>
+                      <TableCell>Special Instructions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -59,10 +78,11 @@ const renderRow = (rowData, rowMeta) => {
                     {rows.map(row => (
                       <TableRow key={row.name}>
                         <TableCell style={{width: 'calc(48px)'}}></TableCell>
-                        <TableCell>{row.name}</TableCell>
-                        <TableCell>{row.description}</TableCell>
-                        <TableCell>{row.size}</TableCell>
-                        <TableCell>{row.quantity}</TableCell>
+                        <TableCell><p style={stylingCell}>{row.name}</p></TableCell>
+                        <TableCell><p style={stylingCell}>{row.quantity}</p></TableCell>
+                        <TableCell><p style={stylingCell}>{row.size}</p></TableCell>
+                        <TableCell><p style={stylingCell}>{row.accommodations}</p></TableCell>
+                        <TableCell><p style={stylingCell}>{row.specialInstructions}</p></TableCell>                        
                       </TableRow>
                     ))}
                   </TableBody>
@@ -76,6 +96,7 @@ const renderRow = (rowData, rowMeta) => {
 
 export default function OrdersTable(props) {
   
+  // option props to pass into the table
   const options = {
     filter: true,
     expandableRowsOnClick: true,
@@ -86,6 +107,7 @@ export default function OrdersTable(props) {
     searchOpen: true,
   };
 
+  // styling for the row
   const getMuiTheme = () =>
   createMuiTheme({
     overrides: {
@@ -95,6 +117,11 @@ export default function OrdersTable(props) {
           minWidth: '900px',
           maxWidth: '90vw',
         },
+      },
+      MuiTableHead: {
+        root: {
+          fontWeight: 'bold'
+        }
       },
       MuiTableRow: {
         root: {

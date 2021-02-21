@@ -8,7 +8,7 @@ const config = require('../config');
 const Contact = () => {
     return (
         <div>
-            <Navbar currentPage="contact" />
+            <Navbar />
             <div className="contact-wrapper">
                 <div className="contact-map-section">
                     <ContactMap />

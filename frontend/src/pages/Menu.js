@@ -5,9 +5,6 @@ import SearchSection from '../components/SearchSection';
 import MenuSection from '../components/MenuSection';
 import Banner from '../components/Banner';
 import "../css/Menu.css";
-const config = require('../config');
-
-const BACKEND_URL = config.backend.uri;
 
 class Menu extends Component {
     constructor(props) {
@@ -32,7 +29,7 @@ class Menu extends Component {
       return (
           <div>
               <div className="navbar-wrapper">
-                <Navbar currentPage="menu"/>
+                <Navbar/>
               </div>
               <Banner/>
               <div className="cart-preview">

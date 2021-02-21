@@ -1,16 +1,31 @@
+/**
+ * Contains all the helper methods used inside the OrdersTableColumn.js file.
+ * 
+ * Each Method does the following: 
+ * 
+ * renderDateFilters- The Node displayed when filtering by Date
+ * updateDateFilters- Called when the user clicks the "X" inside the Node
+ * DisplayStatusFilters- Renders The dropdown for Order Status filtering
+ * DisplayDateFilters- Renders the Date Range picker inside the Filter Dialog
+ * renderStatus- Node displaying the current filter option for Order Status
+ * 
+ * @summary - helper functions for orders table 
+ */
+
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import '../css/Orders.css';
-import DateRangePicker from 'react-bootstrap-daterangepicker';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
-//This displays the filters in the top left
+// this displays the filters in the top left
 const renderDateFilters = (options) => {
     if (options[0] && options[1]) {
       return `Start Date: ${options[0]}, End Date: ${options[1]}`;
@@ -42,7 +57,7 @@ const updateDateFilters = (filterList, filterPos, index) => {
  * This renders the select dropdown in the filter dropdown
  * 
  * @param {Object} filterList 
- * @param {Function} onChange 
+ * @param {Function} onChange - update the order status
  * @param {Index} index 
  * @param {Array} column 
  */
@@ -50,7 +65,7 @@ const DisplayStatusFilters = (filterList, onChange, index, column) => {
     
     const filterStatus = (event, picker) => {
       filterList[index][0] = event.target.value;
-      //Update the filter 
+      // update the filter 
       onChange(filterList[index], index, column);
     } 
     
@@ -81,7 +96,7 @@ const DisplayStatusFilters = (filterList, onChange, index, column) => {
  * @param {int} column 
  */
 const DisplayDateFilters = (filterList, onChange, index, column) => {  
-    //Get the initial start date and end date for the date filter
+    // get the initial start date and end date for the date filter
     const initialStartDate = new Date();
     const initialEndDate = new Date();
     initialEndDate.setDate(initialStartDate.getDate()+7);
@@ -89,7 +104,7 @@ const DisplayDateFilters = (filterList, onChange, index, column) => {
     const startDate = initialStartDate.getMonth()+1 + "/" + initialStartDate.getDate() + "/" + initialStartDate.getFullYear();
     const endDate = initialEndDate.getMonth()+1 + "/" + initialEndDate.getDate() + "/" + initialEndDate.getFullYear();
   
-    //Called when the "apply" button is clicked
+    // called when the "apply" button is clicked
     const saveDate = (event, picker) => {
       const split = event.target.value.split(" - ");
       filterList[index] = [split[0], split[1]];
@@ -154,7 +169,7 @@ const renderStatus = (value, tableMeta, updateValue) => {
             <select className={(value === "Completed Orders") ? "dropdown-menu-completed" : "dropdown-menu-pending"} value={value} 
             onChange={(e) => updateStatus(value, tableMeta, updateValue, e)}
                 onClick={(e) => {
-                    //This prevents the current row from expanding
+                    // this prevents the current row from expanding
                     e.stopPropagation();
                 }}>
                 <option value={"Pending Orders"}>Pending</option>

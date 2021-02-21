@@ -1,9 +1,17 @@
+/**
+ * Individual buttons that handle toggle the display of sections onclick. 
+ * Toggling is based on props so that they dynamically change.
+ * 
+ * @summary   Individual buttons that toggle the display of sections.
+ * @author    Navid Boloorian
+ */
+
 import React, { useState, useEffect} from 'react';
 import '../css/MenuItemCategory.css';
 import MenuItem from './MenuItem';
 import MenuItemPopup from './MenuItemPopup';
-const config = require('../config');
 
+const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
 const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues, togglePopup }) => {
@@ -11,9 +19,11 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
   const [menuItems, setMenuItems] = useState(new Array());
   const menuItemValues = [];
 
-  // useEffect() is called to get information from database
+  /**
+   * useEffect() is called to get information from database
+   */
   useEffect(() => {
-    fetch("http://localhost:9000/item/")
+    fetch(`${BACKEND_URL}item/`)
     .then(async result => {
       if (result.ok) {
         const json = await result.json();
@@ -55,7 +65,7 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
               let description = menuItem.Description;
               // since some items will only have a family pricing option, we use individual as the default; if individual doesnt exist, use family instead
               let price = ("Individual" in menuItem.Prices) ? menuItem.Prices.Individual : menuItem.Prices.Family
-              let accommodations = menuItem.Accomodations;
+              let accommodations = menuItem.Accommodations;
               let priceOptions = menuItem.Prices;
               let dietaryInfo = menuItem.dietaryInfo;
 

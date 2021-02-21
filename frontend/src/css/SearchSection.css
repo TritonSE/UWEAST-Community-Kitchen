@@ -5,7 +5,8 @@
   position: relative;
   background-image: url("https://bellasbannerelk.com/wp-content/uploads/2014/11/Bellas-Header1.jpg");
   background-size: cover;
-  height: calc(50vh - 58px);
+  background-position: center top;
+  height: calc(50vh - 70px);
 }
 
 .searchbar-box 

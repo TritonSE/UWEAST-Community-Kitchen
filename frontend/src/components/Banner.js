@@ -1,7 +1,12 @@
+/**
+ * Banner with disclaimer below navbar.
+ * 
+ * @summary   Banner with disclaimer below navbar.
+ * @author    Navid Boloorian
+ */
+
 import React from 'react';
-import MenuFilterButton from './MenuFilterButton';
 import "../css/Banner.css";
-const config = require('../config');
 
 const MenuFilter = ( {foodCategories, changeVisibleCategories} ) => {
     return (

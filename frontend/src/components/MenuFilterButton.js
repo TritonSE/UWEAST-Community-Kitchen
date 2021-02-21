@@ -1,8 +1,19 @@
+/**
+ * Individual buttons that handle toggle the display of sections onclick. 
+ * Toggling is based on props so that they dynamically change.
+ * 
+ * @summary   Individual buttons that toggle the display of sections.
+ * @author    Navid Boloorian
+ */
+
 import React from 'react';
 import '../css/MenuFilterButton.css';
 
 const MenuFilterButton = ( {categoryName, changeVisibleCategories, toggledFilter, setToggledFilter} ) => {
 
+    /**
+     * Function that groups the filter toggling state calls.
+     */
     function updateFilters() {
       changeVisibleCategories(categoryName);
       setToggledFilter(categoryName);
