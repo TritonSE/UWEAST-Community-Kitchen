@@ -130,12 +130,12 @@ function menuTable(displayContent, setDisplayContent, setDeleteConfirmation, han
                     <TableRow style={{"overflow": "hidden"}}>
                         <TableCell className="menuTableHeaders" width="5%">Feature</TableCell>
                         <TableCell className="menuTableHeaders" width="15%" align="center">Item Image</TableCell>
-                        <TableCell className="menuTableHeaders" width="15%" align="left">Item Name</TableCell>
-                        <TableCell className="menuTableHeaders" width="12%" align="left">Category Name</TableCell>
-                        <TableCell className="menuTableHeaders" width="12%" align="left">Size</TableCell>
-                        <TableCell className="menuTableHeaders" width="12%" align="left">Base Price</TableCell>
-                        <TableCell className="menuTableHeaders" width="12%" align="left">Add-ons</TableCell>
-                        <TableCell className="menuTableHeaders" width="12%" align="left">Edit</TableCell>
+                        <TableCell className="menuTableHeaders" width="10%" align="left">Item Name</TableCell>
+                        <TableCell className="menuTableHeaders" width="10%" align="left">Category Name</TableCell>
+                        <TableCell className="menuTableHeaders" width="10%" align="left">Size</TableCell>
+                        <TableCell className="menuTableHeaders" width="10%" align="left">Base Price</TableCell>
+                        <TableCell className="menuTableHeaders" width="30%" align="left">Add-ons</TableCell>
+                        <TableCell className="menuTableHeaders" width="10%" align="left">Edit</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -160,24 +160,24 @@ function menuTable(displayContent, setDisplayContent, setDeleteConfirmation, han
                                 <TableCell align="center" className="menuRowText" width="15%">
                                     <img src={row.imgSource} alt={row.itemName} className="menuItemImage"/>
                                 </TableCell>
-                                <TableCell className="menuRowText" width="15%">{row.itemName}</TableCell>
-                                <TableCell align="left" className="menuRowText" width="12%">{row.categoryName}</TableCell>
-                                <TableCell align="left" className="menuRowText" width="12%">
+                                <TableCell className="menuRowText" width="10%">{row.itemName}</TableCell>
+                                <TableCell align="left" className="menuRowText" width="10%">{row.categoryName}</TableCell>
+                                <TableCell align="left" className="menuRowText" width="10%">
                                 {
                                     row.basePrice.map((v) => {return (<>{v[0]}<br /></>)})
                                 }
                                 </TableCell>
-                                <TableCell align="left" className="menuRowText" width="12%">
+                                <TableCell align="left" className="menuRowText" width="10%">
                                 {
                                     row.basePrice.map((v) => <>${v[1]}<br /></>)
                                 }
                                 </TableCell>
-                                <TableCell align="left" className="menuRowText" width="12%">
+                                <TableCell align="left" className="menuRowText" width="30%">
                                 {
                                     row.options.map((v) => <p>{v[1].Description}</p>)
                                 }
                                 </TableCell>
-                                <TableCell align="left" className="menuRowText" width="12%">
+                                <TableCell align="left" className="menuRowText" width="10%">
                                     <IconButton onClick={() => setCurrentEditItem(row.id)}>
                                         <EditIcon style={{"marginRight": "5px"}}/>
                                     </IconButton>
