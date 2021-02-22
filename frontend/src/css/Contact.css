@@ -13,8 +13,9 @@
 {
   display: grid;
   box-shadow: 2px 2px #e4e4e4;
-  overflow: scroll;
   border: 5px solid #f9ce1d;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .contact-form-text h1
@@ -69,6 +70,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+  overflow: auto;
 }
 
 .info-label 
@@ -81,11 +83,15 @@
   font-weight: bold;
 }
 
-@media only screen and (max-width: 768px) 
+@media only screen and (max-width: 1024px) 
 {
+  body 
+  {
+    overflow-x: hidden;
+  }
+
   .contact-wrapper
   {
-    height: calc(100vh - 116px);
     grid-template-areas:
      "top"
      "bottom";
@@ -93,28 +99,42 @@
     overflow-x: hidden;
   }
 
+  .contact-form-text h1
+  {
+    font-size: 6vw;
+    margin-top: 20px;
+  }
+
+  .contact-form-text p 
+  {
+    font-size: 4vw;
+  }
+
   .contact-map-section
   {
     grid-area: bottom;
     height: 100%;
     width: 100vw;
+    min-height: 50vh;
   }
 
   .contact-form-section 
   {
     display: grid;
     grid-area: top;
-    width: calc(100%);
-    height: calc(100vh - 116px);
+    width: 100%;
+    overflow: auto;
+    height: inherit;
     justify-content: center;
     align-items: center;
+    min-height: 50vh;
   }
 
   .contact-form 
   {
     justify-self: center;
-    height: calc(100% - 80px);
-    width: calc(100% - 40px)
+    overflow: auto;
+    width: calc(100% - 40px);
   }
 
   .contact-form form 
@@ -129,7 +149,7 @@
   }
 }
 
-@media only screen and (min-width: 769px) 
+@media only screen and (min-width: 1025px) 
 {
   .contact-wrapper
   {
@@ -144,7 +164,7 @@
 
   .contact-form 
   {
-    height: calc(100% - 100px);
+    min-height: calc(100% - 100px);
     width: calc(50vw - 100px);
   }
 
@@ -156,7 +176,12 @@
   .contact-form-text 
   {
     width: 100%;
-    width: calc(50vw - 110px);
+    width: calc(50vw - 120px);
+  }
+
+  .contact-form-submit
+  {
+    margin-bottom: 5px;
   }
 
   .info-wrapper
