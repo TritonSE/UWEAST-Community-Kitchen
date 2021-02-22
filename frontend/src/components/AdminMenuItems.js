@@ -9,7 +9,7 @@
  */
 
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useReducer} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import Snackbar from "@material-ui/core/Snackbar";
 import Table from "@material-ui/core/Table";
@@ -115,15 +115,15 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
 /**
  * Renders table of items based on what is passed in through displayContent
  *
- * @param {Object} displayContent - list of menu item objects currently being displayed
- * @param {string} setDisplayContent - sets displayContent
+ * @param {Object} display - list of menu item objects currently being displayed
+ * @param {string} setDisplay - sets display
  * @param {function} setDeleteConfirmation - sets value of deleteConfirmation
  * @param {function} handleFeatureChange -  function that handles when featured checkbox is toggled
  * @param {function} setCurrentEditItem - sets the item being edited if edit button is pressed
 
  * @return renders table of menu items
  */
-function menuTable(displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem) {
+function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem) {
     return (
         <TableContainer component={Paper} className="menuTableContainer">
             <Table aria-label="simple table" stickyHeader className="menuTable">
@@ -140,7 +140,7 @@ function menuTable(displayContent, setDisplayContent, setDeleteConfirmation, han
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {displayContent.map((row, index) => {
+                    {display.displayContent.map((row, index) => {
                         const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
                         // console.log(row);
                         return (
@@ -221,16 +221,14 @@ async function handleRemoveByID(id, itemList, setItemList, displayContent, setDi
                 // remove from rows
                 setItemList(itemList.filter(x => x.id !== id));
                 // remove from filtered rows
-                setDisplayContent(displayContent.filter(x => x.id !== id));
+                setDisplayContent({displayContent: displayContent.displayContent.filter(x => x.id !== id)});
             }
         })
     
 }
 export default function AdminMenuItems (props) {
     const [deleteConfirmation, setDeleteConfirmation] = useState(["", ""]);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [filter, setFilter] = useState("All");
-    const [displayContent, setDisplayContent] = useState([]);
+    
     const [itemList, setItemList] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const [checkboxUpdate, setCheckboxUpdate] = useState("");
@@ -239,6 +237,13 @@ export default function AdminMenuItems (props) {
     const [itemAddedSuccess, setItemAddedSuccess] = useState(false)
     const [itemEditedSuccess, setItemEditedSuccess] = useState(false);
 
+    // const [searchTerm, setSearchTerm] = useState("");
+    // const [filter, setFilter] = useState("All");
+    // const [displayContent, setDisplayContent] = useState([]);
+    const [display, setDisplay] = useReducer(
+        (state, newState) => ({...state, ...newState}),
+        {searchTerm: "", filter: "All", displayContent: itemList}
+    )
     // Fetch all menu items to display in table
     useEffect(() => {
         var data = null;
@@ -268,78 +273,47 @@ export default function AdminMenuItems (props) {
                 ));
             });
             setItemList(rows);
-            setDisplayContent(rows);
+            setDisplay({displayContent: rows});
             setLoaded(true);
         }
         
         fetchData();
     }, [loaded])
-    // 
     /**
-    * Updates display contents based on search term
-    *
-    * @param {string} searchTerm - string being searched for
-    *
-    * @return void
-    */
-    const handleSearch = (searchTerm) => {
-        // Empty search term, so we want to reset the displayed items to those of the current category
-        if(searchTerm === ""){
-            if(filter === "All"){        
-                setDisplayContent(itemList); 
-            }
-            else {
-                setDisplayContent(itemList.filter(x => x.categoryName === filter));
-            }
-        }
-        else{
-            // Filters the current display content to show those that contain the
-            // search term in the name AND correspond to current filter
-            if(filter === "All"){
-                setDisplayContent(itemList.filter(x => x.itemName.toLowerCase().includes(searchTerm.toLowerCase()))); 
-            }
-            else {
-                // Filter based on search term and filter term
-                setDisplayContent(itemList.filter(x => 
-                    x.itemName.toLowerCase().includes(searchTerm.toLowerCase())
-                    && x.categoryName === filter
-                )); 
-            }
-        }
-    }
-    /**
-    * Updates display contents based on filter term
-    *
-    * @param {string} filter - filter being used, possible terms are: Main Dish, Appetizer, Drink, Side, Featured
-    *
-    * @return void
-    */
-    const handleFilterChange = (filter) => {
-        // clear search
-        setSearchTerm("");
-        if(filter === "All"){        
-            setDisplayContent(itemList); 
+     * This functions takes in the filter string and the search term, and updates
+     * the display state to these new two values, and the items that correspond to
+     * these two values
+     *
+     * @param {String} filter - current filter
+     * @param {String} searchTerm - current search term
+     */
+    const handleDisplayChange = (filter, searchTerm) => {
+        // takes item list, filters by category then search term
+        let workingItems = [];
+        // filter by category
+        if(filter === "All"){ 
+            workingItems = itemList;
         }
         else if(filter === "Featured"){
-            const newRows = [];
             for(var index in itemList) { 
                 if (itemList[index].isFeatured){
-                    newRows.push(itemList[index]); 
+                    workingItems.push(itemList[index]); 
                 }
             }
-            console.log(newRows)
-            setDisplayContent(newRows); 
         }
         else{
-            const newRows = [];
             for(var i in itemList) { 
                 if (itemList[i]["categoryName"] === filter){
-                    newRows.push(itemList[i]); 
+                    workingItems.push(itemList[i]); 
                 }
             }
-            console.log(newRows)
-            setDisplayContent(newRows); 
         }
+        // filter by search term
+        if(searchTerm !== ""){
+            workingItems = workingItems.filter(x => x.itemName.toLowerCase().includes(searchTerm.toLowerCase()));
+
+        }
+        setDisplay({filter: filter, searchTerm: searchTerm, displayContent: workingItems});
     }
     /**
     * Updates items and database when a feature checkbox is pressed
@@ -363,10 +337,10 @@ export default function AdminMenuItems (props) {
                 return prev;
             })
         }
-        var displayContentIndex = displayContent.findIndex(x => x.id === itemID);
+        var displayContentIndex = display.displayContent.findIndex(x => x.id === itemID);
         if(displayContentIndex !== -1){
-            displayContent[displayContentIndex].isFeatured = newValue;
-            setDisplayContent(displayContent);
+            display.displayContent[displayContentIndex].isFeatured = newValue;
+            setDisplay({displayContent: display.displayContent});
         }
         setCheckboxUpdate(row.itemName + "" + newValue);
 
@@ -382,12 +356,11 @@ export default function AdminMenuItems (props) {
             })
         })
     }
-    
     if(loaded){
         return (  
             <div className="adminMenuPageContainer">
                 {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded} setItemEditedSuccess={setItemEditedSuccess}/>}
-                {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
+                {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, display, setDisplay)}
                 {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} setItemAddedSuccess={setItemAddedSuccess}/>}
                 {/* Add/Edit item success snackbars*/}
                 <Snackbar
@@ -410,7 +383,7 @@ export default function AdminMenuItems (props) {
                     onClose={() => setItemEditedSuccess(false)}
                     message={<span id="message-id">Item successfully edited!</span>}
                 />
-                
+
                 <div className="aboveTableContainer">
                     <Button className="menuAddButton" onClick={() => {setAddItemModal(true)}}>
                         <AddCircleIcon className="menuAddButtonIcon" />
@@ -423,10 +396,9 @@ export default function AdminMenuItems (props) {
                             defaultValue="All"
                             displayEmpty="false"
                             variant="outlined"
-                            value={filter}
+                            value={display.filter}
                             onChange={(v) => {
-                                setFilter(v.target.value);
-                                handleFilterChange(v.target.value);
+                                handleDisplayChange(v.target.value, display.searchTerm);
                             }}
                         >
                             <MenuItem value="All">All</MenuItem>
@@ -438,17 +410,20 @@ export default function AdminMenuItems (props) {
                         </Select>
                         <SearchBar
                             className="menuSearchBar"
-                            value={searchTerm}
-                            onChange={(newValue) => setSearchTerm(newValue)}
-                            onRequestSearch={() => handleSearch(searchTerm)}
-                            onCancelSearch={() => {
-                                setSearchTerm(""); 
-                                handleSearch("");
+                            value={display.searchTerm}
+                            onChange={(newValue) => {
+                                handleDisplayChange(display.filter, newValue);
+                            }}
+                            onRequestSearch={(newValue) => {
+                                handleDisplayChange(display.filter, newValue);
+                            }}
+                            onCancelSearch={() => {                                
+                                handleDisplayChange(display.filter, "");
                             }}
                         />
                     </div>
                 </div>
-                {menuTable(displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem)}
+                {menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem)}
             </div>
         )
     }
