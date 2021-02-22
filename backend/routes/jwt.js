@@ -21,18 +21,18 @@ router.post(
         jwt.verify(jwtToken, config.auth.jwt_secret, function(err, decoded) {
             //Could not verify --> Error
             if(err){
-                res.status(401).send(err.message | "Unverified");
-                console.log("Legit")
+                res.sendStatus(401);
+                console.log("Fraud/Expired JWT Token")
               //Verified --> Success
             } else {
-                res.status(200).send("Verified");
-                console.log("Fraud")
+                res.sendStatus(200);
+                console.log("Valid JWT Token")
             }
           });
         //Catch any validation/other errors here 
       } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server error");
+        res.sendStatus(500);
       }
     }
   );

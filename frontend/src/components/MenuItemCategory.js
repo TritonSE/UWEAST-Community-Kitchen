@@ -65,7 +65,7 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
               let description = menuItem.Description;
               // since some items will only have a family pricing option, we use individual as the default; if individual doesnt exist, use family instead
               let price = ("Individual" in menuItem.Prices) ? menuItem.Prices.Individual : menuItem.Prices.Family
-              let accommodations = menuItem.Accomodations;
+              let accommodations = menuItem.Accommodations;
               let priceOptions = menuItem.Prices;
               let dietaryInfo = menuItem.dietaryInfo;
 

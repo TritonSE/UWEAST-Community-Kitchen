@@ -29,7 +29,7 @@ class Menu extends Component {
       return (
           <div>
               <div className="navbar-wrapper">
-                <Navbar currentPage="menu"/>
+                <Navbar/>
               </div>
               <Banner/>
               <div className="cart-preview">
