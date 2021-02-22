@@ -7,6 +7,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
+const { verify } = require("./verifyToken");
 const router = express.Router();
 const {
   findPrimaryEmail,
@@ -16,13 +17,20 @@ const {
   addSecondaryEmail,
 } = require("../db/services/email");
 
-// @body: email
-// @return: { success:true } if email is changed
+// @description - changes the primary email address in the Email DB
+// @body - email
+// @return - { success:true } if email is changed
 //          "Email change unsuccessful": if duplicate email or failures
-// @description: changes the primary email address in the Email DB
 router.post(
   "/changePrimary",
-  [body("email").notEmpty().isEmail(), isValidated],
+  [
+    body("email").notEmpty().isEmail(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     const { email } = req.body;
     try {
@@ -46,13 +54,20 @@ router.post(
   }
 );
 
-// @body: email
-// @return: { success:true } if secondary email is added
-//          "Email change unsuccessful": if duplicate email or failures
 // @description: adds the secondary email address in the Email DB
+// @body - email
+// @return - { success:true } if secondary email is added
+//          "Email change unsuccessful": if duplicate email or failures
 router.post(
   "/addSecondary",
-  [body("email").notEmpty().isEmail(), isValidated],
+  [
+    body("email").notEmpty().isEmail(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     const { email } = req.body;
     try {
@@ -76,13 +91,20 @@ router.post(
   }
 );
 
-// @body: email
-// @return: { success:true } if the secondary email is deleted
+// @description - deletes the secondary email address in the Email DB
+// @body - email
+// @return - { success:true } if the secondary email is deleted
 //          "Enter a valid secondary email": if email is not in DB/failure
-// @description: deletes the secondary email address in the Email DB
 router.delete(
   "/removeSecondary",
-  [body("email").notEmpty().isEmail(), isValidated],
+  [
+    body("email").notEmpty().isEmail(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     const { email } = req.body;
     try {
@@ -102,9 +124,9 @@ router.delete(
   }
 );
 
-// @body: email
-// @return: returns an array of all the secondary emails in the DB
-// @description: gets all the secondary emails
+// @description - gets all the secondary emails
+// @body - email
+// @return - returns an array of all the secondary emails in the DB
 router.get("/secondary", async (req, res, next) => {
   try {
     // returns emails or error if there is an error
@@ -118,9 +140,9 @@ router.get("/secondary", async (req, res, next) => {
   }
 });
 
-// @body: email
-// @return: returns the primary email in the DB
-// @description: gets the primary email in the DB
+// @description - gets the primary email in the DB
+// @body - email
+// @return - returns the primary email in the DB
 router.get("/primary", async (req, res, next) => {
   try {
     // returns email or error if there is an error

@@ -14,6 +14,8 @@ const {
 } = require("../db/services/item");
 const { body, validationResult } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
+const { token } = require("morgan");
+const { verify } = require("./verifyToken");
 const router = express.Router();
 
 // returns all menu items in the DB
@@ -26,7 +28,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// num: string representation of money
+// num - string representation of money
 // checks the string to conform to positive decimals
 function checkNumeral(num) {
   const regex = /^\d*(\.)?\d*$/;
@@ -35,11 +37,10 @@ function checkNumeral(num) {
   return true;
 }
 
-// @body Name, pictureURL, Description, Category, Prices: required
-//       at least one of Individual or Family Prices: required
-//       isFeatured, Accommodations: not required
-//
-// inserts an item into the Item DB
+// @description - inserts an item into the Item DB
+// @body Name, pictureURL, Description, Category, Prices - required
+//       at least one of Individual or Family Prices - required
+//       isFeatured, Accommodations - not required
 router.post(
   "/insert",
   [
@@ -56,6 +57,10 @@ router.post(
           (checkNumeral(value.Individual) && !value.Family) ||
           (checkNumeral(value.Family) && checkNumeral(value.Individual)))
       );
+    }),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
     }),
     body("Accommodations")
       .custom((value) => {
@@ -88,11 +93,18 @@ router.post(
   }
 );
 
-// @body _id: id of object to be deleted
-// deletes an item for the Item DB
+// @description - deletes an item for the Item DB
+// @body _id - id of object to be deleted
 router.delete(
   "/remove",
-  [body("_id").notEmpty(), isValidated],
+  [
+    body("_id").notEmpty(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     try {
       // deleted object response check if deletedCount is 1
@@ -111,8 +123,8 @@ router.delete(
   }
 );
 
-// @body id of object to be edited and any of the attributes of the item object
-// edits any of the item attributes, the only required attribute is _id
+// @description - edits any of the item attributes, the only required attribute is _id
+// @body id - of object to be edited and any of the attributes of the item object
 router.post(
   "/edit",
   [
@@ -128,6 +140,10 @@ router.post(
           (checkNumeral(value.Individual) && !value.Family) ||
           (checkNumeral(value.Family) && checkNumeral(value.Individual)))
       );
+    }),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
     }),
     body("Accommodations")
       .custom((value) => {
@@ -155,12 +171,20 @@ router.post(
   }
 );
 
-// @body _id: id of the item to be featured/unfeatured
-//       isFeatured: T/F to set to object
-// sets the isFeatured atribute of the object associated with the id
+// @description - sets the isFeatured atribute of the object associated with the id
+// @body _id - id of the item to be featured/unfeatured
+//       isFeatured - T/F to set to object
 router.post(
   "/feature",
-  [body("_id").notEmpty(), body("isFeatured").notEmpty(), isValidated],
+  [
+    body("_id").notEmpty(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    body("isFeatured").notEmpty(),
+    isValidated,
+  ],
   async (req, res, next) => {
     const featured = await setFeatured(req.body._id, req.body.isFeatured);
     // if there is an error or the item is not found

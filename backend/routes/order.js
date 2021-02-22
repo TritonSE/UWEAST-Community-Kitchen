@@ -9,10 +9,10 @@ const { isValidated } = require("../middleware/validation");
 const router = express.Router();
 const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 
-// @body: Customer (with Name, Email, Phone), Pickup, Timestamps,
-// @body: PayPal(with Amount and transactionID),
-// @body: Order (array of objects with item string, quantity and extra array),
-// returns success:true if order is changed
+// @body - Customer (with Name, Email, Phone), Pickup, Timestamps,
+// @body - PayPal(with Amount and transactionID),
+// @body - Order (array of objects with item string, quantity and extra array),
+// @return -  success:true if order is changed
 // router.post(
 //   "/insert",
 //   [
@@ -41,11 +41,11 @@ const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 //   }
 // );
 
-// @body: isCompleted, Customer: neither required
-// isCompleted: T/F based on whether an order is completed (default: false)
-// Customer: JSON which contains name, email and phone of customer
-// finds orders filtered on isCompleted and/or Customer
-// returns all orders if body is not provided to filter or error
+// @description - finds orders filtered on isCompleted and/or Customer
+// @body - isCompleted, Customer: neither required
+//  isCompleted: T/F based on whether an order is completed (default: false)
+//  Customer: JSON which contains name, email and phone of customer
+// @return - all orders if body is not provided to filter or error
 router.post(
   "/",
   [
@@ -68,10 +68,10 @@ router.post(
   }
 );
 
-// @body: _id, isCompleted: both required
-// _id: id of order to be updated - required
-// isCompleted: T/F based on whether an order is completed (default: false) - required
-// updates the order's isCompleted boolean to the value passed in
+// @description - updates the order's isCompleted boolean to the value passed in
+// @body - _id, isCompleted: both required
+//  _id id of order to be updated - required
+//  isCompleted: T/F based on whether an order is completed (default: false) - required
 router.post(
   "/updateStatus",
   [body("_id").isString(), body("isCompleted").isBoolean(), isValidated],

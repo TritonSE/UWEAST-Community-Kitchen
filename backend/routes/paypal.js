@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const paypal = require("@paypal/checkout-server-sdk");
 
 const router = express.Router();
@@ -15,56 +15,57 @@ const clientSecret = "";
  Once the order is created, we get a Payment ID, and return it to the client
  to render the payment screen.
 */
-function createEnv(){
-    return new paypal.core.SandboxEnvironment(clientId, clientSecret);
+function createEnv() {
+  return new paypal.core.SandboxEnvironment(clientId, clientSecret);
 }
-function client(){
-    return new paypal.core.PayPalHttpClient(createEnv());
+function client() {
+  return new paypal.core.PayPalHttpClient(createEnv());
 }
-router.post('/createPayment', async (req, res) => {
-    // req = request
-    // res = response
-    // next = middleware
-    try {
-        const order = req.body;
-        console.log(order);
-        // call paypal with order object to set up transaction. 
-        let paypalOrderRequest = new paypal.orders.OrdersCreateRequest();
-        paypalOrderRequest.headers["prefer"] = 'return=representation';
-        paypalOrderRequest.requestBody(order);  
+router.post("/createPayment", async (req, res) => {
+  // req = request
+  // res = response
+  // next = middleware
+  try {
+    const order = req.body;
+    console.log(order);
+    // call paypal with order object to set up transaction.
+    let paypalOrderRequest = new paypal.orders.OrdersCreateRequest();
+    paypalOrderRequest.headers["prefer"] = "return=representation";
+    paypalOrderRequest.requestBody(order);
 
-        const data = await client().execute(paypalOrderRequest);
-        res.json({id: data.result.id});
-    } catch (err) {
-        // 4. Handle any errors from the call
-        console.error(err);
-        return res.sendStatus(500);
-    }
+    const data = await client().execute(paypalOrderRequest);
+    res.json({ id: data.result.id });
+  } catch (err) {
+    // handle any errors from the call
+    console.error(err);
+    return res.sendStatus(500);
+  }
 });
-router.post('/executePayment', async (req, res, next) => {
-    const orderID = req.body.orderID;
-    console.log(orderID);
-    // capture the order by calling the paypal api
-    
-    try {
-        console.log("a");
-        const request = new paypal.orders.OrdersAuthorizeRequest(orderId);
-        console.log("b");
-        request.requestBody({});
-        console.log("start");
-        await client().execute(request)
-        .then((data) => {
-            console.log("done");
-            console.log(data);
-            res.json({data});
-            return res.sendStatus(200);
-        });
-    } catch (err) {
-        // Handle any errors from the call
-        console.error(err);
-        return res.sendStatus(500)
-    }
+router.post("/executePayment", async (req, res, next) => {
+  const orderID = req.body.orderID;
+  console.log(orderID);
+  // capture the order by calling the paypal api
+
+  try {
+    console.log("a");
+    const request = new paypal.orders.OrdersAuthorizeRequest(orderId);
+    console.log("b");
+    request.requestBody({});
+    console.log("start");
+    await client()
+      .execute(request)
+      .then((data) => {
+        console.log("done");
+        console.log(data);
+        res.json({ data });
+        return res.sendStatus(200);
+      });
+  } catch (err) {
+    // handle any errors from the call
+    console.error(err);
+    return res.sendStatus(500);
+  }
 });
-//update with shipping costs
+// update with shipping costs
 
 module.exports = router;

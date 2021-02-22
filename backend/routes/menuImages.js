@@ -7,6 +7,7 @@ const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const router = express.Router();
 const { changeMenuImage, findMenuImage } = require("../db/services/menuImages");
+const { verify } = require("./verifyToken");
 
 // @description - changes the menu image in the DB
 // @body {string} imageUrl - url to be set
@@ -14,7 +15,14 @@ const { changeMenuImage, findMenuImage } = require("../db/services/menuImages");
 //          "MenuImage change unsuccessful" if duplicate imageUrl
 router.post(
   "/changeMenuImage",
-  [body("imageUrl").notEmpty().isURL(), isValidated],
+  [
+    body("imageUrl").notEmpty().isURL(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     const { imageUrl } = req.body;
     try {

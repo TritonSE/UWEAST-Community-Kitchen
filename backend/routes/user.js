@@ -17,14 +17,14 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 const crypto = require("crypto");
 
-//Used for random password generation (Route: /resetPassword)
+// used for random password generation (Route: /resetPassword)
 const MIN_PASS_LENGTH = 6;
 const MAX_PASS_LENGTH = 15;
 
 const JWT_EXPIRY = "1h";
 
-// @body: email, password, secret use middleware to validate
-// @return: json with email and jwt or error
+// @body - email, password, secret use middleware to validate
+// @return - json with email and jwt or error
 router.post(
   "/register",
   [
@@ -68,8 +68,8 @@ router.post(
   }
 );
 
-// @body: email && password use middleware to validate
-// @return: json with email and jwt or error
+// @body - email && password use middleware to validate
+// @return - json with email and jwt or error
 router.post(
   "/login",
   [
@@ -114,7 +114,7 @@ router.post(
 );
 
 /**
- * Returns a random number between min (inclusive) and max (exclusive)
+ * Returns a random number between min (inclusive) and max (exclusive).
  */
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
@@ -164,7 +164,7 @@ async function sendEmail(template, to_email, locals, res) {
 
 // @body: email that denotes an existing user's email in the DB (required string)
 // @response: If user exists in DB, reset their password to something randomly generated, and send them an email
-// stating this new password. Otherwise, thrown an error status
+// stating this new password. Otherwise, throw an error status
 router.post(
   "/forgotPassword",
   [body("email").notEmpty().isEmail(), isValidated],
@@ -175,11 +175,9 @@ router.post(
       // check if user email exists
       const user = await findOneUser(email);
       if (!user) {
-        return res
-          .status(401)
-          .json({
-            errors: [{ msg: "Email Not Associated With User Account" }],
-          });
+        return res.status(401).json({
+          errors: [{ msg: "Email Not Associated With User Account" }],
+        });
       }
 
       // generate a random password
@@ -217,11 +215,11 @@ router.post(
   }
 );
 
-//@body: email that denotes an existing user's email in the DB (required string)
+// @body: email that denotes an existing user's email in the DB (required string)
 //        oldPassword that denotes an existing user's current password in DB (required string)
 //        newPassword that denotes what an existing user's password will be changed to (required string)
 //
-//@response: If user exists in DB (email and oldPassword match), then that user's password is updated to the
+// @response: If user exists in DB (email and oldPassword match), then that user's password is updated to the
 // newPassword passed in. Else, an error status is thrown.
 router.post(
   "/resetPassword",
@@ -238,11 +236,9 @@ router.post(
       const user = await findOneUser(email);
       // error: User email does not exist
       if (!user) {
-        return res
-          .status(401)
-          .json({
-            errors: [{ msg: "Email Not Associated With User Account" }],
-          });
+        return res.status(401).json({
+          errors: [{ msg: "Email Not Associated With User Account" }],
+        });
       }
 
       // check if the old password matches the email (authenticated user)
