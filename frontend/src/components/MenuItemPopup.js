@@ -1,14 +1,36 @@
+/**
+ * Popup that displays specified item when MenuItem is clicked. Has form to 
+ * pass data to/add items to cart. Popup gives relevant information such as 
+ * pricing, description, additional accommodations etc.
+ * 
+ * @summary     Displays item information and allows user to add item to cart.
+ * @author      Aaron Kirk, Navid Boloorian
+ */
+
 import React, { useState } from 'react';
 import '../css/MenuItemPopup.css';
 import plus from '../media/plus.svg';
 import minus from '../media/minus.svg';
 
 const MenuItemPopup = ({ values, togglePopup, processForm }) => {
-    const [quantity, setQuantity] = useState(1);
+
+    const getInitialAccommodationsCost = () => {
+        var sum = 0;
+        if(values.get("fillIns") != undefined) {
+            values.get("accommodations").forEach((accommodation) => {
+                if(values.get("fillIns").accommodations.includes(accommodation.Description)) {
+                    sum += parseFloat(accommodation.Price).toFixed(2);
+                }
+            });
+        }
+        return sum;
+    }
+
+    const [quantity, setQuantity] = useState((values.get("fillIns") != undefined) ? parseInt(values.get("fillIns").quantity) : 1);
     // if individual price exists, use that as default; otherwise, use family
-    const [currPrice, setCurrPrice] = useState(("Individual" in values.get("price")) ? values.get("price").Individual : values.get("price").Family);
-    const [totalPrice, setTotalPrice] = useState(currPrice);
-    const [accommodationCost, setAccommodationCost] = useState(0);
+    const [currPrice, setCurrPrice] = useState((values.get("fillIns") != undefined) ? ((values.get("fillIns").size == "Individual") ? values.get("price").Individual : values.get("price").Family) : (("Individual" in values.get("price")) ? values.get("price").Individual : values.get("price").Family));
+    const [accommodationCost, setAccommodationCost] = useState(getInitialAccommodationsCost());
+    const [totalPrice, setTotalPrice] = useState((parseFloat(currPrice * quantity) + parseFloat(accommodationCost)).toFixed(2));
 
     // handles changing price and quantity states
     const changeQuantity = sign => {
@@ -27,10 +49,25 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         }
     }
 
+    const checkAccommodationFillIns = accommodation=> {
+        if(values.get("fillIns") != undefined) {
+            if(values.get("fillIns").accommodations.includes(accommodation.Description)) {
+                handleAccommodation(true, accommodation.Price);
+                return true;
+            }
+        } 
+        return false;
+    }
+
     //handles toggling price additions from accommodations
-    const handleAccommodation = (event, price) => {
+    const handleAccommodation = (checked, price) => {
+        if(checked) {
+            setAccommodationCost((parseFloat(accommodationCost) + parseFloat(price)).toFixed(2));
+            setTotalPrice((parseFloat(totalPrice) + parseFloat(price)).toFixed(2));
+            return;
+        }
         // everything is fixed to 2 decimal places
-        if(event.target.checked) {
+        if(checked) {
             // parseFloat() is necessary because otherwise they get treated like strings for addition
             setAccommodationCost((parseFloat(accommodationCost) + parseFloat(price)).toFixed(2));
             setTotalPrice((parseFloat(totalPrice) + parseFloat(price)).toFixed(2));
@@ -45,7 +82,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         return(
             /** conditionally displays family size as an "add-on" if both are possible */
             <label className="choice-label">
-                <input onClick={() => handleSize(price)} type="radio" name="size" value={name} defaultChecked={(name == "Individual" || !("Individual" in values.get("price")))} required />
+                <input onClick={() => handleSize(price)} type="radio" name="size" value={name} defaultChecked={(name == "Individual" || ((values.get("fillIns") != undefined) && values.get("fillIns").size == name) || !("Individual" in values.get("price")))} required />
                 <span onClick={() => handleSize(price)} className="label-title">{(hasBothPrices) ? name + " +($" + parseFloat(price - values.get("price").Individual).toFixed(2) + ")": name}</span>
             </label>
         );
@@ -73,7 +110,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                 {values.get("accommodations").map((accommodation) => {
                     return(
                         <label className="choice-label">
-                            <input type="checkbox" name="accommodations" value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e, accommodation.Price)} />
+                            <input type="checkbox" name="accommodations" defaultChecked={values.get("fillIns") != undefined && values.get("fillIns").accommodations.includes(accommodation.Description)} value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e.target.checked, accommodation.Price)} />
                             <span className="label-title">{accommodation.Description + " +($" + parseFloat(accommodation.Price).toFixed(2) + ")"}</span>
                         </label>
                     );
@@ -104,6 +141,8 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                     {(values.get("dietary-info").vegetarian) ? "*Vegetarian" : null}
                     {(values.get("dietary-info").vegetarian) ? <br/> : null}
                     {(values.get("dietary-info").glutenFree) ? "*Gluten-free" : null}
+                    {(values.get("dietary-info").glutenFree) ? <br/> : null}
+                    {(values.get("dietary-info").containsDairy) ? "*Contains Dairy" : null}
                 </p>
                 </>
             );
@@ -120,7 +159,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
 
                     {/** Left side with dish details */}
                     <div className="left-popup">
-                        <div className="popup-image" style={{backgroundImage: "url(" + values.get("image") + ")"}}>
+                        <div className="popup-image" style={{backgroundImage: "url(" + values.get("image") + ")", backgroundSize:"cover"}}>
                             <div className="popup-image-price"><h3>{"$" + parseFloat(currPrice).toFixed(2)}</h3></div>
                         </div>
                         <div className="popup-item-info">
@@ -155,7 +194,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                                     <i>optional</i>
                                 </div>
                                 <p className="instructions-note">Special accommodations can be made for orders placed in advanced but are not guaranteed, please <a href="/contact">contact us</a> directly for more info.</p>
-                                <textarea name="instructions" maxLength="75" className="instructions-textarea" />
+                                <textarea name="instructions" maxLength="75" className="instructions-textarea">{(values.get("fillIns") != undefined) ? values.get("fillIns").instructions : ""}</textarea>
                             </div>
 
                             {/** quantity selection */}
@@ -171,11 +210,10 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                             </div>
 
                             {/** hidden fields to pass along to the total price and  quantity */}
-                            <input name="name" type="hidden" value={values.get("title")} />
+                            <input name="popupValues" type="hidden" value={values} />
                             <input name="price" type="hidden" value={parseFloat(totalPrice).toFixed(2)} />
                             <input name="quantity" type="hidden" value={quantity} />
-                            <input name="description" type="hidden" value={values.get("description")} />
-                            <input className="submit-order-button" type="submit" value={"Add " + quantity + " to cart: $" + totalPrice} />
+                            <input className="submit-order-button" type="submit" value={(values.get("fillIns") != undefined) ? "Save Changes: $" + totalPrice : "Add " + quantity + " to cart: $" + totalPrice} />
                         </form>
                     </div>
 

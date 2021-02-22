@@ -1,61 +1,190 @@
-import React, { Component} from 'react';
+import React from 'react';
+import { Link, Redirect, useHistory } from 'react-router-dom';
+import { 
+  TextField, Button,  
+  Snackbar, Typography 
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import '../css/Login.css';
+import { isAuthenticated, setJWT} from '../util/Auth';
 import Navbar from '../components/NavBar';
+import { useEffect } from 'react';
 const config = require('../config');
+
 
 const BACKEND_URL = config.backend.uri;
 
-class Login extends Component {
+const useStyles = makeStyles((theme) => ({
 
-    constructor(){
-        super();
-        this.state = {
-            isFetching: true,
-            response: ''
-        }
-        this.fetchUsersWithFetchAPI = this.fetchUsersWithFetchAPI.bind();
+  centered: {
+    textAlign: 'center'
+  },
+  form: {
+    //Input Field - General Layout
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '95%'
+    },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "black"
+    },
+    "& .MuiInputLabel-outlined.Mui-focused": {
+      color: "black"
+    },
+    '& .MuiTypography-root': {
+      margin: theme.spacing(1),
+      width: '100%'
+    },
+
+    '& .MuiButton-root': {
+      margin: theme.spacing(3),
+      color: 'black',
+      background: '#F9CE1D',
+      width:'30%'
     }
+  },
+  title: {
+    margin: theme.spacing(2),
+    textAlign: 'center',
+    fontWeight: 'bolder',
+    textTransform: 'uppercase'
+  }
+}));
 
-    /***
-     * Take a look at backend/app (route /) to see exactly how the response is being sent 
-     */
-    fetchUsersWithFetchAPI =  () => {
-        this.setState({isFetching: true});
-        fetch(BACKEND_URL)
-            //Make sure to make the request asynchronous else you will get promises/errors
-            .then(async result => {
-                if (result.ok){
-                    const json = await result.json();
-                    this.setState({response: json.message, isFetching: false})
-                } else{
-                    this.setState({response: "Bad", isFetching: false})
-                }
-            })
-            .catch(e => {
-                console.log(e);
-                this.setState({response: "Error", isFetching: false});
-            });
+export default function Login() {
+  const classes = useStyles();
+  const history = useHistory();
+  const [state, setState] = React.useState({
+    isAuthenticatingUser: true,
+    isUserAuthenticated: false,
+    email: '',
+    password: '',
+    snack: {
+      message: '',
+      open: false
+    },
+    errors: {
+      email: false,
+      password: false
+    },
+    form_disabled: false
+  });
+
+  useEffect(() => {
+    isAuthenticated().then(async result => {
+      setState({...state, isAuthenticatingUser: false, isUserAuthenticated: result});
+    })
+  }, []);
+
+  // Updates given state with given value 
+  const handleChange = (prop) => (event) => {
+    setState({ ...state, [prop]: event.target.value });
+  };
+
+  
+  // Handles submission of the form (button click)
+  // Validates form data for completion/length, making a backend request to Users DB for user authetnication. If
+  // user is authenticated, user is redirected to admin page. Otherwise, an error message appears. 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setState({ ...state, form_disabled: true });
+    const submission = {
+      email: state.email,
+      password: state.password
     };
 
-    componentDidMount(){
-        this.fetchUsersWithFetchAPI();
+    //Check if either field is empty
+    let email = false;
+    let password = false; 
+
+    if(state.email === ''){
+        email = true;
     }
+    if(state.password === ''){
+        password = true;
+    }
+    if(email + password > 0){
+        setState({...state, errors: {email: email, password: password}, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
+        return;
+    }
+   
+    //Check Password Length
+    if (submission.password.length < 6) {
+      setState({...state, errors: {email: false, password: true}, form_disabled: false, snack: {message: 'Password must be at least 6 characters long.', open: true}});
+      return;
+    }
+    try {
+        //Attempt to login with given credentials 
+      const response = await fetch(`${BACKEND_URL}user/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submission)
+      });
 
+      //Successful Login
+      if (response.ok) {
+        const json = await response.json();
+        setJWT(json.token);
+        history.push("/admin");
+      }
+      //Invalid Credentials
+      else if (response.status === 401) {
+        setState({...state, errors: {email: true, password: true}, form_disabled: false, snack: {message: 'Invalid Login: Email or password not recognized.', open: true}});
+      }
+      //Any other server response
+      else {
+        const text = await response.text();
+        setState({...state, form_disabled: false, errors: {email: false, password: false}, snack: {message: `Could not log in: ${text}`, open: true}});
+      }
+    } 
+    //General Error
+    catch (error) {
+      setState({...state, form_disabled: false, errors: {email: false, password: false}, snack: {message: `An error occurred: ${error.message}`, open: true}});
+    }
+  };
 
-    render (){
+  //Error Message Display: Auto close itself by updating its states
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setState({...state, snack: {...state.snack, open: false}});
+  };
 
-      return (
-
-          <div>
-              <Navbar currentPage="login"/>
-              <div style={{marginTop: "30px"}}>
-                  This is the Login Page.
-              </div> 
-              <p>{this.state.isFetching ? 'Fetching message...' : this.state.response}</p>
-
+  if(state.isAuthenticatingUser){
+    return(
+      <div>
+        <Navbar/>
+        <p> Loading... </p>
+      </div>
+    )
+  } else if(state.isUserAuthenticated){
+    return(
+      <Redirect to="/admin"/>
+    )
+  } else {
+    return (
+      <div>
+        <Navbar/>
+        <div className="Main">
+          <div className="Border">
+            <Typography variant="h4" className={classes.title} style={{fontSize: "2.5rem"}} > Login </Typography>
+            <p className={classes.centered} style={{color: "#8d8d8d"}}> Sign-in into an existing account below </p>
+            <form className={classes.form} onSubmit={handleSubmit}>
+                  <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')} error={state.errors.email}/>
+                  <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')} error={state.errors.password}/>
+                  <Link to="register" className="Child"><Typography>Register Account</Typography></Link>
+                  <Link to="reset-password"><Typography>Reset Password</Typography></Link>
+                  <div className={classes.centered}>
+                      <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}
+                      // style={{fontWeight: "bolder", borderRadius: "3px", fontSize: "16px"}}
+                      >Login</Button>
+                  </div>
+              </form>
+            </div>
           </div>
-
-      )
-    }
+          <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
+      </div>
+    );
   }
-  
-  export default Login;
+}

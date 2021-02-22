@@ -10,6 +10,7 @@ import { withCookies, Cookies } from 'react-cookie';
 const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
+import "../css/Menu.css";
 
 class Menu extends Component {
     static propTypes = {
@@ -79,7 +80,7 @@ class Menu extends Component {
       return (
           <div>
               <div className="navbar-wrapper">
-                <Navbar currentPage="menu"/>
+                <Navbar/>
               </div>
               <Banner/>
               {this.state.cartPopupVisible ? <CartSummary key={this.state.cartKey} items={this.state.cartItems} total={this.state.totalPrice} tax={this.state.tax} subtotal={this.state.subTotal} toggleCart={this.toggleCart} removeItem={this.handleRemove}/> : null}

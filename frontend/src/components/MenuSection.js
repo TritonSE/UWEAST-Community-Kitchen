@@ -1,11 +1,23 @@
+/**
+ * Hub of menu portion of page. Almost all  states are elevated to this level. 
+ * Defines most of the form processing and renders MenuFilter, MenuItems, and 
+ * MenuCart.
+ * 
+ * @summary   Hub of menu items, most states are elevated to this level.
+ * @author    Navid Boloorian
+ */
+
 import React, { useState } from 'react';
 import MenuFilter from './MenuFilter';
 import MenuItems from './MenuItems';
-import MenuItemPopup from './MenuItemPopup';
 import '../css/MenuSection.css';
-const config = require('../config');
 
-// MenuSection is responsible for managing states for most of the menu
+/**
+ * Handle the display of menu categories and sections. Stores states of what is 
+ * currently visible.
+ * 
+ * @param {function} onItemAdd - Function returning boolean
+ */
 const MenuSection = ({onItemAdd}) => {
   // filterCategories populates the filter buttons
   const filterCategories = ["Whole Menu", "Featured", "Appetizers", "Main Dishes", "Sides", "Drinks"];
@@ -18,6 +30,8 @@ const MenuSection = ({onItemAdd}) => {
 
   // states that are managed and passed down to components
   const [visibleCategories, setVisibleCategories] = useState(defaultCategories);
+
+  const [toggledFilter, setToggledFilter] = useState("none");
 
   // stores whether or not the popup is currently visible
   const [popupVisible, setPopupVisible] = useState(false);
@@ -77,7 +91,7 @@ const MenuSection = ({onItemAdd}) => {
   }
   
   // closes popup when open and opens popup when closed
-  const togglePopup = (title, description, price, image, dietaryInfo, accommodations) => {
+  const togglePopup = (title, description, price, image, dietaryInfo, accommodations, fillIns) => {
     setPopupVisible(!popupVisible);
     
     // sets the values of the map based on passed-in information
@@ -87,6 +101,7 @@ const MenuSection = ({onItemAdd}) => {
     popupValues.set("image", image);
     popupValues.set("dietary-info", dietaryInfo);
     popupValues.set("accommodations", accommodations);
+    popupValues.set("fillIns", fillIns);
 
     setPopupValues(popupValues);
   }
@@ -101,7 +116,7 @@ const MenuSection = ({onItemAdd}) => {
     <div className="menu-section-wrapper">
       <div className="menu-section">
         <div className="menu-filter-wrapper">
-          <MenuFilter foodCategories={filterCategories} changeVisibleCategories={() => changeVisibleCategories} />
+          <MenuFilter toggledFilter={toggledFilter} setToggledFilter={setToggledFilter} foodCategories={filterCategories} changeVisibleCategories={() => changeVisibleCategories} />
         </div>
         <div className="menu-items">
           {/** parameters are states being passed down */}

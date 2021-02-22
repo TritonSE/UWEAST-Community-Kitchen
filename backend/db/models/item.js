@@ -26,9 +26,10 @@ const itemSchema = new mongoose.Schema({
     vegan: { type: Boolean, default: false },
     vegetarian: { type: Boolean, default: false },
     glutenFree: { type: Boolean, default: false },
+    containsDairy: { type: Boolean, default: false },
   },
   isFeatured: { type: Boolean, default: false },
-  Accomodations: {
+  Accommodations: {
     type: [
       {
         Description: { type: String, required: true },
