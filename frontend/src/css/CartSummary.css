@@ -10,9 +10,9 @@
 }
 
 .cart-popup {
-    width: 32.5vw;
+    width: 34.5vw;
     background-color: white;
-    max-height: 70vw;
+    max-height: 50vw;
     overflow-x: hidden;
     overflow-y: scroll;
     position: fixed;
@@ -25,23 +25,26 @@
 
 .pickup-title {
     font-weight: bold;
-    padding-left: 2vw;
+    margin-left: 2vw;
     font-size: 1.3vw;
 }
 
 .date-picker {
-    padding: 1vw 0vw 0vw 3vw;
+    margin-left: 4vw;
 }
 
 .time-picker {
-    padding: 1vw 2vw 0vw 9vw;
+    margin-top: 1vw;
+    margin-left: 7vw;
+    margin-right: 2vw;
 }
 
 .pickup-date-info {
-    width: 11vw;
     height: auto;
     font-size: 0.7vw;
     margin-left: 2vw;
+    margin-top: 0.5vw;
+    width: 11vw;
 }
 
 .summary-title {
@@ -52,14 +55,15 @@
 
 .cart-items {
     margin-left: 2vw;
-    width: 29vw;
-    height: 23.8vh;
+    width: 31.5vw;
+    height: auto;
+    max-height: 18vw;
     overflow-x: hidden;
     overflow-y: scroll;
 }
 
 .summary-item {
-    width: 29vw;
+    width: 31.5vw;
 }
 
 .edit-button {
@@ -99,7 +103,7 @@
 
 .order-totalprices {
     margin-top: 2vw;
-    margin-right: 2.5vw;
+    margin-right: 2vw;
     text-align: right;
     font-size: 70%;
     font-weight: bold;
@@ -112,13 +116,13 @@
 }
 
 .item-divide {
-    width: 28vw;
+    width: 31vw;
     margin-top: 0.8vw;
     border-bottom: 1px solid #000000;
 }
 
 .return-button {
-    width: 28vw;
+    width: 30vw;
     margin-top: 2vw;
     margin-left: 2vw;
     margin-bottom: 2vw;
@@ -140,13 +144,13 @@
     font-size: 1vw;
     font-weight: bold;
     height: auto;
-    width: 11vw;
+    width: 13.5vw;
     margin-left: 0.3vw;
     margin-top: 0.6vw;
     margin-bottom: 0.2vw;
 }
 
-.item-description {
+.item-descript {
     font-size: 0.8vw;
     font-style: italic;
     font-weight: bold;
@@ -154,4 +158,30 @@
 
 .summary-price {
     width: 4vw;
+}
+
+.error {
+    font-size: 0.7vw;
+    max-width: 10vw;
+    color: red;
+}
+
+.select-error {
+    font-size: 0.7vw;
+    color: red;
+    
+}
+
+.order-minimum {
+    height: auto;
+    text-align: right;
+    max-width: 15vw;
+    margin-right: 2.5vw;
+    margin-left: 17vw;
+    font-size: 0.7vw;
+    color: red;
+}
+
+.return {
+    width: 100%;
 }

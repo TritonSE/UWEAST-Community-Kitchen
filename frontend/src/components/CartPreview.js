@@ -1,15 +1,21 @@
 import React, { Component, useEffect } from 'react';
 import {Button} from 'react-bootstrap';
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
 import '../css/CartPreview.css';
 
 class CartPreview extends Component {
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    }
+
     constructor(props) {
         super(props);
         this.state = {
             items: this.props.items,
-            subTotal: "00.00",
-            tax: "00.00",
-            totalPrice: "00.00"
+            subTotal: this.props.subtotal,
+            tax: this.props.tax,
+            totalPrice: this.props.total
         }
 
         this.loadItems = this.loadItems.bind(this);
@@ -21,16 +27,17 @@ class CartPreview extends Component {
             <div>
                 {this.state.items.map((item, ind) => {
 
-                    this.state.subTotal = parseFloat(this.state.subTotal) + parseFloat(item.price);
-                    this.state.subTotal = parseFloat(this.state.subTotal).toFixed(2);
-                    this.state.totalPrice = parseFloat(this.state.subTotal) + parseFloat(this.state.tax);
-                    this.state.totalPrice = parseFloat(this.state.totalPrice).toFixed(2);
+                    let accomodation = (item.accommodations) ? ", " + item.accommodations : "";
+                    let size = item.size;
+                    let extraInfo = size + accomodation;
 
                         return (
                             <div key={ind} className="summary-item row">
                                 <span className="thumbnail thumb-img">{ind+1}</span>
                                 <span className="item-info">{item.quantity} X {item.name}<br/>
-                                <span className="item-description">{item.description}</span></span>
+                                <span className="item-description">{extraInfo}<br/>
+                                {(item.instructions != "") ? <span>Special Instr.: {item.instructions}</span> : null}
+                                </span></span>
                                 <span className="thumbnail summary-price">${item.price}</span>
                                 <span className="item-divider"></span>
                             </div>
@@ -57,11 +64,11 @@ class CartPreview extends Component {
                             Subtotal: ${this.state.subTotal}<br/>
                             Tax: ${this.state.tax}
                         </div>
-                        <Button onClick={this.props.toggleCart}>Review Order</Button>
-                    </div>
-                    <div className="order-summary">
+                        <div className="order-summary">
                         <span>Total Price</span><span className="add-price">${this.state.totalPrice}</span>
                     </div>
+                    </div>
+                    <Button className="review-order-button" onClick={this.props.toggleCart}>Review Order</Button>
                 </div>
             </div>
         )
@@ -69,4 +76,4 @@ class CartPreview extends Component {
 
 }
 
-export default CartPreview;
+export default withCookies(CartPreview);
