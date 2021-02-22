@@ -10,15 +10,14 @@
 .adminNavContainer {
   display: flex;
   flex-direction: row;
-
-  max-width: 40vw; 
-  min-width: 600px;
-  padding-bottom: 40px;
+  justify-content: space-around;
+  width: 100vw;
+  margin-left: -80px;
+  padding: 20px;
 }
 .adminNavUnselected {
   display: inline-block; 
-  margin-right: 40px;
-
+  margin: 10px;
   font-family: 'Roboto', sans-serif !important;
   font-size: 20px;
   color: var(--darkgrey) !important;
@@ -34,8 +33,7 @@
 }
 .adminNavSelected {
   display: inline-block; 
-  margin-right: 40px;
-
+  margin: 10px;
   font-family: 'Roboto', sans-serif !important;
   font-size: 20px;
   color: var(--black) !important;

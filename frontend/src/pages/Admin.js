@@ -37,6 +37,7 @@ export default function Admin() {
         var currentScreen = state.currentScreen;
         return(
             <div className="adminNavContainer">
+            <div>
                 { currentScreen === "orders" ? 
                     <h2 className="adminNavSelected" onClick={() => setState({...state, currentScreen: "orders"})}>
                         All Orders
@@ -47,10 +48,10 @@ export default function Admin() {
                 }
                 { currentScreen === "menu" ? 
                     <h2 className="adminNavSelected" onClick={() => setState({...state, currentScreen: "menu"})}>
-                        Menu Items
+                        Edit Menu
                     </h2> : 
                     <h2 className="adminNavUnselected" onClick={() => setState({...state, currentScreen: "menu"})}>
-                        Menu Items
+                        Edit Menu
                     </h2>
                 }
                 { currentScreen === "email" ? 
@@ -69,6 +70,7 @@ export default function Admin() {
                         Reset Password
                     </h2>
                 }
+                </div>
             </div>
         );
     }

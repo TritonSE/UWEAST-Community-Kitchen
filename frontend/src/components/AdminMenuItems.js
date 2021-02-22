@@ -126,7 +126,7 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
 function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem) {
     return (
         <TableContainer component={Paper} className="menuTableContainer">
-            <Table aria-label="simple table" stickyHeader className="menuTable">
+            <Table aria-label="simple table" className="menuTable">
                 <TableHead>
                     <TableRow style={{"overflow": "hidden"}}>
                         <TableCell className="menuTableHeaders" width="5%">Feature</TableCell>
@@ -402,11 +402,11 @@ export default function AdminMenuItems (props) {
                             }}
                         >
                             <MenuItem value="All">All</MenuItem>
+                            <MenuItem value="Featured">Featured</MenuItem>
                             <MenuItem value="Appetizers">Appetizers</MenuItem>
                             <MenuItem value="Main Dishes">Main Dishes</MenuItem>
                             <MenuItem value="Sides">Sides</MenuItem>
                             <MenuItem value="Drinks">Drinks</MenuItem>
-                            <MenuItem value="Featured">Featured</MenuItem>
                         </Select>
                         <SearchBar
                             className="menuSearchBar"
