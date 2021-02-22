@@ -172,7 +172,7 @@ export default function EditMenuItemModal (props) {
             body: JSON.stringify(itemObject)
         }).then(res => {
             if(res.ok){
-                alert("Your item was updated!");
+                props.setItemEditedSuccess(true);
                 //refetch
                 setLoaded(false);
                 setShowModal("");

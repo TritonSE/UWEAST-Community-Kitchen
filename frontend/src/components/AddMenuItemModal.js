@@ -156,6 +156,7 @@ export default function AddMenuItemModal (props) {
         }).then(res => {
             if(res.ok){
                 alert("Your item was added!");
+                props.setItemAddedSuccess(true);
                 //refetch
                 setLoaded(false);
                 setShowModal(false);

@@ -11,6 +11,7 @@
 
 import React, {useState, useEffect} from 'react';
 import {Modal, Button} from 'react-bootstrap';
+import Snackbar from "@material-ui/core/Snackbar";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -235,6 +236,9 @@ export default function AdminMenuItems (props) {
     const [checkboxUpdate, setCheckboxUpdate] = useState("");
     const [addItemModal, setAddItemModal] = useState(false);
     const [currentEditItem, setCurrentEditItem] = useState("");
+    const [itemAddedSuccess, setItemAddedSuccess] = useState(false)
+    const [itemEditedSuccess, setItemEditedSuccess] = useState(false);
+
     // Fetch all menu items to display in table
     useEffect(() => {
         var data = null;
@@ -382,9 +386,31 @@ export default function AdminMenuItems (props) {
     if(loaded){
         return (  
             <div className="adminMenuPageContainer">
-                {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded}/>}
+                {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded} setItemEditedSuccess={setItemEditedSuccess}/>}
                 {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
-                {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} />}
+                {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} setItemAddedSuccess={setItemAddedSuccess}/>}
+                {/* Add/Edit item success snackbars*/}
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    open={itemAddedSuccess}
+                    autoHideDuration={5000}
+                    onClose={() => setItemAddedSuccess(false)}
+                    message={<span id="message-id">Item successfully added!</span>}
+                />
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    open={itemEditedSuccess}
+                    autoHideDuration={5000}
+                    onClose={() => setItemEditedSuccess(false)}
+                    message={<span id="message-id">Item successfully edited!</span>}
+                />
+                
                 <div className="aboveTableContainer">
                     <Button className="menuAddButton" onClick={() => {setAddItemModal(true)}}>
                         <AddCircleIcon className="menuAddButtonIcon" />
