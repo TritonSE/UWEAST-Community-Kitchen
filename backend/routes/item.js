@@ -15,7 +15,7 @@ const {
 const { body, validationResult } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const { token } = require("morgan");
-const { verify , createJWT} = require("./services/jwt");
+const { verify } = require("./services/jwt");
 const router = express.Router();
 
 // returns all menu items in the DB
