@@ -97,6 +97,9 @@
     margin: -8px 0 0 0 !important;
     padding: 0 !important;
 }
+.removeAddOnButton:hover {
+    color: red !important;
+}
 .modalFooter {
     padding-top: 20px;
     height: auto;

@@ -22,7 +22,7 @@
   * @author PatrickBrown1
   */
 
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import { Button } from 'react-bootstrap';
 import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment, FormHelperText, Snackbar, IconButton } from '@material-ui/core';
 import '../css/AddMenuItemModal.css';
@@ -68,8 +68,10 @@ export default function AddMenuItemModal (props) {
     const [containsDairy, setContainsDairy] = useState(false);
 
     const [menuError, setMenuError] = useState(false);
-    const [errorSnackbar, setErrorSnackbar] = useState(false);
-    
+    const [errorSnackbar, setErrorSnackbar] = useReducer(
+        (state, newState) => ({...state, ...newState}),
+        {visible: false, message: ""}
+    )    
     // makes sure url is valid image link
     const checkUrl = (url) => {
         return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
@@ -86,11 +88,17 @@ export default function AddMenuItemModal (props) {
         if(itemName === "" || 
             itemCategory === "" || 
             (individualItemPrice === "" && familyItemPrice === "") || 
-            itemImageURL === "" || itemDescription === "" || !checkUrl(itemImageURL)
+            itemImageURL === "" || itemDescription === ""
         ){
             console.log("fail basic");
             setMenuError(true);
-            setErrorSnackbar(true);
+            setErrorSnackbar({visible: true, message: "There was an error in the form"});
+            return;
+        }
+        if(!checkUrl(itemImageURL)){
+            console.log("fail url check");
+            setMenuError(true);
+            setErrorSnackbar({visible: true, message: "Image link must have a valid image extension (.jpeg, .jpg, or .png)"});
             return;
         }
         // validate addons
@@ -101,7 +109,7 @@ export default function AddMenuItemModal (props) {
                 console.log("fail add on");
                 failAddOn = true;
                 setMenuError(true);
-                setErrorSnackbar(true);
+                setErrorSnackbar({visible: true, message: "One or more addons weren't properly filled in"});
                 return;
             }
             else if(item.name !== "" && parseFloat(item.price) < 0){
@@ -109,13 +117,13 @@ export default function AddMenuItemModal (props) {
                 console.log("add on price was negative");
                 failAddOn = true;
                 setMenuError(true);
-                setErrorSnackbar(true);
+                setErrorSnackbar({visible: true, message: "Negative prices are not allowed in the menu"});
                 return;
             }
         })
         if(failAddOn){
             setMenuError(true);
-            setErrorSnackbar(true);
+            setErrorSnackbar({visible: true, message: "One or more addons weren't properly filled in"});
             return;
         }
 
@@ -178,10 +186,10 @@ export default function AddMenuItemModal (props) {
                     vertical: 'bottom',
                     horizontal: 'center',
                 }}
-                open={errorSnackbar}
+                open={errorSnackbar.visible}
                 autoHideDuration={5000}
-                onClose={() => setErrorSnackbar(false)}
-                message={<span id="message-id">There was an error in the form</span>}
+                onClose={() => setErrorSnackbar({visible: false, message: ""})}
+                message={<span id="message-id">{errorSnackbar.message}</span>}
             />
 
             <Modal open={showModal} onClose={() => setShowModal(false)} 
