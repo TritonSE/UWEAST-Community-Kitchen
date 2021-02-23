@@ -3,6 +3,9 @@
  * Contains routes to add, update or find a user.
  * Also contains configuration and jwt to allow for login functionality as well as
  * email functionality.
+ *
+ * @summary   Creation of login and registration as well as email sending.
+ * @author    Amrit Kaur Singh
  */
 const express = require("express");
 const { body } = require("express-validator");
@@ -12,7 +15,7 @@ const {
   findOneUser,
   updateOneUser,
 } = require("../db/services/user");
-const { createJWT  } = require("./services/jwt");
+const { createJWT } = require("./services/jwt");
 const router = express.Router();
 const config = require("../config");
 const crypto = require("crypto");
@@ -21,8 +24,12 @@ const crypto = require("crypto");
 const MIN_PASS_LENGTH = 6;
 const MAX_PASS_LENGTH = 15;
 
-// @body - email, password, secret use middleware to validate
-// @return - json with email and jwt or error
+/**
+ * Registers a user into the DB.
+ *
+ * @body - email, password, secret use middleware to validate
+ * @returns {status/object} - 200 json with email and jwt / 500 with err
+ */
 router.post(
   "/register",
   [
@@ -64,8 +71,12 @@ router.post(
   }
 );
 
-// @body - email && password use middleware to validate
-// @return - json with email and jwt or error
+/**
+ * Logins a user.
+ *
+ * @body - email and password use middleware to validate
+ * @returns {status/object} - 200 json with email and jwt / 500 with err
+ */
 router.post(
   "/login",
   [
@@ -109,6 +120,10 @@ router.post(
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive).
+ *
+ * @param {Number} min - minimum value
+ * @param {Number} max - maximum value
+ * @returns {Number} - a random number between min and max
  */
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
@@ -156,9 +171,12 @@ async function sendEmail(template, to_email, locals, res) {
   }
 }
 
-// @body: email that denotes an existing user's email in the DB (required string)
-// @response: If user exists in DB, reset their password to something randomly generated, and send them an email
-// stating this new password. Otherwise, throw an error status
+/**
+ * Sends Email containing new password for forgot password if the user is authenticated with email.
+ *
+ * @body {string} - email that denotes an existing user's email in the DB
+ * @returns {status/object} - 200 if password is reset to a rendomly generated password / 400 or 500 with err
+ */
 router.post(
   "/forgotPassword",
   [body("email").notEmpty().isEmail(), isValidated],
@@ -209,12 +227,14 @@ router.post(
   }
 );
 
-// @body: email that denotes an existing user's email in the DB (required string)
-//        oldPassword that denotes an existing user's current password in DB (required string)
-//        newPassword that denotes what an existing user's password will be changed to (required string)
-//
-// @response: If user exists in DB (email and oldPassword match), then that user's password is updated to the
-// newPassword passed in. Else, an error status is thrown.
+/**
+ * Resets password for authenticated users.
+ *
+ * @body {string} email - denotes an existing user's email in the DB
+ * @body {string} oldPassword - denotes an existing user's current password in DB - required
+ * @body {string} newPassword - denotes what an existing user's password will be changed to - required
+ * @returns {status/object} - 200 if email and oldPassword match and the password is updated / 401 or 500 with err
+ */
 router.post(
   "/resetPassword",
   [

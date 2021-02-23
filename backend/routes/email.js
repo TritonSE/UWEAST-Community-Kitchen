@@ -3,6 +3,9 @@
  * Contains routes to add or change the primary email, add a secondary email, and remove a secondary email.
  * Also contains get requests to get the primary email and secondary email(s) as well as
  * delete request to delete a secondary email.
+ *
+ * @summary   Routes to modify the Email DB specifically changing, finding and deleting emails.
+ * @author    Thomas Garry
  */
 const express = require("express");
 const { body } = require("express-validator");
@@ -17,10 +20,13 @@ const {
   addSecondaryEmail,
 } = require("../db/services/email");
 
-// @description - changes the primary email address in the Email DB
-// @body - email
-// @return - { success:true } if email is changed
-//          "Email change unsuccessful": if duplicate email or failures
+/**
+ * Changes the primary email address in the Email DB.
+ *
+ * @body {string} - email to be set to the Primary address
+ * @returns {status/object} - 200 with success if email is changed /
+ *                            400 if duplicate email or failure
+ */
 router.post(
   "/changePrimary",
   [
@@ -54,10 +60,13 @@ router.post(
   }
 );
 
-// @description: adds the secondary email address in the Email DB
-// @body - email
-// @return - { success:true } if secondary email is added
-//          "Email change unsuccessful": if duplicate email or failures
+/**
+ * Adds the secondary email address in the Email DB.
+ *
+ * @body {object} - email to be set as a secondary address
+ * @returns {status/object} - 200 with success if email is changed /
+ *                            400 if duplicate email or failure
+ */
 router.post(
   "/addSecondary",
   [
@@ -91,10 +100,13 @@ router.post(
   }
 );
 
-// @description - deletes the secondary email address in the Email DB
-// @body - email
-// @return - { success:true } if the secondary email is deleted
-//          "Enter a valid secondary email": if email is not in DB/failure
+/**
+ * Deletes the secondary email address in the Email DB.
+ *
+ * @body {object} - email to be deleted from the secondary addresses
+ * @returns {status/object} - 200 with success if email is changed /
+ *                            400 if duplicate email or failure
+ */
 router.delete(
   "/removeSecondary",
   [
@@ -124,9 +136,11 @@ router.delete(
   }
 );
 
-// @description - gets all the secondary emails
-// @body - email
-// @return - returns an array of all the secondary emails in the DB
+/**
+ * Gets all the secondary emails.
+ *
+ * @returns {status/[object]} - 200 with an array of all the secondary emails in the DB / 500 err
+ */
 router.get("/secondary", async (req, res, next) => {
   try {
     // returns emails or error if there is an error
@@ -140,9 +154,11 @@ router.get("/secondary", async (req, res, next) => {
   }
 });
 
-// @description - gets the primary email in the DB
-// @body - email
-// @return - returns the primary email in the DB
+/**
+ * Gets the primary email in the DB.
+ *
+ * @returns {status/object}} - 200 with the primary email in the DB / 500 err
+ */
 router.get("/primary", async (req, res, next) => {
   try {
     // returns email or error if there is an error

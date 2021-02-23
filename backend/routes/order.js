@@ -1,7 +1,10 @@
 /**
  * This file creates the routes to allow for interaction with the orders DB.
  * Contains route find completed orders or find orders based on customer name.
- * Also allows for an order's status to be updated
+ * Also allows for an order's status to be updated.
+ *
+ * @summary   Routes to modify the orders DB specifically finding and updating.
+ * @author    Thomas Garry
  */
 const express = require("express");
 const { body } = require("express-validator");
@@ -41,11 +44,13 @@ const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 //   }
 // );
 
-// @description - finds orders filtered on isCompleted and/or Customer
-// @body - isCompleted, Customer: neither required
-//  isCompleted: T/F based on whether an order is completed (default: false)
-//  Customer: JSON which contains name, email and phone of customer
-// @return - all orders if body is not provided to filter or error
+/**
+ * Finds orders filtered on isCompleted and/or Customer.
+ *
+ * @body {boolean} isCompleted - T/F based on whether an order is completed (default: false) (not required)
+ * @body {object} Customer - contains name, email and phone of customer (not required)
+ * @returns {status/object} - 200 success with all orders under the constraints / 500 with err
+ */
 router.post(
   "/",
   [
@@ -68,10 +73,13 @@ router.post(
   }
 );
 
-// @description - updates the order's isCompleted boolean to the value passed in
-// @body - _id, isCompleted: both required
-//  _id id of order to be updated - required
-//  isCompleted: T/F based on whether an order is completed (default: false) - required
+/**
+ * Updates the order's isCompleted boolean to the value passed in.
+ *
+ * @body {string} _id - id of order to be updated
+ * @body {object} isCompleted - T/F based on whether an order is completed (default: false)
+ * @returns {status/object} - 200 with success / 500 with err
+ */
 router.post(
   "/updateStatus",
   [body("_id").isString(), body("isCompleted").isBoolean(), isValidated],

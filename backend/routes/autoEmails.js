@@ -1,5 +1,8 @@
 /**
  * This file adds routes to allow for email verification and ordering.
+ *
+ * @summary   Creation and verification of JWTs via functions.
+ * @author    Amrit Kaur Singh
  */
 const express = require("express");
 const nodemailer = require("nodemailer");
@@ -33,8 +36,16 @@ const mail =
         preview: false,
       });
 
-// populates given email template with locals and sends it to to_email
-// all emails are sent from the email account specified in dotenv.
+/**
+ * Populates given email template with locals and sends it to to_email.
+ * All emails are sent from the email account specified in dotenv.
+ *
+ * @param {string} template - template email
+ * @param {string} to_email - the email address being sent to
+ * @param {string} locals - the email address being sent to
+ * @param {object} res - the response
+ * @returns {object} - mail object / err
+ */
 async function sendEmail(template, to_email, locals, res) {
   // sends email only if mail has been successfully setup
   if (mail != null) {
@@ -53,10 +64,14 @@ async function sendEmail(template, to_email, locals, res) {
   }
 }
 
-// @body - Requires the Customer, PickUp, PayPal, and Order information retrieved via Checkout process.
-// @return - Adds the order to the Orders DB, and also sends order receipts to customer's specified email
-//            as well as all UWEAST emails registered in Emails DB. If everything goes successful, returns
-//            a 200 status, else returns some error status.
+/**
+ * Adds the order to the Orders DB and also sends order receipts to customer's specified email
+ * as well as all UWEAST emails registered in Emails DB.
+ *
+ * @body - requires the Customer, PickUp, PayPal, and Order information retrieved via Checkout process
+ * @returns {status/object} - if everything goes successful, returns
+ *                         a 200 status, else returns some error status
+ */
 router.post(
   "/automate",
   [
@@ -135,10 +150,13 @@ router.post(
   }
 );
 
-// @body - Requires the name, email, and message of the indivdual who is seeking to contact UWEAST via the
-//        form on the Contact page.
-// @returns - Sends an email to all individuals inside of the Emails DB with the form information. Successfully
-//           sent email sends a 200 status. Otherwise, an error status is sent.
+/**
+ * Sends an email to all individuals inside of the Emails DB with the form information.
+ *
+ * @body - requires the name, email, and message of the indivdual who is seeking to contact UWEAST via the
+ *         form on the Contact page
+ * @returns {status/object} - successfully sent email sends a 200 status / unsuccessful an error status is sent.
+ */
 router.post(
   "/contact",
   [
