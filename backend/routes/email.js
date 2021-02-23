@@ -7,7 +7,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
-const { verify } = require("./verifyToken");
+const { verify } = require("./services/jwt");
 const router = express.Router();
 const {
   findPrimaryEmail,

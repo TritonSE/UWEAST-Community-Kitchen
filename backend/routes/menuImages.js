@@ -7,7 +7,7 @@ const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const router = express.Router();
 const { changeMenuImage, findMenuImage } = require("../db/services/menuImages");
-const { verify } = require("./verifyToken");
+const { verify } = require("./services/jwt");
 
 // @description - changes the menu image in the DB
 // @body {string} imageUrl - url to be set

@@ -15,7 +15,7 @@ const {
 const { body, validationResult } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const { token } = require("morgan");
-const { verify } = require("./verifyToken");
+const { verify , createJWT} = require("./services/jwt");
 const router = express.Router();
 
 // returns all menu items in the DB
@@ -76,6 +76,7 @@ router.post(
     isValidated,
   ],
   async (req, res, next) => {
+    console.log("Successfully inside of Add Item Route");
     try {
       // addedItem if successful or false if error
       const addedItem = await addNewItem(req.body);

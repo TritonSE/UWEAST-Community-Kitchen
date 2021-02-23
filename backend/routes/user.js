@@ -12,16 +12,14 @@ const {
   findOneUser,
   updateOneUser,
 } = require("../db/services/user");
+const { createJWT  } = require("./services/jwt");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
 const config = require("../config");
 const crypto = require("crypto");
 
 // used for random password generation (Route: /resetPassword)
 const MIN_PASS_LENGTH = 6;
 const MAX_PASS_LENGTH = 15;
-
-const JWT_EXPIRY = "1h";
 
 // @body - email, password, secret use middleware to validate
 // @return - json with email and jwt or error
@@ -56,9 +54,7 @@ router.post(
         };
         res.status(200).json({
           email: email,
-          token: jwt.sign(payload, config.auth.jwt_secret, {
-            expiresIn: JWT_EXPIRY,
-          }),
+          token: createJWT(payload),
         });
       }
     } catch (err) {
@@ -101,9 +97,7 @@ router.post(
         };
         res.status(200).json({
           email: email,
-          token: jwt.sign(payload, config.auth.jwt_secret, {
-            expiresIn: JWT_EXPIRY,
-          }),
+          token: createJWT(payload),
         });
       });
     } catch (err) {
