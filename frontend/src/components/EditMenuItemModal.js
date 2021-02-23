@@ -86,12 +86,16 @@ export default function EditMenuItemModal (props) {
      * No params
      * @returns {void}
      */
+     // makes sure url is valid image link
+    const checkUrl = (url) => {
+        return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+    }
     const handleSubmit = async () => {
         // validate basic input
         if(itemName === "" || 
             itemCategory === "" || 
             (individualItemPrice === "" && familyItemPrice === "") || 
-            itemImageURL === "" || itemDescription === ""
+            itemImageURL === "" || itemDescription === "" || !checkUrl(itemImageURL)
         ){
             // if(!validURL(itemImageURL)){
             //     console.log("fail url");
@@ -222,7 +226,7 @@ export default function EditMenuItemModal (props) {
                             </FormControl>
                             {/* Item Image URL */}
                             <p className="formLabelText">Image Link {requiredAsterix()}</p>
-                            <FormControl fullWidth error={menuError && itemImageURL === ""} className="formItem" margin='dense'>
+                            <FormControl fullWidth error={menuError && (itemImageURL === "" || !checkUrl(itemImageURL))} className="formItem" margin='dense'>
                                 <OutlinedInput name="imageURL" id="imageURL" className="formTextInput"
                                     required 
                                     value={itemImageURL}
@@ -292,13 +296,13 @@ export default function EditMenuItemModal (props) {
                                 </div>
                             </div>
                             <div className="priceSizeContainer">
-                                <FormHelperText style={{"margin": "0px 40px 10px 40px"}}>{requiredAsterix()} At least one size must be given a price. If you do not want a particular size available for the item, please leave its price field blank.</FormHelperText>
+                                <FormHelperText style={{"margin": "0px 40px 20px 0px"}}>{requiredAsterix()} At least one size must be given a price. If you do not want a particular size available for the item, please leave its price field blank.</FormHelperText>
                             </div>
                             {/* Item Addons */}
                             <p className="formLabelText" style={{"marginTop": "20px", "marginBottom": "-10px"}}>Accommodations</p>
                             <div className="priceSizeContainer">
                                 <div className="sizeContainer">
-                                    <p className="formLabelText">Description</p>
+                                    <p className="formSubHeading">Description</p>
                                     {addOns.map((item,index) => {
                                         
                                         return(
@@ -325,7 +329,7 @@ export default function EditMenuItemModal (props) {
                                 </div>
                                 
                                 <div className="priceContainer">
-                                    <p className="formLabelText">Price</p>
+                                    <p className="formSubHeading">Price</p>
                                     {addOns.map((item,index) => {
                                         return(
                                             <FormControl margin='dense'
