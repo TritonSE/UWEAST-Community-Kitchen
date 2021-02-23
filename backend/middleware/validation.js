@@ -1,5 +1,8 @@
 /**
- * This file is middleware for express-validator to throw errors
+ * This file is middleware for express-validator to throw errors.
+ *
+ * @summary   Validation middleware for express-validator
+ * @author    TSE
  */
 const { validationResult } = require("express-validator");
 

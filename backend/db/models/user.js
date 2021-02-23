@@ -1,3 +1,10 @@
+/**
+ * File sets up the user mongoose schema. The user schema
+ * utilizes bcrypt and sets up schema methods to compare
+ * passwords and properly hash them.
+ *
+ * @summary   Creation of the user DB
+ */
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 

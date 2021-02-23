@@ -1,3 +1,8 @@
+/**
+ * File sets up the menuImage mongoose schema.
+ *
+ * @summary   Creation of the menuImage DB
+ */
 const mongoose = require("mongoose");
 
 const menuImageSchema = new mongoose.Schema({
