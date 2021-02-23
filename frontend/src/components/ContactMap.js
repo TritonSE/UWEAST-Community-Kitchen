@@ -47,15 +47,17 @@ const ContactMap = () => {
    * email variable to that primary email.
    */
   useEffect(() => {
-    fetch(`${BACKEND_URL}/email/all`)
+    fetch(`${BACKEND_URL}email/primary`)
     .then(async result => {
       if (result.ok) {
         const json = await result.json();
 
         // get the first email in the db if it exists
-        if(json.emails !== undefined && json.emails.length > 0) {
-          setContactEmail(json.emails[0].email);
+        if(json.email !== undefined) {
+          setContactEmail(json.email.email);
         }
+
+        console.log(json);
       }
       else {
         console.log("error");
