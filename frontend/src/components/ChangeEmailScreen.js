@@ -30,6 +30,7 @@ export default function ChangeEmailScreen (props) {
     const classes = useStyles();
     const [inputEmail, setPrimaryEmail] = useState("");
     const [secondaryEmails, setSecondaryEmails] = useState([]);
+    const [primaryEmail, updateStatePrimaryEmail] = useState("")
     const [inputError, setInputError] = useState(false);
     const [open, setOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -43,6 +44,7 @@ export default function ChangeEmailScreen (props) {
 
     useEffect(() => {
         setSecondaryEmails(props.emails);
+        updateStatePrimaryEmail(props.primaryEmail);
     }, [props])
 
     /**
@@ -89,6 +91,7 @@ export default function ChangeEmailScreen (props) {
                 setOpen(true);
                 setPrimaryEmail("");
                 setErrorMessage("");
+                props.updatePrimaryEmail(email);
             }
             else {
                 setErrorMessage("This is currently your primary email.");  
@@ -102,6 +105,18 @@ export default function ChangeEmailScreen (props) {
             <br />
             <h1 className="emailHeading">Change Primary Email</h1>
             <p className="emailDescription">Order confirmations and customer inquiries will be sent to this email.</p>
+
+            <span>
+                <TextField id="primary-email-disabled" 
+                    size="small"
+                    value={primaryEmail} 
+                    type="email" 
+                    variant="outlined"
+                    disabled={true}
+                />
+            </span>
+
+            <br />
             <br />
                 <span className={classes.span}>
                     <TextField id="email-input" 

@@ -35,6 +35,7 @@ export default class Emails extends React.Component {
         this.getSecondaryEmails = this.getSecondaryEmails.bind(this);
         this.getPrimaryEmail = this.getPrimaryEmail.bind(this);
         this.updateSecondaryEmails = this.updateSecondaryEmails.bind(this);
+        this.updatePrimaryEmail = this.updatePrimaryEmail.bind(this);
     }
 
     /**
@@ -64,6 +65,15 @@ export default class Emails extends React.Component {
     }
 
     /**
+     * Used to update the state in this class from the child class
+     * 
+     * @param {array} email - updated primary email
+     */
+    updatePrimaryEmail(email) {
+        this.setState({ primaryEmail: email });
+    }
+
+    /**
      * GET the primary email
      */
     getPrimaryEmail() {
@@ -86,7 +96,7 @@ export default class Emails extends React.Component {
         return (
             <div>
                 <div className="disclaimer">
-                    <FormHelperText id="component-helper-text">{requiredAsterix()} 
+                    <FormHelperText style={{ fontSize: '16px', color: '#747474' }} id="component-helper-text">{requiredAsterix()} 
                         {' '} Note: An email can be either a Primary Email, 
                         or a Secondary Email - not both.
                     </FormHelperText>
@@ -94,6 +104,8 @@ export default class Emails extends React.Component {
                 {/* Primary email section */}
                 <ChangeEmailScreen 
                     emails={this.state.secondaryEmailsList} 
+                    primaryEmail={this.state.primaryEmail}
+                    updatePrimaryEmail={this.updatePrimaryEmail}
                 />
 
                 {/* Secondary email section */}

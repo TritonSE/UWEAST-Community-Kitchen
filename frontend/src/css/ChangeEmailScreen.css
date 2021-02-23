@@ -12,7 +12,7 @@
 
 .disclaimer {
     margin-top: calc(-3vh);
-    width: calc(300px);
+    width: calc(370px);
 }
 
 .emailHeading {
@@ -45,12 +45,21 @@
     height: 40px !important;
     width: 120px;
 }
+#primary-email-disabled {
+    background-color: var(--lightgrey) !important;
+    font-family: 'Roboto', sans-serif !important;
+    color: var(--black) !important;
+    font-weight: light !important;
+    font-size: 16px;
+    width: calc(15vw);
+    font-weight: bold;
+}
 
 /* Styling for the secondary emails starts here */
 
 .secondary-emails-container {
     margin-top: calc(2em);
-    margin-bottom: calc(7vh);
+    margin-bottom: calc(5vh);
 }
 
 .secondary-emails {
@@ -125,7 +134,7 @@
         width: calc(60vw);
     }
 
-    #emailUpdateInput {
+    #emailUpdateInput, #primary-email-disabled  {
         width: calc(27vw) !important;
     }
 
@@ -133,18 +142,3 @@
         width: calc(37vw) !important;    
     }
 }
-
-/* @media only screen and (max-width: 1500px) 
-{
-    .secondary-emails {
-        width: calc(60vw);
-    }
-
-    #emailUpdateInput {
-        width: calc(27vw) !important;
-    }
-
-    #secondaryEmail {
-        width: calc(37vw) !important;    
-    }
-} */
