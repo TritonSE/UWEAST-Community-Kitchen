@@ -56,8 +56,6 @@ const ContactMap = () => {
         if(json.email !== undefined) {
           setContactEmail(json.email.email);
         }
-
-        console.log(json);
       }
       else {
         console.log("error");
