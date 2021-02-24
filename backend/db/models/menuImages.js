@@ -6,6 +6,7 @@
 const mongoose = require("mongoose");
 
 const menuImageSchema = new mongoose.Schema({
+  // image link for menu header 
   imageUrl: { type: String, required: true },
 });
 

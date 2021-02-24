@@ -6,6 +6,7 @@
  * @summary   Code for routes involved with sending automated emails. 
  * @author    Amrit Kaur Singh, Dhanush Nanjunda Reddy
  */
+
 const express = require("express");
 const { body } = require("express-validator");
 const { findAllEmails, findPrimaryEmail } = require("../db/services/email");
@@ -118,9 +119,9 @@ router.post(
   ],
   async (req, res, next) => {
     try {
-      // get all emails inside of Emails DB
+      // get primary email from collection
       const emails = await findPrimaryEmail();
-      console.log(emails);
+
       // error if no emails exist
       if (!emails) {
         return res.status(500).json({ errors: [{ msg: "no emails found" }] });
@@ -139,7 +140,7 @@ router.post(
       sendEmail("contact-message", dbemails, locals, res);
 
       return res.status(200).json({ success: true });
-      
+
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server err");
