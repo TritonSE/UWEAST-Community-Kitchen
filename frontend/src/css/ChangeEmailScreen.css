@@ -9,12 +9,6 @@
     --white: #FFFFFF;
     --offwhite: #F1f1f1;
 }
-
-.disclaimer {
-    margin-top: calc(-3vh);
-    width: calc(370px);
-}
-
 .emailHeading {
     font-family: 'Roboto', sans-serif !important;
     color: var(--black) !important;
@@ -27,12 +21,12 @@
     font-weight: 300;
     font-size: 16px;
 }
-#emailUpdateInput {
+.emailUpdateInput {
     font-family: 'Roboto', sans-serif !important;
     color: var(--black) !important;
     font-weight: light !important;
     font-size: 16px;
-    width: calc(15vw);
+    width: 250px;
 }
 .emailUpdateButton {
     font-family: 'Roboto', sans-serif !important;
@@ -42,103 +36,6 @@
     font-weight: bold !important;
     padding: 0px !important;
     font-size: 16px !important;
-    height: 40px !important;
+    height: 30px !important;
     width: 120px;
-}
-#primary-email-disabled {
-    background-color: var(--lightgrey) !important;
-    font-family: 'Roboto', sans-serif !important;
-    color: var(--black) !important;
-    font-weight: light !important;
-    font-size: 16px;
-    width: calc(15vw);
-    font-weight: bold;
-}
-
-/* Styling for the secondary emails starts here */
-
-.secondary-emails-container {
-    margin-top: calc(2em);
-    margin-bottom: calc(5vh);
-}
-
-.secondary-emails {
-    position: relative;
-    width: calc(45vw);
-    border: 2px solid var(--darkgrey);
-    min-height: calc(15.5em);
-    max-height: calc(15.5em);
-    overflow-y: auto;
-}
-
-.secondary-emails div {
-    position: relative;
-    width: calc(100%);
-    display: flex;
-    align-items: center;
-}
-
-.secondary-email-name {
-    padding-top: calc(1vh);
-    padding-left: calc(3vw);
-    width: calc(40vw);
-    font-weight: 600;
-}
-
-.trash-icon {
-    display: none;
-}
-
-.secondary-emails div:hover {
-    background-color: var(--lightgrey);
-}
-
-.secondary-emails div:hover > .trash-icon {
-    display: flex;
-    justify-content: end;
-    margin-left: calc(1vw);
-    cursor: pointer;
-}
-
-.secondary-emails div:hover > .secondary-email-name {
-    font-weight: 700;
-}
-
-.add-secondary-email {
-    margin-top: calc(2vh);
-}
-
-#secondaryEmail {
-    width: calc(25vw);
-    font-family: 'Roboto', sans-serif !important;
-    color: var(--black) !important;
-    font-weight: light !important;
-    font-size: 16px;
-}
-
-.emailAddButton {
-    font-family: 'Roboto', sans-serif !important;
-    background-color: var(--yellow) !important;
-    border: 1px solid var(--yellow) !important;
-    color: var(--black) !important;
-    font-weight: bold !important;
-    margin-left: calc(2vw);
-    font-size: 16px !important;
-    height: 40px !important;
-    width: 120px;
-}
-
-@media only screen and (max-width: 1268px) 
-{
-    .secondary-emails {
-        width: calc(60vw);
-    }
-
-    #emailUpdateInput, #primary-email-disabled  {
-        width: calc(27vw) !important;
-    }
-
-    #secondaryEmail {
-        width: calc(37vw) !important;    
-    }
 }
