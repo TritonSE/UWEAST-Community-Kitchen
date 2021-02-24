@@ -4,9 +4,10 @@
  * Also contains configuration and jwt to allow for login functionality as well as
  * email functionality.
  *
- * @summary   Creation of login and registration as well as email sending.
- * @author    Amrit Kaur Singh
+ * @summary   Login, registration, reset password, and forgot password functionality for accounts.
+ * @author    Amrit Kaur Singh, Thomas Garry
  */
+
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
@@ -15,12 +16,13 @@ const {
   findOneUser,
   updateOneUser,
 } = require("../db/services/user");
+const {sendEmail} = require("../routes/services/mailer");
 const { createJWT } = require("./services/jwt");
 const router = express.Router();
 const config = require("../config");
 const crypto = require("crypto");
 
-// used for random password generation (Route: /resetPassword)
+// used for random password generation (Route: /forgotPassword)
 const MIN_PASS_LENGTH = 6;
 const MAX_PASS_LENGTH = 15;
 
@@ -120,6 +122,7 @@ router.post(
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive).
+ * Used in /forgotPassword route to help create randomly generated password.
  *
  * @param {Number} min - minimum value
  * @param {Number} max - maximum value
@@ -127,48 +130,6 @@ router.post(
  */
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
-}
-
-const nodemailer = require("nodemailer");
-const Email = require("email-templates");
-
-// transporter object for nodemailer
-const transporter =
-  config.uweast.user === ""
-    ? null
-    : nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: config.uweast,
-      });
-
-// template based sender object
-const mail =
-  config.uweast.user === ""
-    ? null
-    : new Email({
-        transport: transporter,
-        send: true,
-        preview: false,
-      });
-
-// populates given email template with req.body and sends it to to_email
-async function sendEmail(template, to_email, locals, res) {
-  // sends email only if mail has been successfully setup
-  if (mail != null) {
-    await mail.send({
-      template: template,
-      message: {
-        from: config.uweast.user,
-        to: to_email,
-      },
-      locals: locals,
-    });
-    console.log(`Email ${template} has been sent to ${to_email}.`);
-  } else {
-    return res.status(500).send("Server err");
-  }
 }
 
 /**
@@ -181,7 +142,7 @@ router.post(
   "/forgotPassword",
   [body("email").notEmpty().isEmail(), isValidated],
   async (req, res, next) => {
-    console.log(req.body);
+  
     const { email } = req.body;
     try {
       // check if user email exists
@@ -214,7 +175,7 @@ router.post(
         password: randomlyGeneratedPass,
         resetLink: "http://localhost:3000/reset-password",
       };
-
+      
       sendEmail("forgot-password", email, locals, res);
 
       res.status(200).json({
