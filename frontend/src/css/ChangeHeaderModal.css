@@ -26,6 +26,7 @@
 
 .modalBackground{
     max-height: 700px;
+    min-width: 400px;
     display: flex;
     flex-direction: column;
     width: 40%;

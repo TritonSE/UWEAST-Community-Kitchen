@@ -36,11 +36,11 @@ function requiredAsterisk(){
 /**
  * Renders the modal used to change the URL of the Menu page's header image.
  * 
- * @param   {any} props - props for the modal. It must contain:
- *                      + changeHeaderModal {boolean}: show/hide modal
- *                      + setChangeHeaderModel {function}: set changeHeaderModal
- *                      + setLoaded {function}: sets AdminMenuItems.js loaded state
- *                      + headerImageUrl {string}: current header image URL
+ * @param {boolean} changeHeaderModal - show/hide modal
+ * @param {function} setChangeHeaderModel - set changeHeaderModal
+ * @param {function} setLoaded - sets AdminMenuItems.js loaded state
+ * @param {string} headerImageUrl - current header image URL
+ * 
  * @returns {HTMLElement} - A modal with implemented functionality
  */
 export default function ChangeHeaderModal (props){
@@ -58,7 +58,7 @@ export default function ChangeHeaderModal (props){
 
     const handleSubmit = async () => {
         // validates input
-        if (headerImageURL === "")
+        if (headerImageURL === "" || (headerImageURL.match(/\.(jpeg|jpg|gif|png)$/) === null))
         {
             console.log("failed header image input");
             setMenuError(true);
@@ -86,7 +86,7 @@ export default function ChangeHeaderModal (props){
             }
             // failure
             else{
-                alert("There was an error. Check your input and try again");
+                alert("There was an error. Please provide a valid image URL and try again");
             }
         })
 
@@ -102,11 +102,11 @@ export default function ChangeHeaderModal (props){
                 open={errorSnackbar}
                 autoHideDuration={5000}
                 onClose={() => setErrorSnackbar(false)}
-                message={<span id="message-id">Please fill in the required fields</span>}
+                message={<span id="message-id">Please provide a valid image URL</span>}
             />
             {/* Change header image Modal */}
             <Modal open={showModal} onClose={() => setShowModal(false)} 
-                className="modalContainer"
+                className="modalContainer" style={{display:'flex',alignItems:'center',justifyContent:'center'}}
             >
                 <div className="modalBackground">
                     <div className="modalHeader">
