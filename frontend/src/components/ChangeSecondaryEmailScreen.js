@@ -7,7 +7,7 @@
  *  1) POST call to add secondary email
  *  2) DELETE call to remove a secondary email
  * 
- * @summary the functionality of the secondary emails
+ * @summary     Handles functionality of secondary emails on Admin page.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -35,13 +35,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /**
- * Renders the node containing the email addresses
+ * Renders the node containing the email addresses.
  * 
- * @param {string} email - secondary email
- * @param {array} secondaryEmails - list of all current secondary emails
- * @param {function} setSecondaryEmails - function to update secondary emails list
- * @param {function} updateSecondaryEmails - parent function to update parent state 
- * @returns {component} - renders the node with email
+ * @param {string} email - Secondary email
+ * @param {array} secondaryEmails - List of all current secondary emails
+ * @param {function} setSecondaryEmails - Function to update secondary emails list
+ * @param {function} updateSecondaryEmails - Parent function to update parent state 
+ * @returns {component} - Renders the node with email
  */
 const renderNode = (email, secondaryEmails, setSecondaryEmails, updateSecondaryEmails) => {
     // delete the email from the database
@@ -106,9 +106,9 @@ export default function ChangeSecondaryEmailScreen (props) {
     }, [props])
 
     /**
-     * Adds the email to the database
+     * Adds the email to the database.
      * 
-     * @param {string} addSecondaryEmail - email to add
+     * @param {string} addSecondaryEmail - Email to add
      */
     const addEmail = (addSecondaryEmail) => {
         // make sure email is not a primary email 
