@@ -1,7 +1,8 @@
 /**
  * This renders the "change primary email" portion of
- * The "emails" tab under the "Admin" page.
+ * the "emails" tab under the "Admin" page.
  * 
+ * @summary     Handles changing primary email functionality.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -48,7 +49,7 @@ export default function ChangeEmailScreen (props) {
     }, [props])
 
     /**
-     * Updates the primary email in the database
+     * Updates the primary email in the database.
      * 
      * @param {string} email - Primary email to update
      * @param {function} setInputError - Error handling 
