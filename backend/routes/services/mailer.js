@@ -39,11 +39,11 @@ const mail =
  * Populates given email template with locals and sends it to to_email.
  * All emails are sent from the email account specified in dotenv.
  *
- * @param {string} template - template email
- * @param {string} to_email - the email address(es) being sent to
- * @param {string} locals - information that will populate the email template
- * @param {object} res - the response
- * @returns {object} - mail object / err
+ * @param {string} template - Template email
+ * @param {string} to_email - Email address(es) being sent to
+ * @param {string} locals - Information that will populate the email template
+ * @param {object} res - Response
+ * @returns {object} - Mail object / err
  */
 async function sendEmail(template, to_email, locals, res) {
     // sends email only if mail has been successfully setup
@@ -56,6 +56,7 @@ async function sendEmail(template, to_email, locals, res) {
         },
         locals: locals,
       });
+      // log emails successfully sent
       console.log(`Email ${template} has been sent to ${to_email}.`);
     } else {
       console.log(`Error: Email ${template} could not be sent to ${to_email}.`);
