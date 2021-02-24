@@ -251,7 +251,7 @@ export default function AddMenuItemModal (props) {
                                 <div className="sizeContainer">
                                     <p className="formLabelText">Size</p>
                                     <FormControl margin='dense'>
-                                        <OutlinedInput name="name" id="individuallabel" className="sizePriceTextInput"
+                                        <OutlinedInput name="name" id="individuallabel" className="formTextInput"
                                             required 
                                             value={"Individual"}
                                             size="small"
@@ -259,7 +259,7 @@ export default function AddMenuItemModal (props) {
                                         />
                                     </FormControl>
                                     <FormControl margin='dense'>
-                                        <OutlinedInput name="name" id="familylabel" className="sizePriceTextInput"
+                                        <OutlinedInput name="name" id="familylabel" className="formTextInput"
                                             required 
                                             value={"Family"}
                                             size="small"
@@ -270,7 +270,7 @@ export default function AddMenuItemModal (props) {
                                 <div className="priceContainer">
                                     <p className="formLabelText">Price</p>
                                     <FormControl error={menuError && ((individualItemPrice === "" && familyItemPrice === "") || (parseInt(individualItemPrice) < 0))} margin='dense' variant="outlined">
-                                        <OutlinedInput name="name" id="individualprice" className="sizePriceTextInput"
+                                        <OutlinedInput name="name" id="individualprice" className="formTextInput"
                                             type="number"
                                             value={individualItemPrice}
                                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
@@ -279,7 +279,7 @@ export default function AddMenuItemModal (props) {
                                         /> 
                                     </FormControl>
                                     <FormControl error={menuError && ((individualItemPrice === "" && familyItemPrice === "") || (parseInt(individualItemPrice) < 0))} margin='dense' variant="outlined">
-                                        <OutlinedInput name="name" id="familyprice" className="sizePriceTextInput"
+                                        <OutlinedInput name="name" id="familyprice" className="formTextInput"
                                             type="number"
                                             value={familyItemPrice}
                                             startAdornment={<InputAdornment position="start">$</InputAdornment>}

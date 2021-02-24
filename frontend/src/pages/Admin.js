@@ -1,3 +1,10 @@
+/**
+  * This file contains renders the Admin page. It includes a Nav Bar that links
+  * to the orders page, menu page, update emails page, and change passwords page.
+  *
+  * @summary Renders admin page
+  * @author PatrickBrown1
+  */
 import React, { useEffect } from 'react';
 import Navbar from '../components/NavBar';
 import AdminMenuItems from "../components/AdminMenuItems";
