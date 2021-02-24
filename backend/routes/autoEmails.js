@@ -120,15 +120,14 @@ router.post(
     try {
       // get all emails inside of Emails DB
       const emails = await findPrimaryEmail();
+      console.log(emails);
       // error if no emails exist
-      if (!emails.length) {
+      if (!emails) {
         return res.status(500).json({ errors: [{ msg: "no emails found" }] });
       }
 
       // extract the emails from the JSON objects
-      let dbemails = emails.map(function (item) {
-        return item.email;
-      });
+      let dbemails = emails.email;
 
       let locals = {
         name: req.body.name,
@@ -140,6 +139,7 @@ router.post(
       sendEmail("contact-message", dbemails, locals, res);
 
       return res.status(200).json({ success: true });
+      
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server err");
