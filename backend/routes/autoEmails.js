@@ -92,7 +92,7 @@ router.post(
       sendEmail("uweast-receipt", dbemail, locals, res);
 
       // send customer copy of order receipt
-      sendEmail("customer-email", req.body.Customer.Email, locals, res);
+      sendEmail("customer-receipt", req.body.Customer.Email, locals, res);
 
       return res.status(200).json({ success: true });
     } catch (err) {
