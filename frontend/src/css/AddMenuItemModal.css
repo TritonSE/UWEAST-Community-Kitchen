@@ -32,6 +32,7 @@
     background-color: white;
     overflow: scroll;
     padding: 10px 20px 20px 20px;
+    overflow-x: hidden;
 }
 .formItem{
     font-size: 16px !important;
@@ -54,11 +55,12 @@
     display: inline-block;
     font-weight: bold;
     margin: 0px !important;
+    width: 100% !important;
 }
 .formSubHeading{
     display: inline-block;
-    font-weight: 00;
     margin: 0px !important;
+    width: 100% !important;
 }
 .priceSizeContainer{
     display: flex;
@@ -75,6 +77,10 @@
 }
 .sizeContainer{
     width: 40%;
+}
+.sizePriceTextInput{
+    height: 28px !important;
+    width: 100% !important;
 }
 .sizeContainer > *{
     margin-top: 0 !important;
@@ -117,6 +123,7 @@
     font-weight: bold !important;
     min-width: 112px;
     width: 100%;
+    max-width: 195px;
     height: auto !important;
     font-size: 12px !important;
     margin: 10px 0 20px 0;
