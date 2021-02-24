@@ -1,6 +1,8 @@
 /**
- * This file adds routes to allow for the sending of automated emails to both customers
- * and emails in the database. All email formats can be seen seperated by functionality
+ * This file initializes the mailing service used for all emails sent on the website. 
+ * It also contains a single function that allows for the sending of "automated"
+ * emails using the information passed to it in conjunction with the pre-made
+ * email-templates. All email formats can be seen seperated by functionality
  * inside the emails folder inside of the backend directory. 
  *
  * @summary   Code for routes involved with automated emails. 
