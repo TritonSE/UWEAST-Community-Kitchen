@@ -13,10 +13,14 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
+import CartSummary from './components/CartSummary';
 import Orders from './pages/Orders';
+import { CookiesProvider } from 'react-cookie';
+import { withCookies } from 'react-cookie';
 
 function App() {
   return (
+    <CookiesProvider>
     <Router>
       {/* Switch gurantees that a URL can match to only one route*/}
       <Switch>
@@ -44,13 +48,18 @@ function App() {
         <Route exact path="/admin">
           <Admin/>
         </Route>
+        {/* Cart Summary Page for when screen size is mobile*/}
+        <Route exact path="/cart">
+          <CartSummary/>
+        </Route>
         {/* Any other URL is automatically matched to Menu Page */}
         <Route path="/">
           <Menu/>
         </Route>
       </Switch>
     </Router>
+    </CookiesProvider>
   );
 }
 
-export default App;
+export default withCookies(App);

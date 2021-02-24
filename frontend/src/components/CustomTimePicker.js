@@ -3,13 +3,11 @@ import moment from "moment";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import '../css/CartSummary.css';
-import { Container, Row, Col, Button } from 'react-bootstrap';
 
 function CustomTimePicker(props) {
     return (
+        <div className="time-picker">
         <MuiPickersUtilsProvider utils={MomentUtils}>
-            <div className="time-picker">
-                <Row>
                 <TimePicker
                 label={props.label ? props.label : "Time Picker"}
                 value={
@@ -22,15 +20,26 @@ function CustomTimePicker(props) {
                 minutesStep={1}
                 onChange={(time) => props.setSelectedTime(time)}
                 error={props.errorMessage ? true : false}
+                inputProps={
+                    props.setSize ?
+                    {
+                    style: {
+                        fontSize: "3vw"
+                    }
+                } : {}}
+                InputLabelProps={
+                    props.setSize ? 
+                    {
+                    style: {
+                        fontSize: "3vw"
+                    }
+                } : {}}
                 />
-                </Row>
-                <Row>
                 {props.errorMessage && (
                 <span className="error">{props.errorMessage}</span>
                 )}
-                </Row>
-            </div>
         </MuiPickersUtilsProvider>
+        </div>
     );
 }
 

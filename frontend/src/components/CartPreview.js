@@ -1,5 +1,5 @@
-import React, { Component, useEffect } from 'react';
-import {Button} from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 import '../css/CartPreview.css';
@@ -20,28 +20,37 @@ class CartPreview extends Component {
 
         this.loadItems = this.loadItems.bind(this);
     }
-    
+
     //displays items currently in the cart and updates subtotal and total
     loadItems() {
-        return(
+        return (
             <div>
                 {this.state.items.map((item, ind) => {
 
-                    let accomodation = (item.accommodations) ? ", " + item.accommodations : "";
-                    let size = item.size;
-                    let extraInfo = size + accomodation;
+                    const popupValues = JSON.parse(item.popupValues);
 
-                        return (
-                            <div key={ind} className="summary-item row">
-                                <span className="thumbnail thumb-img">{ind+1}</span>
-                                <span className="item-info">{item.quantity} X {item.name}<br/>
-                                <span className="item-description">{extraInfo}<br/>
-                                {(item.instructions != "") ? <span>Special Instr.: {item.instructions}</span> : null}
+                    let accom = "";
+                    if (item.accommodations && Array.isArray(item.accommodations)) {
+                        item.accommodations.forEach((accommodation) => {
+                            accom = accom + ", " + accommodation;
+                        })
+                    } else if (item.accommodations) {
+                        accom = ", " + item.accommodations;
+                    }
+                    let size = item.size;
+                    let extraInfo = size + accom;
+
+                    return (
+                        <div key={ind} className="summary-item row">
+                            <span className="thumbnail thumb-img">{ind + 1}</span>
+                            <span className="item-info">{item.quantity} X {popupValues.title}<br />
+                                <span className="item-description">{extraInfo}<br />
+                                    {(item.instructions !== "") ? <span>Special Instr.: {item.instructions}</span> : null}
                                 </span></span>
-                                <span className="thumbnail summary-price">${item.price}</span>
-                                <span className="item-divider"></span>
-                            </div>
-                        )
+                            <span className="thumbnail summary-price">${item.price}</span>
+                            <span className="item-divider"></span>
+                        </div>
+                    )
                 })}
             </div>
         )
@@ -60,13 +69,13 @@ class CartPreview extends Component {
                             {this.loadItems()}
                         </div>
                         <div className="order-totals">
-                            <br/>
-                            Subtotal: ${this.state.subTotal}<br/>
+                            <br />
+                            Subtotal: ${this.state.subTotal}<br />
                             Tax: ${this.state.tax}
                         </div>
                         <div className="order-summary">
-                        <span>Total Price</span><span className="add-price">${this.state.totalPrice}</span>
-                    </div>
+                            <span>Total Price</span><span className="add-price">${this.state.totalPrice}</span>
+                        </div>
                     </div>
                     <Button className="review-order-button" onClick={this.props.toggleCart}>Review Order</Button>
                 </div>

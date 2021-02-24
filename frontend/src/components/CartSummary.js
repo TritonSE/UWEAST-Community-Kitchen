@@ -1,135 +1,127 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
+import { KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
-import LuxonUtils from '@date-io/luxon';
 import moment from "moment";
 import '../css/CartSummary.css';
-import { TextField } from '@material-ui/core';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import CustomTimePicker from '../components/CustomTimePicker';
-import { instanceOf } from 'prop-types';
-import { withCookies, Cookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
+import { useLocation, useHistory } from "react-router-dom";
 import PayPal from '../components/PayPal';
+import Navbar from '../components/NavBar';
 
-class CartSummary extends Component {
-    static propTypes = {
-        cookies: instanceOf(Cookies).isRequired
-    }
+//displays items currently in the cart and updates subtotal and total
+function loadItems(cart, popupFunc, removeItem) {
+    return (
+        <div>
+            {cart.items.map((item, ind) => {
 
-    constructor(props) {
-        super(props);
+                const popupValues = JSON.parse(item.popupValues);
 
-        this.state = {
-            cart: {
-                cart_total: "00.00",
-                item_total: "00.00",
-                tax_total: "00.00",
-                items: []
-            },
-            selectedDate: null,
-            selectedTime: null,
-            subTotal: this.props.subtotal,
-            tax: this.props.tax,
-            totalPrice: this.props.total,
-            items: this.props.items,
-            error: "",
-            displayPayPal: false
-        }
+                let accom = "";
+                if(item.accommodations && Array.isArray(item.accommodations)) {
+                    item.accommodations.forEach((accommodation) => {
+                        accom = accom + ", " + accommodation;
+                    })
+                } else if(item.accommodations) {
+                    accom = ", " + item.accommodations;
+                }
+                let size = item.size;
 
-        this.setSelectedDate = this.setSelectedDate.bind(this);
-        this.handleDateChange = this.handleDateChange.bind(this);
-        this.loadItems = this.loadItems.bind(this);
-        //this.reloadData = this.reloadData.bind(this);
-    }
+                let extraInfo = size + accom;
 
-    setSelectedDate = (date) => {
-        this.setState({ selectedDate: date });
-    }
+                const fillIns = {
+                    quantity: item.quantity,
+                    size: item.size,
+                    instructions: item.instructions,
+                    index: ind,
+                    accommodations: item.accommodations
+                }
 
-    handleDateChange = (date) => {
-        this.setSelectedDate(date);
-    }
-
-    disableDates = (date) => {
-        let currDate = new Date();
-        const numDays = new Date(currDate.getFullYear(), currDate.getMonth()+1, 0).getDate();
-        return (currDate.getMonth() == date.getMonth() && date.getDate() - 3 < currDate.getDate()) || (currDate.getMonth()+1 == date.getMonth() && date.getDate() <  currDate.getDate()+3-numDays);
-    }
-
-    //displays items currently in the cart and updates subtotal and total
-    loadItems() {
-        return (
-            <div>
-                {this.state.items.map((item, ind) => {
-
-                    let accomodation = (item.accommodations) ? ", " + item.accommodations : "";
-                    let size = item.size;
-
-                    let extraInfo = size + accomodation;
-
-                    if(this.state.selectedTime && this.state.selectedDate && parseFloat(this.state.totalPrice) > 20) {
-                        this.state.displayPayPal = true;
-                    } else {
-                        this.state.displayPayPal = false;
-                    }
-
-                    return (
-                        <div key={ind} className="summary-item row">
-                            <span className="thumbnail-background thumb-img">{item.quantity}</span>
-                            <span className="item-name">{item.name}<br />
-                                <span className="item-descript">{extraInfo}<br/>
-                                {(item.instructions != "") ? <span>Special Instr.: {item.instructions}</span> : null}
+                return (
+                    <div key={ind} className="summary-item">
+                        <div className="item-wrapper">
+                            <span className="thumbnail-background thumb-image">{item.quantity}</span>
+                            <span className="item-name">{popupValues.title}<br />
+                                <span className="item-descript">{extraInfo}<br />
+                                    {(item.instructions != "") ? <span>Special Instr.: {item.instructions}</span> : null}
                                 </span></span>
-                            <button className="edit-button">Edit</button>
-                            <button className="remove-button" onClick={() => this.props.removeItem(ind) }>Remove</button>
+                            <button className="edit-button" onClick={() => popupFunc(popupValues.title, popupValues.description, popupValues.price, popupValues.image, popupValues["dietary-info"], popupValues.accommodations, fillIns)}>Edit</button>
+                            <button className="remove-button" onClick={() => removeItem(ind)}>Remove</button>
                             <span className="thumbnail-background summary-price">${item.price}</span>
-                            <span className="item-divide"></span>
                         </div>
-                    )
-                })}
-            </div>
-        )
+                        <span className="item-divide"></span>
+                    </div>
+                )
+            })}
+        </div>
+    )
+}
+
+export default function CartSummary(props) {
+    const location = useLocation();
+    let history = useHistory();
+    const [cookies, setCookie] = useCookies(["cart"]);
+
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedTime, setSelectedTime] = useState(null);
+    const [isMobile, setIsMobile] = useState((window.innerWidth < 768) ? true : false);
+    const [error, setError] = useState("");
+    const [cart, setCart] = useState({
+        cart_total: props.total || cookies.cart.total,
+        item_total: props.subtotal || cookies.cart.subtotal,
+        tax_total: props.tax || cookies.cart.tax,
+        items: props.items || cookies.cart.items
+    });
+    const [paypalCart, setPaypalCart] = useState({
+        cart_total: "00.00",
+        item_total: "00.00",
+        tax_total: "00.00",
+        items: []
+    });
+
+    const styles = {
+        size: {
+            fontSize: 20
+        }
     }
 
-    render() {
-        return (
-            <>
-                <div className="background" onClick={this.props.toggleCart}></div>
-                <div className="cart-popup">
-                    <br />
-                    <span className="pickup-title">Choose Pickup Time</span>
-                    <Row>
-                        {/* <form className="date-picker" noValidate>
-                            <TextField
-                                id="date"
-                                label="Date"
-                                type="date"
-                                defaultValue={new Date()}
-                                className="date"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </form>
-                        <form className="time-picker" noValidate>
-                            <TextField
-                                id="time"
-                                label="Time"
-                                type="time"
-                                defaultValue={null}
-                                className="time"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                inputProps={{
-                                    step: 300, // 5 min
-                                }}
-                            />
-                        </form> */}
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+    }
+    const disableDates = (date) => {
+        let currDate = new Date();
+        const numDays = new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0).getDate();
+        return (currDate.getMonth() === date.getMonth() && date.getDate() - 3 < currDate.getDate()) || (currDate.getMonth() + 1 === date.getMonth() && date.getDate() < currDate.getDate() + 3 - numDays);
+    }
+
+    const handleRemove = (ind) => {
+        let cart = cookies.cart;
+        cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.items[ind].price)).toFixed(2);
+        cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
+        cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
+        cart.items.splice(ind, 1);
+        setCookie("cart", cart, { path: "/" });
+        const newCart = {
+            cart_total: cart.total,
+            item_total: cart.subtotal,
+            tax_total: cart.tax,
+            items: cart.items
+        }
+        setCart(newCart);
+    }
+
+    return (
+        <div className="cart-wrapper">
+            {(isMobile) ? <div className="navbar-wrapper">
+                <Navbar />
+            </div> : <div className="background" onClick={props.toggleCart}></div>}
+            <div className="cart-popup">
+                <span className="pickup-title">Choose Pickup Time</span>
+                <div className="date-time">
+                    <div className="date-picker">
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <div className="date-picker">
-                            <Row>
                             <KeyboardDatePicker
                                 disableToolbar
                                 variant="inline"
@@ -137,62 +129,69 @@ class CartSummary extends Component {
                                 margin="normal"
                                 id="date-picker-inline"
                                 label="Date"
-                                value={this.state.selectedDate}
-                                onChange={this.handleDateChange}
+                                value={selectedDate}
+                                onChange={handleDateChange}
                                 disablePast={true}
-                                shouldDisableDate={this.disableDates}
+                                shouldDisableDate={disableDates}
                                 KeyboardButtonProps={{
                                     'aria-label': 'change date',
                                 }}
-                            />
-                            </Row>
-                            <Row>
-                            {(!this.state.selectedDate || !this.state.selectedTime) ? <span className="select-error">Please select a date and a time</span> : null}
-                            </Row>
-                            </div>
-                            </MuiPickersUtilsProvider>
-                          
-                            <CustomTimePicker
-                                label="Time"
-                                value={this.state.selectedTime}
-                                setSelectedTime={(time) => {
-                                    const minTime = moment("7:59 AM", "HH:mm A");
-                                    const maxTime = moment("6:01 PM", "HH:mm A");
-                                    let errorMsg = "";
-                                    if (minTime.isBefore(time) && maxTime.isAfter(time)) {
-                                        this.state.selectedTime = time.format("HH:mm A");
-                                        errorMsg = false;
-                                    } else {
-                                        errorMsg = "Select between 8:00 AM and 6:00 PM";
+                                inputProps={
+                                    isMobile ?
+                                    {
+                                    style: {
+                                        fontSize: "3vw"
                                     }
-                                    this.setState({ error: errorMsg });
-                                }}
-                                errorMessage={this.state.error}
+                                } : {}}
+                                InputLabelProps={
+                                    isMobile ?
+                                    {
+                                    style: {
+                                        fontSize: "3vw"
+                                    }
+                                } : {}}
                             />
-                          
-                    </Row>
-                    <p className="pickup-date-info">NOTE: Earliest pickup is 3 days after order has been placed</p>
-                    <h1 className="summary-title">Order Summary</h1>
-                    <div className="cart-items">
-                        {/* loads and displays all items currently in the cart */}
-                        {this.loadItems()}
+                            {(!selectedDate || !selectedTime) ? <span className="select-error">Please select a date and a time</span> : null}
+                        </MuiPickersUtilsProvider>
                     </div>
-                    <div className="order-totalprices">
-                        <br />
-                            Subtotal: ${this.state.subTotal}<br />
-                            Tax: ${this.state.tax}<br />
-                            Total Price: ${this.state.totalPrice}
-                    </div>
-                    <div className="order-minimum">
-                    {(parseFloat(this.state.totalPrice) < 20) ? <span>Order minimum is $20. Please add ${(20 - parseFloat(this.state.totalPrice)).toFixed(2)} to your cart to proceed to checkout.</span> : null}
-                    </div>
-                    <div className="return-button">
-                    {(this.state.displayPayPal) ? <PayPal cart={this.state.cart}/>: <Button className="return" onClick={this.props.toggleCart}>Return to Menu</Button>}
-                    </div>
+                    <CustomTimePicker
+                        label="Time"
+                        value={selectedTime}
+                        setSelectedTime={(time) => {
+                            const minTime = moment("7:59 AM", "HH:mm A");
+                            const maxTime = moment("6:01 PM", "HH:mm A");
+                            let errorMsg = "";
+                            if (minTime.isBefore(time) && maxTime.isAfter(time)) {
+                                setSelectedTime(time.format("HH:mm A"));
+                                errorMsg = false;
+                            } else {
+                                errorMsg = "Select between 8:00 AM and 6:00 PM";
+                            }
+                            setError(errorMsg);
+                        }}
+                        setSize={isMobile}
+                        errorMessage={error}
+                    />
                 </div>
-            </>
-        )
-    }
+                <p className="pickup-date-info">NOTE: Earliest pickup is 3 days after order has been placed</p>
+                <h1 className="summary-title">Order Summary</h1>
+                <div className="cart-items">
+                    {/* loads and displays all items currently in the cart */}
+                    {(props.removeItem) ? loadItems(cart, props.popupFunc, props.removeItem) : loadItems(cart, props.popupFunc, handleRemove)}
+                </div>
+                <div className="order-totalprices">
+                    <br />
+                        Subtotal: ${cart.item_total}<br />
+                        Tax: ${cart.tax_total}<br />
+                        Total Price: ${cart.cart_total}
+                </div>
+                <div className="order-minimum">
+                    {(parseFloat(cart.cart_total) < 20) ? <span>Order minimum is $20. Please add ${(20 - parseFloat(cart.cart_total)).toFixed(2)} to your cart to proceed to checkout.</span> : null}
+                </div>
+                <div className="return-button">
+                    {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= 20) ? <PayPal cart={paypalCart} /> : <Button className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
+                </div>
+            </div>
+        </div>
+    )
 }
-
-export default withCookies(CartSummary);

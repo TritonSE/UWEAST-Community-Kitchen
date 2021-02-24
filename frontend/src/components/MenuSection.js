@@ -18,7 +18,7 @@ import '../css/MenuSection.css';
  * 
  * @param {function} onItemAdd - Function returning boolean
  */
-const MenuSection = ({onItemAdd}) => {
+const MenuSection = ({onItemAdd, popupFunc}) => {
   // filterCategories populates the filter buttons
   const filterCategories = ["Whole Menu", "Featured", "Appetizers", "Main Dishes", "Sides", "Drinks"];
 
@@ -105,6 +105,8 @@ const MenuSection = ({onItemAdd}) => {
 
     setPopupValues(popupValues);
   }
+
+  popupFunc(togglePopup);
 
   /**
    * MenuSection is split into three columns:
