@@ -1,8 +1,9 @@
 /**
  * This file renders the Orders Table on the Admin page.
- * It imports the table from OrdersTable.js.
+ * It imports the table from OrdersTable.js. This file
  * 
- * @summary Handles rendering of Orders table (main component).
+ * @summary - The orders table
+ * 
  */
 
 import React from 'react';
@@ -29,14 +30,14 @@ export default class Orders extends React.Component {
     }
 
     /**
-     * Formats the data from the fetch() call into the array.
+     * Formats the data from the fetch() call into the array
      * 
-     * @param {Object} list - Information about order
-     * @param {String} date - Pick up date
-     * @param {String} formatCurrTime - Pick up time
-     * @param {String} dateSubmission - Submission date
-     * @param {String} formatCurrTimeSubmission - Submission time
-     * @returns {array} - Formated array
+     * @param {Object} list - information about order
+     * @param {String} date - pick up date
+     * @param {String} formatCurrTime - pick up time
+     * @param {String} dateSubmission - submission date
+     * @param {String} formatCurrTimeSubmission - submission time
+     * @returns {array} - formated array
      */
     formatArray(list, date, formatCurrTime, dateSubmission, formatCurrTimeSubmission) {
         let val = formatCurrTime;
@@ -50,10 +51,10 @@ export default class Orders extends React.Component {
     }
 
     /**
-     * Formats the time in the HH:MM (P.M. OR A.M.).
+     * Formats the time in the HH:MM (P.M. OR A.M.)
      * 
      * @param {String} time 
-     * @returns {String} - The formated time
+     * @returns {String} - the formated time
      */
     formatTime(time) {
         // convert to array
@@ -76,10 +77,10 @@ export default class Orders extends React.Component {
     }
 
     /**
-     * Formats the date to be in the MM/DD/YYYY format.
+     * Formats the date to be in the MM/DD/YYYY format
      * 
      * @param {String} getDate 
-     * @returns {String} - The formated date
+     * @returns {String} - the formated date
      */
     formatDate(getDate) {
         const monthSubmission = getDate.getMonth()+1 >= 10 ? getDate.getMonth()+1 : ("0" + (getDate.getMonth() + 1)).slice(-2);
@@ -88,7 +89,7 @@ export default class Orders extends React.Component {
     }
 
     /**
-     * Get all the orders from the database.
+     * Get all the orders from the database
      */
     componentDidMount() {
         fetch(`${BACKEND_URL}order`, {
