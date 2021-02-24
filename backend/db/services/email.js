@@ -94,10 +94,20 @@ async function deleteSecondaryEmail(incomingEmail) {
   }
 }
 
+/**
+ * Query all emails (primary and secondary) in the collection.
+ *
+ * @returns {[object]} - Returns an array of all emails in collection, where emails are JSON objects.
+ */
+async function findAllEmails() {
+    return Email.find({}).exec();
+}
+
 module.exports = {
   findPrimaryEmail,
   findAllSecondaryEmails,
   deleteSecondaryEmail,
   changePrimaryEmail,
   addSecondaryEmail,
+  findAllEmails
 };
