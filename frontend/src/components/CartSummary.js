@@ -74,11 +74,14 @@ export default function CartSummary(props) {
         tax_total: props.tax || cookies.cart.tax,
         items: props.items || cookies.cart.items
     });
+
+    // placeholder for rendering Paypal component until props handling is fixed in that component
     const [paypalCart, setPaypalCart] = useState({
         cart_total: "00.00",
         item_total: "00.00",
         tax_total: "00.00",
-        items: []
+        items: [],
+        pickup_date: ""
     });
 
     const styles = {
