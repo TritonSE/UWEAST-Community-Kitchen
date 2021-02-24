@@ -1,8 +1,10 @@
 /**
- * This file adds routes to allow for email verification and ordering.
+ * This file adds routes to allow for the sending of automated emails to both customers
+ * and emails in the database. All email formats can be seen seperated by functionality
+ * inside the emails folder inside of the backend directory. 
  *
- * @summary   Creation and verification of JWTs via functions.
- * @author    Amrit Kaur Singh
+ * @summary   Code for routes involved with automated emails. 
+ * @author    Amrit Kaur Singh, Dhanush Nanjunda Reddy
  */
 const express = require("express");
 const nodemailer = require("nodemailer");
@@ -70,7 +72,7 @@ async function sendEmail(template, to_email, locals, res) {
  *
  * @body - requires the Customer, PickUp, PayPal, and Order information retrieved via Checkout process
  * @returns {status/object} - if everything goes successful, returns
- *                         a 200 status, else returns some error status
+ *                            a 200 status, else returns some error status
  */
 router.post(
   "/automate",
@@ -155,7 +157,7 @@ router.post(
  *
  * @body - requires the name, email, and message of the indivdual who is seeking to contact UWEAST via the
  *         form on the Contact page
- * @returns {status/object} - successfully sent email sends a 200 status / unsuccessful an error status is sent.
+ * @returns {status/object} - successfully sent email sends a 200 status / unsuccessful an error status is sent
  */
 router.post(
   "/contact",
