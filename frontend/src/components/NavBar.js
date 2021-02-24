@@ -9,19 +9,32 @@ import { useHistory } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { withStyles } from '@material-ui/core/styles';
+import Badge from '@material-ui/core/Badge'
+import IconButton from '@material-ui/core/IconButton'
 import Logo from "../media/UWEAST_Logo_Detail_Transparent.png";
 import '../css/NavBar.css';
 import { isAuthenticated, logout} from '../util/Auth';
 
+// styled Badge for the cart icon
+const CartBadge = withStyles(({
+    badge: {
+      backgroundColor: "#F9CE1D",
+      color: "white"
+    }
+  }))(Badge);
 
-export default function NavBar () {
+export default function NavBar() {
 
     {/* history hook to redirect on logout */}
     const history = useHistory();
 
     const [state, setState] = React.useState({
-        isUserAuthenticated: false
+        isUserAuthenticated: false,
       });
+        
+    // reads and stores the items in the cart for the cart icon
+    var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
     {/* stores class names to toggle whether content is shown */}
     var adminContentClass;
@@ -75,9 +88,11 @@ export default function NavBar () {
 
                 {/* The shopping cart will only render if it is a mobile component */}
                 <div className="cart-icon">
-                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
-                        onClick={() => console.log('clicked')} />
-
+                    <IconButton onClick={() => console.log('clicked')}>
+                        <CartBadge badgeContent={cartItems.length} anchorOrigin={{vertical: 'bottom', horizontal: 'right',}}>
+                            <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                        </CartBadge>
+                    </IconButton>
                 </div>
 
                 {/* Triggers on Collapse - Hamburger Icon replaces pages */}
@@ -114,9 +129,11 @@ export default function NavBar () {
 
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
                 <div className="cart-icon-smaller-desktop">
-                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
-                        onClick={() => console.log('clicked')} />
-
+                    <IconButton onClick={() => console.log('clicked')}>
+                        <CartBadge badgeContent={cartItems.length} anchorOrigin={{vertical: 'bottom', horizontal: 'right',}}>
+                            <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                        </CartBadge>
+                    </IconButton>
                 </div>
             </Navbar>
         </html>
