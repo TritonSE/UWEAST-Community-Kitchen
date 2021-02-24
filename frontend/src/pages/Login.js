@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { 
-  TextField, Button, Grid, 
+  TextField, Button,  
   Snackbar, Typography 
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
 import '../css/Login.css';
-import { isAuthenticated, setJWT, setUser } from '../util/auth';
+import { isAuthenticated, setJWT} from '../util/Auth';
 import Navbar from '../components/NavBar';
+import { useEffect } from 'react';
 const config = require('../config');
 
 
@@ -25,13 +25,11 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       width: '95%'
     },
-    //Input Field - Label Layout 
-    '& .MuiFormLabel-root': {
-        color: 'black',
-      },
-      //Input Field - Border Layout 
-    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-        border: '1px solid black'
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "black"
+    },
+    "& .MuiInputLabel-outlined.Mui-focused": {
+      color: "black"
     },
     '& .MuiTypography-root': {
       margin: theme.spacing(1),
@@ -47,7 +45,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     margin: theme.spacing(2),
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: 'bolder',
+    textTransform: 'uppercase'
   }
 }));
 
@@ -55,14 +55,26 @@ export default function Login() {
   const classes = useStyles();
   const history = useHistory();
   const [state, setState] = React.useState({
+    isAuthenticatingUser: true,
+    isUserAuthenticated: false,
     email: '',
     password: '',
     snack: {
       message: '',
       open: false
     },
+    errors: {
+      email: false,
+      password: false
+    },
     form_disabled: false
   });
+
+  useEffect(() => {
+    isAuthenticated().then(async result => {
+      setState({...state, isAuthenticatingUser: false, isUserAuthenticated: result});
+    })
+  }, []);
 
   // Updates given state with given value 
   const handleChange = (prop) => (event) => {
@@ -82,13 +94,23 @@ export default function Login() {
     };
 
     //Check if either field is empty
-    if (state.email === '' || state.password === ''){
-        setState({...state, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
+    let email = false;
+    let password = false; 
+
+    if(state.email === ''){
+        email = true;
+    }
+    if(state.password === ''){
+        password = true;
+    }
+    if(email + password > 0){
+        setState({...state, errors: {email: email, password: password}, form_disabled: false, snack: {message: 'Please fill out all required fields.', open: true}});
         return;
     }
+   
     //Check Password Length
     if (submission.password.length < 6) {
-      setState({...state, form_disabled: false, snack: {message: 'Password must be at least 6 characters long.', open: true}});
+      setState({...state, errors: {email: false, password: true}, form_disabled: false, snack: {message: 'Password must be at least 6 characters long.', open: true}});
       return;
     }
     try {
@@ -103,22 +125,21 @@ export default function Login() {
       if (response.ok) {
         const json = await response.json();
         setJWT(json.token);
-        setUser(json.email);
         history.push("/admin");
       }
       //Invalid Credentials
       else if (response.status === 401) {
-        setState({...state, form_disabled: false, snack: {message: 'Email or password not recognized.', open: true}});
+        setState({...state, errors: {email: true, password: true}, form_disabled: false, snack: {message: 'Invalid Login: Email or password not recognized.', open: true}});
       }
       //Any other server response
       else {
         const text = await response.text();
-        setState({...state, form_disabled: false, snack: {message: `Could not log in: ${text}`, open: true}});
+        setState({...state, form_disabled: false, errors: {email: false, password: false}, snack: {message: `Could not log in: ${text}`, open: true}});
       }
     } 
     //General Error
     catch (error) {
-      setState({...state, form_disabled: false, snack: {message: `An error occurred: ${error.message}`, open: true}});
+      setState({...state, form_disabled: false, errors: {email: false, password: false}, snack: {message: `An error occurred: ${error.message}`, open: true}});
     }
   };
 
@@ -130,41 +151,40 @@ export default function Login() {
     setState({...state, snack: {...state.snack, open: false}});
   };
 
-  //If user is already logged in, then redirect to Admin Page. Else display Login page. 
-  return isAuthenticated() ? <Redirect to="/admin"/> : ( 
+  if(state.isAuthenticatingUser){
+    return(
       <div>
-            <Navbar/>
-            <Grid
-                    container
-                    spacing={0}
-                    alignItems="center"
-                    justify="center"
-                    style={{position: "absolute", top:"20%"}}
-                    >
-                    <Grid container
-                    spacing={0}
-                    alignItems="center"
-                    justify="center"
-                    //item md={6} xs={12}
-                    >
-                        <Box border={8} borderColor="#F9CE1D" style={{padding: "2vw"}}>
-                        
-                            <Typography variant="h4" className={classes.title} > Login </Typography>
-                                <form className={classes.form} onSubmit={handleSubmit}>
-                                <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')}/>
-                                <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')}/>
-                                <Link to="register" className="Child"><Typography>Register Account</Typography></Link>
-                                <Link to="reset-password"><Typography>Reset Password</Typography></Link>
-                                <div className={classes.centered}>
-                                    <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}>Login</Button>
-                                </div>
-                            </form>
-
-                        </Box>
-                    </Grid> 
-                    <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
-                </Grid> 
+        <Navbar/>
+        <p> Loading... </p>
       </div>
-   
-  )
+    )
+  } else if(state.isUserAuthenticated){
+    return(
+      <Redirect to="/admin"/>
+    )
+  } else {
+    return (
+      <div>
+        <Navbar/>
+        <div className="Main">
+          <div className="Border">
+            <Typography variant="h4" className={classes.title} style={{fontSize: "2.5rem"}} > Login </Typography>
+            <p className={classes.centered} style={{color: "#8d8d8d"}}> Sign-in into an existing account below </p>
+            <form className={classes.form} onSubmit={handleSubmit}>
+                  <TextField label='Email' variant='outlined' type='email' onChange={handleChange('email')} error={state.errors.email}/>
+                  <TextField label='Password' variant='outlined' type='password' onChange={handleChange('password')} error={state.errors.password}/>
+                  <Link to="register" className="Child"><Typography>Register Account</Typography></Link>
+                  <Link to="reset-password"><Typography>Reset Password</Typography></Link>
+                  <div className={classes.centered}>
+                      <Button variant="contained" color="primary" type="submit" disabled={state.form_disabled}
+                      // style={{fontWeight: "bolder", borderRadius: "3px", fontSize: "16px"}}
+                      >Login</Button>
+                  </div>
+              </form>
+            </div>
+          </div>
+          <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
+      </div>
+    );
+  }
 }
