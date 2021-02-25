@@ -2,8 +2,8 @@
   * This file contains renders the Admin page. It includes a Nav Bar that links
   * to the orders page, menu page, update emails page, and change passwords page.
   *
-  * @summary Renders admin page
-  * @author PatrickBrown1
+  * @summary    Renders admin page
+  * @author     PatrickBrown1
   */
 import React, { useEffect } from 'react';
 import Navbar from '../components/NavBar';
@@ -38,8 +38,9 @@ export default function Admin() {
         })
       }, []);
 
-    // Renders the admin page navigation bar between orders, menu, and email screens
-    // currentScreen takes values "orders", "menu", and "email"
+    /**
+     * Renders the admin page navigation bar between orders, menu, and email screens.
+     */
     const adminNavBar = () => {
         var currentScreen = state.currentScreen;
         return(
@@ -80,8 +81,7 @@ export default function Admin() {
         );
     }
 
-        //Redirect to login if user is trying to access admin panel without being logged in 
-
+        // redirect to login if user is trying to access admin panel without being logged in 
         if(state.isAuthenticatingUser){
             return (
                 <div>

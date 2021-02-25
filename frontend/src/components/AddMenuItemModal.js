@@ -18,8 +18,8 @@
   * understand. A lot of the bulk comes from Material UI's form control handling
   * and general HTML property tags.
   *
-  * @summary Renders modal for adding an item to the menu
-  * @author PatrickBrown1
+  * @summary    Renders modal for adding an item to the menu
+  * @author     PatrickBrown1
   */
 
 import React, { useState, useReducer } from 'react';
@@ -61,7 +61,7 @@ export default function AddMenuItemModal (props) {
     ]
     */
     const [addOns, setAddOns] = useState([]);
-        // dietary info
+    // dietary info
     const [vegan, setVegan] = useState(false);
     const [vegetarian, setVegetarian] = useState(false);
     const [glutenFree, setGlutenFree] = useState(false);
@@ -71,17 +71,22 @@ export default function AddMenuItemModal (props) {
     const [errorSnackbar, setErrorSnackbar] = useReducer(
         (state, newState) => ({...state, ...newState}),
         {visible: false, message: ""}
-    )    
-    // makes sure url is valid image link
+    )  
+
+    /**
+     * Handles form submit for editing an item. This includes form validation,
+     * error handling, and making a call to the /item/edit route.
+     *
+     * No params
+     * @returns {boolean} - True if the url is valid, false otherwise
+     */
     const checkUrl = (url) => {
         return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
     }
+    
     /**
      * Handles form submit for adding an item. This includes form validation,
      * error handling, and making a call to the /item/insert route.
-     *
-     * No params
-     * @returns {void}
      */
     const handleSubmit = async () => {
         // validate basic input

@@ -23,8 +23,8 @@
  * understand. A lot of the bulk comes from Material UI's form control handling
  * and general HTML property tags.
  *
- * @summary Renders a modal for editing an item existing in the menu
- * @author PatrickBrown1
+ * @summary     Renders a modal for editing an item existing in the menu.
+ * @author      PatrickBrown1
  */
 
 import React, { useState, useReducer } from 'react';
@@ -87,9 +87,8 @@ export default function EditMenuItemModal (props) {
      * error handling, and making a call to the /item/edit route.
      *
      * No params
-     * @returns {void}
+     * @returns {boolean} - True if the url is valid, false otherwise
      */
-     // makes sure url is valid image link
     const checkUrl = (url) => {
         return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
     }
@@ -100,11 +99,6 @@ export default function EditMenuItemModal (props) {
             (individualItemPrice === "" && familyItemPrice === "") || 
             itemImageURL === "" || itemDescription === ""
         ){
-            // if(!validURL(itemImageURL)){
-            //     console.log("fail url");
-            //     setMenuError(true);
-            //     return;
-            // }
             console.log("fail basic");
             setMenuError(true);
             setErrorSnackbar({visible: true, message: "There was an error in the form"});
@@ -186,7 +180,7 @@ export default function EditMenuItemModal (props) {
         }).then(res => {
             if(res.ok){
                 props.setItemEditedSuccess(true);
-                //refetch
+                // refetch
                 setLoaded(false);
                 setShowModal("");
             }

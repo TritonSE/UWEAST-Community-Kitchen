@@ -4,8 +4,8 @@
  * and sortable based on item caregory (main dish, appetizer, side, etc.). This table gives
  * the user the option to edit and remove existing items, and add new items.
  *
- * @summary Renders admin menu items table for the Admin page
- * @author PatrickBrown1
+ * @summary     Renders admin menu items table for the Admin page
+ * @author      PatrickBrown1
  */
 
 
@@ -73,7 +73,7 @@ function createData(itemName, imgSource, categoryName, options, baseprice, descr
  * @param {Object} displayContent - list of menu item objects currently being displayed
  * @param {string} setDisplayContent - sets displayContent
 
- * @return modal displaying delete confirmation message
+ * @return - modal displaying delete confirmation message
  */
 const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent) => {
     return (
@@ -121,7 +121,7 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
  * @param {function} handleFeatureChange -  function that handles when featured checkbox is toggled
  * @param {function} setCurrentEditItem - sets the item being edited if edit button is pressed
 
- * @return renders table of menu items
+ * @return - renders table of menu items
  */
 function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem) {
     return (
@@ -201,8 +201,6 @@ function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChan
  * @param {function} setItemList - sets value of itemList
  * @param {Object[]} displayContent -  list of all menu items being displayed
  * @param {function} setDisplayContent - sets value of displayContent
-
- * @return void
  */
 async function handleRemoveByID(id, itemList, setItemList, displayContent, setDisplayContent){
     // remove from database
@@ -244,7 +242,7 @@ export default function AdminMenuItems (props) {
         (state, newState) => ({...state, ...newState}),
         {searchTerm: "", filter: "All", displayContent: itemList}
     )
-    // Fetch all menu items to display in table
+    // fetch all menu items to display in table
     useEffect(() => {
         var data = null;
         const fetchData = async () => {
@@ -279,6 +277,7 @@ export default function AdminMenuItems (props) {
         
         fetchData();
     }, [loaded])
+
     /**
      * This functions takes in the filter string and the search term, and updates
      * the display state to these new two values, and the items that correspond to
@@ -319,8 +318,6 @@ export default function AdminMenuItems (props) {
     * Updates items and database when a feature checkbox is pressed
     *
     * @param {Object} row - row being updated
-    *
-    * @return void
     */
     const handleFeatureChange = async (row) => {
         const itemID = row.id;
