@@ -37,14 +37,13 @@ function requiredAsterisk(){
  * Renders the modal used to change the URL of the Menu page's header image.
  * 
  * @param {boolean} changeHeaderModal - show/hide modal
- * @param {function} setChangeHeaderModel - set changeHeaderModal
+ * @param {function} setChangeHeaderModal - set changeHeaderModal
  * @param {function} setLoaded - sets AdminMenuItems.js loaded state
  * @param {string} headerImageUrl - current header image URL
- * 
  * @returns {HTMLElement} - A modal with implemented functionality
  */
 export default function ChangeHeaderModal (props){
-    // inherits display functions as props
+    // inherit display functions as props
     const showModal = props.changeHeaderModal;
     const setShowModal = props.setChangeHeaderModal;
     const setLoaded = props.setLoaded;
@@ -56,20 +55,21 @@ export default function ChangeHeaderModal (props){
     // form's states
     const [headerImageURL, setHeaderImageURL] = useState(props.headerImageURL);
 
-    const handleSubmit = async () => {
-        // validates input
-        if (headerImageURL === "" || (headerImageURL.match(/\.(jpeg|jpg|gif|png)$/) === null))
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // validate input
+        if (headerImageURL === "")
         {
             console.log("failed header image input");
             setMenuError(true);
             setErrorSnackbar(true);
             return;
         }
-        // creates the object to oush to the database
+        // create the object to oush to the database
         const imageURLObject = {
             "imageUrl": headerImageURL,
         }
-        // pushes to database
+        // push to database
         await fetch(`${BACKEND_URL}menuImages/changeMenuImage`, {
             method: "POST",
             headers: {
@@ -80,7 +80,7 @@ export default function ChangeHeaderModal (props){
             // success
             if(res.ok){
                 alert("The header image was changed!");
-                // refetches
+                // refetch
                 setLoaded(false);
                 setShowModal(false);
             }
@@ -117,13 +117,12 @@ export default function ChangeHeaderModal (props){
                             <ClearIcon/>
                         </IconButton>
                     </div>
-                    <form autocomplete="off">
+                    <form autocomplete="off" onSubmit={(e) => handleSubmit(e)}>
                         <div className="modalBody">
                             {/* Header image URL */}
                             <p className="formLabelText">Image Link {requiredAsterisk()}</p>
                             <FormControl fullWidth error={menuError && headerImageURL === ""} className="formItem" margin='dense'>
-                                <OutlinedInput name="imageURL" id="imageURL" className="formTextInput"
-                                    required 
+                                <OutlinedInput name="imageUrl" id="imageUrl" className="formTextInput"
                                     value={headerImageURL}
                                     onChange={(e) => setHeaderImageURL(e.target.value)}
                                     size="small"
@@ -132,7 +131,7 @@ export default function ChangeHeaderModal (props){
                         </div>
                         <div className="modalFooter">
                             {/* Change header button */}
-                            <Button className="changeHeaderButton" onClick={() => handleSubmit()}>
+                            <Button className="changeHeaderButton" type="submit">
                                 Change Header
                             </Button>
                         </div>
