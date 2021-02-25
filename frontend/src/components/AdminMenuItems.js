@@ -1,5 +1,17 @@
-import React, {useState, useEffect} from 'react';
+/**
+ * This file renders a table filled with each item in the menu. It includes information
+ * such as name, icon, price, addons, sizing, etc. This table is searchable based on name,
+ * and sortable based on item caregory (main dish, appetizer, side, etc.). This table gives
+ * the user the option to edit and remove existing items, and add new items.
+ *
+ * @summary     Renders admin menu items table for the Admin page
+ * @author      PatrickBrown1
+ */
+
+
+import React, {useState, useEffect, useReducer} from 'react';
 import {Modal, Button} from 'react-bootstrap';
+import Snackbar from "@material-ui/core/Snackbar";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -19,9 +31,26 @@ import Checkbox from '@material-ui/core/Checkbox';
 import '../css/AdminMenuItems.css';
 import AddMenuItemModal from './AddMenuItemModal.js';
 import EditMenuItemModal from './EditMenuItemModal.js';
+import ChangeHeaderModal from './ChangeHeaderModal.js';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
+/**
+ * This function takes in data points from the get item route and formats them into
+ * an object readable by the table.
+ *
+ * @param {string} itemName - name of the item
+ * @param {string} imgSource - url of image source
+ * @param {string} categoryName - item's category
+ * @param {Object[]} options -  array of accommodation objects
+ * @param {Object} baseprice - object with Individual and Family price properties
+ * @param {string} description - description of the item
+ * @param {string} id - item's id in database
+ * @param {boolean} featured - indicates whether or not the item is featured on the menu
+ * @param {Object} dietaryInfo - object containing dairyFree, vegan, vegetarian, and gluten-free boolean properties
+ *
+ * @return {Object} - Object with above parameters formatted in proper order.
+ */
 function createData(itemName, imgSource, categoryName, options, baseprice, description, id, featured, dietaryInfo) {
   return {
         "itemName": itemName, 
@@ -35,8 +64,18 @@ function createData(itemName, imgSource, categoryName, options, baseprice, descr
         "dietaryInfo": dietaryInfo
     };
 }
+/**
+ * Renders modal that asks the user if they want to remove the item from the menu.
+ *
+ * @param {boolean} deleteConfirmation - indicates whether or not to show the delete confirmation modal
+ * @param {function} setDeleteConfirmation - sets value of deleteConfirmation
+ * @param {Object[]} itemList - list of all menu item objects
+ * @param {function} setItemList -  sets itemList
+ * @param {Object} displayContent - list of menu item objects currently being displayed
+ * @param {string} setDisplayContent - sets displayContent
 
-// Renders modal that asks the user if they want to remove the item from the menu
+ * @return - modal displaying delete confirmation message
+ */
 const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent) => {
     return (
         <Modal 
@@ -74,26 +113,35 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
             </Modal>
         );
 }
+/**
+ * Renders table of items based on what is passed in through displayContent
+ *
+ * @param {Object} display - list of menu item objects currently being displayed
+ * @param {string} setDisplay - sets display
+ * @param {function} setDeleteConfirmation - sets value of deleteConfirmation
+ * @param {function} handleFeatureChange -  function that handles when featured checkbox is toggled
+ * @param {function} setCurrentEditItem - sets the item being edited if edit button is pressed
 
-// Renders table of items based on what is passed in through displayContent
-function menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem) {
+ * @return - renders table of menu items
+ */
+function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem) {
     return (
         <TableContainer component={Paper} className="menuTableContainer">
-            <Table aria-label="simple table" stickyHeader className="menuTable">
+            <Table aria-label="simple table" className="menuTable">
                 <TableHead>
                     <TableRow style={{"overflow": "hidden"}}>
                         <TableCell className="menuTableHeaders" width="5%">Feature</TableCell>
                         <TableCell className="menuTableHeaders" width="15%" align="center">Item Image</TableCell>
-                        <TableCell className="menuTableHeaders" width="15%" align="left">Item Name</TableCell>
-                        <TableCell className="menuTableHeaders" width="12%" align="left">Category Name</TableCell>
-                        <TableCell className="menuTableHeaders" width="12%" align="left">Size</TableCell>
-                        <TableCell className="menuTableHeaders" width="12%" align="left">Base Price</TableCell>
-                        <TableCell className="menuTableHeaders" width="12%" align="left">Add-ons</TableCell>
-                        <TableCell className="menuTableHeaders" width="12%" align="left">Edit</TableCell>
+                        <TableCell className="menuTableHeaders" width="10%" align="left">Item Name</TableCell>
+                        <TableCell className="menuTableHeaders" width="10%" align="left">Category Name</TableCell>
+                        <TableCell className="menuTableHeaders" width="10%" align="left">Size</TableCell>
+                        <TableCell className="menuTableHeaders" width="10%" align="left">Base Price</TableCell>
+                        <TableCell className="menuTableHeaders" width="30%" align="left">Add-ons</TableCell>
+                        <TableCell className="menuTableHeaders" width="10%" align="left">Edit</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {displayContent.map((row, index) => {
+                    {display.displayContent.map((row, index) => {
                         const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
                         // console.log(row);
                         return (
@@ -114,24 +162,24 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
                                 <TableCell align="center" className="menuRowText" width="15%">
                                     <img src={row.imgSource} alt={row.itemName} className="menuItemImage"/>
                                 </TableCell>
-                                <TableCell className="menuRowText" width="15%">{row.itemName}</TableCell>
-                                <TableCell align="left" className="menuRowText" width="12%">{row.categoryName}</TableCell>
-                                <TableCell align="left" className="menuRowText" width="12%">
+                                <TableCell className="menuRowText" width="10%">{row.itemName}</TableCell>
+                                <TableCell align="left" className="menuRowText" width="10%">{row.categoryName}</TableCell>
+                                <TableCell align="left" className="menuRowText" width="10%">
                                 {
                                     row.basePrice.map((v) => {return (<>{v[0]}<br /></>)})
                                 }
                                 </TableCell>
-                                <TableCell align="left" className="menuRowText" width="12%">
+                                <TableCell align="left" className="menuRowText" width="10%">
                                 {
                                     row.basePrice.map((v) => <>${v[1]}<br /></>)
                                 }
                                 </TableCell>
-                                <TableCell align="left" className="menuRowText" width="12%">
+                                <TableCell align="left" className="menuRowText" width="30%">
                                 {
                                     row.options.map((v) => <p>{v[1].Description}</p>)
                                 }
                                 </TableCell>
-                                <TableCell align="left" className="menuRowText" width="12%">
+                                <TableCell align="left" className="menuRowText" width="10%">
                                     <IconButton onClick={() => setCurrentEditItem(row.id)}>
                                         <EditIcon style={{"marginRight": "5px"}}/>
                                     </IconButton>
@@ -146,7 +194,15 @@ function menuTable(itemList, setItemList, displayContent, setDisplayContent, set
         </TableContainer>
     );
 }
-// handle remove based on id passed in through params
+/**
+ * Removed an item from the database and from page state
+ *
+ * @param {string} id - id of item being removed
+ * @param {Object[]} itemList - list of all menu items
+ * @param {function} setItemList - sets value of itemList
+ * @param {Object[]} displayContent -  list of all menu items being displayed
+ * @param {function} setDisplayContent - sets value of displayContent
+ */
 async function handleRemoveByID(id, itemList, setItemList, displayContent, setDisplayContent){
     // remove from database
     console.log("Removing " + id);
@@ -164,24 +220,36 @@ async function handleRemoveByID(id, itemList, setItemList, displayContent, setDi
                 // remove from rows
                 setItemList(itemList.filter(x => x.id !== id));
                 // remove from filtered rows
-                setDisplayContent(displayContent.filter(x => x.id !== id));
+                setDisplayContent({displayContent: displayContent.displayContent.filter(x => x.id !== id)});
             }
         })
     
 }
 export default function AdminMenuItems (props) {
     const [deleteConfirmation, setDeleteConfirmation] = useState(["", ""]);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [filter, setFilter] = useState("All");
-    const [displayContent, setDisplayContent] = useState([]);
+    
     const [itemList, setItemList] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const [checkboxUpdate, setCheckboxUpdate] = useState("");
+    const [changeHeaderModal, setChangeHeaderModal] = useState(false);
     const [addItemModal, setAddItemModal] = useState(false);
     const [currentEditItem, setCurrentEditItem] = useState("");
-    // Fetch all menu items to display in table
+    const [itemAddedSuccess, setItemAddedSuccess] = useState(false)
+    const [itemEditedSuccess, setItemEditedSuccess] = useState(false);
+
+    // const [searchTerm, setSearchTerm] = useState("");
+    // const [filter, setFilter] = useState("All");
+    // const [displayContent, setDisplayContent] = useState([]);
+    const [display, setDisplay] = useReducer(
+        (state, newState) => ({...state, ...newState}),
+        {searchTerm: "", filter: "All", displayContent: itemList}
+    )
+    const [headerImageURL, setHeaderImageURL] = useState("");
+
+    // fetch all menu items to display in table
     useEffect(() => {
         var data = null;
+        var imgUrl = null;
         const fetchData = async () => {
             const res = await fetch(`${BACKEND_URL}item/`, {
                 method: "GET",
@@ -207,59 +275,63 @@ export default function AdminMenuItems (props) {
                         element.dietaryInfo
                 ));
             });
+            const urlFetch = await fetch(`${BACKEND_URL}menuImages/`, {
+                method: "GET",
+                headers: {
+                    "content-type": "application/json",
+                },
+            })
+            data = await urlFetch.json();
+            setHeaderImageURL(data.imageUrl.imageUrl);
             setItemList(rows);
-            setDisplayContent(rows);
+            setDisplay({displayContent: rows});
             setLoaded(true);
         }
         
         fetchData();
     }, [loaded])
-    // update display contents based on search term
-    const handleSearch = (searchTerm) => {
-        // Empty search term, so we want to reset the displayed items to those of the current category
-        if(searchTerm === ""){
-            if(filter === "All"){        
-                setDisplayContent(itemList); 
-            }
-            else {
-                setDisplayContent(itemList.filter(x => x.categoryName === filter));
-            }
+
+    /**
+     * This functions takes in the filter string and the search term, and updates
+     * the display state to these new two values, and the items that correspond to
+     * these two values
+     *
+     * @param {String} filter - current filter
+     * @param {String} searchTerm - current search term
+     */
+    const handleDisplayChange = (filter, searchTerm) => {
+        // takes item list, filters by category then search term
+        let workingItems = [];
+        // filter by category
+        if(filter === "All"){ 
+            workingItems = itemList;
         }
-        else{
-            // Filters the current display content to show those that contain the
-            // search term in the name AND correspond to current filter
-            if(filter === "All"){
-                setDisplayContent(itemList.filter(x => x.itemName.toLowerCase().includes(searchTerm.toLowerCase()))); 
-            }
-            else {
-                // Filter based on search term and filter term
-                setDisplayContent(itemList.filter(x => 
-                    x.itemName.toLowerCase().includes(searchTerm.toLowerCase())
-                    && x.categoryName === filter
-                )); 
-            }
-        }
-    }
-    // update display contents based on filter term
-    // possible terms are: Main Dish, Appetizer, Drink, Side
-    const handleFilterChange = (filter) => {
-        // clear search
-        setSearchTerm("");
-        if(filter === "All"){        
-            setDisplayContent(itemList); 
-        }
-        else{
-            const newRows = [];
+        else if(filter === "Featured"){
             for(var index in itemList) { 
-                if (itemList[index]["categoryName"] === filter){
-                    newRows.push(itemList[index]); 
+                if (itemList[index].isFeatured){
+                    workingItems.push(itemList[index]); 
                 }
             }
-            console.log(newRows)
-            setDisplayContent(newRows); 
         }
+        else{
+            for(var i in itemList) { 
+                if (itemList[i]["categoryName"] === filter){
+                    workingItems.push(itemList[i]); 
+                }
+            }
+        }
+        // filter by search term
+        if(searchTerm !== ""){
+            workingItems = workingItems.filter(x => x.itemName.toLowerCase().includes(searchTerm.toLowerCase()));
+
+        }
+        setDisplay({filter: filter, searchTerm: searchTerm, displayContent: workingItems});
     }
-    // Called when a set featured checkbox is clicked
+    /**
+    * Updates items and database when a feature checkbox is pressed
+    *
+    * @param {Object} row - row being updated
+    */
     const handleFeatureChange = async (row) => {
         const itemID = row.id;
         const newValue = !row.isFeatured;
@@ -275,10 +347,10 @@ export default function AdminMenuItems (props) {
                 return prev;
             })
         }
-        var displayContentIndex = displayContent.findIndex(x => x.id === itemID);
+        var displayContentIndex = display.displayContent.findIndex(x => x.id === itemID);
         if(displayContentIndex !== -1){
-            displayContent[displayContentIndex].isFeatured = newValue;
-            setDisplayContent(displayContent);
+            display.displayContent[displayContentIndex].isFeatured = newValue;
+            setDisplay({displayContent: display.displayContent});
         }
         setCheckboxUpdate(row.itemName + "" + newValue);
 
@@ -296,15 +368,43 @@ export default function AdminMenuItems (props) {
     }
     if(loaded){
         return (  
-            <div>
-                {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded}/>}
-                {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
-                {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} />}
+            <div className="adminMenuPageContainer">
+                {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded} setItemEditedSuccess={setItemEditedSuccess}/>}
+                {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, display, setDisplay)}
+                {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} setItemAddedSuccess={setItemAddedSuccess}/>}
+                {changeHeaderModal && <ChangeHeaderModal changeHeaderModal={changeHeaderModal} setChangeHeaderModal={setChangeHeaderModal} setLoaded={setLoaded} headerImageURL={headerImageURL}/>}
+                {/* Add/Edit item success snackbars*/}
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    open={itemAddedSuccess}
+                    autoHideDuration={5000}
+                    onClose={() => setItemAddedSuccess(false)}
+                    message={<span id="message-id">Item successfully added!</span>}
+                />
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    open={itemEditedSuccess}
+                    autoHideDuration={5000}
+                    onClose={() => setItemEditedSuccess(false)}
+                    message={<span id="message-id">Item successfully edited!</span>}
+                />
+
                 <div className="aboveTableContainer">
-                    <Button className="menuAddButton" onClick={() => {setAddItemModal(true)}}>
-                        <AddCircleIcon className="menuAddButtonIcon" />
-                        Add Item
-                    </Button>
+                    <div className="addUpdateButtonContainer">
+                        <Button className="menuAddButton" onClick={() => {setAddItemModal(true)}}>
+                            <AddCircleIcon className="menuAddButtonIcon" />
+                            Add Item
+                        </Button>
+                        <Button className="menuChangeHeaderButton" onClick={() => {setChangeHeaderModal(true)}}>
+                            Change Header
+                        </Button>
+                    </div>
                     <div className="searchFilterContainer">
                         <Select
                             className="menuFilterSelect"
@@ -312,13 +412,13 @@ export default function AdminMenuItems (props) {
                             defaultValue="All"
                             displayEmpty="false"
                             variant="outlined"
-                            value={filter}
+                            value={display.filter}
                             onChange={(v) => {
-                                setFilter(v.target.value);
-                                handleFilterChange(v.target.value);
+                                handleDisplayChange(v.target.value, display.searchTerm);
                             }}
                         >
                             <MenuItem value="All">All</MenuItem>
+                            <MenuItem value="Featured">Featured</MenuItem>
                             <MenuItem value="Appetizers">Appetizers</MenuItem>
                             <MenuItem value="Main Dishes">Main Dishes</MenuItem>
                             <MenuItem value="Sides">Sides</MenuItem>
@@ -326,17 +426,20 @@ export default function AdminMenuItems (props) {
                         </Select>
                         <SearchBar
                             className="menuSearchBar"
-                            value={searchTerm}
-                            onChange={(newValue) => setSearchTerm(newValue)}
-                            onRequestSearch={() => handleSearch(searchTerm)}
-                            onCancelSearch={() => {
-                                setSearchTerm(""); 
-                                handleSearch("");
+                            value={display.searchTerm}
+                            onChange={(newValue) => {
+                                handleDisplayChange(display.filter, newValue);
+                            }}
+                            onRequestSearch={(newValue) => {
+                                handleDisplayChange(display.filter, newValue);
+                            }}
+                            onCancelSearch={() => {                                
+                                handleDisplayChange(display.filter, "");
                             }}
                         />
                     </div>
                 </div>
-                {menuTable(itemList, setItemList, displayContent, setDisplayContent, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem)}
+                {menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChange, setCurrentEditItem)}
             </div>
         )
     }
