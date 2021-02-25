@@ -7,7 +7,7 @@
  * Pickup Details, Name, email, Phone number, Price, Submission Date, Order Status,
  * Items, Quantity, Size, Accommodations, Special Instructions
  * 
- * @summary - The Orders table implementation 
+ * @summary The Orders table implementation.
  */
 
 import React from 'react';
@@ -38,8 +38,8 @@ function createData(name, accommodations, specialInstructions, size, quantity) {
  * This function is used to render the dropdown row when the table row is clicked.
  * It renders the order details of the selected order row.
  * 
- * @param {Object} rowData - info of the row clicked 
- * @param {Object} rowMeta - index of the data
+ * @param {Object} rowData - Info of the row clicked 
+ * @param {Object} rowMeta - Index of the data
  */
 const renderRow = (rowData, rowMeta) => {
     const rows = []

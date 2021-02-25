@@ -10,7 +10,7 @@
  * Order Status contains props for a custom body inside the table
  * Cell. 
  * 
- * @summary - Column details for orders table
+ * @summary Column details for orders table.
  */
 
 // import helper functions from utils
