@@ -74,8 +74,8 @@
 @media only screen and (min-width: 767px) and (max-width: 1349px) {
     .cart-icon-smaller-desktop {
         display: inline-block;
-        transform: scale(1.5);
-        -webkit-transform: scale(1.5);
+        transform: scale(1.25);
+        -webkit-transform: scale(1.25);
         margin-right: calc(0.5vw);    
     }
 }
@@ -121,8 +121,8 @@
         display: inline-block;
         width: calc(34%);
         text-align: right;
-        transform: scale(1.5);
-        -webkit-transform: scale(1.5);
+        transform: scale(1.25);
+        -webkit-transform: scale(1.25);
     }
 }
 
