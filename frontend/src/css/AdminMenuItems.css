@@ -18,21 +18,34 @@
 .aboveTableContainer{
     width: 100%;
     min-width: 440px;
-    height: 40px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    flex-wrap: wrap;
+}
+.aboveTableContainer > *{
+    margin-bottom: 10px;
 }
 .searchFilterContainer {
     height: 40px;
     right: 0;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     flex-shrink: 1;
-    padding-left: 10px;
+    min-width: 350px !important;
+}
+.addUpdateButtonContainer{
+    height: 40px;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-shrink: 1;
+    min-width: 350px !important;
 }
 .menuAddButton {
     font-family: 'Roboto', sans-serif !important;
@@ -46,6 +59,16 @@
 .menuAddButtonIcon {
     color: var(--white) !important;
     margin-right: 10px;
+}
+.menuChangeHeaderButton {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: var(--yellow) !important;
+    border: 1px solid var(--yellow) !important;
+    color: var(--black) !important;
+    font-weight: bold !important;
+    width: 150px;
+    height: 40px !important;
+    margin-left: 10px;
 }
 .menuFilterSelect {
     margin: 0px;

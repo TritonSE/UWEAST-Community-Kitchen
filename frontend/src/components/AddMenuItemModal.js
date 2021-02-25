@@ -189,7 +189,7 @@ export default function AddMenuItemModal (props) {
                     </div> */}
                     <div className="headerContainer">
                         <IconButton
-                            className="removeAddOnButton"
+                            className="closeModalButton"
                             onClick={() => setShowModal("")}
                         >
                             <ClearIcon/>
