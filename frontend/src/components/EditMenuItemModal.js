@@ -1,4 +1,33 @@
-import React, { useState } from 'react';
+/**
+ * This file contains the modal for editing an item that exists the menu. It's split
+ * into sections for each of the form items, including name, image url, category,
+ * prices, accommodations, and description. The fields are automatically filled
+ * in with the current information from the item for the user to edit.
+ * 
+ * It uses MaterialUI's form control
+ * to create the form. 
+ * The required fields are name, image url, category, description, and price.
+ * Price is considered to be filled out if one of the prices is complete (so
+ * one of the prices can be empty).
+ * Also, a given accommodations is considered to be filled out if it has
+ * 0 or 2 fields completed. If 0, it is removed, if 1, it is considered incomplete.
+ * 
+ * Errors are thrown under the following cases:
+ *     1. one of the required fields is empty
+ *     2. one of the accommodations fields has one of the fields filled out
+ *     3. none of the prices are filled out
+ *   
+ * A new accommodation field can be added if both fields of the previous one
+ * has values, if not it will not be added.
+ * Disclaimer: This file seems really long (it is), but it isn't very hard to
+ * understand. A lot of the bulk comes from Material UI's form control handling
+ * and general HTML property tags.
+ *
+ * @summary     Renders a modal for editing an item existing in the menu.
+ * @author      PatrickBrown1
+ */
+
+import React, { useState, useReducer } from 'react';
 import { Button } from 'react-bootstrap';
 import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Select, MenuItem, InputAdornment, FormHelperText, Snackbar, IconButton } from '@material-ui/core';
 import '../css/AddMenuItemModal.css';
@@ -7,34 +36,6 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
-
-/*
-    This file contains the modal for editing an item that exists the menu. It's split
-    into sections for each of the form items, including name, image url, category,
-    prices, accommodations, and description. The fields are automatically filled
-    in with the current information from the item for the user to edit.
-    
-    It uses MaterialUI's form control
-    to create the form. 
-    The required fields are name, image url, category, description, and price.
-    Price is considered to be filled out if one of the prices is complete (so
-    one of the prices can be empty).
-    Also, a given accommodations is considered to be filled out if it has
-    0 or 2 fields completed. If 0, it is removed, if 1, it is considered incomplete.
-
-    Errors are thrown under the following cases:
-        1. one of the required fields is empty
-        2. one of the accommodations fields has one of the fields filled out
-        3. none of the prices are filled out
-    
-    A new accommodation field can be added if both fields of the previous one
-    has values, if not it will not be added.
-
-    Disclaimer: This file seems really long (it is), but it isn't very hard to
-    understand. A lot of the bulk comes from Material UI's form control handling
-    and general HTML property tags.
-*/
-
 
 // renders a red asterix that indicates a required field
 function requiredAsterix(){
@@ -77,8 +78,11 @@ export default function EditMenuItemModal (props) {
     const [containsDairy, setContainsDairy] = useState(props.item.dietaryInfo !== undefined ? props.item.dietaryInfo.containsDairy : false);
 
     const [menuError, setMenuError] = useState(false);
-    const [errorSnackbar, setErrorSnackbar] = useState(false);
-
+    const [errorSnackbar, setErrorSnackbar] = useReducer(
+        (state, newState) => ({...state, ...newState}),
+        {visible: false, message: ""}
+    )
+    
     const handleSubmit = async () => {
         // validate basic input
         if(itemName === "" || 
@@ -86,14 +90,9 @@ export default function EditMenuItemModal (props) {
             (individualItemPrice === "" && familyItemPrice === "") || 
             itemImageURL === "" || itemDescription === ""
         ){
-            // if(!validURL(itemImageURL)){
-            //     console.log("fail url");
-            //     setMenuError(true);
-            //     return;
-            // }
             console.log("fail basic");
             setMenuError(true);
-            setErrorSnackbar(true);
+            setErrorSnackbar({visible: true, message: "There was an error in the form"});
             return;
         }
         // validate addons
@@ -104,7 +103,7 @@ export default function EditMenuItemModal (props) {
                 console.log("fail add on");
                 failAddOn = true;
                 setMenuError(true);
-                setErrorSnackbar(true);
+                setErrorSnackbar({visible: true, message: "One or more addons weren't properly filled in"});
                 return;
             }
             else if(item.name !== "" && parseFloat(item.price) < 0){
@@ -112,13 +111,13 @@ export default function EditMenuItemModal (props) {
                 console.log("add on price was negative");
                 failAddOn = true;
                 setMenuError(true);
-                setErrorSnackbar(true);
+                setErrorSnackbar({visible: true, message: "Negative prices are not allowed in the menu"});
                 return;
             }
         })
         if(failAddOn){
             setMenuError(true);
-            setErrorSnackbar(true);
+            setErrorSnackbar({visible: true, message: "One or more addons weren't properly filled in"});
             return;
         }
         // send to db
@@ -165,8 +164,8 @@ export default function EditMenuItemModal (props) {
             body: JSON.stringify(itemObject)
         }).then(res => {
             if(res.ok){
-                alert("Your item was updated!");
-                //refetch
+                props.setItemEditedSuccess(true);
+                // refetch
                 setLoaded(false);
                 setShowModal("");
             }
@@ -184,10 +183,10 @@ export default function EditMenuItemModal (props) {
                     vertical: 'bottom',
                     horizontal: 'center',
                 }}
-                open={errorSnackbar}
+                open={errorSnackbar.visible}
                 autoHideDuration={5000}
-                onClose={() => setErrorSnackbar(false)}
-                message={<span id="message-id">There was an error in the form</span>}
+                onClose={() => setErrorSnackbar({visible: false, message: ""})}
+                message={<span id="message-id">{errorSnackbar.message}</span>}
             />
             <Modal open={showModal} onClose={() => setShowModal("")} 
                 className="modalContainer"
@@ -215,7 +214,7 @@ export default function EditMenuItemModal (props) {
                             </FormControl>
                             {/* Item Image URL */}
                             <p className="formLabelText">Image Link {requiredAsterix()}</p>
-                            <FormControl fullWidth error={menuError && itemImageURL === ""} className="formItem" margin='dense'>
+                            <FormControl fullWidth error={menuError && (itemImageURL === "")} className="formItem" margin='dense'>
                                 <OutlinedInput name="imageURL" id="imageURL" className="formTextInput"
                                     required 
                                     value={itemImageURL}
@@ -285,13 +284,13 @@ export default function EditMenuItemModal (props) {
                                 </div>
                             </div>
                             <div className="priceSizeContainer">
-                                <FormHelperText style={{"margin": "0px 40px 10px 40px"}}>{requiredAsterix()} At least one size must be given a price. If you do not want a particular size available for the item, please leave its price field blank.</FormHelperText>
+                                <FormHelperText style={{"margin": "0px 40px 20px 0px"}}>{requiredAsterix()} At least one size must be given a price. If you do not want a particular size available for the item, please leave its price field blank.</FormHelperText>
                             </div>
                             {/* Item Addons */}
                             <p className="formLabelText" style={{"marginTop": "20px", "marginBottom": "-10px"}}>Accommodations</p>
                             <div className="priceSizeContainer">
                                 <div className="sizeContainer">
-                                    <p className="formLabelText">Description</p>
+                                    <p className="formSubHeading">Description</p>
                                     {addOns.map((item,index) => {
                                         
                                         return(
@@ -318,7 +317,7 @@ export default function EditMenuItemModal (props) {
                                 </div>
                                 
                                 <div className="priceContainer">
-                                    <p className="formLabelText">Price</p>
+                                    <p className="formSubHeading">Price</p>
                                     {addOns.map((item,index) => {
                                         return(
                                             <FormControl margin='dense'
