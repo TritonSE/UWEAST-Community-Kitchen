@@ -119,10 +119,10 @@
 
     .cart-icon {
         display: inline-block;
-        width: calc(34%);
+        width: calc(55%);
         text-align: right;
         transform: scale(1.25);
-        -webkit-transform: scale(1.25);
+        -webkit-transform: scale(1.25);   
     }
 }
 
@@ -130,27 +130,34 @@
 @media only screen and (max-width: 610px) 
 {
     .cart-icon {
-        width: calc(30%);
+        width: calc(50%);
     }
 } 
 
 @media only screen and (max-width: 532px) 
 {
     .cart-icon {
-        width: calc(23%);
+        width: calc(44%);
     }
 } 
 
 @media only screen and (max-width: 400px) 
 {
     .cart-icon {
-        width: calc(18%);
+        width: calc(37%);
     }
 } 
 
 @media only screen and (max-width: 300px) 
 {
     .cart-icon {
-        width: calc(10%);
+        width: calc(29%);
     }
-} 
+}
+
+@media only screen and (max-width: 280px) 
+{
+    .cart-icon {
+        width: calc(25%);
+    }
+}
