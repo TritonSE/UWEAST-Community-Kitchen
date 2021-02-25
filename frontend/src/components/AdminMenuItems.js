@@ -282,8 +282,7 @@ export default function AdminMenuItems (props) {
                 },
             })
             data = await urlFetch.json();
-            console.log(data.imageUrl);
-            setHeaderImageURL(data.imageUrl);
+            setHeaderImageURL(data.imageUrl.imageUrl);
             setItemList(rows);
             setDisplay({displayContent: rows});
             setLoaded(true);
@@ -373,7 +372,7 @@ export default function AdminMenuItems (props) {
                 {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded} setItemEditedSuccess={setItemEditedSuccess}/>}
                 {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, display, setDisplay)}
                 {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} setItemAddedSuccess={setItemAddedSuccess}/>}
-                {changeHeaderModal && <ChangeHeaderModal changeHeaderModal={changeHeaderModal} setChangeHeaderModal={setChangeHeaderModal} setLoaded={setLoaded} headerImageURL = {headerImageURL}/>}
+                {changeHeaderModal && <ChangeHeaderModal changeHeaderModal={changeHeaderModal} setChangeHeaderModal={setChangeHeaderModal} setLoaded={setLoaded} headerImageURL={headerImageURL}/>}
                 {/* Add/Edit item success snackbars*/}
                 <Snackbar
                     anchorOrigin={{
