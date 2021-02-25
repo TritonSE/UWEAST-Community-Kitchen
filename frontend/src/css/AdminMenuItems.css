@@ -38,6 +38,16 @@
     color: var(--white) !important;
     margin-right: 10px;
 }
+.menuChangeHeaderButton {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: var(--yellow) !important;
+    border: 1px solid var(--yellow) !important;
+    color: var(--black) !important;
+    font-weight: bold !important;
+    width: 150px;
+    height: 40px !important;
+    margin-left: 40px;
+}
 .menuFilterSelect {
     margin: 0px;
     padding: 0px;

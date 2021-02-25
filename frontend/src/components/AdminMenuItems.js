@@ -19,6 +19,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import '../css/AdminMenuItems.css';
 import AddMenuItemModal from './AddMenuItemModal.js';
 import EditMenuItemModal from './EditMenuItemModal.js';
+import ChangeHeaderModal from './ChangeHeaderModal.js';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -177,11 +178,14 @@ export default function AdminMenuItems (props) {
     const [itemList, setItemList] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const [checkboxUpdate, setCheckboxUpdate] = useState("");
+    const [changeHeaderModal, setChangeHeaderModal] = useState(false);
     const [addItemModal, setAddItemModal] = useState(false);
     const [currentEditItem, setCurrentEditItem] = useState("");
+    const [headerImageURL, setHeaderImageURL] = useState("");
     // Fetch all menu items to display in table
     useEffect(() => {
         var data = null;
+        var imgUrl = null;
         const fetchData = async () => {
             const res = await fetch(`${BACKEND_URL}item/`, {
                 method: "GET",
@@ -207,6 +211,15 @@ export default function AdminMenuItems (props) {
                         element.dietaryInfo
                 ));
             });
+            const urlFetch = await fetch(`${BACKEND_URL}menuImages/`, {
+                method: "GET",
+                headers: {
+                    "content-type": "application/json",
+                },
+            })
+            data = await urlFetch.json();
+            console.log(data.imageUrl.imageUrl);
+                setHeaderImageURL(data.imageUrl.imageUrl);
             setItemList(rows);
             setDisplayContent(rows);
             setLoaded(true);
@@ -300,11 +313,17 @@ export default function AdminMenuItems (props) {
                 {currentEditItem !== "" && <EditMenuItemModal showModal={currentEditItem !== ""} setCurrentEditItem={setCurrentEditItem} item={itemList.filter(item => item.id === currentEditItem)[0]} setLoaded={setLoaded}/>}
                 {deleteConfirmation[0] !== "" && deleteConfirmationModal(deleteConfirmation, setDeleteConfirmation, itemList, setItemList, displayContent, setDisplayContent)}
                 {addItemModal && <AddMenuItemModal addItemModal={addItemModal} setAddItemModal={setAddItemModal} setLoaded={setLoaded} />}
+                {changeHeaderModal && <ChangeHeaderModal changeHeaderModal={changeHeaderModal} setChangeHeaderModal={setChangeHeaderModal} setLoaded={setLoaded} headerImageURL = {headerImageURL}/>}
                 <div className="aboveTableContainer">
-                    <Button className="menuAddButton" onClick={() => {setAddItemModal(true)}}>
-                        <AddCircleIcon className="menuAddButtonIcon" />
-                        Add Item
-                    </Button>
+                    <div>
+                        <Button className="menuAddButton" onClick={() => {setAddItemModal(true)}}>
+                            <AddCircleIcon className="menuAddButtonIcon" />
+                            Add Item
+                        </Button>
+                        <Button className="menuChangeHeaderButton" onClick={() => {setChangeHeaderModal(true)}}>
+                            Change Header
+                        </Button>
+                    </div>
                     <div className="searchFilterContainer">
                         <Select
                             className="menuFilterSelect"
