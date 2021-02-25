@@ -82,16 +82,7 @@ export default function EditMenuItemModal (props) {
         (state, newState) => ({...state, ...newState}),
         {visible: false, message: ""}
     )
-    /**
-     * Handles form submit for editing an item. This includes form validation,
-     * error handling, and making a call to the /item/edit route.
-     *
-     * No params
-     * @returns {boolean} - True if the url is valid, false otherwise
-     */
-    const checkUrl = (url) => {
-        return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
-    }
+    
     const handleSubmit = async () => {
         // validate basic input
         if(itemName === "" || 
@@ -102,12 +93,6 @@ export default function EditMenuItemModal (props) {
             console.log("fail basic");
             setMenuError(true);
             setErrorSnackbar({visible: true, message: "There was an error in the form"});
-            return;
-        }
-        if(!checkUrl(itemImageURL)){
-            console.log("fail url check");
-            setMenuError(true);
-            setErrorSnackbar({visible: true, message: "Image link must have a valid image extension (.jpeg, .jpg, or .png)"});
             return;
         }
         // validate addons
@@ -229,7 +214,7 @@ export default function EditMenuItemModal (props) {
                             </FormControl>
                             {/* Item Image URL */}
                             <p className="formLabelText">Image Link {requiredAsterix()}</p>
-                            <FormControl fullWidth error={menuError && (itemImageURL === "" || !checkUrl(itemImageURL))} className="formItem" margin='dense'>
+                            <FormControl fullWidth error={menuError && (itemImageURL === "")} className="formItem" margin='dense'>
                                 <OutlinedInput name="imageURL" id="imageURL" className="formTextInput"
                                     required 
                                     value={itemImageURL}
