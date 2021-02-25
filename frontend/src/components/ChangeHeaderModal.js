@@ -86,7 +86,10 @@ export default function ChangeHeaderModal (props){
             }
             // failure
             else{
-                alert("There was an error. Please provide a valid image URL and try again");
+                console.log("failed header image input");
+                setMenuError(true);
+                setErrorSnackbar(true);
+                return;
             }
         })
 
@@ -102,7 +105,7 @@ export default function ChangeHeaderModal (props){
                 open={errorSnackbar}
                 autoHideDuration={5000}
                 onClose={() => setErrorSnackbar(false)}
-                message={<span id="message-id">Please provide a valid image URL</span>}
+                message={<span id="message-id">URL is either already in use or invalid</span>}
             />
             {/* Change header image Modal */}
             <Modal open={showModal} onClose={() => setShowModal(false)} 
