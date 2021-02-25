@@ -15,7 +15,7 @@ const SearchSection = () => {
   // set a default header image here
   var defaultImg = "https://idental.com.sg/wp-content/uploads/soft-food-for-braces-1200x675.png"
 
-  const [headerImg, setHeaderImg] = useState(defaultImg); 
+  const [headerImg, setHeaderImg] = useState(""); 
 
   /**
    * UseEffect gets the background image for the header.
@@ -37,7 +37,9 @@ const SearchSection = () => {
   }, []);
 
   return (
-    <div title="Menu Image" style={{backgroundImage: "url(" + headerImg + ")"}} className="search-section"></div>
+    <div className="search-section">
+      <img alt="Menu Image" src={headerImg} className="header-img" onError={(e)=>{e.target.src=defaultImg}} />
+    </div>
   );
 }
   
