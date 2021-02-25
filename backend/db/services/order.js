@@ -79,7 +79,7 @@ async function findOrders(o_isCompleted, Customer) {
       }).exec();
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return false;
   }
 }

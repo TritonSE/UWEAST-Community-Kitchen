@@ -62,7 +62,7 @@ async function editItem(id, info) {
       { $set: info }
     ).exec();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return false;
   }
 }

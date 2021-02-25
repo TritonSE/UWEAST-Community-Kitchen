@@ -92,7 +92,6 @@ router.post(
     isValidated,
   ],
   async (req, res, next) => {
-    console.log("Successfully inside of Add Item Route");
     try {
       // addedItem if successful or false if error
       const addedItem = await addNewItem(req.body);

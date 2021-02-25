@@ -27,7 +27,6 @@ router.post("/createPayment", async (req, res) => {
   // next = middleware
   try {
     const order = req.body;
-    console.log(order);
     // call paypal with order object to set up transaction.
     let paypalOrderRequest = new paypal.orders.OrdersCreateRequest();
     paypalOrderRequest.headers["prefer"] = "return=representation";
@@ -43,20 +42,14 @@ router.post("/createPayment", async (req, res) => {
 });
 router.post("/executePayment", async (req, res, next) => {
   const orderID = req.body.orderID;
-  console.log(orderID);
   // capture the order by calling the paypal api
 
   try {
-    console.log("a");
     const request = new paypal.orders.OrdersAuthorizeRequest(orderId);
-    console.log("b");
     request.requestBody({});
-    console.log("start");
     await client()
       .execute(request)
       .then((data) => {
-        console.log("done");
-        console.log(data);
         res.json({ data });
         return res.sendStatus(200);
       });

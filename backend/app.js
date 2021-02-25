@@ -46,7 +46,7 @@ app.use("/menuImages", require("./routes/menuImages"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  console.log("Error caught");
+  console.error("Error caught");
   next(createError(404));
 });
 
