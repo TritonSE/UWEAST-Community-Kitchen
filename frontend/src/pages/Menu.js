@@ -1,3 +1,11 @@
+/**
+ * This page renders the menu page with two sections: the search section and 
+ * the menu section. The search section stores the header image and the menu 
+ * section stores the menu items and item cart.
+ * 
+ * @summary   Renders the menu page.
+ */
+
 import React, { Component} from 'react';
 import Navbar from '../components/NavBar';
 import CartPreview from '../components/CartPreview';

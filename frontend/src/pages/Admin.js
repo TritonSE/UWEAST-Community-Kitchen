@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Navbar from '../components/NavBar';
 import AdminMenuItems from "../components/AdminMenuItems";
 import Orders from "./Orders";
-import ChangeEmailScreen from "../components/ChangeEmailScreen";
+import Emails from "./Emails";
 import { isAuthenticated } from '../util/Auth';
 import {Redirect} from 'react-router-dom';
 import '../css/Admin.css';
@@ -104,7 +104,7 @@ export default function Admin() {
                         </div> */}
                         {state.currentScreen === "orders" && <Orders />}
                         {state.currentScreen === "menu" && <AdminMenuItems />}
-                        {state.currentScreen === "email" && <ChangeEmailScreen />}
+                        {state.currentScreen === "email" && <Emails />}
                         {state.currentScreen === "resetPassword" && <Redirect to="/reset-password"/>}
                     </div>       
               </div>

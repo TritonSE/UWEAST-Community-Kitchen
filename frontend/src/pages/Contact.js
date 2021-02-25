@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+/**
+ * This page renders the contact page which has the contact form and map.
+ * 
+ * @summary   Renders the contact page.
+ */
+
+import React from 'react';
 import Navbar from '../components/NavBar';
 import ContactMap from '../components/ContactMap';
 import ContactForm from '../components/ContactForm';
 import "../css/Contact.css";
-const config = require('../config');
 
 const Contact = () => {
     return (
@@ -18,7 +23,6 @@ const Contact = () => {
                 </div>
             </div>
         </div>
-
     )
   }
   
