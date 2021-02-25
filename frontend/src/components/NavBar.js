@@ -1,10 +1,12 @@
-import React, {useEffect} from 'react';
 /**
  * The NavBar component. Renders at the top of the website and is fixed to the top.
  * Contains all the relevant tabs that route the user to the specified page.
  * Cart Icon is used for the mobile/tablet rendering of the webpage. 
  * 
+ * @summary NavBar at the top of each page, used to navigate the website.
  */
+
+import React, {useEffect} from 'react';
 import { useHistory } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -24,6 +26,11 @@ const CartBadge = withStyles(({
     }
   }))(Badge);
 
+/**
+ * Renders the NavBar used to navigate the website
+ * 
+ * @returns {HTMLElement} - The NavBar
+ */
 export default function NavBar() {
 
     {/* history hook to redirect on logout */}
@@ -33,7 +40,7 @@ export default function NavBar() {
         isUserAuthenticated: false,
       });
         
-    // reads and stores the items in the cart for the cart icon
+    // read and store the items in the cart for the cart icon
     var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
     {/* stores class names to toggle whether content is shown */}
@@ -89,7 +96,7 @@ export default function NavBar() {
                 {/* The shopping cart will only render if it is a mobile component */}
                 <div className="cart-icon">
                     <IconButton onClick={() => console.log('clicked')}>
-                        <CartBadge badgeContent={cartItems.length} anchorOrigin={{vertical: 'bottom', horizontal: 'right',}}>
+                        <CartBadge badgeContent={cartItems.length}>
                             <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
                         </CartBadge>
                     </IconButton>
@@ -130,7 +137,7 @@ export default function NavBar() {
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
                 <div className="cart-icon-smaller-desktop">
                     <IconButton onClick={() => console.log('clicked')}>
-                        <CartBadge badgeContent={cartItems.length} anchorOrigin={{vertical: 'bottom', horizontal: 'right',}}>
+                        <CartBadge badgeContent={cartItems.length}>
                             <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
                         </CartBadge>
                     </IconButton>

@@ -52,6 +52,7 @@
 .cart-icon, .cart-icon-smaller-desktop {
     display: none;
 }
+
 .navbar-bg-color { 
     background-color: rgb(51,51,51);
 }
@@ -73,8 +74,8 @@
 @media only screen and (min-width: 767px) and (max-width: 1349px) {
     .cart-icon-smaller-desktop {
         display: inline-block;
-        transform: scale(1.7);
-        -webkit-transform: scale(1.7);
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
         margin-right: calc(0.5vw);    
     }
 }
@@ -120,8 +121,8 @@
         display: inline-block;
         width: calc(34%);
         text-align: right;
-        transform: scale(2);
-        -webkit-transform: scale(2);
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
     }
 }
 
