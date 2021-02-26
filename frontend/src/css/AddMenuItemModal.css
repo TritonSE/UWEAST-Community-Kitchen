@@ -110,10 +110,10 @@
     padding-top: 20px;
     height: auto;
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row-reverse !important;
 }
 .modalFooter > * {
-    margin-left: 10px;
+    margin-left: 10px !important;
 }
 .addAddOnButton {
     font-family: 'Roboto', sans-serif !important;
