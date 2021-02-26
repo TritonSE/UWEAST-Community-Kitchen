@@ -14,7 +14,7 @@ import '../css/NavBar.css';
 import { isAuthenticated, logout} from '../util/Auth';
 
 
-export default function NavBar (props) {
+export default function NavBar () {
 
     {/* history hook to redirect on logout */}
     const history = useHistory();
@@ -32,10 +32,6 @@ export default function NavBar (props) {
         logout();
         history.push("/login");
         history.go(0);
-    }
-
-    function OpenCart() {
-        history.push("/cart");
     }
 
     useEffect(() => {
@@ -78,9 +74,10 @@ export default function NavBar (props) {
                 </div>
 
                 {/* The shopping cart will only render if it is a mobile component */}
-                <div className="cart-icon" >
+                <div className="cart-icon">
                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
-                        onClick={OpenCart} />
+                        onClick={() => console.log('clicked')} />
+
                 </div>
 
                 {/* Triggers on Collapse - Hamburger Icon replaces pages */}
@@ -118,7 +115,8 @@ export default function NavBar (props) {
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
                 <div className="cart-icon-smaller-desktop">
                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
-                        onClick={() => props.toggleCart()} />
+                        onClick={() => console.log('clicked')} />
+
                 </div>
             </Navbar>
         </html>
