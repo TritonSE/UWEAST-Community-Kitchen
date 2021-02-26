@@ -30,8 +30,8 @@
     width: 40%;
     height: auto;
     background-color: white;
-    overflow: scroll;
     padding: 10px 20px 20px 20px;
+    overflow: scroll !important;
     overflow-x: hidden;
 }
 .formItem{
