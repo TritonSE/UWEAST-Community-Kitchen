@@ -32,7 +32,9 @@ import '../css/AdminMenuItems.css';
 import AddMenuItemModal from './AddMenuItemModal.js';
 import EditMenuItemModal from './EditMenuItemModal.js';
 import ChangeHeaderModal from './ChangeHeaderModal.js';
-import { getJWT } from '../util/Auth';
+
+import {getJWT, logout} from '../util/Auth';
+
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -224,6 +226,13 @@ async function handleRemoveByID(id, itemList, setItemList, displayContent, setDi
                 // remove from filtered rows
                 setDisplayContent({displayContent: displayContent.displayContent.filter(x => x.id !== id)});
             }
+             // invalid admin token
+             else if(res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
+            }
         })
     
 }
@@ -367,6 +376,14 @@ export default function AdminMenuItems (props) {
                 "isFeatured": newValue,
                 "token": getJWT()
             })
+        }).then(res =>{
+             // invalid admin token
+             if(res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
+            }
         })
     }
     if(loaded){

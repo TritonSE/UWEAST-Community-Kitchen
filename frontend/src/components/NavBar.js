@@ -36,6 +36,9 @@ export default function NavBar () {
 
     useEffect(() => {
         isAuthenticated().then(async result => {
+            if(!result){
+                logout();
+            }
           setState({...state, isUserAuthenticated: result});
         })
       }, []);

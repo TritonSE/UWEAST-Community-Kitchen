@@ -44,7 +44,9 @@ function getJWT() {
   
   //Clears out all attributes in local storage
   function logout() {
-    localStorage.removeItem(ADMIN_TOKEN_ATTRIBUTE);
+    if (localStorage.hasOwnProperty(ADMIN_TOKEN_ATTRIBUTE)) {
+      localStorage.removeItem(ADMIN_TOKEN_ATTRIBUTE);
+    }
   }
   
   export {
