@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import '../css/MenuItemPopup.css';
 import plus from '../media/plus.svg';
 import minus from '../media/minus.svg';
+import info from '../media/info.svg';
 
 const MenuItemPopup = ({ values, togglePopup, processForm }) => {
 
@@ -97,7 +98,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
             //       available, and whether an item is passed in to fill populate fields)
             <label className="choice-label">
                 <input onClick={() => handleSize(price)} type="radio" name="size" value={name} defaultChecked={(name == "Individual" || ((values.get("fillIns") != undefined) && values.get("fillIns").size == name) || !("Individual" in values.get("price")))} required />
-                <span onClick={() => handleSize(price)} className="label-title">{(hasBothPrices) ? name + " +($" + parseFloat(price - values.get("price").Individual).toFixed(2) + ")": name}</span>
+                <span onClick={() => handleSize(price)} className="label-title">{name + " "}<span title="Suited for 5-6 people."><img src={info} class={(hasBothPrices) ? "size-info" : "hidden size-info"} alt="Size Info"/></span>{(hasBothPrices) ? " +($" + parseFloat(price - values.get("price").Individual).toFixed(2) + ")": null}</span>
             </label>
         );
     }

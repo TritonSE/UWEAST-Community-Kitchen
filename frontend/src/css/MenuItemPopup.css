@@ -153,6 +153,11 @@
   display: none;
 }
 
+.size-info {
+    width: 14px;
+    height: 14px;
+}
+
 .instructions-note {
   margin-left: 20px;
   margin-bottom: 3px;
@@ -225,7 +230,7 @@
   font-size: 20px;
 }
 
-/* iPads (landscape) ----------- */
+/* iPad Landscape ----------- */
 @media only screen and (max-width : 1024px) {
   .menu-item-popup {
     width: 500px;
@@ -245,3 +250,19 @@
     height: 250px;
   }
 }
+
+/* Galaxy Fold ----------- */
+@media only screen and (max-width : 300px) {
+    .instructions-note {
+        margin-left: 0px;
+    }
+
+    .instructions-textarea {
+        margin-left: 10px;
+    }
+
+    .submit-order-button {
+        font-size: 16px;
+        width: 70vw;
+    }
+  }
