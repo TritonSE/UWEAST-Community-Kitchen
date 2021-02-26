@@ -1,8 +1,15 @@
+/**
+  * This file contains renders the Admin page. It includes a Nav Bar that links
+  * to the orders page, menu page, update emails page, and change passwords page.
+  *
+  * @summary    Renders admin page
+  * @author     PatrickBrown1
+  */
 import React, { useEffect } from 'react';
 import Navbar from '../components/NavBar';
 import AdminMenuItems from "../components/AdminMenuItems";
 import Orders from "./Orders";
-import ChangeEmailScreen from "../components/ChangeEmailScreen";
+import Emails from "./Emails";
 import { isAuthenticated } from '../util/Auth';
 import {Redirect} from 'react-router-dom';
 import '../css/Admin.css';
@@ -31,8 +38,9 @@ export default function Admin() {
         })
       }, []);
 
-    // Renders the admin page navigation bar between orders, menu, and email screens
-    // currentScreen takes values "orders", "menu", and "email"
+    /**
+     * Renders the admin page navigation bar between orders, menu, and email screens.
+     */
     const adminNavBar = () => {
         var currentScreen = state.currentScreen;
         return(
@@ -47,10 +55,10 @@ export default function Admin() {
                 }
                 { currentScreen === "menu" ? 
                     <h2 className="adminNavSelected" onClick={() => setState({...state, currentScreen: "menu"})}>
-                        Menu Items
+                        Edit Menu
                     </h2> : 
                     <h2 className="adminNavUnselected" onClick={() => setState({...state, currentScreen: "menu"})}>
-                        Menu Items
+                        Edit Menu
                     </h2>
                 }
                 { currentScreen === "email" ? 
@@ -73,8 +81,7 @@ export default function Admin() {
         );
     }
 
-        //Redirect to login if user is trying to access admin panel without being logged in 
-
+        // redirect to login if user is trying to access admin panel without being logged in 
         if(state.isAuthenticatingUser){
             return (
                 <div>
@@ -104,7 +111,7 @@ export default function Admin() {
                         </div> */}
                         {state.currentScreen === "orders" && <Orders />}
                         {state.currentScreen === "menu" && <AdminMenuItems />}
-                        {state.currentScreen === "email" && <ChangeEmailScreen />}
+                        {state.currentScreen === "email" && <Emails />}
                         {state.currentScreen === "resetPassword" && <Redirect to="/reset-password"/>}
                     </div>       
               </div>

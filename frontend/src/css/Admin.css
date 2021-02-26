@@ -10,15 +10,26 @@
 .adminNavContainer {
   display: flex;
   flex-direction: row;
-
-  max-width: 40vw; 
-  min-width: 600px;
-  padding-bottom: 40px;
+  justify-content: flex-start;
+  width: 85vw;
+  padding-bottom: 30px;
+  padding-top: 40px;
 }
+@media only screen and (max-width: 768px) 
+{
+  .adminNavContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-left: -80px;
+    width: 100vw;
+  }
+}
+
+  
 .adminNavUnselected {
   display: inline-block; 
-  margin-right: 40px;
-
+  margin: 10px;
   font-family: 'Roboto', sans-serif !important;
   font-size: 20px;
   color: var(--darkgrey) !important;
@@ -34,8 +45,7 @@
 }
 .adminNavSelected {
   display: inline-block; 
-  margin-right: 40px;
-
+  margin: 10px;
   font-family: 'Roboto', sans-serif !important;
   font-size: 20px;
   color: var(--black) !important;
@@ -47,8 +57,10 @@
 }
 
 .admin-section {
-  padding-top: 30px;
+  width: 100vw;
+  height: 90vh;
   padding-left: 80px;
+  padding-right: 80px;
 }
 
 .admin-info {
