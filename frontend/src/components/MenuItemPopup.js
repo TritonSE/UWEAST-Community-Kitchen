@@ -98,7 +98,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
             //       available, and whether an item is passed in to fill populate fields)
             <label className="choice-label">
                 <input onClick={() => handleSize(price)} type="radio" name="size" value={name} defaultChecked={(name == "Individual" || ((values.get("fillIns") != undefined) && values.get("fillIns").size == name) || !("Individual" in values.get("price")))} required />
-                <span onClick={() => handleSize(price)} className="label-title">{name + " "}<span title="Suited for 5-6 people."><img src={info} class={(hasBothPrices) ? "size-info" : "hidden size-info"} alt="Size Info"/></span>{(hasBothPrices) ? " +($" + parseFloat(price - values.get("price").Individual).toFixed(2) + ")": null}</span>
+                <span onClick={() => handleSize(price)} className="label-title">{name + " "}<span title="Suited for 5-6 people"><img src={info} class={(hasBothPrices) ? "size-info" : "hidden size-info"} alt="Size Info"/></span>{(hasBothPrices) ? " +($" + parseFloat(price - values.get("price").Individual).toFixed(2) + ")": null}</span>
             </label>
         );
     }
