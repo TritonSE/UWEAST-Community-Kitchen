@@ -28,6 +28,8 @@ import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInpu
 import '../css/AddMenuItemModal.css';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ClearIcon from '@material-ui/icons/Clear';
+import {getJWT} from '../util/Auth';
+
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -144,7 +146,8 @@ export default function AddMenuItemModal (props) {
             "isFeatured": false,
             "isCompleted": false,
             "Accommodations": accommodations,
-            "dietaryInfo": dietaryInfo
+            "dietaryInfo": dietaryInfo,
+            "token": getJWT()
         }
         // push to database
         await fetch(`${BACKEND_URL}item/insert`, {

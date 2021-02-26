@@ -32,6 +32,7 @@ import '../css/AdminMenuItems.css';
 import AddMenuItemModal from './AddMenuItemModal.js';
 import EditMenuItemModal from './EditMenuItemModal.js';
 import ChangeHeaderModal from './ChangeHeaderModal.js';
+import { getJWT } from '../util/Auth';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -212,7 +213,8 @@ async function handleRemoveByID(id, itemList, setItemList, displayContent, setDi
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                "_id": id
+                "_id": id,
+                "token": getJWT()
             })
         }).then(res => {
             if(res.ok){
@@ -362,7 +364,8 @@ export default function AdminMenuItems (props) {
             },
             body: JSON.stringify({
                 "_id": itemID,
-                "isFeatured": newValue
+                "isFeatured": newValue,
+                "token": getJWT()
             })
         })
     }

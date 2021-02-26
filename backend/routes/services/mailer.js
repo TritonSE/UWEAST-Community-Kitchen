@@ -5,7 +5,7 @@
  * email-templates. All email formats can be seen seperated by functionality
  * inside the emails folder inside of the backend directory. 
  *
- * @summary   Code for routes involved with automated emails. 
+ * @summary   Code for initializing mailing system and sending emails. 
  * @author    Dhanush Nanjunda Reddy, Amrit Kaur Singh
  */
 const nodemailer = require("nodemailer");
