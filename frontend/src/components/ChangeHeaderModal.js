@@ -19,6 +19,7 @@ import { Button } from 'react-bootstrap';
 import { Modal, FormControl, OutlinedInput, Snackbar, IconButton } from '@material-ui/core';
 import '../css/ChangeHeaderModal.css';
 import ClearIcon from '@material-ui/icons/Clear';
+import {getJWT} from '../util/Auth';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -50,7 +51,10 @@ export default function ChangeHeaderModal (props){
 
     // error handling
     const [menuError, setMenuError] = useState(false);
-    const [errorSnackbar, setErrorSnackbar] = useState(false);
+    const [errorSnackbar, setErrorSnackbar] = useState({
+        display: false,
+        message: ''
+    });
 
     // form's states
     const [headerImageURL, setHeaderImageURL] = useState(props.headerImageURL);
@@ -60,14 +64,14 @@ export default function ChangeHeaderModal (props){
         // validate input
         if (headerImageURL === "")
         {
-            console.log("failed header image input");
             setMenuError(true);
-            setErrorSnackbar(true);
+            setErrorSnackbar({display: true, message: "URL cannot be empty"});
             return;
         }
         // create the object to oush to the database
         const imageURLObject = {
             "imageUrl": headerImageURL,
+            "token": getJWT()
         }
         // push to database
         await fetch(`${BACKEND_URL}menuImages/changeMenuImage`, {
@@ -76,19 +80,31 @@ export default function ChangeHeaderModal (props){
                 "content-type": "application/json",
             },
             body: JSON.stringify(imageURLObject)
-        }).then(res => {
+        }).then(async (res) => {
             // success
             if(res.ok){
                 alert("The header image was changed!");
                 // refetch
                 setLoaded(false);
                 setShowModal(false);
+            } 
+            // invalid admin token
+            else if(res.status === 401){
+                const errMsg = await res.json();
+                setMenuError(true);
+                setErrorSnackbar({display: true, message: errMsg.message});
+                return;
+            }
+            // system error on backend 
+            else if (res.status === 500){
+                setMenuError(true);
+                setErrorSnackbar({display: true, message: "A system error has occurred - try again later"});
+                return;
             }
             // failure
             else{
-                console.log("failed header image input");
                 setMenuError(true);
-                setErrorSnackbar(true);
+                setErrorSnackbar({display: true, message: "URL is either already in use or invalid"});
                 return;
             }
         })
@@ -102,10 +118,10 @@ export default function ChangeHeaderModal (props){
                     vertical: 'bottom',
                     horizontal: 'center',
                 }}
-                open={errorSnackbar}
+                open={errorSnackbar.display}
                 autoHideDuration={5000}
-                onClose={() => setErrorSnackbar(false)}
-                message={<span id="message-id">URL is either already in use or invalid</span>}
+                onClose={() => setErrorSnackbar({...errorSnackbar, display: false})}
+                message={<span id="message-id">{errorSnackbar.message}</span>}
             />
             {/* Change header image Modal */}
             <Modal open={showModal} onClose={() => setShowModal(false)} 
