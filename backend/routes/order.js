@@ -10,6 +10,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const router = express.Router();
+const { verify } = require("./services/jwt");
 const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 
 // @body - Customer (with Name, Email, Phone), Pickup, Timestamps,
@@ -82,7 +83,13 @@ router.post(
  */
 router.post(
   "/updateStatus",
-  [body("_id").isString(), body("isCompleted").isBoolean(), isValidated],
+  [body("_id").isString(), 
+  body("isCompleted").isBoolean(),  
+  body("token").custom(async (token) => {
+    // verify token
+    return await verify(token);
+  }),
+   isValidated],
   async (req, res, next) => {
     try {
       const { _id, isCompleted } = req.body;
