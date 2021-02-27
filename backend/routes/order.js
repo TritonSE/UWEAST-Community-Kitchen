@@ -48,8 +48,7 @@ const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 /**
  * Finds orders filtered on isCompleted and/or Customer.
  *
- * @body {boolean} isCompleted - T/F based on whether an order is completed (default: false) (not required)
- * @body {object} Customer - contains name, email and phone of customer (not required)
+ * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 success with all orders under the constraints / 500 with err
  */
 router.post(
