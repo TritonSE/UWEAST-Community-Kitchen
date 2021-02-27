@@ -47,37 +47,13 @@ async function updateStatus(id, update) {
 }
 
 /**
- * Find orders based on isCompleted and/or Customer.
+ * Find all orders in collection.
  *
- * @param {string} id - the id of the order to be modified
- * @param {boolean} update - true or false value to set to isCompleted
  * @returns {[object]/boolean} - found order(s) / false on error
  */
-async function findOrders(o_isCompleted, Customer) {
+async function findOrders() {
   try {
-    if (Customer !== undefined) {
-      if (o_isCompleted !== undefined) {
-        // return all orders based on customer name and whether it is completed
-        return Order.find({
-          "Customer.Name": Customer.Name,
-          isCompleted: o_isCompleted,
-        }).exec();
-      }
-      // return all orders based on customer name
-      return Order.find({
-        "Customer.Name": Customer.Name,
-      }).exec();
-    }
-
-    // if isCompleted is not passed in return all orders
-    if (o_isCompleted === undefined) {
-      return Order.find({}).exec();
-    } else {
-      // return all orders based on isCompleted T/F
-      return Order.find({
-        isCompleted: o_isCompleted,
-      }).exec();
-    }
+    return Order.find({}).exec();
   } catch (err) {
     console.error(err);
     return false;

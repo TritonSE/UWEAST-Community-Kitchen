@@ -55,18 +55,30 @@ const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 router.post(
   "/",
   [
-    body("isCompleted").notEmpty().optional(),
-    body("Customer").notEmpty().optional(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
     isValidated,
   ],
   async (req, res, next) => {
     try {
-      const { isCompleted, Customer } = req.body;
-      // returns orders or error if there is an error
-      const orders = await findOrders(isCompleted, Customer);
-      res.status(200).json({
+      
+      // retrieve all the orders
+      const orders = await findOrders();
+      
+      // error in getting errors, empty orders array returned
+      if(!orders){
+        return res.status(400).json({
+          orders: [],
+        });
+      }
+
+      // successfully retrieved orders
+      return res.status(200).json({
         orders: orders,
       });
+
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server err");
