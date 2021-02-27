@@ -90,6 +90,7 @@ router.post(
  *
  * @body {string} _id - id of order to be updated
  * @body {object} isCompleted - T/F based on whether an order is completed (default: false)
+ * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with success / 500 with err
  */
 router.post(

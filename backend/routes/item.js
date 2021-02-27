@@ -55,6 +55,7 @@ function checkNumeral(num) {
  * @body Name, pictureURL, Description, Category, Prices - required
  *       at least one of Individual or Family Prices - required
  *       isFeatured, Accommodations - not required
+ * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with item_id of inserted item / 400 err
  */
 router.post(
@@ -113,6 +114,7 @@ router.post(
  * Deletes an item for the Item DB.
  *
  * @body {string} _id - id of object to be deleted
+ * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with success / 500 err
  */
 router.delete(
@@ -149,6 +151,7 @@ router.delete(
  * @body {string} _id - id of object to be edited and
  *                Prices, Accommodations, etc - any of the attributes
  *                of the item object to be edited
+ * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with success / 400 err
  */
 router.post(
@@ -202,6 +205,7 @@ router.post(
  *
  * @body {string} _id - id of the item to be featured/unfeatured
  * @body {boolean} isFeatured - true or false to set to order object
+ * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with success / 400 err
  */
 router.post(
