@@ -174,7 +174,7 @@ function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChan
                                     row.basePrice.map((v) => <>${v[1]}<br /></>)
                                 }
                                 </TableCell>
-                                <TableCell align="left" className="menuRowText" width="30%">
+                                <TableCell align="left" className="menuRowText accommodationCell" width="30%">
                                 {
                                     row.options.map((v) => <p>{v[1].Description}</p>)
                                 }
