@@ -13,7 +13,7 @@ const BACKEND_URL = config.backend.uri;
 
 const SearchSection = () => {
   // set a default header image here
-  var defaultImg = "https://idental.com.sg/wp-content/uploads/soft-food-for-braces-1200x675.png"
+  var defaultImg = "https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80"
 
   const [headerImg, setHeaderImg] = useState(""); 
 
