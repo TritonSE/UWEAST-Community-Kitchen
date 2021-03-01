@@ -342,7 +342,7 @@ export default function AddMenuItemModal (props) {
                                 <div className="removeAddOnContainer">
                                     {addOns.map((item,index) => {
                                         return(
-                                            <FormControl margin='dense'>
+                                            
                                                 <IconButton
                                                     className="removeAddOnButton"
                                                     onClick={() => {
@@ -354,7 +354,6 @@ export default function AddMenuItemModal (props) {
                                                 >
                                                     <ClearIcon/>
                                                 </IconButton> 
-                                            </FormControl>
                                         )
                                     })}
                                    
