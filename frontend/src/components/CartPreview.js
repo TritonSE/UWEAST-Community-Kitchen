@@ -64,9 +64,9 @@ class CartPreview extends Component {
                         <div key={ind} className="summary-item row">
                             <span className="thumbnail thumb-img">{ind + 1}</span>
                             <span className="item-info">{item.quantity} X {popupValues.title}<br />
-                                <span className="item-description">{extraInfo}<br/>
+                                <span className="item-description">{extraInfo}<br />
                                     {/* Conditonally renders a new line with special instructions if any were added */}
-                                    {(item.instructions !== "") ? <div><br/><span>Special Instr.: {item.instructions}</span></div> : null}
+                                    {(item.instructions !== "") ? <div><br /><span>Special Instr.: {item.instructions}</span></div> : null}
                                 </span></span>
                             <span className="thumbnail summary-price">${item.price}</span>
                             <span className="item-divider"></span>
@@ -94,12 +94,12 @@ class CartPreview extends Component {
                             Subtotal: ${this.state.subTotal}<br />
                             Tax: ${this.state.tax}
                         </div>
-                        <div className="order-summary">
-                            <span>Total Price</span><span className="add-price">${this.state.totalPrice}</span>
-                        </div>
+                    </div>
+                    <div className="order-summary">
+                        <span>Total Price</span><span className="add-price">${this.state.totalPrice}</span>
                     </div>
                     {/* button to open the cart summary */}
-                    <Button style={{backgroundColor:"#f9ce1d", borderColor:"#f9ce1d", color:"#000000"}} className="review-order-button" onClick={this.props.toggleCart}>Review Order</Button>
+                    <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="review-order-button" onClick={this.props.toggleCart}>Review Order</Button>
                 </div>
             </div>
         )

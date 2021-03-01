@@ -81,9 +81,10 @@ export default function NavBar (props) {
                 </div>
 
                 {/* The shopping cart will only render if it is a mobile component */}
-                <div className="cart-icon" >
+                <div className="cart-icon">
                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
                         onClick={OpenCart} />
+
                 </div>
 
                 {/* Triggers on Collapse - Hamburger Icon replaces pages */}
@@ -122,6 +123,7 @@ export default function NavBar (props) {
                 <div className="cart-icon-smaller-desktop">
                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
                         onClick={() => props.toggleCart()} />
+
                 </div>
             </Navbar>
         </html>

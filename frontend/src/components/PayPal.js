@@ -1,8 +1,14 @@
+/**
+ * This file contains the code for the PayPal Smart Buttons integration.
+ * It calls the backend once an order is completed to create a new order object.
+ * The expected form of the props is shown below.
+ *
+ * @summary Renders paypal buttons for payment based on cart passed in through props
+ * @author PatrickBrown1
+ */
 import React from 'react'
 import { useHistory } from "react-router-dom";
 import { useCookies } from 'react-cookie';
-
-// const paypal = require("@paypal/checkout-server-sdk");
 
 const config = require('../config');
 

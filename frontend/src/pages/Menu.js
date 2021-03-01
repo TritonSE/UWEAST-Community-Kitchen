@@ -1,10 +1,11 @@
 /**
  * Entry point of the Menu page on the website. It renders all components that are part of the menu page,
- * including the cart preview, cart summary, menu section, and search section. It also contains the
+ * including the cart preview, cart summary, menu section, and search section. The search section stores 
+ * the header image and the menu section stores the menu items and item cart. It also contains the
  * cart, which is tracked by states, and handles adding and removing items from the cart. This file 
  * depends on the CartPreview, CartSummary, SearchSection, MenuSection, Navbar, and Banner components.
  * 
- * @summary Displays the menu page and all components that are on this page.
+ * @summary Renders the menu page and all components that are on this page.
  * @author Dhanush Nanjunda Reddy
  * @author Navid Boloorian
  */
