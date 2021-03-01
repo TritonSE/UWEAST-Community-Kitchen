@@ -31,12 +31,23 @@
     justify-content: center;
     color: #ffdf69;
     font-family: 'Roboto Slab', serif;
-    margin-left: calc(-1vw);
+    margin-left: calc(-15px);
     margin-top: calc(2vh);
+    cursor: pointer;
+}
+
+.brand-name a {
+    color: #ffdf69;
+    text-decoration: none;
+}
+
+.brand-name a:hover {
+    text-decoration: none;
+    color: #ffdf69;
 }
 
 .brand-name p {
-    font-size: calc(30px);
+    font-size: calc(28px);
     font-style: italic;
     font-family: 'Roboto Slab', serif;
 }
@@ -90,12 +101,16 @@
         max-height: auto;
     }
 
-    .navbar.navbar-bg-color .desktop-tabs {
+    /* .navbar.navbar-bg-color .desktop-tabs {
         display: none;
-    }
+    } */
 
     .brand-name {
-        display: none;
+        margin-left: calc(-10px);
+    }
+    
+    .brand-name p {
+        font-size: calc(28px);
     }
 
     .cart-icon {
@@ -114,6 +129,10 @@
     }
 
     .navbar.navbar-bg-color .desktop-tabs, .cart-icon-smaller-desktop {
+        display: none;
+    }
+
+    .brand-name {
         display: none;
     }
 

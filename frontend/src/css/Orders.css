@@ -14,12 +14,12 @@
     margin-top: calc(-2vh);
     display: flex;
     justify-content: center;
-    margin-left: calc(-55px);
+    margin-left: calc(8px);
     font-family: 'roboto', sans-serif;
 }
 
 .justify-table-center {
-    width: calc(92%);
+    width: calc(100%);
 }
 
 /* Sets the background color for the table header column */

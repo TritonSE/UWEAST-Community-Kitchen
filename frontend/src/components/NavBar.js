@@ -60,7 +60,7 @@ export default function NavBar () {
                 {/* Bootstrap Resources */}
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
             </head>
-            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="md" variant="dark">
+            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="lg" variant="dark">
                 
                 {/* Left Hand Side of Navbar - Title & Image linked to Menu Page */}
                 <Navbar.Brand href="/">
@@ -69,8 +69,10 @@ export default function NavBar () {
                 </Navbar.Brand>
 
                 {/* Text to complement the logo */}
-                <div className="brand-name">
-                    <p>Community Kitchen</p>
+                <div className="brand-name" >
+                    <a href="/">
+                        <p>Community Kitchen</p>
+                    </a>
                 </div>
 
                 {/* The shopping cart will only render if it is a mobile component */}
