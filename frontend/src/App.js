@@ -20,6 +20,7 @@ import { withCookies } from 'react-cookie';
 
 function App() {
   return (
+    // CookiesProvider allows cookies to be used in any page component
     <CookiesProvider>
     <Router>
       {/* Switch gurantees that a URL can match to only one route*/}

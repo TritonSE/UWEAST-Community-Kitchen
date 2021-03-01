@@ -34,6 +34,9 @@ export default function NavBar (props) {
         history.go(0);
     }
 
+    /**
+     * Renders the cart page
+     */
     function OpenCart() {
         history.push("/cart");
     }

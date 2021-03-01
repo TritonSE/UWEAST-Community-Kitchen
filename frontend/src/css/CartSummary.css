@@ -56,12 +56,12 @@
         background-color: white;
         overflow-x: scroll;
         z-index: 1;
-        padding: 10vw;
+        padding: 6vw;
     }
 
     .pickup-title {
         font-weight: bold;
-        font-size: 3.5vw;
+        font-size: 4.5vw;
     }
 
     .date-picker {
@@ -76,26 +76,26 @@
 
     .pickup-date-info {
         height: auto;
-        font-size: 1.7vw;
+        font-size: 2.7vw;
         margin-top: 1.2vw;
-        width: 28.8vw;
+        width: 48.8vw;
     }
 
     .summary-title {
         font-weight: bold;
         padding: 2.4vw 0vw 2.4vw 0vw;
-        font-size: 3.5vw;
+        font-size: 4.5vw;
     }
 
     .cart-items {
-        width: 80vw;
+        width: 88vw;
         height: auto;
         overflow-x: scroll;
         overflow-y: scroll;
     }
 
     .summary-item {
-        width: 80vw;
+        width: 88vw;
         display: block;
     }
 
@@ -105,29 +105,30 @@
         border-radius: 1.2vw;
         border-width: 0vw;
         padding: 1.68vw;
-        font-size: 1.9vw;
+        font-size: 2.7vw;
+        margin-left: 1vw;
     }
 
     .remove-button {
-        margin-left: 3.2vw;
+        margin-left: 2.2vw;
         border-radius: 1.2vw;
         border-width: 0vw;
         padding: 1.68vw;
-        font-size: 1.9vw;
+        font-size:2.7vw;
         height: 5.76vw;
         margin-top: 1.2vw;
     }
 
     .summary-price {
         margin-top: 1.2vw;
-        margin-left: 2.4vw;
-        width: 9.6vw;
+        margin-left: 1.9vw;
+        width: 12.1vw;
     }
 
     .order-totalprices {
         margin-top: 4.8vw;
         text-align: right;
-        font-size: 2vw;
+        font-size: 2.7vw;
         font-weight: bold;
         padding-bottom: 1.6vw;
     }
@@ -138,7 +139,7 @@
     }
 
     .item-divide {
-        width: 80vw;
+        width: 88vw;
         margin-top: 1.92vw;
         border-bottom: 1px solid #000000;
         display: block;
@@ -147,11 +148,11 @@
     .thumbnail-background {
         border-radius: 1.2vw;
         padding: 1.68vw;
-        font-size: 1.9vw;
+        font-size: 2.7vw;
     }
 
     .item-name {
-        font-size: 2.5vw;
+        font-size: 3vw;
         font-weight: bold;
         height: auto;
         width: 40.9vw;
@@ -161,19 +162,20 @@
     }
 
     .item-descript {
-        font-size: 2vw;
+        font-size: 2.5vw;
         font-style: italic;
         font-weight: bold;
     }
 
     .error {
-        font-size: 1.7vw;
+        font-size: 2.7vw;
         max-width: 24vw;
         color: red;
     }
 
     .select-error {
-        font-size: 1.7vw;
+        font-size: 2.7vw;
+        margin-bottom: 0px;
         color: red;
     }
 
@@ -181,7 +183,7 @@
         height: auto;
         text-align: right;
         margin-left: 40.8vw;
-        font-size: 1.7vw;
+        font-size: 2.7vw;
         color: red;
         margin-bottom: 1.6vw;
     }
@@ -194,7 +196,8 @@
         height: 100vh;
         overflow: hidden;
         position: fixed;
-        background-color: rgba(0, 0, 0, 0.4);
+        background-color: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(4px);
         z-index: 1;
         top: 0;
         left: 0;
