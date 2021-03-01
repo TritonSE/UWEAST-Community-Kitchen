@@ -11,8 +11,8 @@ const { MenuImage } = require("../models/menuImages");
 /**
  * Change the current image url in the DB.
  *
- * @param {string} raw_menu - imageUrl to be used
- * @returns {object/boolean} - created imageUrl / false
+ * @param {string} raw_menu - ImageUrl to be used
+ * @returns {object/boolean} - Created imageUrl / false
  */
 async function changeMenuImage(raw_menu) {
   try {
@@ -34,7 +34,7 @@ async function changeMenuImage(raw_menu) {
 /**
  * Finds the imageUrl in the DB.
  *
- * @returns {object} - the first MenuImage in the DB
+ * @returns {object} - The first MenuImage in the DB
  */
 async function findMenuImage() {
   return MenuImage.findOne({}).exec();

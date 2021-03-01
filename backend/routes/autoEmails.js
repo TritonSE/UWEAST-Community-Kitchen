@@ -1,16 +1,16 @@
 /**
  * This file adds routes to allow for the sending of automated emails to both customers
  * and emails in the database. All email formats can be seen seperated by functionality
- * inside the emails folder inside of the backend directory. 
+ * inside the emails folder inside of the backend directory.
  *
- * @summary   Code for routes involved with sending automated emails. 
+ * @summary   Code for routes involved with sending automated emails.
  * @author    Amrit Kaur Singh, Dhanush Nanjunda Reddy
  */
 
 const express = require("express");
 const { body } = require("express-validator");
 const { findAllEmails, findPrimaryEmail } = require("../db/services/email");
-const {sendEmail} = require("../routes/services/mailer");
+const { sendEmail } = require("../routes/services/mailer");
 const { addOrder } = require("../db/services/order");
 const { isValidated } = require("../middleware/validation");
 
@@ -20,8 +20,8 @@ const router = express.Router();
  * Adds the order to the Orders DB and also sends order receipts to customer's specified email
  * as well as all UWEAST emails registered in Emails DB.
  *
- * @body - requires the Customer, PickUp, PayPal, and Order information retrieved via Checkout process
- * @returns {status/object} - if everything goes successful, returns
+ * @body - Requires the Customer, PickUp, PayPal, and Order information retrieved via Checkout process
+ * @returns {status/object} - If everything goes successful, returns
  *                            a 200 status, else returns some error status
  */
 router.post(
@@ -105,9 +105,9 @@ router.post(
 /**
  * Sends an email to all individuals inside of the Emails DB with the form information.
  *
- * @body - requires the name, email, and message of the indivdual who is seeking to contact UWEAST via the
+ * @body - Requires the name, email, and message of the indivdual who is seeking to contact UWEAST via the
  *         form on the Contact page
- * @returns {status/object} - successfully sent email sends a 200 status / unsuccessful an error status is sent
+ * @returns {status/object} - Successfully sent email sends a 200 status / unsuccessful an error status is sent
  */
 router.post(
   "/contact",
@@ -140,7 +140,6 @@ router.post(
       sendEmail("contact-message", dbemails, locals, res);
 
       return res.status(200).json({ success: true });
-
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server err");

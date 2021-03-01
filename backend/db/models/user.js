@@ -1,9 +1,9 @@
 /**
- * File sets up the user mongoose schema. The user schema
+ * File sets up the User mongoose schema. The User schema
  * utilizes bcrypt and sets up schema methods to compare
  * passwords and properly hash them.
  *
- * @summary   Creation of the user DB
+ * @summary   Creation of the User DB.
  */
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
@@ -38,7 +38,7 @@ userSchema.pre("save", function (next) {
   });
 });
 
-//implement password comparison function here
+// implement password comparison function here
 userSchema.methods.comparePassword = function (candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
     if (err) return cb(err);

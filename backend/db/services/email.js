@@ -12,7 +12,7 @@ const { Email } = require("../models/email");
 /**
  * Change the primary email in the DB to the passed in object.
  *
- * @param {object} raw_email - json representing the primary email to store
+ * @param {object} raw_email - Json representing the primary email to store
  * @returns {object/boolean} - Mongo object email or false on duplicate/error
  */
 async function changePrimaryEmail(raw_email) {
@@ -100,7 +100,7 @@ async function deleteSecondaryEmail(incomingEmail) {
  * @returns {[object]} - Returns an array of all emails in collection, where emails are JSON objects.
  */
 async function findAllEmails() {
-    return Email.find({}).exec();
+  return Email.find({}).exec();
 }
 
 module.exports = {
@@ -109,5 +109,5 @@ module.exports = {
   deleteSecondaryEmail,
   changePrimaryEmail,
   addSecondaryEmail,
-  findAllEmails
+  findAllEmails,
 };

@@ -16,7 +16,7 @@ const {
   findOneUser,
   updateOneUser,
 } = require("../db/services/user");
-const {sendEmail} = require("../routes/services/mailer");
+const { sendEmail } = require("../routes/services/mailer");
 const { createJWT } = require("./services/jwt");
 const router = express.Router();
 const config = require("../config");
@@ -29,7 +29,7 @@ const MAX_PASS_LENGTH = 15;
 /**
  * Registers a user into the DB.
  *
- * @body - email, password, secret use middleware to validate
+ * @body email, password, secret - Use middleware to validate
  * @returns {status/object} - 200 json with email and jwt / 500 with err
  */
 router.post(
@@ -76,7 +76,7 @@ router.post(
 /**
  * Logins a user.
  *
- * @body - email and password use middleware to validate
+ * @body email, password - Use middleware to validate
  * @returns {status/object} - 200 json with email and jwt / 500 with err
  */
 router.post(
@@ -124,9 +124,9 @@ router.post(
  * Returns a random number between min (inclusive) and max (exclusive).
  * Used in /forgotPassword route to help create randomly generated password.
  *
- * @param {Number} min - minimum value
- * @param {Number} max - maximum value
- * @returns {Number} - a random number between min and max
+ * @param {Number} min - Minimum value
+ * @param {Number} max - Maximum value
+ * @returns {Number} - A random number between min and max
  */
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
@@ -135,14 +135,13 @@ function getRandomArbitrary(min, max) {
 /**
  * Sends Email containing new password for forgot password if the user is authenticated with email.
  *
- * @body {string} - email that denotes an existing user's email in the DB
+ * @body {string} - Email that denotes an existing user's email in the DB
  * @returns {status/object} - 200 if password is reset to a rendomly generated password / 400 or 500 with err
  */
 router.post(
   "/forgotPassword",
   [body("email").notEmpty().isEmail(), isValidated],
   async (req, res, next) => {
-  
     const { email } = req.body;
     try {
       // check if user email exists
@@ -175,7 +174,7 @@ router.post(
         password: randomlyGeneratedPass,
         resetLink: "http://localhost:3000/reset-password",
       };
-      
+
       sendEmail("forgot-password", email, locals, res);
 
       res.status(200).json({
@@ -191,9 +190,9 @@ router.post(
 /**
  * Resets password for authenticated users.
  *
- * @body {string} email - denotes an existing user's email in the DB
- * @body {string} oldPassword - denotes an existing user's current password in DB - required
- * @body {string} newPassword - denotes what an existing user's password will be changed to - required
+ * @body {string} email - Denotes an existing user's email in the DB
+ * @body {string} oldPassword - Denotes an existing user's current password in DB - required
+ * @body {string} newPassword - Denotes what an existing user's password will be changed to - required
  * @returns {status/object} - 200 if email and oldPassword match and the password is updated / 401 or 500 with err
  */
 router.post(

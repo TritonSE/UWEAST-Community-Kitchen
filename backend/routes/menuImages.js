@@ -15,7 +15,7 @@ const { verify } = require("./services/jwt");
 /**
  * Changes the menu image in the DB.
  *
- * @body {string} imageUrl - url to be set
+ * @body {string} imageUrl - Url to be set
  * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 success if imageUrl is changed / 400 err with duplicate url / 500 err
  */

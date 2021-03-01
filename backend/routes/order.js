@@ -62,12 +62,11 @@ router.post(
   ],
   async (req, res, next) => {
     try {
-      
       // retrieve all the orders
       const orders = await findOrders();
-      
+
       // error in getting errors, empty orders array returned
-      if(!orders){
+      if (!orders) {
         return res.status(400).json({
           orders: [],
         });
@@ -77,7 +76,6 @@ router.post(
       return res.status(200).json({
         orders: orders,
       });
-
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server err");
@@ -88,20 +86,22 @@ router.post(
 /**
  * Updates the order's isCompleted boolean to the value passed in.
  *
- * @body {string} _id - id of order to be updated
+ * @body {string} _id - Id of order to be updated
  * @body {object} isCompleted - T/F based on whether an order is completed (default: false)
  * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with success / 500 with err
  */
 router.post(
   "/updateStatus",
-  [body("_id").isString(), 
-  body("isCompleted").isBoolean(),  
-  body("token").custom(async (token) => {
-    // verify token
-    return await verify(token);
-  }),
-   isValidated],
+  [
+    body("_id").isString(),
+    body("isCompleted").isBoolean(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     try {
       const { _id, isCompleted } = req.body;

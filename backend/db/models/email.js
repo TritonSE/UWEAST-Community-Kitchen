@@ -1,7 +1,7 @@
 /**
  * File sets up the email mongoose schema.
  *
- * @summary   Creation of the Email DB
+ * @summary   Creation of the Email DB.
  */
 const mongoose = require("mongoose");
 

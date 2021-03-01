@@ -23,7 +23,7 @@ const {
 /**
  * Changes the primary email address in the Email DB.
  *
- * @body {string} - email to be set to the Primary address
+ * @body {string} - Email to be set to the Primary address
  * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with success if email is changed /
  *                            400 if duplicate email or failure
@@ -64,7 +64,7 @@ router.post(
 /**
  * Adds the secondary email address in the Email DB.
  *
- * @body {object} - email to be set as a secondary address
+ * @body {object} - Email to be set as a secondary address
  * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with success if email is changed /
  *                            400 if duplicate email or failure
@@ -105,7 +105,7 @@ router.post(
 /**
  * Deletes the secondary email address in the Email DB.
  *
- * @body {object} - email to be deleted from the secondary addresses
+ * @body {object} - Email to be deleted from the secondary addresses
  * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with success if email is changed /
  *                            400 if duplicate email or failure

@@ -14,8 +14,8 @@ const { Order } = require("../models/order");
  * Email and Phone), Pickup (time), Paypal (Amount and transactionID),
  * the order information itself, etc.
  *
- * @param {object} raw_order - order object to be added
- * @returns {object/boolean} - order object / false on error
+ * @param {object} raw_order - Order object to be added
+ * @returns {object/boolean} - Order object / false on error
  */
 async function addOrder(raw_order) {
   try {
@@ -31,9 +31,9 @@ async function addOrder(raw_order) {
  * Edits an order's isCompleted to signify that an order is
  * completed or not.
  *
- * @param {string} id - the id of the order to be modified
- * @param {boolean} update - true or false value to set to isCompleted
- * @returns {object/boolean} - updated order / false on error
+ * @param {string} id - The id of the order to be modified
+ * @param {boolean} update - True or false value to set to isCompleted
+ * @returns {object/boolean} - Updated order / false on error
  */
 async function updateStatus(id, update) {
   try {
@@ -49,7 +49,7 @@ async function updateStatus(id, update) {
 /**
  * Find all orders in collection.
  *
- * @returns {[object]/boolean} - found order(s) / false on error
+ * @returns {[object]/boolean} - Found order(s) / false on error
  */
 async function findOrders() {
   try {

@@ -39,8 +39,8 @@ router.get("/", async (req, res, next) => {
 /**
  * Check the given string to conform to positive decimals.
  *
- * @param {string} num - string representation of money
- * @returns {boolean} - true if valid string / false if not
+ * @param {string} num - String representation of money
+ * @returns {boolean} - True if valid string / false if not
  */
 function checkNumeral(num) {
   const regex = /^\d*(\.)?\d*$/;
@@ -113,7 +113,7 @@ router.post(
 /**
  * Deletes an item for the Item DB.
  *
- * @body {string} _id - id of object to be deleted
+ * @body {string} _id - Id of object to be deleted
  * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with success / 500 err
  */
@@ -148,7 +148,7 @@ router.delete(
 /**
  * Edits any of the item attributes, the only required attribute is _id.
  *
- * @body {string} _id - id of object to be edited and
+ * @body {string} _id - Id of object to be edited and
  *                Prices, Accommodations, etc - any of the attributes
  *                of the item object to be edited
  * @body {string} token - Admin token to verify for authorization
@@ -203,8 +203,8 @@ router.post(
 /**
  * Sets the isFeatured atribute of the object associated with the id.
  *
- * @body {string} _id - id of the item to be featured/unfeatured
- * @body {boolean} isFeatured - true or false to set to order object
+ * @body {string} _id - Id of the item to be featured/unfeatured
+ * @body {boolean} isFeatured - True or false to set to order object
  * @body {string} token - Admin token to verify for authorization
  * @returns {status/object} - 200 with success / 400 err
  */

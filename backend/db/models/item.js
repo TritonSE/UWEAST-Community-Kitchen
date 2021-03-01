@@ -1,7 +1,7 @@
 /**
  * File sets up the item mongoose schema.
  *
- * @summary   Creation of the Item DB
+ * @summary   Creation of the Item DB.
  */
 const mongoose = require("mongoose");
 
