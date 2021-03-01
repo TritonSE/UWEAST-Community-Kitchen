@@ -13,16 +13,18 @@ class About extends Component {
     //     item_total: "",
     //     tax_total: "",
     //     items: [
+    //         items: [
     //         {
     //             name: "",
-    //             quantity: "", 
-    //             size: "", (Individual or Family)
-    //             addons: ["", ""], (Sides, gluten free)
-    //             individual_price: "", (price per item)
-    //             individual_tax: "", (tax per item)
+    //             quantity: "",
+    //             size: "",
+    //             accommodations: ["", ""],
+    //             specialInstructions: "",
+    //             individual_price: "",
+    //             individual_tax: "",
     //         },
-
-    //     ]
+    //     ],
+    //
     // }
     
     render (){
@@ -35,7 +37,8 @@ class About extends Component {
                 name: "Food 1",
                 quantity: "2",
                 size: "Individual",
-                addons: ["Gluten Free"],
+                accommodations: ["Ketchup, Soy Sauce"],
+                specialInstructions: "No salt please!",
                 individual_price: "6.00",
                 individual_tax: "1.50",
             },

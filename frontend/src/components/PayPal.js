@@ -27,7 +27,8 @@ export default function PayPal(props) {
     //             name: "",
     //             quantity: "",
     //             size: "",
-    //             addons: ["", ""],
+    //             accommodations: ["", ""],
+    //             specialInstructions: "",
     //             individual_price: "",
     //             individual_tax: "",
     //         },
@@ -66,7 +67,7 @@ export default function PayPal(props) {
                     name: item.name,
                     // Description follows the format:
                     // Size: {size}, (Gluten Free,) (Other addons,) 
-                    description: [`Size: ${item.size}`, ...item.addons].join(", "),
+                    description: [`Size: ${item.size}`, ...item.accommodations, item.specialInstructions].join(", "),
                     unit_amount: {
                         currency_code: "USD",
                         value: item.individual_price,
@@ -157,7 +158,9 @@ export default function PayPal(props) {
                             return {
                                 "item": item.name,
                                 "quantity": item.quantity,
-                                "extra": [`${item.size} size`, ...item.addons],
+                                "size": item.size,
+                                "accommodations": item.accommodations.join(", "),
+                                "specialInstructions": item.specialInstructions,
                             }
                         })
                     }
