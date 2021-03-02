@@ -39,7 +39,7 @@ const SearchSection = () => {
 
   return (
     <div className="search-section">
-      <img alt="Menu Image" src={defaultImg} className="header-img" onError={(e)=>{e.target.src=defaultImg}} />
+      <img alt="Menu Image" src={headerImg} className="header-img" onError={(e)=>{e.target.src=defaultImg}} />
     </div>
   );
 }
