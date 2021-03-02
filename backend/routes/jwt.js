@@ -1,40 +1,46 @@
-const express = require('express');
+/**
+ * File containing routes related to JWT assiged on site. Specifically, allows for the
+ * verification of a JWT based on token signature. 
+ * 
+ * @summary   Contains all routes related to JWTs.
+ * @author    Amrit Kaur Singh
+ */
+
+const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
-const jwt = require("jsonwebtoken");
-const config = require("../config");
+const { verify } = require("./services/jwt");
 
 const router = express.Router();
 
-//@body: jwtToken used for user authentication (required string)
-//@response: Returns some error code for failed authentication, 200 if successfully authenticated 
+/**
+ * Given a JWT in the request body, verifies if the given JWT has been authorized by the site.
+ * 
+ * @body {string} jwtToken - JWT to be verified for authorization
+ * @returns {Response} - 200 status code if authorized
+ *                       401 status code if unauthorized/missing info
+ *                       500 status code if system error
+ */
 router.post(
-    "/verify",
-    [
-      body("jwtToken").notEmpty().isString(),
-      isValidated,
-    ],
-    async (req, res, next) => {
-      const { jwtToken } = req.body;
-      try {
-        //Verify the token using our server side secret key
-        jwt.verify(jwtToken, config.auth.jwt_secret, function(err, decoded) {
-            //Could not verify --> Error
-            if(err){
-                res.sendStatus(401);
-                console.log("Fraud/Expired JWT Token")
-              //Verified --> Success
-            } else {
-                res.sendStatus(200);
-                console.log("Valid JWT Token")
-            }
-          });
-        //Catch any validation/other errors here 
-      } catch (err) {
-        console.error(err.message);
-        res.sendStatus(500);
-      }
+  "/verify",
+  [body("jwtToken").notEmpty().isString(), isValidated],
+  async (req, res, next) => {
+    const { jwtToken } = req.body;
+    try {
+
+      await verify(jwtToken).then(() => {
+        // resolved promise => authorized token
+        res.sendStatus(200);
+      }).catch((err) => {
+        // rejected promise => unauthorized token
+        res.sendStatus(401);
+      });
+
+    } catch (err) {
+      console.error(err.message);
+      res.sendStatus(500);
     }
-  );
+  }
+);
 
 module.exports = router;

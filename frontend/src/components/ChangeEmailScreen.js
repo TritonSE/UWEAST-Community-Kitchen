@@ -10,6 +10,7 @@ import { Button } from 'react-bootstrap';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import { makeStyles } from '@material-ui/core/styles';
+import {getJWT, logout} from '../util/Auth';
 
 import '../css/ChangeEmailScreen.css';
 
@@ -84,7 +85,8 @@ export default function ChangeEmailScreen (props) {
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                email: email
+                email: email,
+                "token": getJWT()
             })
         }).then(res => {
             if(res.ok){
@@ -93,6 +95,13 @@ export default function ChangeEmailScreen (props) {
                 setPrimaryEmail("");
                 setErrorMessage("");
                 props.updatePrimaryEmail(email);
+            }
+            // invalid admin token
+            else if(res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
             }
             else {
                 setErrorMessage("This is currently your primary email.");  

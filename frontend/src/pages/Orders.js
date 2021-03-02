@@ -8,6 +8,7 @@
 import React from 'react';
 import OrdersTable from '../components/OrdersTable';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {getJWT, logout} from '../util/Auth';
 import '../css/Orders.css';
 
 const config = require('../config');
@@ -95,8 +96,18 @@ export default class Orders extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"token": getJWT()})
+        }).then(res => {
+             // invalid admin token
+            if(res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
             }
-        }).then(res => res.json())
+            return res.json();
+        })
         .then(data => {
             const getOrdersList = data.orders;
             const length = getOrdersList.length
