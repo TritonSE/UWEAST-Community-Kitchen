@@ -24,16 +24,34 @@ export default function PayPal(props) {
     //     tax_total: "",
     //     items: [
     //         {
-    //             name: "",
+    //             price: "12.23"
     //             quantity: "",
     //             size: "",
-    //             accommodations: ["", ""],
-    //             specialInstructions: "",
-    //             individual_price: "",
-    //             individual_tax: "",
-    //         },
-    //     ],
-    //     pickup_date: ""
+    //             accommodations: ["", ""] (string if only one, prop doesn't exist if none),
+    //             instructions: "",
+    //             
+    //             "popupValues": 
+    //                  {
+    //                      "title":"Caesar Salad",
+    //                      "description":"Romaine lettuce with argula and spinach, served with a drizzle of olive oil!",
+    //                      "price": {"Individual":"8.23"},
+    //                      "image":"https://natashaskitchen.com/wp-content/uploads/2019/01/Caesar-Salad-Recipe-3.jpg",
+    //                      "dietary-info":
+    //                          {
+    //                              "vegan":true,
+    //                              "vegetarian":true,
+    //                              "glutenFree":true,
+    //                              "containsDairy":false
+    //                          },
+    //              "accommodations":[
+    //                  {"_id":"602cd4994cca295f7648f2e0","Description":"Add Chicken Breasts","Price":"4.00"},
+    //                  {"_id":"602cd4994cca295f7648f2e1","Description":"Subsitute with Ranch dressing","Price":"0.00"},
+    //                  {"_id":"602cd4994cca295f7648f2e2","Description":"Add Garlic Croutons","Price":"0.50"},
+    //                  {"_id":"602cd4994cca295f7648f2e3","Description":"Substitute with Greek Dressing","Price":"0.75"}]}"
+    //              ]
+    //     }],
+    //     pickup_date: "",
+    //     pickup_time: "",
     // }
     const paypalRef = React.useRef();
     const paypalOrderObject = {
@@ -63,11 +81,22 @@ export default function PayPal(props) {
             // Deals with the individual item entries for the order
             items: 
             cart.items.map((item) => {
+                // build description
+                let desc = [`Size: ${item.size}`];
+                if(item.accommodations !== undefined){
+                    if(Array.isArray(item.accommodations)){
+                        desc = [...desc, ...item.accommodations];
+                    }
+                    else{
+                        desc = [...desc, item.accommodations];
+                    }
+                }
+                desc = [...desc, item.instructions];
                 return {
-                    name: item.name,
+                    name: item.popupValues.title,
                     // Description follows the format:
                     // Size: {size}, (Gluten Free,) (Other addons,) 
-                    description: [`Size: ${item.size}`, ...item.accommodations, item.specialInstructions].join(", "),
+                    description: desc.join(", "),
                     unit_amount: {
                         currency_code: "USD",
                         value: item.individual_price,
@@ -156,11 +185,17 @@ export default function PayPal(props) {
                         "Order": 
                         cart.items.map((item) => {
                             return {
-                                "item": item.name,
+                                "item": item.popupValues.title,
                                 "quantity": item.quantity,
                                 "size": item.size,
-                                "accommodations": item.accommodations.join(", "),
-                                "specialInstructions": item.specialInstructions,
+                                "accommodations": 
+                                    item.accommodations !== undefined
+                                        ? (Array.isArray(item.accommodations) 
+                                            ? item.accommodations.join(",") 
+                                            : item.accommodations
+                                        )
+                                        : "",
+                                "specialInstructions": item.instructions,
                             }
                         })
                     }
