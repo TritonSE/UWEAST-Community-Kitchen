@@ -1,20 +1,40 @@
+/**
+ * This file creates the routes to allow for interaction with the user DB.
+ * Contains routes to add, update or find a user.
+ * Also contains configuration and jwt to allow for login functionality as well as
+ * email functionality.
+ *
+ * @summary   Login, registration, reset password, and forgot password functionality for accounts.
+ * @author    Amrit Kaur Singh, Thomas Garry
+ */
+
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
-const { addNewUser, findOneUser, updateOneUser } = require("../db/services/user");
+const {
+  addNewUser,
+  findOneUser,
+  updateOneUser,
+} = require("../db/services/user");
+const { sendEmail } = require("../routes/services/mailer");
+const { createJWT } = require("./services/jwt");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
 const config = require("../config");
 const crypto = require("crypto");
 
-//Used for random password generation (Route: /resetPassword)
+const config = require('../config');
+const FRONTEND_URI = config.frontend.uri;
+
+// used for random password generation (Route: /forgotPassword)
 const MIN_PASS_LENGTH = 6;
 const MAX_PASS_LENGTH = 15;
 
-const JWT_EXPIRY= '1h';
-
-// @body: email, password, secret use middleware to validate
-// @return: json with email and jwt or error
+/**
+ * Registers a user into the DB.
+ *
+ * @body email, password, secret - Use middleware to validate
+ * @returns {status/object} - 200 json with email and jwt / 500 with err
+ */
 router.post(
   "/register",
   [
@@ -46,7 +66,7 @@ router.post(
         };
         res.status(200).json({
           email: email,
-          token: jwt.sign(payload, config.auth.jwt_secret, { expiresIn: JWT_EXPIRY}),
+          token: createJWT(payload),
         });
       }
     } catch (err) {
@@ -56,8 +76,12 @@ router.post(
   }
 );
 
-// @body: email && password use middleware to validate
-// @return: json with email and jwt or error
+/**
+ * Logins a user.
+ *
+ * @body email, password - Use middleware to validate
+ * @returns {status/object} - 200 json with email and jwt / 500 with err
+ */
 router.post(
   "/login",
   [
@@ -89,7 +113,7 @@ router.post(
         };
         res.status(200).json({
           email: email,
-          token: jwt.sign(payload, config.auth.jwt_secret, { expiresIn: JWT_EXPIRY}),
+          token: createJWT(payload),
         });
       });
     } catch (err) {
@@ -100,94 +124,64 @@ router.post(
 );
 
 /**
- * Returns a random number between min (inclusive) and max (exclusive)
+ * Returns a random number between min (inclusive) and max (exclusive).
+ * Used in /forgotPassword route to help create randomly generated password.
+ *
+ * @param {Number} min - Minimum value
+ * @param {Number} max - Maximum value
+ * @returns {Number} - A random number between min and max
  */
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-const nodemailer = require("nodemailer");
-const Email = require('email-templates');
-
-//transporter object for nodemailer
-const transporter = config.uweast.user === "" ? null : nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: config.uweast
-});
-
-//template based sender object
-const mail = config.uweast.user === "" ? null : new Email({
-  transport: transporter,
-  send: true,
-  preview: false
-});
-
-//Populates given email template with req.body and sends it to to_email
-async function sendEmail(template, to_email , locals, res) {
-  //Sends email only if mail has been successfully setup
-  if (mail != null) {
-    await mail.send({
-      template: template,
-      message: {
-        from: config.uweast.user,
-        to: to_email
-      },
-      locals: locals
-    });
-    console.log(`Email ${template} has been sent to ${to_email}.`);
-  } else {
-    return res.status(500).send("Server err");
-  }
-}
-
-//@body: email that denotes an existing user's email in the DB (required string)
-//@response: If user exists in DB, reset their password to something randomly generated, and send them an email
-// stating this new password. Otherwise, thrown an error status
+/**
+ * Sends Email containing new password for forgot password if the user is authenticated with email.
+ *
+ * @body {string} - Email that denotes an existing user's email in the DB
+ * @returns {status/object} - 200 if password is reset to a rendomly generated password / 400 or 500 with err
+ */
 router.post(
   "/forgotPassword",
-  [
-    body("email").notEmpty().isEmail(),
-    isValidated,
-  ],
+  [body("email").notEmpty().isEmail(), isValidated],
   async (req, res, next) => {
-    console.log(req.body);
     const { email } = req.body;
     try {
       // check if user email exists
       const user = await findOneUser(email);
       if (!user) {
-        return res
-          .status(401)
-          .json({ errors: [{ msg: "Email Not Associated With User Account" }] });
+        return res.status(401).json({
+          errors: [{ msg: "Email Not Associated With User Account" }],
+        });
       }
 
-      //Generate a random password
+      // generate a random password
       const passLength = getRandomArbitrary(MIN_PASS_LENGTH, MAX_PASS_LENGTH);
-      const randomlyGeneratedPass = crypto.randomBytes(passLength).toString('hex');
+      const randomlyGeneratedPass = crypto
+        .randomBytes(passLength)
+        .toString("hex");
 
-      //Set user's password to the randomly generated one
+      // set user's password to the randomly generated one
       user.password = randomlyGeneratedPass;
 
-      //Attempt to update the password for the user 
+      // attempt to update the password for the user
       const updatedUser = await updateOneUser(user);
-      if(!updatedUser){
+      if (!updatedUser) {
         return res
           .status(400)
           .json({ errors: [{ msg: "Could not update user..." }] });
       }
 
-      //Send an automated email to the user containing their new randomly generated password
+      // send an automated email to the user containing their new randomly generated password
       const locals = {
         password: randomlyGeneratedPass,
-        resetLink: 'http://localhost:3000/reset-password'
-      }
+        resetLink: `${FRONTEND_URI}reset-password`,
+      };
 
-      sendEmail('forgot-password', email, locals, res);
+      sendEmail("forgot-password", email, locals, res);
 
       res.status(200).json({
-        msg: "Email Successfully Sent"
+        msg: "Email Successfully Sent",
       });
     } catch (err) {
       console.error(err.message);
@@ -196,12 +190,14 @@ router.post(
   }
 );
 
-//@body: email that denotes an existing user's email in the DB (required string)
-//        oldPassword that denotes an existing user's current password in DB (required string)
-//        newPassword that denotes what an existing user's password will be changed to (required string)
-//
-//@response: If user exists in DB (email and oldPassword match), then that user's password is updated to the
-// newPassword passed in. Else, an error status is thrown. 
+/**
+ * Resets password for authenticated users.
+ *
+ * @body {string} email - Denotes an existing user's email in the DB
+ * @body {string} oldPassword - Denotes an existing user's current password in DB - required
+ * @body {string} newPassword - Denotes what an existing user's password will be changed to - required
+ * @returns {status/object} - 200 if email and oldPassword match and the password is updated / 401 or 500 with err
+ */
 router.post(
   "/resetPassword",
   [
@@ -215,17 +211,17 @@ router.post(
     try {
       // check if user email exists
       const user = await findOneUser(email);
-      //Error: User email does not exist
+      // error: User email does not exist
       if (!user) {
-        return res
-          .status(401)
-          .json({ errors: [{ msg: "Email Not Associated With User Account" }] });
+        return res.status(401).json({
+          errors: [{ msg: "Email Not Associated With User Account" }],
+        });
       }
 
-       // check if the old password matches the email (authenticated user)
-       user.comparePassword(oldPassword, function (err, isMatch) {
+      // check if the old password matches the email (authenticated user)
+      user.comparePassword(oldPassword, function (err, isMatch) {
         if (err) throw err;
-        //Error: Old Password does not match!
+        // error: Old Password does not match!
         if (!isMatch) {
           return res
             .status(401)
@@ -233,22 +229,21 @@ router.post(
         }
       });
 
-      //Attempt to update to the newPassword for the user
+      // attempt to update to the newPassword for the user
       user.password = newPassword;
 
       const updatedUser = await updateOneUser(user);
-      //Error: Password could not be updated
-      if(!updatedUser){
+      // error: Password could not be updated
+      if (!updatedUser) {
         return res
           .status(400)
           .json({ errors: [{ msg: "Password Could Not Be Updated!" }] });
       }
 
-      //Success!
+      // success!
       res.status(200).json({
         msg: "Password Successfully Updated!",
       });
-
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server error");

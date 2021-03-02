@@ -1,5 +1,11 @@
+/**
+ * File sets up the item mongoose schema.
+ *
+ * @summary   Creation of the Item DB.
+ */
 const mongoose = require("mongoose");
 
+// Prices set to 2 decimal places
 const itemSchema = new mongoose.Schema({
   Name: { type: String, required: true },
   pictureURL: { type: String, required: true },
