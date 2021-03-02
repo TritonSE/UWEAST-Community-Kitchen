@@ -11,9 +11,17 @@ import React, { useState } from 'react';
 import '../css/MenuItemPopup.css';
 import plus from '../media/plus.svg';
 import minus from '../media/minus.svg';
+import info from '../media/info.svg';
 
 const MenuItemPopup = ({ values, togglePopup, processForm }) => {
 
+    /**
+     * Calculates the initial cost to add on from default selected accommodations
+     * when editing an item (when auto-selecting fields). Must be used first to
+     * set the inital totalPrice state when editing items.
+     * 
+     * @returns {number} - Sum of the price of all auto-selected accommodations
+     */
     const getInitialAccommodationsCost = () => {
         var sum = 0;
         if(values.get("fillIns") != undefined) {
@@ -26,15 +34,21 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         return sum;
     }
 
+    // TODO: fix the absurd tertiary statements here...
     const [quantity, setQuantity] = useState((values.get("fillIns") != undefined) ? parseInt(values.get("fillIns").quantity) : 1);
     // if individual price exists, use that as default; otherwise, use family
     const [currPrice, setCurrPrice] = useState((values.get("fillIns") != undefined) ? ((values.get("fillIns").size == "Individual") ? values.get("price").Individual : values.get("price").Family) : (("Individual" in values.get("price")) ? values.get("price").Individual : values.get("price").Family));
     const [accommodationCost, setAccommodationCost] = useState(getInitialAccommodationsCost());
     const [totalPrice, setTotalPrice] = useState((parseFloat(currPrice * quantity) + parseFloat(accommodationCost)).toFixed(2));
 
-    // handles changing price and quantity states
+    /**
+     * Updates the quantity and price states accordingly when the user tries to
+     * increment or decrement the quantity.
+     * 
+     * @param {*} sign - Symbol (+ or -) indicating whether to increase or decrease quantity
+     */
     const changeQuantity = sign => {
-        // everything is fixed to 2 decimal places
+        // two scenarios: increments or decrements quantity
         if(sign == "+") {
             setQuantity(quantity + 1);
             // calulates on quantity + 1 b/c state hasn't updated yet
@@ -49,24 +63,14 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         }
     }
 
-    const checkAccommodationFillIns = accommodation=> {
-        if(values.get("fillIns") != undefined) {
-            if(values.get("fillIns").accommodations.includes(accommodation.Description)) {
-                handleAccommodation(true, accommodation.Price);
-                return true;
-            }
-        } 
-        return false;
-    }
-
-    //handles toggling price additions from accommodations
+    /**
+     * Updates price when accommodations are selected or unselected.
+     * 
+     * @param {*} checked - Checked state of the accommodation field 
+     * @param {*} price - Price of the accommodation to be added or removed
+     */
     const handleAccommodation = (checked, price) => {
-        if(checked) {
-            setAccommodationCost((parseFloat(accommodationCost) + parseFloat(price)).toFixed(2));
-            setTotalPrice((parseFloat(totalPrice) + parseFloat(price)).toFixed(2));
-            return;
-        }
-        // everything is fixed to 2 decimal places
+        // adds price if field is now checked; removes price otherwise
         if(checked) {
             // parseFloat() is necessary because otherwise they get treated like strings for addition
             setAccommodationCost((parseFloat(accommodationCost) + parseFloat(price)).toFixed(2));
@@ -77,17 +81,33 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         }
     }
 
-    // helper function to render the 
+    /**
+     * Helper function to render a sizing option and determine whether or not
+     * it should be checked by default.
+     * 
+     * @param {*} name - Name of Size (Individual or Family)
+     * @param {*} price - Price of Size
+     * @param {*} hasBothPrices - boolean indicating whether both options are being rendered in order to choose default selection
+     */
     const renderSize = (name, price, hasBothPrices) => {
         return(
-            /** conditionally displays family size as an "add-on" if both are possible */
+            // conditionally displays family size as an "add-on" if both are possible
+            // TODO: fix the absurd nested tertiary statements
+            //      (these decide whether the element should be checked by default
+            //       depending on which size this is, whether both sizes are 
+            //       available, and whether an item is passed in to fill populate fields)
             <label className="choice-label">
                 <input onClick={() => handleSize(price)} type="radio" name="size" value={name} defaultChecked={(name == "Individual" || ((values.get("fillIns") != undefined) && values.get("fillIns").size == name) || !("Individual" in values.get("price")))} required />
-                <span onClick={() => handleSize(price)} className="label-title">{(hasBothPrices) ? name + " +($" + parseFloat(price - values.get("price").Individual).toFixed(2) + ")": name}</span>
+                <span onClick={() => handleSize(price)} className="label-title">{name + " "}<span title="Suited for 5-6 people"><img src={info} class={(name == "Family") ? "size-info" : "hidden size-info"} alt="Size Info"/></span>{(hasBothPrices) ? " +($" + parseFloat(price - values.get("price").Individual).toFixed(2) + ")": null}</span>
             </label>
         );
     }
-    // will be used when family price is introduced to toggle between
+    
+    /**
+     * Changes price depending on the size selected.
+     * 
+     * @param {*} newPrice - Price of the newly selected size
+     */
     const handleSize = (newPrice) => {
         setCurrPrice(newPrice);
         // currPrice has yet to update, so still using newPrice
@@ -95,6 +115,9 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         setTotalPrice((parseFloat(accommodationCost) + newPrice * (quantity)).toFixed(2));
     }
 
+    /**
+     * Helper function to render the entire accommodations section.
+     */
     const renderAccommodations = () => {
         // return nothing if there are no accommodations
         if(values.get("accommodations").length == 0) return;
@@ -110,7 +133,11 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                 {values.get("accommodations").map((accommodation) => {
                     return(
                         <label className="choice-label">
-                            <input type="checkbox" name="accommodations" defaultChecked={values.get("fillIns") != undefined && values.get("fillIns").accommodations.includes(accommodation.Description)} value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e.target.checked, accommodation.Price)} />
+
+                            <input type="checkbox" name="accommodations" 
+                                defaultChecked={values.get("fillIns") != undefined && values.get("fillIns").accommodations.includes(accommodation.Description)}
+                                value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e.target.checked, accommodation.Price)} />
+
                             <span className="label-title">{accommodation.Description + " +($" + parseFloat(accommodation.Price).toFixed(2) + ")"}</span>
                         </label>
                     );
@@ -120,16 +147,28 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         }
     }
 
+    /**
+     * Helper function to count number of dietary information.
+     * 
+     * @returns {number} - Number of dietary information fields that are true for this item.
+     */
     const numDietaryInfo = () => {
+        // convert to Object
         const dietaryInfo = Object.entries(values.get("dietary-info"));
         var count = 0;
+        // loop through all the dietaryInfo and account for ones that are true
         for (const [key, value] of dietaryInfo) {
             if(value) count++;
         }
         return count;
     }
 
+    /**
+     * Helper function to render all the dietary information
+     */
     const renderDietaryInfo = () => {
+        // returns nothing in the trivial case that there is no information to show
+        // this is so that the horizontal line (<hr/>) will not render
         if (numDietaryInfo() == 0) return;
         else {
             return (
