@@ -84,7 +84,6 @@ export default function AddMenuItemModal (props) {
             (individualItemPrice === "" && familyItemPrice === "") || 
             itemImageURL === "" || itemDescription === ""
         ){
-            console.log("fail basic");
             setMenuError(true);
             setErrorSnackbar({visible: true, message: "There was an error in the form"});
             return;
@@ -94,7 +93,6 @@ export default function AddMenuItemModal (props) {
         addOns.forEach(item => {
             if((item.price === "" && item.name !== "") || (item.price !== "" && item.name === "")){
                 // error
-                console.log("fail add on");
                 failAddOn = true;
                 setMenuError(true);
                 setErrorSnackbar({visible: true, message: "One or more addons weren't properly filled in"});
@@ -102,7 +100,6 @@ export default function AddMenuItemModal (props) {
             }
             else if(item.name !== "" && parseFloat(item.price) < 0){
                 //negative number
-                console.log("add on price was negative");
                 failAddOn = true;
                 setMenuError(true);
                 setErrorSnackbar({visible: true, message: "Negative prices are not allowed in the menu"});

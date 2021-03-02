@@ -94,10 +94,7 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
                 </Modal.Body>
                 
                 <Modal.Footer>
-                    <Button variant="primary" className="menuAddButton" onClick={() => {
-                        // REMOVE ITEM FROM MENU
-                        console.log("removing item from menu")
-                        
+                    <Button variant="primary" className="menuAddButton" onClick={() => {                        
                         // Call database, remove item from menu
                         handleRemoveByID(deleteConfirmation[1], itemList, setItemList, displayContent, setDisplayContent);
                         setDeleteConfirmation(["", ""]);
@@ -143,7 +140,6 @@ function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChan
                 <TableBody>
                     {display.displayContent.map((row, index) => {
                         const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
-                        // console.log(row);
                         return (
                             <TableRow key={row._id} className={bgColor}>
                                 <TableCell component="th" scope="row" className="menuRowText" width="5%">
@@ -205,7 +201,6 @@ function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChan
  */
 async function handleRemoveByID(id, itemList, setItemList, displayContent, setDisplayContent){
     // remove from database
-    console.log("Removing " + id);
     await fetch(`${BACKEND_URL}item/remove`, {
             method: "DELETE",
             headers: {
@@ -216,7 +211,6 @@ async function handleRemoveByID(id, itemList, setItemList, displayContent, setDi
             })
         }).then(res => {
             if(res.ok){
-                console.log("Remove successful!")
                 // remove from rows
                 setItemList(itemList.filter(x => x.id !== id));
                 // remove from filtered rows
@@ -258,7 +252,6 @@ export default function AdminMenuItems (props) {
                 },
             })
             data = await res.json();
-            console.log(data.items);
             const rows = [];
             data.items.forEach(element => {
                 // log(element);
