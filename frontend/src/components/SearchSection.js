@@ -7,13 +7,14 @@
 
 import React, {useState, useEffect} from 'react';
 import "../css/SearchSection.css";
+import Header from "../media/default_header.jpg";
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
 const SearchSection = () => {
   // set a default header image here
-  var defaultImg = "https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80"
+  var defaultImg = Header
 
   const [headerImg, setHeaderImg] = useState(""); 
 
@@ -38,7 +39,7 @@ const SearchSection = () => {
 
   return (
     <div className="search-section">
-      <img alt="Menu Image" src={headerImg} className="header-img" onError={(e)=>{e.target.src=defaultImg}} />
+      <img alt="Menu Image" src={defaultImg} className="header-img" onError={(e)=>{e.target.src=defaultImg}} />
     </div>
   );
 }
