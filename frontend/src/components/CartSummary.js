@@ -150,6 +150,10 @@ const CartSummary = (props) => {
         //gets current cart object from cookies
         let cart = cookies.cart;
 
+        const itemCost = item.price;
+
+        delete item.price;
+
         const popupValues = JSON.parse(item.popupValues);
 
         //replaced old item with edited item and updates totals
@@ -158,13 +162,13 @@ const CartSummary = (props) => {
         currItems.splice(popupValues.fillIns.index, 0, item);
         localStorage.setItem('cartItems', JSON.stringify(currItems));
 
-        cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.prices[popupValues.fillIns.index].price) + parseFloat(item.price)).toFixed(2);
+        cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.prices[popupValues.fillIns.index].price) + parseFloat(itemCost)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
 
         const newPrices = {
-            price: item.price,
-            individual_tax: (parseFloat(item.price) * 0.0775).toFixed(2)
+            price: itemCost,
+            individual_tax: (parseFloat(itemCost) * 0.0775).toFixed(2)
         }
 
         cart.prices[popupValues.fillIns.index] = newPrices;
@@ -300,11 +304,14 @@ const CartSummary = (props) => {
      * Loads cart page if window size is mobile 
      */
     useEffect(() => {
-        if (isMobileOnly && isLandscape) {
-            history.push("/cart");
-        }
+        // if (isMobileOnly && isLandscape) {
+        //     history.push("/cart");
+        // }
         window.addEventListener('resize', function () {
-            if (window.innerWidth >= 768) {
+            // if(isLandscape && window.innerHeight < 768) {
+            //     history.push("/cart");
+            // }
+            if (window.innerWidth >= 768  && window.innerHeight >= 768) {
                 history.push({
                     pathname: "/",
                     cartVisible: true,
@@ -326,7 +333,7 @@ const CartSummary = (props) => {
             {/* Renders item popup if an item is being edited */}
             {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
             <div className="cart-wrapper">
-                {(window.innerWidth < 768 || (window.innerWidth < 1024 && isLandscape)) ? <div className="navbar-wrapper">
+                {(window.innerWidth < 768 || (window.innerHeight < 768 && isLandscape)) ? <div className="navbar-wrapper">
                     <Navbar />
                 </div> : <div className="background" onClick={props.toggleCart}></div>}
                 <div className="cart-popup">

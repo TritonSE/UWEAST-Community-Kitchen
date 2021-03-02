@@ -49,7 +49,7 @@
 }
 
 @media only screen and (max-width: 767px),
-            screen and (max-width: 823px) and (orientation: landscape)
+            screen and (max-height: 767px) and (orientation: landscape)
 {
     .cart-popup {
         width: 100vw;
@@ -196,7 +196,7 @@
 }
 
 @media only screen and (min-width: 768px) and (orientation: portrait),
-            screen and (min-width: 824px)
+            screen and (min-height: 768px) and (min-width: 768px)
 {
     .background {
         width: 100vw;

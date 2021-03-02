@@ -84,6 +84,10 @@ class Menu extends Component {
         const { cookies } = this.props;
         let cart = cookies.get("cart");
 
+        const itemCost = item.price;
+
+        delete item.price;
+
         //item.individual_tax = (parseFloat(item.price) * 0.0775).toFixed(2);
 
         this.setState({cartItems: [...this.state.cartItems, item]}, () => {
@@ -91,13 +95,13 @@ class Menu extends Component {
         });
 
         const itemPrices = {
-            price: item.price,
-            individual_tax: (parseFloat(item.price) * 0.0775).toFixed(2)
+            price: itemCost,
+            individual_tax: (parseFloat(itemCost) * 0.0775).toFixed(2)
         }
 
         //modifies cart object values to add new item
         cart.prices.push(itemPrices);
-        cart.subtotal = (parseFloat(cart.subtotal) + parseFloat(item.price)).toFixed(2);
+        cart.subtotal = (parseFloat(cart.subtotal) + parseFloat(itemCost)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
 

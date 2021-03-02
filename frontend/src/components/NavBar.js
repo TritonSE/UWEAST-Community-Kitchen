@@ -34,6 +34,14 @@ export default function NavBar (props) {
         history.go(0);
     }
 
+    function ToggleCart() {
+        if(window.innerWidth >= 768 && window.innerHeight >= 768) {
+            props.toggleCart();
+        } else {
+            history.push("/cart");
+        }
+    }
+
     /**
      * Renders the cart page
      */
@@ -122,7 +130,7 @@ export default function NavBar (props) {
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
                 <div className="cart-icon-smaller-desktop">
                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
-                        onClick={() => props.toggleCart()} />
+                        onClick={ToggleCart} />
 
                 </div>
             </Navbar>
