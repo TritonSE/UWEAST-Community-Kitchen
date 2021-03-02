@@ -20,6 +20,7 @@ class CartPreview extends Component {
             //stores items in the cart
             items: this.props.items,
 
+            //stores price of each item
             itemPrices: this.props.itemPrices,
 
             //stores subtotal of items in the cart

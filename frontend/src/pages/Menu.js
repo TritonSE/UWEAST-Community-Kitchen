@@ -23,7 +23,7 @@ import "../css/Menu.css";
 
 class Menu extends Component {
 
-    //COokies object used to access and modify cookies
+    //Cookies object used to access and modify cookies
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired
     }
@@ -31,6 +31,7 @@ class Menu extends Component {
     constructor(props) {
         super(props);
 
+        //creates cart in local storage if it doesn't exist
         if(!localStorage.getItem("cartItems")) {
             localStorage.setItem("cartItems", JSON.stringify([]));
         }
@@ -54,6 +55,7 @@ class Menu extends Component {
             //stores whether cart sumarry is currently visible or not
             cartPopupVisible: (this.props.location) ? this.props.location.cartVisible : false,
 
+            //stores price of each item
             itemPrices: this.props.cookies.get("cart").prices,
 
             //stores subtotal of items in the cart
@@ -84,22 +86,22 @@ class Menu extends Component {
         const { cookies } = this.props;
         let cart = cookies.get("cart");
 
+        //removes "price" key from item
         const itemCost = item.price;
-
         delete item.price;
 
-        //item.individual_tax = (parseFloat(item.price) * 0.0775).toFixed(2);
-
+        //adds new item to cart
         this.setState({cartItems: [...this.state.cartItems, item]}, () => {
             localStorage.setItem('cartItems', JSON.stringify(this.state.cartItems))
         });
 
+        //prices object for new item
         const itemPrices = {
             price: itemCost,
             individual_tax: (parseFloat(itemCost) * 0.0775).toFixed(2)
         }
 
-        //modifies cart object values to add new item
+        //modifies cart price values to add new item
         cart.prices.push(itemPrices);
         cart.subtotal = (parseFloat(cart.subtotal) + parseFloat(itemCost)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
@@ -120,11 +122,12 @@ class Menu extends Component {
         const { cookies } = this.props;
         let cart = cookies.get("cart");
 
+        //removes item at index from cart
         let currItems = JSON.parse(localStorage.getItem('cartItems'));
         currItems.splice(ind, 1);
         localStorage.setItem('cartItems', JSON.stringify(currItems));
 
-        //modifies cart object values to remove the item at index ind
+        //modifies cart price values to remove item at index
         cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.prices[ind].price)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);

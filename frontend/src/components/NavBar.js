@@ -34,6 +34,9 @@ export default function NavBar (props) {
         history.go(0);
     }
 
+    /**
+     * Renders cart page or cart popup for larger sized navbar
+     */
     function ToggleCart() {
         if(window.innerWidth >= 768 && window.innerHeight >= 768) {
             props.toggleCart();
@@ -43,7 +46,7 @@ export default function NavBar (props) {
     }
 
     /**
-     * Renders the cart page
+     * Renders the cart page for mobile navbar
      */
     function OpenCart() {
         history.push("/cart");

@@ -22,7 +22,7 @@ import { useHistory } from "react-router-dom";
 import PayPal from '../components/PayPal';
 import Navbar from '../components/NavBar';
 import MenuItemPopup from '../components/MenuItemPopup';
-import { isMobileOnly, withOrientationChange } from 'react-device-detect';
+import { withOrientationChange } from 'react-device-detect';
 
 /**
  * displays items currently in the cart and updates subtotal, tax, and total
@@ -97,6 +97,8 @@ function loadItems(cart, popupFunc, removeItem) {
  */
 const CartSummary = (props) => {
     let history = useHistory();
+
+    //stores orientation of window
     const { isLandscape } = props
 
     //stores cookie object and function to update cookie
@@ -112,7 +114,7 @@ const CartSummary = (props) => {
     const [cartTime, setCartTime] = useState(null);
 
     //stores whether the window size is mobile or not
-    const [isMobile, setIsMobile] = useState((window.innerWidth < 768) ? true : false);
+    const [isMobile, setIsMobile] = useState((window.innerWidth < 768) || (window.innerHeight < 768 && isLandscape) ? true : false);
 
     //stores the error message for time picker
     const [error, setError] = useState("");
@@ -150,27 +152,28 @@ const CartSummary = (props) => {
         //gets current cart object from cookies
         let cart = cookies.cart;
 
+        //removes "price" key from item
         const itemCost = item.price;
-
         delete item.price;
 
         const popupValues = JSON.parse(item.popupValues);
 
-        //replaced old item with edited item and updates totals
+        //replaced old item with edited item in cart
         let currItems = JSON.parse(localStorage.getItem('cartItems'));
         currItems.splice(popupValues.fillIns.index, 1);
         currItems.splice(popupValues.fillIns.index, 0, item);
         localStorage.setItem('cartItems', JSON.stringify(currItems));
 
+        //updates cart price values
         cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.prices[popupValues.fillIns.index].price) + parseFloat(itemCost)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
 
+        //updates price of edited item
         const newPrices = {
             price: itemCost,
             individual_tax: (parseFloat(itemCost) * 0.0775).toFixed(2)
         }
-
         cart.prices[popupValues.fillIns.index] = newPrices;
 
         //updates cart cookie and state values to rerender page
@@ -278,11 +281,12 @@ const CartSummary = (props) => {
         //gets current cart object from cookies
         let cart = cookies.cart;
 
+        //removes item at index from cart
         let currItems = JSON.parse(localStorage.getItem('cartItems'));
         currItems.splice(ind, 1);
         localStorage.setItem('cartItems', JSON.stringify(currItems));
 
-        //modifies cart object values to remove the item at index ind
+        //modifies cart price values to remove item at index
         cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.prices[ind].price)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
@@ -304,13 +308,7 @@ const CartSummary = (props) => {
      * Loads cart page if window size is mobile 
      */
     useEffect(() => {
-        // if (isMobileOnly && isLandscape) {
-        //     history.push("/cart");
-        // }
         window.addEventListener('resize', function () {
-            // if(isLandscape && window.innerHeight < 768) {
-            //     history.push("/cart");
-            // }
             if (window.innerWidth >= 768  && window.innerHeight >= 768) {
                 history.push({
                     pathname: "/",
@@ -321,11 +319,6 @@ const CartSummary = (props) => {
                 history.push("/cart");
             }
         });
-        // window.addEventListener('orientationchange', function (event) {
-        //     if(event.target.screen.orientation.angle === -90) {
-        //         history.push("/cart");
-        //     }
-        // })
     })
 
     return (
@@ -333,6 +326,7 @@ const CartSummary = (props) => {
             {/* Renders item popup if an item is being edited */}
             {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
             <div className="cart-wrapper">
+                {/* Renders navbar if device is mobile */}
                 {(window.innerWidth < 768 || (window.innerHeight < 768 && isLandscape)) ? <div className="navbar-wrapper">
                     <Navbar />
                 </div> : <div className="background" onClick={props.toggleCart}></div>}
