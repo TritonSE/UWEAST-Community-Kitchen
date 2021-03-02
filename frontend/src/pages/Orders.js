@@ -44,9 +44,9 @@ export default class Orders extends React.Component {
 
         const dateOne = date + `\n${val}`;
         const dateTwo = dateSubmission + `\n${val2}`;
-        return [dateOne, list.Customer.Name, list.Customer.Email, list.Customer.Phone, 
-            list.PayPal.Amount, list.Order, dateTwo, list.isCompleted ? "Completed Orders" : "Pending Orders", 
-            list._id];
+
+        return [list._id, dateOne, list.Customer.Name, list.Customer.Email, list.Customer.Phone, 
+            list.PayPal.Amount, list.Order, dateTwo, list.isCompleted ? "Completed Orders" : "Pending Orders"];
     }
 
     /**
@@ -116,6 +116,7 @@ export default class Orders extends React.Component {
                 const formatedArray = this.formatArray(getOrdersList[i], date, formatCurrtime, dateSubmission, formatCurrtimeSubmission)
                 createArr.push(formatedArray);
             }
+            console.log(createArr)
             this.setState({ getOrders: createArr, Loading: false})
         })
         .catch(err => console.log(err));

@@ -25,6 +25,15 @@ import {
 // the column headers for the table
 const columns = [
     {
+      name: "Order ID",
+      options: {
+        display: true, 
+        viewColumns: true, 
+        filter: true,
+        filterType: 'textField'
+      }
+    },
+    {
       name: "Pick up Details",
       options: {
         filter: true,
@@ -136,14 +145,6 @@ const columns = [
           },
           display: DisplayStatusFilters
         }
-      }
-    },
-    {
-      name: "Row ID",
-      options: {
-        display: false, 
-        viewColumns: false, 
-        filter: false
       }
     }
 ];

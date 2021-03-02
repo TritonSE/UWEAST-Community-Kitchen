@@ -79,7 +79,6 @@ export default function NavBar () {
                 <div className="cart-icon">
                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
                         onClick={() => console.log('clicked')} />
-
                 </div>
 
                 {/* Triggers on Collapse - Hamburger Icon replaces pages */}

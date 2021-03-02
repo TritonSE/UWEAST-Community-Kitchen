@@ -15,17 +15,19 @@
   width: 100%;
 }
 
-@media only screen and (min-width: 768px) 
-{
+@media only screen and (min-width: 993px) {
   .navbar-wrapper nav {
-      position: fixed !important;
-      width: 100%;
-      z-index: 1;
-  }
+    position: fixed !important;
+    width: 100%;
+    z-index: 1;
+  } 
+}
 
+@media only screen and (min-width: 768px) and (max-width: 992px)
+{
   .search-section
   {
     position: relative;
-    top: 65px;
+    top: 0px;
   }
 }

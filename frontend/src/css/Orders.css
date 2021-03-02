@@ -87,6 +87,76 @@ td {
     white-space: pre; 
 }
 
+#table-cell-items {
+    width: calc(18.3%);
+}
+
+#table-cell-quanitity {
+    width: calc(11.8%);
+}
+
+#table-cell-size {
+    width: calc(6.9%);
+}
+
+#table-cell-acc {
+    width: calc(24.6%);
+}
+
+@media only screen and (min-width: 1470px) and (max-width: 1534px) {
+    #table-cell-items {
+        width: calc(20.6%);
+    }
+    
+    #table-cell-quanitity {
+        width: calc(9.8%);
+    }
+    
+    #table-cell-size {
+        width: calc(7.4%);
+    }
+    
+    #table-cell-acc {
+        width: calc(25.8%);
+    }
+}
+
+@media only screen and (min-width: 1343px) and (max-width: 1470px) {
+    #table-cell-items {
+        width: calc(21.3%);
+    }
+    
+    #table-cell-quanitity {
+        width: calc(9.8%);
+    }
+    
+    #table-cell-size {
+        width: calc(7.4%);
+    }
+    
+    #table-cell-acc {
+        width: calc(25.8%);
+    }
+}
+
+@media only screen and (max-width: 1342px) {
+    #table-cell-items {
+        width: calc(20%);
+    }
+    
+    #table-cell-quanitity {
+        width: calc(9.8%);
+    }
+    
+    #table-cell-size {
+        width: calc(8.2%);
+    }
+    
+    #table-cell-acc {
+        width: calc(25.8%);
+    }
+}
+
 
 /**********************************************************/
 /* This is the CSS styling for the OrdersStatus component */

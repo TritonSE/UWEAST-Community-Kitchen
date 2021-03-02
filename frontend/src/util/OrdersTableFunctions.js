@@ -135,7 +135,7 @@ const DisplayDateFilters = (filterList, onChange, index, column) => {
  */
 const updateStatus = (value, tableMeta, updateValue, e) => {
     const setValue = (value === "Completed Orders") ? "Pending Orders" : "Completed Orders";
-    const getRowId = tableMeta.rowData[8];
+    const getRowId = tableMeta.rowData[0];
     
     const requestBody = {
       _id: getRowId,
