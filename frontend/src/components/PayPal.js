@@ -168,16 +168,17 @@ export default function PayPal(props) {
             },
             onApprove: async (data, actions) => {
                 return actions.order.capture().then(function(details) {
-                    // Details here includes payer name, phone number, and email.
+                    // details here includes payer name, phone number, and email
 
                     // create order object
+                    let sendDate = new Date((cart.pickup_date.getMonth()+1) + ' ' + cart.pickup_date.getDate() + ', ' + cart.pickup_date.getFullYear() + ' ' + cart.pickup_time)
                     const orderObj = {
                         "Customer": {
                             "Name": details.payer.name.given_name + " " + details.payer.name.surname,
                             "Email": details.payer.email_address,
                             "Phone": details.payer.phone.phone_number.national_number
                         },
-                        "Pickup": cart.pickup_date,
+                        "Pickup": sendDate,
                         "PayPal": {
                             "Amount": cart.cart_total,
                             "transactionID": details.id
@@ -225,12 +226,10 @@ export default function PayPal(props) {
             onCancel: () => {
                 // If the user cancels their order, send them back to the cart summary
                 // The cart summary exists at the menu page
-                console.log("cancel");
                 history.push("/");
             },
             onError: (err) => {
                 alert("An error occurred!");
-                console.error(err);
                 history.push("/");
 
             },
