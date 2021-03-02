@@ -37,25 +37,35 @@ router.post(
     // Assume req.body looks like this:
     // {
     //   "Customer": {
-    //     "Name": "",
-    //     "Email": "",
-    //     "Phone": ""
+    //     "Name": "Kelly Pham",
+    //     "Email": "aksingh@ucsd.edu",
+    //     "Phone": "7149140284"
     //   },
-    //   "Pickup": Date,
-    //   "Paypal": {
-    //     "Amount": "0.04",
-    //     "transactionID": ""
+    //   "Pickup": Date.now(),
+    //   "PayPal": {
+    //     "Amount": "22.04",
+    //     "transactionID": "asjf982432"
     //   },
     //   "Order": [
     //     {
-    //       "item": "",
-    //       "quantity": Number,
-    //       "extra": [""]
+    //       "item": "Blue Bayou Lemonade",
+    //       "quantity": 4,
+    //       "size": "Individual",
+    //     }, 
+    //     {
+    //       "item": "Hawaiian Barbeque",
+    //       "quantity": 2,
+    //       "size": "Family",
+    //       "accommodations": "Extra pork",
+    //       "specialInstructions": "Please remember the pork"
     //     }
     //   ]
     // }
 
     try {
+
+      req.body.Customer.Phone = req.body.Customer.Phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+
       // attempt to add order into Orders DB
       const order = await addOrder(req.body);
       // error Status if order could not be added
@@ -64,11 +74,17 @@ router.post(
           .status(400)
           .json({ errors: [{ msg: "Order unsuccessful" }] });
       }
-
+      
       // retrieve all emails inside of Emails DB
       const emails = await findAllEmails();
       if (!emails.length) {
         return res.status(400).json({ errors: [{ msg: "no emails found" }] });
+      }
+
+      // primary email 
+      const primaryEmail = await findPrimaryEmail();
+      if (!primaryEmail) {
+        return res.status(400).json({ errors: [{ msg: "no primary email found" }] });
       }
 
       dbemail = emails.map(function (item) {
@@ -85,6 +101,9 @@ router.post(
           minute: "2-digit",
         }),
         order: req.body.Order,
+        transactionID: req.body.PayPal.transactionID,
+        primaryEmail: primaryEmail.email,
+        ordersPageLink: "http://localhost:3000/admin",
         dbemail: dbemail,
       };
 
