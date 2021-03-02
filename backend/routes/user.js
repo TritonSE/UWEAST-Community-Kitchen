@@ -22,6 +22,9 @@ const router = express.Router();
 const config = require("../config");
 const crypto = require("crypto");
 
+const config = require('../config');
+const FRONTEND_URI = config.frontend.uri;
+
 // used for random password generation (Route: /forgotPassword)
 const MIN_PASS_LENGTH = 6;
 const MAX_PASS_LENGTH = 15;
@@ -172,7 +175,7 @@ router.post(
       // send an automated email to the user containing their new randomly generated password
       const locals = {
         password: randomlyGeneratedPass,
-        resetLink: "http://localhost:3000/reset-password",
+        resetLink: `${FRONTEND_URI}reset-password`,
       };
 
       sendEmail("forgot-password", email, locals, res);

@@ -15,6 +15,8 @@ const { addOrder } = require("../db/services/order");
 const { isValidated } = require("../middleware/validation");
 
 const router = express.Router();
+const config = require('../config');
+const FRONTEND_URI = config.frontend.uri;
 
 /**
  * Adds the order to the Orders DB and also sends order receipts to customer's specified email
@@ -38,8 +40,8 @@ router.post(
     // {
     //   "Customer": {
     //     "Name": "Kelly Pham",
-    //     "Email": "aksingh@ucsd.edu",
-    //     "Phone": "7149140284"
+    //     "Email": "abc@ucsd.edu",
+    //     "Phone": "1234567890"
     //   },
     //   "Pickup": Date.now(),
     //   "PayPal": {
@@ -64,6 +66,7 @@ router.post(
 
     try {
 
+      // add hypens to phone number
       req.body.Customer.Phone = req.body.Customer.Phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 
       // attempt to add order into Orders DB
@@ -103,7 +106,7 @@ router.post(
         order: req.body.Order,
         transactionID: req.body.PayPal.transactionID,
         primaryEmail: primaryEmail.email,
-        ordersPageLink: "http://localhost:3000/admin",
+        ordersPageLink: `${FRONTEND_URI}admin`,
         dbemail: dbemail,
       };
 
