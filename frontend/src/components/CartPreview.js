@@ -20,6 +20,8 @@ class CartPreview extends Component {
             //stores items in the cart
             items: this.props.items,
 
+            itemPrices: this.props.itemPrices,
+
             //stores subtotal of items in the cart
             subTotal: this.props.subtotal,
 
@@ -68,7 +70,7 @@ class CartPreview extends Component {
                                     {/* Conditonally renders a new line with special instructions if any were added */}
                                     {(item.instructions !== "") ? <div><br /><span>Special Instr.: {item.instructions}</span></div> : null}
                                 </span></span>
-                            <span className="thumbnail summary-price">${item.price}</span>
+                            <span className="thumbnail summary-price">${this.state.itemPrices[ind].price}</span>
                             <span className="item-divider"></span>
                         </div>
                     )

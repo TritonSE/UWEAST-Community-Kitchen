@@ -22,6 +22,7 @@ import { useHistory } from "react-router-dom";
 import PayPal from '../components/PayPal';
 import Navbar from '../components/NavBar';
 import MenuItemPopup from '../components/MenuItemPopup';
+import { isMobileOnly, withOrientationChange } from 'react-device-detect';
 
 /**
  * displays items currently in the cart and updates subtotal, tax, and total
@@ -79,7 +80,7 @@ function loadItems(cart, popupFunc, removeItem) {
 
                             {/* Removes item from the cart */}
                             <button className="remove-button" onClick={() => removeItem(ind)}>Remove</button>
-                            <span className="thumbnail-background summary-price">${item.price}</span>
+                            <span className="thumbnail-background summary-price">${cart.itemPrices[ind].price}</span>
                         </div>
                         <span className="item-divide"></span>
                     </div>
@@ -94,8 +95,9 @@ function loadItems(cart, popupFunc, removeItem) {
  * 
  * @param {*} props - values passed down from parent component
  */
-export default function CartSummary(props) {
+const CartSummary = (props) => {
     let history = useHistory();
+    const { isLandscape } = props
 
     //stores cookie object and function to update cookie
     const [cookies, setCookie] = useCookies(["cart"]);
@@ -120,7 +122,8 @@ export default function CartSummary(props) {
         cart_total: props.total || cookies.cart.total,
         item_total: props.subtotal || cookies.cart.subtotal,
         tax_total: props.tax || cookies.cart.tax,
-        items: props.items || cookies.cart.items
+        items: props.items || JSON.parse(localStorage.getItem('cartItems')),
+        itemPrices: props.itemPrices || cookies.cart.prices
     });
 
     // stores whether or not the item popup is currently visible
@@ -148,14 +151,23 @@ export default function CartSummary(props) {
         let cart = cookies.cart;
 
         const popupValues = JSON.parse(item.popupValues);
-        
+
         //replaced old item with edited item and updates totals
-        let oldItem = cart.items[popupValues.fillIns.index];
-        cart.items.splice(popupValues.fillIns.index, 1);
-        cart.items.splice(popupValues.fillIns.index, 0, item);
-        cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(oldItem.price) + parseFloat(item.price)).toFixed(2);
+        let currItems = JSON.parse(localStorage.getItem('cartItems'));
+        currItems.splice(popupValues.fillIns.index, 1);
+        currItems.splice(popupValues.fillIns.index, 0, item);
+        localStorage.setItem('cartItems', JSON.stringify(currItems));
+
+        cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.prices[popupValues.fillIns.index].price) + parseFloat(item.price)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
+
+        const newPrices = {
+            price: item.price,
+            individual_tax: (parseFloat(item.price) * 0.0775).toFixed(2)
+        }
+
+        cart.prices[popupValues.fillIns.index] = newPrices;
 
         //updates cart cookie and state values to rerender page
         setCookie("cart", cart, { path: "/" });
@@ -163,12 +175,13 @@ export default function CartSummary(props) {
             cart_total: cart.total,
             item_total: cart.subtotal,
             tax_total: cart.tax,
-            items: cart.items
+            items: currItems,
+            itemPrices: cart.prices
         }
         setCart(newCart);
 
         //calls parent function to update its states
-        if(!isMobile) {
+        if (!isMobile) {
             props.updateItems();
         }
     }
@@ -261,11 +274,15 @@ export default function CartSummary(props) {
         //gets current cart object from cookies
         let cart = cookies.cart;
 
+        let currItems = JSON.parse(localStorage.getItem('cartItems'));
+        currItems.splice(ind, 1);
+        localStorage.setItem('cartItems', JSON.stringify(currItems));
+
         //modifies cart object values to remove the item at index ind
-        cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.items[ind].price)).toFixed(2);
+        cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.prices[ind].price)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
-        cart.items.splice(ind, 1);
+        cart.prices.splice(ind, 1);
 
         //updates cart cookie and state values to rerender page
         setCookie("cart", cart, { path: "/" });
@@ -273,7 +290,8 @@ export default function CartSummary(props) {
             cart_total: cart.total,
             item_total: cart.subtotal,
             tax_total: cart.tax,
-            items: cart.items
+            items: currItems,
+            itemPrices: cart.prices
         }
         setCart(newCart);
     }
@@ -282,6 +300,9 @@ export default function CartSummary(props) {
      * Loads cart page if window size is mobile 
      */
     useEffect(() => {
+        if (isMobileOnly && isLandscape) {
+            history.push("/cart");
+        }
         window.addEventListener('resize', function () {
             if (window.innerWidth >= 768) {
                 history.push({
@@ -289,98 +310,108 @@ export default function CartSummary(props) {
                     cartVisible: true,
                 });
             }
+            if (window.innerWidth < 768) {
+                history.push("/cart");
+            }
         });
+        // window.addEventListener('orientationchange', function (event) {
+        //     if(event.target.screen.orientation.angle === -90) {
+        //         history.push("/cart");
+        //     }
+        // })
     })
 
     return (
         <div>
-        {/* Renders item popup if an item is being edited */}
-        {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
-        <div className="cart-wrapper">
-            {(isMobile) ? <div className="navbar-wrapper">
-                <Navbar />
-            </div> : <div className="background" onClick={props.toggleCart}></div>}
-            <div className="cart-popup">
-                <span className="pickup-title">Choose Pickup Time</span>
-                <div className="date-time">
-                    <div className="date-picker">
-                        {/* Date picker to select a pickup date */}
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                disableToolbar
-                                variant="inline"
-                                format="MM/dd/yyyy"
-                                margin="normal"
-                                id="date-picker-inline"
-                                label="Date"
-                                value={selectedDate}
-                                onChange={handleDateChange}
-                                disablePast={true}
-                                shouldDisableDate={disableDates}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                                inputProps={
-                                    isMobile ?
-                                        {
-                                            style: {
-                                                fontSize: "3vw"
-                                            }
-                                        } : {}}
-                                InputLabelProps={
-                                    isMobile ?
-                                        {
-                                            style: {
-                                                fontSize: "3vw"
-                                            }
-                                        } : {}}
-                            />
-                            {(!selectedDate || !selectedTime) ? <p className="select-error">Please select a date and a time</p> : null}
-                        </MuiPickersUtilsProvider>
+            {/* Renders item popup if an item is being edited */}
+            {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
+            <div className="cart-wrapper">
+                {(window.innerWidth < 768 || (window.innerWidth < 1024 && isLandscape)) ? <div className="navbar-wrapper">
+                    <Navbar />
+                </div> : <div className="background" onClick={props.toggleCart}></div>}
+                <div className="cart-popup">
+                    <span className="pickup-title">Choose Pickup Time</span>
+                    <div className="date-time">
+                        <div className="date-picker">
+                            {/* Date picker to select a pickup date */}
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                    disableToolbar
+                                    variant="inline"
+                                    format="MM/dd/yyyy"
+                                    margin="normal"
+                                    id="date-picker-inline"
+                                    label="Date"
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                    disablePast={true}
+                                    shouldDisableDate={disableDates}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                    inputProps={
+                                        isMobile ?
+                                            {
+                                                style: {
+                                                    fontSize: "3vw"
+                                                }
+                                            } : {}}
+                                    InputLabelProps={
+                                        isMobile ?
+                                            {
+                                                style: {
+                                                    fontSize: "3vw"
+                                                }
+                                            } : {}}
+                                />
+                                {(!selectedDate || !selectedTime) ? <p className="select-error">Please select a date and a time</p> : null}
+                            </MuiPickersUtilsProvider>
+                        </div>
+                        {/* Time picker to select a pickup time */}
+                        <CustomTimePicker
+                            label="Time"
+                            value={selectedTime}
+                            setSelectedTime={(time) => {
+                                const minTime = moment("7:59 AM", "HH:mm A");
+                                const maxTime = moment("6:01 PM", "HH:mm A");
+                                let errorMsg = "";
+                                if (minTime.isBefore(time) && maxTime.isAfter(time)) {
+                                    setSelectedTime(time.format("HH:mm A"));
+                                    setCartTime(time.format("HH:mm:ss"));
+                                    errorMsg = false;
+                                } else {
+                                    errorMsg = "Select between 8:00 AM and 6:00 PM";
+                                }
+                                setError(errorMsg);
+                            }}
+                            setSize={isMobile}
+                            errorMessage={error}
+                        />
                     </div>
-                    {/* Time picker to select a pickup time */}
-                    <CustomTimePicker
-                        label="Time"
-                        value={selectedTime}
-                        setSelectedTime={(time) => {
-                            const minTime = moment("7:59 AM", "HH:mm A");
-                            const maxTime = moment("6:01 PM", "HH:mm A");
-                            let errorMsg = "";
-                            if (minTime.isBefore(time) && maxTime.isAfter(time)) {
-                                setSelectedTime(time.format("HH:mm A"));
-                                setCartTime(time.format("HH:mm:ss"));
-                                errorMsg = false;
-                            } else {
-                                errorMsg = "Select between 8:00 AM and 6:00 PM";
-                            }
-                            setError(errorMsg);
-                        }}
-                        setSize={isMobile}
-                        errorMessage={error}
-                    />
-                </div>
-                <p className="pickup-date-info">NOTE: Earliest pickup is 3 days after order has been placed</p>
-                <h1 className="summary-title">Order Summary</h1>
-                <div className="cart-items">
-                    {/* loads and displays all items currently in the cart */}
-                    {(props.removeItem) ? loadItems(cart, togglePopup, props.removeItem) : loadItems(cart, togglePopup, handleRemove)}
-                </div>
-                <div className="order-totalprices">
-                    <br />
+                    <p className="pickup-date-info">NOTE: Earliest pickup is 3 days after order has been placed</p>
+                    <h1 className="summary-title">Order Summary</h1>
+                    <div className="cart-items">
+                        {/* loads and displays all items currently in the cart */}
+                        {(props.removeItem) ? loadItems(cart, togglePopup, props.removeItem) : loadItems(cart, togglePopup, handleRemove)}
+                    </div>
+                    <div className="order-totalprices">
+                        <br />
                         Subtotal: ${cart.item_total}<br />
                         Tax: ${cart.tax_total}<br />
                         Total Price: ${cart.cart_total}
-                </div>
-                {/* Renders an error message if cart total is less than the $20 minimum */}
-                <div className="order-minimum">
-                    {(parseFloat(cart.cart_total) < 20) ? <span>Order minimum is $20. Please add ${(20 - parseFloat(cart.cart_total)).toFixed(2)} to your cart to proceed to checkout.</span> : null}
-                </div>
-                {/* Renders PayPal component if all required fields are completed and return to menu button otherwise */}
-                <div className="return-button">
-                    {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= 20) ? <PayPal cart={paypalCart} /> : <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
+                    </div>
+                    {/* Renders an error message if cart total is less than the $20 minimum */}
+                    <div className="order-minimum">
+                        {(parseFloat(cart.cart_total) < 20) ? <span>Order minimum is $20. Please add ${(20 - parseFloat(cart.cart_total)).toFixed(2)} to your cart to proceed to checkout.</span> : null}
+                    </div>
+                    {/* Renders PayPal component if all required fields are completed and return to menu button otherwise */}
+                    <div className="return-button">
+                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= 20) ? <PayPal cart={paypalCart} /> : <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
     )
 }
+
+export default withOrientationChange(CartSummary);

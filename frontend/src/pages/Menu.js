@@ -31,10 +31,14 @@ class Menu extends Component {
     constructor(props) {
         super(props);
 
+        if(!localStorage.getItem("cartItems")) {
+            localStorage.setItem("cartItems", JSON.stringify([]));
+        }
+
         //creates cart cookie with default values if it doesn't exist
         if (!this.props.cookies.get("cart")) {
             let newCart = {
-                items: [],
+                prices: [],
                 subtotal: "00.00",
                 tax: "00.00",
                 total: "00.00"
@@ -45,10 +49,12 @@ class Menu extends Component {
         //stores items currently in the cart using local storage
         this.state = {
             //stores items currently in the cart
-            cartItems: this.props.cookies.get("cart").items,
+            cartItems: JSON.parse(localStorage.getItem('cartItems')),
 
             //stores whether cart sumarry is currently visible or not
             cartPopupVisible: (this.props.location) ? this.props.location.cartVisible : false,
+
+            itemPrices: this.props.cookies.get("cart").prices,
 
             //stores subtotal of items in the cart
             subTotal: this.props.cookies.get("cart").subtotal,
@@ -78,17 +84,26 @@ class Menu extends Component {
         const { cookies } = this.props;
         let cart = cookies.get("cart");
 
-        item.individual_tax = (parseFloat(item.price) * 0.0775).toFixed(2);
+        //item.individual_tax = (parseFloat(item.price) * 0.0775).toFixed(2);
+
+        this.setState({cartItems: [...this.state.cartItems, item]}, () => {
+            localStorage.setItem('cartItems', JSON.stringify(this.state.cartItems))
+        });
+
+        const itemPrices = {
+            price: item.price,
+            individual_tax: (parseFloat(item.price) * 0.0775).toFixed(2)
+        }
 
         //modifies cart object values to add new item
-        cart.items.push(item);
+        cart.prices.push(itemPrices);
         cart.subtotal = (parseFloat(cart.subtotal) + parseFloat(item.price)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
 
         //updates cart cookie and state values to rerender page
         cookies.set("cart", cart, { path: "/"});
-        this.setState({ cartItems: cart.items, subTotal: cart.subtotal, tax: cart.tax, totalPrice: cart.total, cartKey: !this.state.cartKey, previewKey: !this.state.previewKey });
+        this.setState({ itemPrices: cart.prices, subTotal: cart.subtotal, tax: cart.tax, totalPrice: cart.total, cartKey: !this.state.cartKey, previewKey: !this.state.previewKey });
     }
 
     /**
@@ -101,15 +116,19 @@ class Menu extends Component {
         const { cookies } = this.props;
         let cart = cookies.get("cart");
 
+        let currItems = JSON.parse(localStorage.getItem('cartItems'));
+        currItems.splice(ind, 1);
+        localStorage.setItem('cartItems', JSON.stringify(currItems));
+
         //modifies cart object values to remove the item at index ind
-        cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.items[ind].price)).toFixed(2);
+        cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.prices[ind].price)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
-        cart.items.splice(ind, 1);
+        cart.prices.splice(ind, 1);
 
         //updates cart cookie and state values to rerender page
         cookies.set("cart", cart, { path: "/"});
-        this.setState({ cartItems: cart.items, subTotal: cart.subtotal, tax: cart.tax, totalPrice: cart.total, cartKey: !this.state.cartKey, previewKey: !this.state.previewKey });
+        this.setState({ itemPrices: cart.prices, cartItems: currItems, subTotal: cart.subtotal, tax: cart.tax, totalPrice: cart.total, cartKey: !this.state.cartKey, previewKey: !this.state.previewKey });
     }
 
     /**
@@ -123,7 +142,7 @@ class Menu extends Component {
      * Updates cart states when an item is edited in the cart
      */
     updateItems() {
-        this.setState({cartItems: this.props.cookies.get("cart").items, subTotal: this.props.cookies.get("cart").subtotal, tax: this.props.cookies.get("cart").tax, totalPrice: this.props.cookies.get("cart").total, previewKey: !this.state.previewKey});
+        this.setState({cartItems: JSON.parse(localStorage.getItem('cartItems')), subTotal: this.props.cookies.get("cart").subtotal, tax: this.props.cookies.get("cart").tax, totalPrice: this.props.cookies.get("cart").total, previewKey: !this.state.previewKey});
     }
 
     render() {
@@ -135,10 +154,10 @@ class Menu extends Component {
                 </div>
                 <Banner />
                 {/* cart summary is conditionally rendered based on if it is currently open */}
-                {this.state.cartPopupVisible ? <CartSummary key={this.state.cartKey} items={this.state.cartItems} total={this.state.totalPrice} tax={this.state.tax} subtotal={this.state.subTotal} toggleCart={this.toggleCart} removeItem={this.handleRemove} updateItems={this.updateItems}/> : null}
+                {this.state.cartPopupVisible ? <CartSummary key={this.state.cartKey} items={this.state.cartItems} itemPrices={this.state.itemPrices} total={this.state.totalPrice} tax={this.state.tax} subtotal={this.state.subTotal} toggleCart={this.toggleCart} removeItem={this.handleRemove} updateItems={this.updateItems}/> : null}
                 <div className="cart-preview">
                 {/* cart preview is floated on the bottom right of the screen */}
-                <CartPreview key={this.state.previewKey} items={this.state.cartItems} total={this.state.totalPrice} tax={this.state.tax} subtotal={this.state.subTotal} toggleCart={this.toggleCart} />
+                <CartPreview key={this.state.previewKey} items={this.state.cartItems} itemPrices={this.state.itemPrices} total={this.state.totalPrice} tax={this.state.tax} subtotal={this.state.subTotal} toggleCart={this.toggleCart} />
                 </div>
                 {/** search section is the top, non-menu half of the page */}
                 <SearchSection />
