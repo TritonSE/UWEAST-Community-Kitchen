@@ -16,6 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { makeStyles } from '@material-ui/core/styles';
+import {getJWT, logout} from '../util/Auth';
 
 import '../css/ChangeEmailScreen.css';
 
@@ -52,19 +53,26 @@ const renderNode = (email, secondaryEmails, setSecondaryEmails, updateSecondaryE
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: email
+                email: email,
+                "token": getJWT()
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            if(data.success) {
+        .then(res => {
+            if(res.ok) {
                 // update the array in the current class
                 // and in the parent class
                 const arr = secondaryEmails.filter(a => a !== email);
                 setSecondaryEmails(arr);
                 updateSecondaryEmails(arr);
             }
-        })    
+            // invalid admin token
+            else if(res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
+            }
+        })  
     }
     
     return (
@@ -131,12 +139,12 @@ export default function ChangeSecondaryEmailScreen (props) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: addSecondaryEmail
+                email: addSecondaryEmail,
+                "token": getJWT()
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            if(data.success) {
+        .then(res => {
+            if(res.ok) {
                 // update the parent's array and the child's array
                 const getNewEmail = addSecondaryEmail;
                 const arr = secondaryEmails.concat(getNewEmail)
@@ -147,6 +155,13 @@ export default function ChangeSecondaryEmailScreen (props) {
                 // clear any error handling
                 setInputError(false);
                 setErrorMessage("");
+            }
+            // invalid admin token
+            else if(res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
             } else {
                 // error handling
                 setErrorMessage("This email is already listed as a secondary email."); 

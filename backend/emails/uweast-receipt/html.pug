@@ -1,12 +1,30 @@
 p Dear all,
-p A new order was placed by #{name}. The customer's email is #{email} and their phone number is #{number}. The pick up date chosen by the customer is #{date} at #{time}.
-p The following are the details of the order.
-p Order Summary:
+p A new order was recently placed by a customer. The following are the order details: 
+p #[strong Order ID:] #{transactionID}
+p #[strong Pick Up:] #{date} at #{time}
+p #[strong Order Summary:]
 ul
     each val in order
-        li= `${val.quantity} x ${val.item} (${val.extra})`
-p The payment details for this order can be found on either the PayPal auto receipt for this order or on your PayPal account under transactions.
+        li= `${val.quantity} x ${val.item} (${val.size} Size)`
+            ul
+                li Accomodations: 
+                    if !val.accommodations || val.accommodations === '' 
+                        | n/a
+                    else
+                        = val.accommodations
+                li Special Instructions: 
+                    if !val.specialInstructions || val.specialInstructions === '' 
+                        | n/a
+                    else
+                        = val.specialInstructions
+p #[strong Customer Information:]
+ul
+    li= `Name: ${name}`
+    li= `Email: ${email}`
+    li= `Phone Number: ${number}`
+p The payment details for this order can be found on either the PayPal auto receipt or on your PayPal account under transactions. If you need to refund this order for any reason, note that the order ID doubles as the PayPal transaction ID.
+p All order information captured on this email can also be found on the #[a(target="_blank", href=`${ordersPageLink}`) Orders Page], where it has been added as a new pending order.
 p NOTE: This is an automatically generated email. Please do not reply.
     br
     br
-    | UWEAST
+    | UWEAST CK
