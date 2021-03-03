@@ -63,20 +63,20 @@ export default function NavBar () {
                 {/* Bootstrap Resources */}
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
             </head>
-            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="lg" variant="dark">
+            <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="xl" variant="dark">
                 
                 {/* Left Hand Side of Navbar - Title & Image linked to Menu Page */}
                 <Navbar.Brand href="/">
-                    <img src={Logo} className="logo-img" alt="UWEAST Logo" width={window.innerWidth > 768 ? '90' : '80'} 
-                        height={window.innerWidth > 768 ? '90' : '80'} />
-                </Navbar.Brand>
+                    <span>
+                        <img src={Logo} className="logo-img" alt="UWEAST Logo" width={'90'} 
+                            height={'90'} />
+                    </span>
 
-                {/* Text to complement the logo */}
-                <div className="brand-name" >
-                    <a href="/">
+                    {/* Text to complement the logo */}
+                    <div className="brand-name" >
                         <p>Community Kitchen</p>
-                    </a>
-                </div>
+                    </div>
+                </Navbar.Brand>
 
                 {/* The shopping cart will only render if it is a mobile component */}
                 <div className="cart-icon">
@@ -85,7 +85,7 @@ export default function NavBar () {
                 </div>
 
                 {/* Triggers on Collapse - Hamburger Icon replaces pages */}
-                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" style={{border: '1px solid white', marginLeft: 'calc(7vw)'}}/>
 
                 {/* Right Hand Side of Navbar - Linked Pages (based off of Router paths in App.js) */}
                 <Navbar.Collapse id="responsive-navbar-nav">

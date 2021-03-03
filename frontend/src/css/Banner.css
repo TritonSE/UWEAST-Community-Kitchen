@@ -18,7 +18,7 @@
   margin: 0px;
 }
 
-@media only screen and (min-width: 993px) 
+@media only screen and (min-width: 1199px) 
 {
   .banner 
   {
@@ -27,7 +27,7 @@
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 992px) 
+@media only screen and (min-width: 768px) and (max-width: 1199px) 
 {
   .banner 
   {
