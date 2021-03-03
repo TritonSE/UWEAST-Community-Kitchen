@@ -6,7 +6,7 @@
  *
  * @summary   Routes to modify the Item DB specifically changing, finding, editing,
  *            featuring and deleting items.
- * @author    Thomas Garry
+ * @author    Thomas Garry, Amrit Singh
  */
 const express = require("express");
 const {
@@ -15,6 +15,7 @@ const {
   deleteItem,
   editItem,
   setFeatured,
+  getItemById
 } = require("../db/services/item");
 const { body, validationResult } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
@@ -229,6 +230,42 @@ router.post(
     } else {
       res.status(200).json({ success: true });
     }
+  }
+);
+
+/**
+ * Queries the Item collection for Item document with a given Object ID tag. Returns 
+ * JSON denoting said item upon success, else returns error.
+ *
+ * @body {string} _id - Id of the item whose information need to be retrieved
+ * @returns {status/object} - 200 with JSON attached to response body with attribute "item" / 400 err
+ */
+router.post(
+  "/itemInfo",
+  [
+    body("_id").notEmpty().isString(),
+    isValidated,
+  ],
+  async (req, res, next) => {
+
+    try{
+      // retrieve item JSON given id
+      const itemJSON = await getItemById(req.body._id);
+
+      // item not found
+      if(!itemJSON){
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "item does not exist" }] });
+      }
+
+      return res.status(200).json({ item: itemJSON });
+
+  } catch(err){
+      console.error(err.message);
+      res.status(500).send("Server error");
+  }
+  
   }
 );
 
