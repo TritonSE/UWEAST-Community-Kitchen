@@ -21,7 +21,7 @@
 }
 
 .navbar-brand {
-    padding-left: 1em;
+    padding-left: 0;
 }
 
 .brand-name {
@@ -92,16 +92,12 @@
         max-height: auto;
     }
 
-    /* .navbar.navbar-bg-color .desktop-tabs {
-        display: none;
-    } */
-
     .brand-name {
-        margin-left: calc(-10px);
+        margin-left: calc(-20px);
     }
     
     .brand-name p {
-        font-size: calc(28px);
+        font-size: calc(27px);
     }
 
     .cart-icon {

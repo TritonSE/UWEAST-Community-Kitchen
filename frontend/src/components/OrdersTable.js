@@ -105,6 +105,7 @@ export default function OrdersTable(props) {
     rowsPerPageOptions: [10, 25, 50],
     renderExpandableRow: renderRow,
     searchOpen: true,
+    responsive: 'vertical'
   };
 
   // styling for the row
