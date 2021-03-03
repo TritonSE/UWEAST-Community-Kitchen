@@ -15,8 +15,6 @@ const { addOrder } = require("../db/services/order");
 const { isValidated } = require("../middleware/validation");
 
 const router = express.Router();
-const config = require('../config');
-const FRONTEND_URI = config.frontend.uri;
 
 /**
  * Adds the order to the Orders DB and also sends order receipts to customer's specified email
@@ -106,7 +104,7 @@ router.post(
         order: req.body.Order,
         transactionID: req.body.PayPal.transactionID,
         primaryEmail: primaryEmail.email,
-        ordersPageLink: `${FRONTEND_URI}admin`,
+        ordersPageLink: `${config.frontend.uri}admin`,
         dbemail: dbemail,
       };
 
