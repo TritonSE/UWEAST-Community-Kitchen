@@ -5,12 +5,12 @@
     position: fixed;
 }
 
-.cart-popup::-webkit-scrollbar {
+.cart-items::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 7px;
   }
   
-.cart-popup::-webkit-scrollbar-thumb {
+.cart-items::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: rgba(0, 0, 0, .5);
     box-shadow: 0 0 1px rgba(255, 255, 255, .5);

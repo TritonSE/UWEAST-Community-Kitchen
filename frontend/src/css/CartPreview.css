@@ -72,7 +72,7 @@
     right: 0.1vw;
     bottom: 0.1vh;
     position: fixed;
-    z-index: 0;
+    z-index: 2;
 }
 
 .item-description {
