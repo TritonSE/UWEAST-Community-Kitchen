@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 /**
  * The NavBar component. Renders at the top of the website and is fixed to the top.
  * Contains all the relevant tabs that route the user to the specified page.
@@ -11,38 +11,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import Logo from "../media/UWEAST_Logo_Detail_Transparent.png";
 import '../css/NavBar.css';
-import { isAuthenticated, logout} from '../util/Auth';
+import { isAuthenticated, logout } from '../util/Auth';
 
 
-export default function NavBar (props) {
+export default function NavBar(props) {
 
-    {/* history hook to redirect on logout */}
+    {/* history hook to redirect on logout */ }
     const history = useHistory();
 
     const [state, setState] = React.useState({
         isUserAuthenticated: false
-      });
+    });
 
-    {/* stores class names to toggle whether content is shown */}
+    {/* stores class names to toggle whether content is shown */ }
     var adminContentClass;
     var loginButtonClass;
 
-    {/* removes login token and redirects to menu page */}
+    {/* removes login token and redirects to menu page */ }
     function Logout() {
         logout();
         history.push("/login");
         history.go(0);
-    }
-
-    /**
-     * Renders cart page or cart popup for larger sized navbar
-     */
-    function ToggleCart() {
-        if(window.innerWidth >= 768 && window.innerHeight >= 768) {
-            props.toggleCart();
-        } else {
-            history.push("/cart");
-        }
     }
 
     /**
@@ -54,15 +43,15 @@ export default function NavBar (props) {
 
     useEffect(() => {
         isAuthenticated().then(async result => {
-            if(!result){
+            if (!result) {
                 logout();
             }
-          setState({...state, isUserAuthenticated: result});
+            setState({ ...state, isUserAuthenticated: result });
         })
-      }, []);
+    }, []);
 
-    {/* Hides admin content (admin page + logout) or login button depending on whether user is logged in */}
-    if(state.isUserAuthenticated) {
+    {/* Hides admin content (admin page + logout) or login button depending on whether user is logged in */ }
+    if (state.isUserAuthenticated) {
         adminContentClass = "nav-link";
         loginButtonClass = "nav-link d-none";
     } else {
@@ -70,7 +59,7 @@ export default function NavBar (props) {
         loginButtonClass = "nav-link";
     }
 
-    {/* Check current page from props to change active nav-link color */}
+    {/* Check current page from props to change active nav-link color */ }
     function isPageActive(pageToCheck) {
         return (pageToCheck === window.location.pathname) ? " active" : "";
     }
@@ -79,13 +68,13 @@ export default function NavBar (props) {
         <html>
             <head>
                 {/* Bootstrap Resources */}
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous" />
             </head>
             <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="md" variant="dark">
-                
+
                 {/* Left Hand Side of Navbar - Title & Image linked to Menu Page */}
                 <Navbar.Brand href="/">
-                    <img src={Logo} className="logo-img" alt="UWEAST Logo" width={window.innerWidth > 768 ? '90' : '80'} 
+                    <img src={Logo} className="logo-img" alt="UWEAST Logo" width={window.innerWidth > 768 ? '90' : '80'}
                         height={window.innerWidth > 768 ? '90' : '80'} />
                 </Navbar.Brand>
 
@@ -96,7 +85,7 @@ export default function NavBar (props) {
 
                 {/* The shopping cart will only render if it is a mobile component */}
                 <div className="cart-icon">
-                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
+                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}
                         onClick={OpenCart} />
 
                 </div>
@@ -128,15 +117,15 @@ export default function NavBar (props) {
 
                         {/* Login */}
                         <span className="desktop-tabs">
-                            <Nav.Link className={loginButtonClass + isPageActive("/login")} href="/login">Login</Nav.Link> 
+                            <Nav.Link className={loginButtonClass + isPageActive("/login")} href="/login">Login</Nav.Link>
                         </span>
                     </Nav>
                 </Navbar.Collapse>
 
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
                 <div className="cart-icon-smaller-desktop">
-                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }} 
-                        onClick={ToggleCart} />
+                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}
+                        onClick={() => props.toggleCart()} />
 
                 </div>
             </Navbar>

@@ -22,7 +22,6 @@ import { useHistory } from "react-router-dom";
 import PayPal from '../components/PayPal';
 import Navbar from '../components/NavBar';
 import MenuItemPopup from '../components/MenuItemPopup';
-import { withOrientationChange } from 'react-device-detect';
 
 /**
  * displays items currently in the cart and updates subtotal, tax, and total
@@ -98,9 +97,6 @@ function loadItems(cart, popupFunc, removeItem) {
 const CartSummary = (props) => {
     let history = useHistory();
 
-    //stores orientation of window
-    const { isLandscape } = props
-
     //stores cookie object and function to update cookie
     const [cookies, setCookie] = useCookies(["cart"]);
 
@@ -114,7 +110,7 @@ const CartSummary = (props) => {
     const [cartTime, setCartTime] = useState(null);
 
     //stores whether the window size is mobile or not
-    const [isMobile, setIsMobile] = useState((window.innerWidth < 768) || (window.innerHeight < 768 && isLandscape) ? true : false);
+    const [isMobile, setIsMobile] = useState((window.innerWidth < 768) ? true : false);
 
     //stores the error message for time picker
     const [error, setError] = useState("");
@@ -309,7 +305,7 @@ const CartSummary = (props) => {
      */
     useEffect(() => {
         window.addEventListener('resize', function () {
-            if (window.innerWidth >= 768  && window.innerHeight >= 768) {
+            if (window.innerWidth >= 768) {
                 history.push({
                     pathname: "/",
                     cartVisible: true,
@@ -327,7 +323,7 @@ const CartSummary = (props) => {
             {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
             <div className="cart-wrapper">
                 {/* Renders navbar if device is mobile */}
-                {(window.innerWidth < 768 || (window.innerHeight < 768 && isLandscape)) ? <div className="navbar-wrapper">
+                {(window.innerWidth < 768) ? <div className="navbar-wrapper">
                     <Navbar />
                 </div> : <div className="background" onClick={props.toggleCart}></div>}
                 <div className="cart-popup">
@@ -415,4 +411,4 @@ const CartSummary = (props) => {
     )
 }
 
-export default withOrientationChange(CartSummary);
+export default CartSummary;
