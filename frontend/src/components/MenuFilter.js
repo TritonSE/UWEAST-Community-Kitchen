@@ -9,7 +9,6 @@
 import React, { Component} from 'react';
 import MenuFilterButton from './MenuFilterButton';
 import "../css/MenuFilter.css";
-const config = require('../config');
 
 const MenuFilter = ( {foodCategories, changeVisibleCategories, toggledFilter, setToggledFilter} ) => {
     return (
