@@ -243,7 +243,7 @@ router.post(
 router.post(
   "/itemInfo",
   [
-    body("_id").notEmpty(),
+    body("_id").notEmpty().isString(),
     isValidated,
   ],
   async (req, res, next) => {
@@ -260,7 +260,7 @@ router.post(
       }
 
       return res.status(200).json({ item: itemJSON });
-      
+
   } catch(err){
       console.error(err.message);
       res.status(500).send("Server error");

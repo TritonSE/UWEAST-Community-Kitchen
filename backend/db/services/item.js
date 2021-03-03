@@ -93,7 +93,7 @@ async function setFeatured(id, featured) {
  */
 async function getItemById(id) {
   try {
-    return Item.find({_id: new mongodb.ObjectID(id)}).exec();
+    return Item.findOne({_id: new mongodb.ObjectID(id)}).exec();
   } catch (err) {
     return false;
   }
