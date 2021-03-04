@@ -19,6 +19,7 @@ const {
 const { sendEmail } = require("../routes/services/mailer");
 const { createJWT } = require("./services/jwt");
 const router = express.Router();
+// const config = require("../config");
 const crypto = require("crypto");
 
 // used for random password generation (Route: /forgotPassword)

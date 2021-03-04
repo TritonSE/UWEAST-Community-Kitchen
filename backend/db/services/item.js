@@ -85,10 +85,25 @@ async function setFeatured(id, featured) {
   }
 }
 
+/**
+ * Retrieves the corresponding Item JSON given an item id. 
+ *
+ * @param {string} id - The id of the item object
+ * @returns {object/boolean} - The queried item object / false on err
+ */
+async function getItemById(id) {
+  try {
+    return Item.findOne({_id: new mongodb.ObjectID(id)}).exec();
+  } catch (err) {
+    return false;
+  }
+}
+
 module.exports = {
   getAllMenuItems,
   addNewItem,
   deleteItem,
   editItem,
   setFeatured,
+  getItemById
 };
