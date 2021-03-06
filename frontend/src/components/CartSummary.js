@@ -49,7 +49,7 @@ function loadItems(cart, popupFunc, removeItem) {
                         accom = accom + ", " + accommodation;
                     })
                 } else if (item[6]) {
-                    accom = ", " + item.accommodations;
+                    accom = ", " + item[6];
                 }
 
                 //item size and accommodations that need to be displayed
