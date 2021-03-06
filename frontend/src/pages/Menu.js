@@ -100,10 +100,16 @@ class Menu extends Component {
 
         const popupValues = JSON.parse(item.popupValues);
 
-
+        let cartIndex = 0;
         const oldCookies = document.cookie;
         const oldCookieFields = oldCookies.split(";");
-        const oldSize = this.byteSize(oldCookieFields[1]);
+        oldCookieFields.forEach(function (value, index) {
+            const cookieNameValue = value.split("=");
+            if(cookieNameValue[0] == " cart") {
+                cartIndex = index;
+            }
+        });
+        const oldSize = this.byteSize(oldCookieFields[cartIndex]);
         console.log(oldSize); 
 
         const itemId = popupValues.id;
@@ -129,12 +135,9 @@ class Menu extends Component {
         cookies.set("cart", cart, { path: "/" });
         const newCookies = document.cookie;
         const newCookieFields = newCookies.split(";");
-        const newSize = this.byteSize(newCookieFields[1]);
+        const newSize = this.byteSize(newCookieFields[cartIndex]);
         console.log(newSize);
         if(oldSize === newSize) {
-            const str = "contact us";
-            const linkStr = str.link(window.location.href + "contact");
-            // alert("Item cannot be added. Cart is already full. If you'd like to make a larger order, we suggest that you" + linkStr + "directly so we can better accommodate your needs.");
             this.setState({limitPopupVisible: true});
         } else {
             this.setState({ cartItems: cart.items, subTotal: cart.subtotal, tax: cart.tax, totalPrice: cart.total, cartKey: !this.state.cartKey, previewKey: !this.state.previewKey });
