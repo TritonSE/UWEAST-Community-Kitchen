@@ -68,8 +68,9 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
               let accommodations = menuItem.Accommodations;
               let priceOptions = menuItem.Prices;
               let dietaryInfo = menuItem.dietaryInfo;
+              let id = menuItem._id;
 
-              return <MenuItem title={title} image={image} price={price} description={description} togglePopup={togglePopup} key={key} dietaryInfo={dietaryInfo} priceOptions={priceOptions} accommodations={accommodations} />
+              return <MenuItem title={title} image={image} price={price} description={description} togglePopup={togglePopup} key={key} dietaryInfo={dietaryInfo} priceOptions={priceOptions} accommodations={accommodations} id={id}/>
             })}
           </div>
         </div>

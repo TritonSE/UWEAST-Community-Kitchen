@@ -21,7 +21,7 @@ class CartPreview extends Component {
             items: this.props.items,
 
             //stores price of each item
-            itemPrices: this.props.itemPrices,
+            // itemPrices: this.props.itemPrices,
 
             //stores subtotal of items in the cart
             subTotal: this.props.subtotal,
@@ -47,31 +47,31 @@ class CartPreview extends Component {
                 {/* iterates through items array and displays each in a row */}
                 {this.state.items.map((item, ind) => {
 
-                    const popupValues = JSON.parse(item.popupValues);
+                    // const popupValues = JSON.parse(item.popupValues);
 
                     //checks if any accommodations were selected and adds them to be displayed
                     let accom = "";
-                    if (item.accommodations && Array.isArray(item.accommodations)) {
-                        item.accommodations.forEach((accommodation) => {
+                    if (item[6] && Array.isArray(item[6])) {
+                        item[6].forEach((accommodation) => {
                             accom = accom + ", " + accommodation;
                         })
-                    } else if (item.accommodations) {
+                    } else if (item[6]) {
                         accom = ", " + item.accommodations;
                     }
 
                     //item size and accommodations that need to be displayed
-                    let size = item.size;
+                    let size = item[4];
                     let extraInfo = size + accom;
 
                     return (
                         <div key={ind} className="summary-item row">
                             <span className="thumbnail thumb-img">{ind + 1}</span>
-                            <span className="item-info">{item.quantity} X {popupValues.title}<br />
+                            <span className="item-info">{item[3]} X {item[1]}<br />
                                 <span className="item-description">{extraInfo}<br />
                                     {/* Conditonally renders a new line with special instructions if any were added */}
-                                    {(item.instructions !== "") ? <div><br /><span>Special Instr.: {item.instructions}</span></div> : null}
+                                    {(item[5] !== "") ? <div><br /><span>Special Instr.: {item[5]}</span></div> : null}
                                 </span></span>
-                            <span className="thumbnail summary-price">${this.state.itemPrices[ind].price}</span>
+                            <span className="thumbnail summary-price">${item[2]}</span>
                             <span className="item-divider"></span>
                         </div>
                     )
