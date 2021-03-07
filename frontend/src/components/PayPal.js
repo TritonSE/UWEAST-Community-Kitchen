@@ -14,7 +14,7 @@ const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
 
-//PayPal script is located in public/index.html (contains Client ID)
+// PayPal script is located in public/index.html (contains Client ID)
 export default function PayPal(props) {
     const [cookies, setCookie] = useCookies(["cart"]);
     let history = useHistory();
@@ -111,7 +111,6 @@ export default function PayPal(props) {
                     tax: {
                         currency_code: "USD",
                         value: 0,
-                        // (parseFloat(item[2])/parseFloat(item[3])*0.0775).toFixed(2)
                     },
                     quantity: item[3],
                     category: "PHYSICAL_GOODS"
@@ -134,54 +133,7 @@ export default function PayPal(props) {
         }],
         shipping_type: 'PICKUP',
     }
-    // THE FOLLOWING TWO METHODS ARE NOT USED. THEY WERE CREATED FOR
-    // SERVER SIDE PAYMENT INTEGRATION, BUT THIS ISN'T BEST PRACTICE,
-    // SO IT WAS NOT PURSUED. THEREFORE THESE METHODS ARE COMMENTED OUT.
-    /* const createOrder = async () => {
-        console.log("Creating order...");
-        return fetch(`${BACKEND_URL}paypal/createPayment`, {
-            method: "POST",
-            body: JSON.stringify(paypalOrderObject),
-            headers: {
-                "content-type": "application/json"
-            }, 
-        }).then((res) => {
-            if(res.ok) {
-                return res.json();
-            }
-        }).then((data) => {
-            console.log("finished creating order")
-            return data.orderID; // make sure to use the same key name for order ID on the client and server
-        })
-        .catch((err) => {
-            console.log(err);
-            alert("Create order Error");
-        });
-    }
-    const onApprove = async (data) => {
-        console.log("Authorizing order...");
-        return fetch(`${BACKEND_URL}paypal/executePayment`, {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({
-                orderID: data.orderID,
-            }),
-        }).then((res) => {
-           // handle show completion
-           console.log("ORDER COMPLETE!");
-           return res.json();
-        })
-        .catch(() => {
-            alert("Error");
-        }).then((details) => {
-            alert("Successful order!");
-            console.log(details);
-        });
-    } */
-
-     // To show PayPal buttons once the component loads
+    // To show PayPal buttons once the component loads
     React.useEffect(() => {
         window.paypal
         .Buttons({
@@ -225,35 +177,6 @@ export default function PayPal(props) {
                     }
                     // signal email automation by calling the /autoEmails/automate route, 
                     // this will automatically add the order to the database 
-                    /*
-                    // Assume req.body looks like this:
-                    // {
-                    //   "Customer": {
-                    //     "Name": "Kelly Pham",
-                    //     "Email": "abc@ucsd.edu",
-                    //     "Phone": "1234567890"
-                    //   },
-                    //   "Pickup": Date.now(),
-                    //   "PayPal": {
-                    //     "Amount": "22.04",
-                    //     "transactionID": "asjf982432"
-                    //   },
-                    //   "Order": [
-                    //     {
-                    //       "item": "Blue Bayou Lemonade",
-                    //       "quantity": 4,
-                    //       "size": "Individual",
-                    //     }, 
-                    //     {
-                    //       "item": "Hawaiian Barbeque",
-                    //       "quantity": 2,
-                    //       "size": "Family",
-                    //       "accommodations": "Extra pork",
-                    //       "specialInstructions": "Please remember the pork"
-                    //     }
-                    //   ]
-                    // }
-                    */
                     return fetch(`${BACKEND_URL}autoEmails/automate`, {
                         method: "POST",
                         headers: {
@@ -276,7 +199,8 @@ export default function PayPal(props) {
                         setCookie("cart", newCart, { path: "/" });
                         //setCookie("cart");
                         
-                        history.push("/contact");
+                        history.push("/");
+                        history.go(0);
                     })
                     .catch(() => {
                         alert("Error...");
@@ -284,14 +208,10 @@ export default function PayPal(props) {
                 });
             },
             onCancel: () => {
-                // If the user cancels their order, send them back to the cart summary
-                // The cart summary exists at the menu page
-                history.push("/");
             },
             onError: (err) => {
                 console.log(err);
                 alert("An error occurred!");
-                history.push("/");
 
             },
         })
