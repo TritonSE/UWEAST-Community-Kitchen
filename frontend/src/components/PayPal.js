@@ -16,11 +16,13 @@ const BACKEND_URL = config.backend.uri;
 
 //PayPal script is located in public/index.html (contains Client ID)
 export default function PayPal(props) {
-    const { cart } = props;
+    const [cookies, removeCookie] = useCookies(["cart"]);
     let history = useHistory();
+
+    const { cart } = cookies.cart;
+
     
     //stores cookie object and function to remove cookie
-    const [cookies, removeCookie] = useCookies(["cart"]);
     // I assume the cart object looks like this:
     // {
     //     cart_total: "",
@@ -68,54 +70,71 @@ export default function PayPal(props) {
             // Deals with pricing of the cart
             amount: {
                 currency_code: "USD",
-                value: cart.cart_total,
+                value: cookies.cart.total,
                 breakdown: {
                     // includes totals for items and taxes. Shipping and handling can be ignored
                     // because the items are for pickup and handling is included in price
                     item_total: {
                         currency_code: "USD",
-                        value: cart.item_total,
+                        value: cookies.cart.subtotal,
                     },
                     tax_total: {
                         currency_code: "USD",
-                        value: cart.tax_total,
+                        value: cookies.cart.tax,
+                        // cookies.cart.tax
                     },
                 }
             },
             // Deals with the individual item entries for the order
             items: 
-            cart.items.map((item) => {
+            [...cookies.cart.items.map((item) => {
                 // build description
-                let desc = [`Size: ${item.size}`];
-                if(item.accommodations !== undefined){
-                    if(Array.isArray(item.accommodations)){
-                        desc = [...desc, ...item.accommodations];
+                let desc = [`Size: ${item[4]}`];
+                if(item[6] !== undefined){
+                    if(Array.isArray(item[6])){
+                        desc = [...desc, ...item[6]];
                     }
                     else{
-                        desc = [...desc, item.accommodations];
+                        desc = [...desc, item[6]];
                     }
                 }
-                desc = [...desc, item.instructions];
+                desc = [...desc, item[5]];
                 return {
-                    name: item.popupValues.title,
+                    name: item[1],
                     // Description follows the format:
                     // Size: {size}, (Gluten Free,) (Other addons,) 
                     description: desc.join(", "),
                     unit_amount: {
                         currency_code: "USD",
-                        value: item.individual_price,
+                        value: (parseFloat(item[2])/parseFloat(item[3])).toFixed(2),
                     },
                     tax: {
                         currency_code: "USD",
-                        value: item.individual_tax,
+                        value: 0,
+                        // (parseFloat(item[2])/parseFloat(item[3])*0.0775).toFixed(2)
                     },
-                    quantity: item.quantity,
+                    quantity: item[3],
                     category: "PHYSICAL_GOODS"
                 }
-            })
+            }), 
+                {   name: "taxes",
+                    description: "taxes",
+                    unit_amount: {
+                        currency_code: "USD",
+                        value: 0,
+                    },
+                    tax: {
+                        currency_code: "USD",
+                        value: cookies.cart.tax,
+                    },
+                    quantity: 1,
+                    category: "PHYSICAL_GOODS"
+                }
+            ]
         }],
         shipping_type: 'PICKUP',
     }
+    console.log(cookies.cart);
     // THE FOLLOWING TWO METHODS ARE NOT USED. THEY WERE CREATED FOR
     // SERVER SIDE PAYMENT INTEGRATION, BUT THIS ISN'T BEST PRACTICE,
     // SO IT WAS NOT PURSUED. THEREFORE THESE METHODS ARE COMMENTED OUT.
@@ -175,7 +194,7 @@ export default function PayPal(props) {
                     // details here includes payer name, phone number, and email
 
                     // create order object
-                    let sendDate = new Date((cart.pickup_date.getMonth()+1) + ' ' + cart.pickup_date.getDate() + ', ' + cart.pickup_date.getFullYear() + ' ' + cart.pickup_time)
+                    let sendDate = new Date((props.selectedDate.getMonth()+1) + ' ' + props.selectedDate.getDate() + ', ' + props.selectedDate.getFullYear() + ' ' + props.selectedTime);
                     const orderObj = {
                         "Customer": {
                             "Name": details.payer.name.given_name + " " + details.payer.name.surname,
@@ -184,28 +203,57 @@ export default function PayPal(props) {
                         },
                         "Pickup": sendDate,
                         "PayPal": {
-                            "Amount": cart.cart_total,
+                            "Amount": parseFloat(cookies.cart.total).toFixed(2),
                             "transactionID": details.id
                         },
                         "Order": 
-                        cart.items.map((item) => {
+                        cookies.cart.items.map((item) => {
                             return {
-                                "item": item.popupValues.title,
-                                "quantity": item.quantity,
-                                "size": item.size,
+                                "item": item[1],
+                                "quantity": item[3],
+                                "size": item[4],
                                 "accommodations": 
-                                    item.accommodations !== undefined
-                                        ? (Array.isArray(item.accommodations) 
-                                            ? item.accommodations.join(",") 
-                                            : item.accommodations
+                                    item[6] !== undefined
+                                        ? (Array.isArray(item[6]) 
+                                            ? item[6].join(",") 
+                                            : item[6]
                                         )
                                         : "",
-                                "specialInstructions": item.instructions,
+                                "specialInstructions": item[5],
                             }
                         })
                     }
                     // signal email automation by calling the /autoEmails/automate route, 
                     // this will automatically add the order to the database 
+                    /*
+                    // Assume req.body looks like this:
+                    // {
+                    //   "Customer": {
+                    //     "Name": "Kelly Pham",
+                    //     "Email": "abc@ucsd.edu",
+                    //     "Phone": "1234567890"
+                    //   },
+                    //   "Pickup": Date.now(),
+                    //   "PayPal": {
+                    //     "Amount": "22.04",
+                    //     "transactionID": "asjf982432"
+                    //   },
+                    //   "Order": [
+                    //     {
+                    //       "item": "Blue Bayou Lemonade",
+                    //       "quantity": 4,
+                    //       "size": "Individual",
+                    //     }, 
+                    //     {
+                    //       "item": "Hawaiian Barbeque",
+                    //       "quantity": 2,
+                    //       "size": "Family",
+                    //       "accommodations": "Extra pork",
+                    //       "specialInstructions": "Please remember the pork"
+                    //     }
+                    //   ]
+                    // }
+                    */
                     return fetch(`${BACKEND_URL}autoEmails/automate`, {
                         method: "POST",
                         headers: {
@@ -223,7 +271,7 @@ export default function PayPal(props) {
                         history.push("/");
                     })
                     .catch(() => {
-                        alert("Error");
+                        alert("Error...");
                     });
                 });
             },
@@ -233,6 +281,7 @@ export default function PayPal(props) {
                 history.push("/");
             },
             onError: (err) => {
+                console.log(err);
                 alert("An error occurred!");
                 history.push("/");
 

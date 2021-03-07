@@ -427,7 +427,7 @@ const CartSummary = (props) => {
                     </div>
                     {/* Renders PayPal component if all required fields are completed and return to menu button otherwise */}
                     <div className="return-button">
-                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= 20) ? <PayPal cart={paypalCart} /> : <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
+                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= 20) ? <PayPal cart={paypalCart} selectedDate={selectedDate} selectedTime={selectedTime} /> : <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
                     </div>
                 </div>
             </div>
