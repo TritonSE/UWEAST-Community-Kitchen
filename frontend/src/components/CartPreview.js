@@ -1,46 +1,75 @@
-import React, { Component, useEffect } from 'react';
-import {Button} from 'react-bootstrap';
+/**
+ * Cart preview component that displays the items currently in the cart. It renders the items in the
+ * cart, with each item's name, quantity, size, accommodations (if any), special instructions (if any), 
+ * and price. It also renders a button that opens the cart summary. This file has no dependencies on 
+ * other files or components.
+ * 
+ * @summary Displays the cart preview on desktop in the bottom-right corner of the screen.
+ * @author Dhanush Nanjunda Reddy
+ */
+import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import '../css/CartPreview.css';
 
 class CartPreview extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
+
+            //stores items in the cart
             items: this.props.items,
-            subTotal: "00.00",
-            tax: "00.00",
-            totalPrice: "00.00"
+
+            //stores subtotal of items in the cart
+            subTotal: this.props.subtotal,
+
+            //stores total tax for items in the cart
+            tax: this.props.tax,
+
+            //stores total price of items in the cart
+            totalPrice: this.props.total
         }
 
         this.loadItems = this.loadItems.bind(this);
     }
-    
-    //displays items currently in the cart and updates subtotal and total
+
+    /**
+     * displays items currently in the cart and updates subtotal, tax, and total
+     * 
+     * @returns {div} - a div that contains all items, one on each row
+     */
     loadItems() {
-        return(
+        return (
             <div>
+                {/* iterates through items array and displays each in a row */}
                 {this.state.items.map((item, ind) => {
 
-                    this.state.subTotal = parseFloat(this.state.subTotal) + parseFloat(item.price);
-                    this.state.subTotal = parseFloat(this.state.subTotal).toFixed(2);
-                    this.state.tax = (parseFloat(this.state.subTotal)*0.0775).toFixed(2);
-                    this.state.totalPrice = parseFloat(this.state.subTotal) + parseFloat(this.state.tax);
-                    this.state.totalPrice = parseFloat(this.state.totalPrice).toFixed(2);
+                    //checks if any accommodations were selected and adds them to be displayed
+                    let accom = "";
+                    if (item[6] && Array.isArray(item[6])) {
+                        item[6].forEach((accommodation) => {
+                            accom = accom + ", " + accommodation;
+                        })
+                    } else if (item[6]) {
+                        accom = ", " + item[6];
+                    }
 
-                    let specialInstructions = (item.instructions === "") ? "" : ", " + item.instructions;
-                    let accommodation = (item.accommodations) ? ", " + item.accommodations : "";
+                    //item size and accommodations that need to be displayed
+                    let size = item[4];
+                    let extraInfo = size + accom;
 
-                    let extraInfo = item.size + specialInstructions  + accommodation;
-
-                        return (
-                            <div key={ind} className="summary-item row">
-                                <span className="thumbnail thumb-img">{ind+1}</span>
-                                <span className="item-info">{item.quantity} X {item.name}<br/>
-                                <span className="item-description">{extraInfo}</span></span>
-                                <span className="thumbnail summary-price">${item.price}</span>
-                                <span className="item-divider"></span>
-                            </div>
-                        )
+                    return (
+                        <div key={ind} className="summary-item row">
+                            <span className="thumbnail thumb-img">{ind + 1}</span>
+                            <span className="item-info">{item[3]} X {item[1]}<br />
+                                <span className="item-description">{extraInfo}<br />
+                                    {/* Conditonally renders a new line with special instructions if any were added */}
+                                    {(item[5] !== "") ? <div><br /><span>Special Instr.: {item[5]}</span></div> : null}
+                                </span></span>
+                            <span className="thumbnail summary-price">${item[2]}</span>
+                            <span className="item-divider"></span>
+                        </div>
+                    )
                 })}
             </div>
         )
@@ -59,15 +88,16 @@ class CartPreview extends Component {
                             {this.loadItems()}
                         </div>
                         <div className="order-totals">
-                            <br/>
-                            Subtotal: ${this.state.subTotal}<br/>
+                            <br />
+                            Subtotal: ${this.state.subTotal}<br />
                             Tax: ${this.state.tax}
                         </div>
-                        <Button>Review Order</Button>
                     </div>
                     <div className="order-summary">
                         <span>Total Price</span><span className="add-price">${this.state.totalPrice}</span>
                     </div>
+                    {/* button to open the cart summary */}
+                    <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="review-order-button" onClick={this.props.toggleCart}>Review Order</Button>
                 </div>
             </div>
         )

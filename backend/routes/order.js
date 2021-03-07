@@ -1,13 +1,22 @@
+/**
+ * This file creates the routes to allow for interaction with the orders DB.
+ * Contains route find completed orders or find orders based on customer name.
+ * Also allows for an order's status to be updated.
+ *
+ * @summary   Routes to modify the orders DB specifically finding and updating.
+ * @author    Thomas Garry
+ */
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const router = express.Router();
+const { verify } = require("./services/jwt");
 const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 
-// @body: Customer (with Name, Email, Phone), Pickup, Timestamps,
-// @body: PayPal(with Amount and transactionID),
-// @body: Order (array of objects with item string, quantity and extra array),
-// returns success:true if order is changed
+// @body - Customer (with Name, Email, Phone), Pickup, Timestamps,
+// @body - PayPal(with Amount and transactionID),
+// @body - Order (array of objects with item string, quantity and extra array),
+// @return -  success:true if order is changed
 // router.post(
 //   "/insert",
 //   [
@@ -36,24 +45,35 @@ const { addOrder, findOrders, updateStatus } = require("../db/services/order");
 //   }
 // );
 
-// @body: isCompleted, Customer: neither required
-// isCompleted: T/F based on whether an order is completed (default: false)
-// Customer: JSON which contains name, email and phone of customer
-// finds orders filtered on isCompleted and/or Customer
-// returns all orders if body is not provided to filter or error
+/**
+ * Finds orders filtered on isCompleted and/or Customer.
+ *
+ * @body {string} token - Admin token to verify for authorization
+ * @returns {status/object} - 200 success with all orders under the constraints / 500 with err
+ */
 router.post(
   "/",
   [
-    body("isCompleted").notEmpty().optional(),
-    body("Customer").notEmpty().optional(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
     isValidated,
   ],
   async (req, res, next) => {
     try {
-      const { isCompleted, Customer } = req.body;
-      // returns orders or error if there is an error
-      const orders = await findOrders(isCompleted, Customer);
-      res.status(200).json({
+      // retrieve all the orders
+      const orders = await findOrders();
+
+      // error in getting errors, empty orders array returned
+      if (!orders) {
+        return res.status(400).json({
+          orders: [],
+        });
+      }
+
+      // successfully retrieved orders
+      return res.status(200).json({
         orders: orders,
       });
     } catch (err) {
@@ -63,13 +83,25 @@ router.post(
   }
 );
 
-// @body: _id, isCompleted: both required
-// _id: id of order to be updated - required
-// isCompleted: T/F based on whether an order is completed (default: false) - required
-// updates the order's isCompleted boolean to the value passed in
+/**
+ * Updates the order's isCompleted boolean to the value passed in.
+ *
+ * @body {string} _id - Id of order to be updated
+ * @body {object} isCompleted - T/F based on whether an order is completed (default: false)
+ * @body {string} token - Admin token to verify for authorization
+ * @returns {status/object} - 200 with success / 500 with err
+ */
 router.post(
   "/updateStatus",
-  [body("_id").isString(), body("isCompleted").isBoolean(), isValidated],
+  [
+    body("_id").isString(),
+    body("isCompleted").isBoolean(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     try {
       const { _id, isCompleted } = req.body;

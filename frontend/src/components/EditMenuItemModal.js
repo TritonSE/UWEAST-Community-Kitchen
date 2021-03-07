@@ -33,6 +33,7 @@ import { Modal, FormControl, Checkbox, FormControlLabel, FormGroup, OutlinedInpu
 import '../css/AddMenuItemModal.css';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ClearIcon from '@material-ui/icons/Clear';
+import {getJWT, logout} from '../util/Auth';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
@@ -149,7 +150,8 @@ export default function EditMenuItemModal (props) {
             "isFeatured": false,
             "isCompleted": false,
             "Accommodations": accommodations,
-            "dietaryInfo": dietaryInfo
+            "dietaryInfo": dietaryInfo,
+            "token": getJWT()
         }
         // push to database
         await fetch(`${BACKEND_URL}item/edit`, {
@@ -164,6 +166,13 @@ export default function EditMenuItemModal (props) {
                 // refetch
                 setLoaded(false);
                 setShowModal("");
+            }
+             // invalid admin token
+             else if(res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
             }
             else{
                 alert("There was an error. Recheck your inputs and try again");

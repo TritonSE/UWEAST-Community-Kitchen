@@ -1,9 +1,16 @@
-// this file creates the routes to allow for interaction with the
-// Email DB, routes are /changePrimary /addSecondary /removeSecondary
-// /secondary (GET) /primary (GET)
+/**
+ * This file creates the routes to allow for interaction with the Email DB.
+ * Contains routes to add or change the primary email, add a secondary email, and remove a secondary email.
+ * Also contains get requests to get the primary email and secondary email(s) as well as
+ * delete request to delete a secondary email.
+ *
+ * @summary   Routes to modify the Email DB specifically changing, finding and deleting emails.
+ * @author    Thomas Garry
+ */
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
+const { verify } = require("./services/jwt");
 const router = express.Router();
 const {
   findPrimaryEmail,
@@ -13,13 +20,24 @@ const {
   addSecondaryEmail,
 } = require("../db/services/email");
 
-// @body: email
-// @return: { success:true } if email is changed
-//          "Email change unsuccessful": if duplicate email or failures
-// @description: changes the primary email address in the Email DB
+/**
+ * Changes the primary email address in the Email DB.
+ *
+ * @body {string} - Email to be set to the Primary address
+ * @body {string} token - Admin token to verify for authorization
+ * @returns {status/object} - 200 with success if email is changed /
+ *                            400 if duplicate email or failure
+ */
 router.post(
   "/changePrimary",
-  [body("email").notEmpty().isEmail(), isValidated],
+  [
+    body("email").notEmpty().isEmail(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     const { email } = req.body;
     try {
@@ -43,13 +61,24 @@ router.post(
   }
 );
 
-// @body: email
-// @return: { success:true } if secondary email is added
-//          "Email change unsuccessful": if duplicate email or failures
-// @description: adds the secondary email address in the Email DB
+/**
+ * Adds the secondary email address in the Email DB.
+ *
+ * @body {object} - Email to be set as a secondary address
+ * @body {string} token - Admin token to verify for authorization
+ * @returns {status/object} - 200 with success if email is changed /
+ *                            400 if duplicate email or failure
+ */
 router.post(
   "/addSecondary",
-  [body("email").notEmpty().isEmail(), isValidated],
+  [
+    body("email").notEmpty().isEmail(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     const { email } = req.body;
     try {
@@ -73,13 +102,24 @@ router.post(
   }
 );
 
-// @body: email
-// @return: { success:true } if the secondary email is deleted
-//          "Enter a valid secondary email": if email is not in DB/failure
-// @description: deletes the secondary email address in the Email DB
+/**
+ * Deletes the secondary email address in the Email DB.
+ *
+ * @body {object} - Email to be deleted from the secondary addresses
+ * @body {string} token - Admin token to verify for authorization
+ * @returns {status/object} - 200 with success if email is changed /
+ *                            400 if duplicate email or failure
+ */
 router.delete(
   "/removeSecondary",
-  [body("email").notEmpty().isEmail(), isValidated],
+  [
+    body("email").notEmpty().isEmail(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
   async (req, res, next) => {
     const { email } = req.body;
     try {
@@ -99,9 +139,11 @@ router.delete(
   }
 );
 
-// @body: email
-// @return: returns an array of all the secondary emails in the DB
-// @description: gets all the secondary emails
+/**
+ * Gets all the secondary emails.
+ *
+ * @returns {status/[object]} - 200 with an array of all the secondary emails in the DB / 500 err
+ */
 router.get("/secondary", async (req, res, next) => {
   try {
     // returns emails or error if there is an error
@@ -115,9 +157,11 @@ router.get("/secondary", async (req, res, next) => {
   }
 });
 
-// @body: email
-// @return: returns the primary email in the DB
-// @description: gets the primary email in the DB
+/**
+ * Gets the primary email in the DB.
+ *
+ * @returns {status/object}} - 200 with the primary email in the DB / 500 err
+ */
 router.get("/primary", async (req, res, next) => {
   try {
     // returns email or error if there is an error

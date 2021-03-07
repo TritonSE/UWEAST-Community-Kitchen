@@ -1,11 +1,20 @@
-// this file allows for interaction with the Email DB
-// with methods that find the primary email, find the secondary emails,
-// delete a secondary email, change the primary email, and a secondaryEmail
+/**
+ * File allows for interaction with the Email DB.
+ * Contains methods that find the primary email, find the secondary emails,
+ * delete a secondary email, change the primary email, and a secondaryEmail.
+ *
+ * @summary   Creation of interaction with Email DB.
+ * @author    Thomas Garry
+ */
 const { raw } = require("express");
 const { Email } = require("../models/email");
 
-// @return: Mongo object email or false on duplicate/error
-// @description: change the primary email in the DB
+/**
+ * Change the primary email in the DB to the passed in object.
+ *
+ * @param {object} raw_email - Json representing the primary email to store
+ * @returns {object/boolean} - Mongo object email or false on duplicate/error
+ */
 async function changePrimaryEmail(raw_email) {
   try {
     // find and replace the primary email
@@ -25,8 +34,12 @@ async function changePrimaryEmail(raw_email) {
   }
 }
 
-// @return: Mongo Object for email or false on failure/duplicate
-// @description: add secondary email if it doesn't already exist
+/**
+ * Add secondary email if it doesn't already exist.
+ *
+ * @param {object} raw_email - json representing the primary email to store
+ * @returns {object/boolean} - Mongo object email or false on duplicate/error
+ */
 async function addSecondaryEmail(raw_email) {
   try {
     let email = await Email.findOne(raw_email).exec();
@@ -43,20 +56,30 @@ async function addSecondaryEmail(raw_email) {
   }
 }
 
-// @return: Mongo Object for primary email / null
-// @decsription: finds the primary email in the DB
+/**
+ * Finds the primary email in the DB.
+ *
+ * @returns {object/nul} - Mongo Object for primary email / null
+ */
 async function findPrimaryEmail() {
   return Email.findOne({ isPrimary: true }).exec();
 }
 
-// @return: Array of Mongo Objects for secondary emails
-// @decsription: finds the primary email in the DB
+/**
+ * Finds the secondary emails in the DB.
+ *
+ * @returns {[object]} - Array of Mongo Objects for secondary emails / [] (empty)
+ */
 async function findAllSecondaryEmails() {
   return Email.find({ isPrimary: false }).exec();
 }
 
-// @return: true on deletion / false
-// @decsription: delete secondary email
+/**
+ * Delete specified secondary email.
+ *
+ * @param {string} incomingEmail - string name of the secondary email to delete
+ * @returns {object/boolean} - true on deletion / false
+ */
 async function deleteSecondaryEmail(incomingEmail) {
   let email = await Email.findOne({
     email: incomingEmail,
@@ -71,10 +94,20 @@ async function deleteSecondaryEmail(incomingEmail) {
   }
 }
 
+/**
+ * Query all emails (primary and secondary) in the collection.
+ *
+ * @returns {[object]} - Returns an array of all emails in collection, where emails are JSON objects.
+ */
+async function findAllEmails() {
+  return Email.find({}).exec();
+}
+
 module.exports = {
   findPrimaryEmail,
   findAllSecondaryEmails,
   deleteSecondaryEmail,
   changePrimaryEmail,
   addSecondaryEmail,
+  findAllEmails,
 };
