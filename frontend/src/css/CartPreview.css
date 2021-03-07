@@ -43,7 +43,7 @@
     width: 2vw;
     height: 5vh;
     border-radius: 0.5vw;
-    background-color: lightgrey;
+    background-color: #CCCCCC;
     font-weight: bold;
     justify-content: center;
     display: inline-flex;
@@ -90,7 +90,11 @@
 .item-info {
     font-size: 1vw;
     height: auto;
-    width: 9vw;
+    width: 7.7vw;
     margin-top: 0.4vw;
     margin-bottom: 0.2vw;
+}
+
+.review-order-button {
+    width: 100%;
 }

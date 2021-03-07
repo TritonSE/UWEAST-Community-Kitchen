@@ -1,77 +1,368 @@
-.background {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    position: fixed;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 1;
-    top: 0;
-    left: 0;
-}
-
 .cart-popup {
-    width: 23vw;
     background-color: white;
-    height: auto;
     overflow-x: hidden;
+    overflow-y: scroll;
     position: fixed;
-    top: 0;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    padding: 10px;
-    z-index: 2;
-}
-
-.date-picker {
-    margin-left: 2vw;
-}
-
-.time-picker {
-    margin-left: 2vw;
-}
-
-.summary-title {
-    margin-top: 2vw;
-}
-.return-button {
-    width: 21vw;
-}
-
-.item-info {
-    font-size: 1vw;
-    height: auto;
-    width: 8vw;
-    margin-top: 0.4vw;
-    margin-bottom: 0.2vw;
 }
 
 .edit-button {
-    margin-top: 1vw;
-    height: 2vw;
+    display: inline-flex;
+    justify-content: center;
     width: auto;
     color: #F9CE1D;
-    border-radius: 0.5vw;
-    background-color: white;
+    align-items: center;
+    text-align: center;
 }
 
 .remove-button {
-    margin-top: 1vw;
-    margin-left: 1vw;
-    height: 2vw;
+    display: inline-flex;
+    justify-content: center;
     width: auto;
-    border-radius: 0.5vw;
-    background-color: white;
+    color: black;
+    align-items: center;
+    text-align: center;
 }
 
-.summary-item {
-    font-size: 80%;
-    width: 25vw;
-    line-height: normal;
+.thumbnail {
+    background-color: #CCCCCC;
 }
 
-.summary-price {
-    margin: 0.5vw 0vw auto 0.5vw;
-    width: auto;
-    float: inline-end;
+.thumbnail-background {
+    background-color: #F1F1F1;
+    font-weight: bold;
+    justify-content: center;
+    display: inline-flex;
+    text-align: center;
+    align-items: center;
+}
+
+.return {
+    width: 100%;
+}
+
+.item-wrapper {
+    display: inline-flex;
+}
+
+.date-time {
+    display: inline-flex;
+}
+
+@media only screen and (max-width: 767px)
+{
+    .cart-popup {
+        width: 100vw;
+        height: calc(100vh - 116px);
+        background-color: white;
+        overflow-x: scroll;
+        z-index: 1;
+        padding: 6vw;
+    }
+
+    .pickup-title {
+        font-weight: bold;
+        font-size: 4.5vw;
+    }
+
+    .date-picker {
+        width: 50%;
+        margin-top: -16px;
+    }
+
+    .time-picker {
+        margin-left: 8vw;
+        width: 50%;
+    }
+
+    .pickup-date-info {
+        height: auto;
+        font-size: 2.7vw;
+        margin-top: 1.2vw;
+        width: 48.8vw;
+    }
+
+    .summary-title {
+        font-weight: bold;
+        padding: 2.4vw 0vw 2.4vw 0vw;
+        font-size: 4.5vw;
+    }
+
+    .cart-items {
+        width: 88vw;
+        height: auto;
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+
+    .summary-item {
+        width: 88vw;
+        display: block;
+    }
+
+    .edit-button {
+        margin-top: 1.2vw;
+        height: 5.76vw;
+        border-radius: 1.2vw;
+        border-width: 0vw;
+        padding: 1.68vw;
+        font-size: 2.7vw;
+        margin-left: 1vw;
+    }
+
+    .remove-button {
+        margin-left: 2.2vw;
+        border-radius: 1.2vw;
+        border-width: 0vw;
+        padding: 1.68vw;
+        font-size:2.7vw;
+        height: 5.76vw;
+        margin-top: 1.2vw;
+    }
+
+    .summary-price {
+        margin-top: 1.2vw;
+        margin-left: 1.9vw;
+        width: 12.1vw;
+    }
+
+    .order-totalprices {
+        margin-top: 4.8vw;
+        text-align: right;
+        font-size: 2.7vw;
+        font-weight: bold;
+        padding-bottom: 1.6vw;
+    }
+
+    .thumb-image {
+        float: left;
+        margin: 1.2vw 1.44vw auto 0vw;
+    }
+
+    .item-divide {
+        width: 88vw;
+        margin-top: 1.92vw;
+        border-bottom: 1px solid #000000;
+        display: block;
+    }
+
+    .thumbnail-background {
+        border-radius: 1.2vw;
+        padding: 1.68vw;
+        font-size: 2.7vw;
+    }
+
+    .item-name {
+        font-size: 3vw;
+        font-weight: bold;
+        height: auto;
+        width: 40.9vw;
+        margin-left: 0.72vw;
+        margin-top: 1.44vw;
+        margin-bottom: 0.48vw;
+    }
+
+    .item-descript {
+        font-size: 2.5vw;
+        font-style: italic;
+        font-weight: bold;
+    }
+
+    .error {
+        font-size: 2.7vw;
+        max-width: 24vw;
+        color: red;
+    }
+
+    .select-error {
+        font-size: 2.7vw;
+        margin-bottom: 0px;
+        color: red;
+    }
+
+    .order-minimum {
+        height: auto;
+        text-align: right;
+        margin-left: 40.8vw;
+        font-size: 2.7vw;
+        color: red;
+        margin-bottom: 1.6vw;
+    }
+
+    .navbar-wrapper {
+        display: block;
+        min-height: 116px;
+    }
+}
+
+@media only screen and (min-width: 768px)
+{
+    .background {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        position: fixed;
+        background-color: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(4px);
+        z-index: 2;
+        top: 0;
+        left: 0;
+    }
+
+    .cart-popup {
+        width: 550px;
+        background-color: white;
+        max-height: 95vh;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        position: fixed;
+        top: 0;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 3;
+        padding: 30px;
+    }   
+
+    .cart-items::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 7px;
+    }
+      
+    .cart-items::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background-color: rgba(0, 0, 0, .5);
+        box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+    }
+
+    .pickup-title {
+        font-weight: bold;
+        font-size: 21px;
+    }
+
+    .date-picker {
+        width: 35%;
+    }
+
+    .time-picker {
+        margin-top: 15px;
+        margin-left: 115px;
+        width: 35%;
+    }
+
+    .pickup-date-info {
+        height: auto;
+        font-size: 11px;
+        margin-top: 7.5px;
+        width: 180px;
+    }
+
+    .summary-title {
+        font-weight: bold;
+        padding: 15px 0px 15px 0px;
+        font-size: 21px;
+    }
+
+    .cart-items {
+        width: 490px;
+        height: auto;
+        max-height: 300px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    .summary-item {
+        width: 490px;
+        display: block;
+    }
+
+    .edit-button {
+        margin-top: 7.5px;
+        height: 36px;
+        border-radius: 7.5px;
+        border-width: 0px;
+        padding: 10.5px;
+        font-size: 12px;
+    }
+
+    .remove-button {
+        margin-left: 15px;
+        border-radius: 7.5px;
+        border-width: 0px;
+        padding: 10.5px;
+        font-size: 12px;
+        height: 36px;
+        margin-top: 7.5px;
+    }
+
+    .summary-price {
+        margin-left: 10px;
+        width: 60px;
+    }
+
+    .order-totalprices {
+        margin-top: 30px;
+        text-align: right;
+        font-size: 70%;
+        font-weight: bold;
+        padding-bottom: 10px;
+    }
+
+    .thumb-image {
+        float: left;
+        margin: 7.5px 9px auto 0px;
+    }
+
+    .item-divide {
+        display: block;
+        width: 480px;
+        margin-top: 12px;
+        border-bottom: 1px solid #000000;
+    }
+
+    .return-button {
+        width: 490px;
+    }
+
+    .thumbnail-background {
+        border-radius: 7.5px;
+        padding: 10.5px;
+        font-size: 12px;
+    }
+
+    .item-name {
+        font-size: 16px;
+        font-weight: bold;
+        height: auto;
+        width: 240px;
+        margin-left: 4.5px;
+        margin-top: 9px;
+        margin-bottom: 3px;
+    }
+
+    .item-descript {
+        font-size: 13px;
+        font-style: italic;
+        font-weight: bold;
+    }
+
+    .error {
+        font-size: 11px;
+        max-width: 150px;
+        color: red;
+    }
+
+    .select-error {
+        font-size: 11px;
+        color: red;
+    }
+
+    .order-minimum {
+        height: auto;
+        text-align: right;
+        max-width: 235px;
+        margin-left: 255px;
+        font-size: 11px;
+        color: red;
+        margin-bottom: 10px;
+    }
 }
