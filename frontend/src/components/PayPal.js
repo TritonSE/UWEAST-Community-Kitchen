@@ -223,7 +223,6 @@ export default function PayPal(props) {
                             }
                         })
                     }
-                    console.log(orderObj);
                     // signal email automation by calling the /autoEmails/automate route, 
                     // this will automatically add the order to the database 
                     /*
