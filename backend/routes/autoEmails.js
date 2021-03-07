@@ -13,7 +13,7 @@ const { findAllEmails, findPrimaryEmail } = require("../db/services/email");
 const { sendEmail } = require("../routes/services/mailer");
 const { addOrder } = require("../db/services/order");
 const { isValidated } = require("../middleware/validation");
-
+const config = require("../config");
 const router = express.Router();
 
 /**

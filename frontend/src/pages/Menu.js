@@ -35,7 +35,8 @@ class Menu extends Component {
         super(props);
 
         //creates cart cookie with default values if it doesn't exist
-        if (!this.props.cookies.get("cart")) {
+        if (this.props.cookies.get("cart") === "undefined") {
+            console.log("cookies undefined");
             let newCart = {
                 items: [],
                 subtotal: "00.00",
@@ -43,6 +44,10 @@ class Menu extends Component {
                 total: "00.00"
             }
             this.props.cookies.set("cart", newCart, { path: "/" });
+        }
+        else{
+            console.log(this.props.cookies);
+
         }
 
         //stores items currently in the cart using local storage

@@ -16,7 +16,7 @@ const BACKEND_URL = config.backend.uri;
 
 //PayPal script is located in public/index.html (contains Client ID)
 export default function PayPal(props) {
-    const [cookies, removeCookie] = useCookies(["cart"]);
+    const [cookies, setCookie] = useCookies(["cart"]);
     let history = useHistory();
 
     const { cart } = cookies.cart;
@@ -267,7 +267,15 @@ export default function PayPal(props) {
                             alert('Transaction completed, but email automation failed. You paid for your meal, and should get a confirmation from PayPal');
                         }
                         //clears the cart cookie after order is placed
-                        removeCookie("cart");
+                        let newCart = {
+                            items: [],
+                            subtotal: "00.00",
+                            tax: "00.00",
+                            total: "00.00"
+                        }
+                        setCookie("cart", newCart, { path: "/" });
+                        //setCookie("cart");
+                        
                         history.push("/");
                     })
                     .catch(() => {
