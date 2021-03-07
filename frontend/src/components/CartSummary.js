@@ -40,8 +40,6 @@ function loadItems(cart, popupFunc, removeItem) {
             {/* iterates through cart items and displays each in a row */}
             {cart.items.map((item, ind) => {
 
-                // const popupValues = JSON.parse(item.popupValues);
-
                 //checks if any accommodations were selected and adds them to be displayed
                 let accom = "";
                 if (item[6] && Array.isArray(item[6])) {
@@ -55,15 +53,6 @@ function loadItems(cart, popupFunc, removeItem) {
                 //item size and accommodations that need to be displayed
                 let size = item[4];
                 let extraInfo = size + accom;
-
-                //object to be passed in to MenuItemPopup when edit button is clicked
-                // const fillIns = {
-                //     quantity: item.quantity,
-                //     size: item.size,
-                //     instructions: item.instructions,
-                //     index: ind,
-                //     accommodations: item.accommodations ? item.accommodations : []
-                // }
 
                 return (
                     <div key={ind} className="summary-item">
@@ -123,7 +112,6 @@ const CartSummary = (props) => {
         item_total: props.subtotal || cookies.cart.subtotal,
         tax_total: props.tax || cookies.cart.tax,
         items: props.items || cookies.cart.items
-        // itemPrices: props.itemPrices || cookies.cart.prices
     });
 
     // stores whether or not the item popup is currently visible
@@ -150,49 +138,23 @@ const CartSummary = (props) => {
         //gets current cart object from cookies
         let cart = cookies.cart;
 
-        //removes "price" key from item
-        // const itemCost = item.price;
-        // delete item.price;
-
         const popupValues = JSON.parse(item.popupValues);
 
-        let oldItem = cart.items[popupValues.fillIns.index];
-
-        const itemId = popupValues.id;
-        const itemName = popupValues.title;
-        delete item.popupValues;
-        item.id = itemId;
-        item.name = itemName;
-
+        //create array representation of item object
         let newItem = [];
-        newItem.push(item.id, item.name, item.price, item.quantity, item.size, item.instructions);
+        newItem.push(popupValues.id, popupValues.title, item.price, item.quantity, item.size, item.instructions);
         if (item.accommodations) {
             newItem.push(item.accommodations);
         }
-
-        //replaced old item with edited item in cart
-        // let currItems = JSON.parse(localStorage.getItem('cartItems'));
-        // currItems.splice(popupValues.fillIns.index, 1);
-        // currItems.splice(popupValues.fillIns.index, 0, item);
-        // localStorage.setItem('cartItems', JSON.stringify(currItems));
-
-        console.log(popupValues.fillIns.index);
 
         //updates cart price values
         cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.items[popupValues.fillIns.index][2]) + parseFloat(item.price)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
 
-
+        //replaces old item with edited item
         cart.items.splice(popupValues.fillIns.index, 1);
         cart.items.splice(popupValues.fillIns.index, 0, newItem);
-
-        //updates price of edited item
-        // const newPrices = {
-        //     price: itemCost,
-        //     individual_tax: (parseFloat(itemCost) * 0.0775).toFixed(2)
-        // }
-        // cart.prices[popupValues.fillIns.index] = newPrices;
 
         //updates cart cookie and state values to rerender page
         setCookie("cart", cart, { path: "/" });
@@ -212,6 +174,7 @@ const CartSummary = (props) => {
 
     const editItem = (item, ind) => {
 
+        //object to pass into item popup
         const fillIns = {
             quantity: item[3],
             size: item[4],
@@ -220,10 +183,12 @@ const CartSummary = (props) => {
             accommodations: item[6] ? item[6] : []
         }
 
+        //object to pass into fetch request
         const bodyObj = {
             "_id": item[0]
         }
 
+        //makes post request to get popup values of item
         fetch(`${BACKEND_URL}item/itemInfo`, {
             method: "POST",
             headers: {
@@ -234,6 +199,7 @@ const CartSummary = (props) => {
                 if (result.ok) {
                     const json = await result.json();
 
+                    //displays item popup
                     const popupValues = json.item;
                     togglePopup(popupValues.Name, popupValues.Description, popupValues.Prices, popupValues.pictureURL, popupValues.dietaryInfo, popupValues.Accommodations, popupValues._id, fillIns);
                 }
@@ -288,7 +254,6 @@ const CartSummary = (props) => {
      * @param {*} fillIns - already selected values for this item
      */
     const togglePopup = (title, description, price, image, dietaryInfo, accommodations, id, fillIns) => {
-        // setPopupVisible(!popupVisible);
 
         // sets the values of the map based on passed-in information
         popupValues.set("title", title);
@@ -334,16 +299,10 @@ const CartSummary = (props) => {
         //gets current cart object from cookies
         let cart = cookies.cart;
 
-        //removes item at index from cart
-        // let currItems = JSON.parse(localStorage.getItem('cartItems'));
-        // currItems.splice(ind, 1);
-        // localStorage.setItem('cartItems', JSON.stringify(currItems));
-
-        //modifies cart price values to remove item at index
+        //modifies cart price values and removes item at index
         cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.items[ind][2])).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
-        // cart.prices.splice(ind, 1);
         cart.items.splice(ind, 1);
 
         //updates cart cookie and state values to rerender page
@@ -358,20 +317,28 @@ const CartSummary = (props) => {
     }
 
     /**
-     * Loads cart page if window size is mobile 
+     * Loads cart popup or page when window is resized
+     */
+    const handleResize = () => {
+        console.log("resize called");
+        if (window.innerWidth >= 768) {
+            history.push({
+                pathname: "/",
+                cartVisible: true,
+            });
+        }
+        if (window.innerWidth < 768) {
+            history.push("/cart");
+        }
+    }
+
+    /**
+     * Adds event listener to load cart popup or page when window is resized
      */
     useEffect(() => {
-        window.addEventListener('resize', function () {
-            if (window.innerWidth >= 768) {
-                history.push({
-                    pathname: "/",
-                    cartVisible: true,
-                });
-            }
-            if (window.innerWidth < 768) {
-                history.push("/cart");
-            }
-        });
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
     })
 
     return (

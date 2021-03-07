@@ -20,9 +20,6 @@ class CartPreview extends Component {
             //stores items in the cart
             items: this.props.items,
 
-            //stores price of each item
-            // itemPrices: this.props.itemPrices,
-
             //stores subtotal of items in the cart
             subTotal: this.props.subtotal,
 
@@ -46,8 +43,6 @@ class CartPreview extends Component {
             <div>
                 {/* iterates through items array and displays each in a row */}
                 {this.state.items.map((item, ind) => {
-
-                    // const popupValues = JSON.parse(item.popupValues);
 
                     //checks if any accommodations were selected and adds them to be displayed
                     let accom = "";

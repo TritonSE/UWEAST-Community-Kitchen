@@ -21,7 +21,6 @@ import { withCookies, Cookies } from 'react-cookie';
 import { withRouter } from 'react-router-dom';
 import {Link} from 'react-router-dom';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import sizeof from 'object-sizeof';
 import "../css/Menu.css";
 import { Button } from 'react-bootstrap';
 
@@ -34,11 +33,6 @@ class Menu extends Component {
 
     constructor(props) {
         super(props);
-
-        //creates cart in local storage if it doesn't exist
-        // if(!localStorage.getItem("cartItems")) {
-        //     localStorage.setItem("cartItems", JSON.stringify([]));
-        // }
 
         //creates cart cookie with default values if it doesn't exist
         if (!this.props.cookies.get("cart")) {
@@ -57,10 +51,7 @@ class Menu extends Component {
             cartItems: this.props.cookies.get("cart").items,
 
             //stores whether cart sumarry is currently visible or not
-            cartPopupVisible: (this.props.location) ? this.props.location.cartVisible : false,
-
-            //stores price of each item
-            // itemPrices: this.props.cookies.get("cart").prices,
+            cartPopupVisible: (this.props.location && this.props.location.cartVisible) ? this.props.location.cartVisible : false,
 
             //stores subtotal of items in the cart
             subTotal: this.props.cookies.get("cart").subtotal,
@@ -74,6 +65,8 @@ class Menu extends Component {
             //key values to update child components when a state changes
             cartKey: false,
             previewKey: true,
+
+            //stores whether cart limit popup is visible
             limitPopupVisible: false
         }
 
@@ -81,13 +74,16 @@ class Menu extends Component {
         this.updateItems = this.updateItems.bind(this);
     }
 
-    getByteSize = (cookie) => {
-        return encodeURIComponent('<q></q>' + cookie).length;
-    }
-
+    /**
+     * Returns the size of the input string in bytes
+     * 
+     * @param {String} string - the string to get byte size of
+     * @returns 
+     */
     byteSize = (string) => {
         return new Blob([string]).size;
     }
+    
     /**
      * adds selected item to the cart and updates totals and cookies
      * 
@@ -100,6 +96,7 @@ class Menu extends Component {
 
         const popupValues = JSON.parse(item.popupValues);
 
+        //gets the cart cookie and its value
         let cartIndex = 0;
         const oldCookies = document.cookie;
         const oldCookieFields = oldCookies.split(";");
@@ -109,23 +106,18 @@ class Menu extends Component {
                 cartIndex = index;
             }
         });
-        const oldSize = this.byteSize(oldCookieFields[cartIndex]);
-        console.log(oldSize); 
 
-        const itemId = popupValues.id;
-        const itemName = popupValues.title;
-        delete item.popupValues;
-        item.id = itemId;
-        item.name = itemName;
-        console.log(item);
+        //finds size of initial cart cookie
+        const oldSize = this.byteSize(oldCookieFields[cartIndex]);
+
+        //creates array representation of item object
         let newItem = [];
-        newItem.push(item.id, item.name, item.price, item.quantity, item.size, item.instructions);
+        newItem.push(popupValues.id, popupValues.title, item.price, item.quantity, item.size, item.instructions);
         if (item.accommodations) {
             newItem.push(item.accommodations);
         }
-        // console.log(Buffer.from(JSON.stringify(item)).length);
-        // console.log(this.byteSize(item));
-        //modifies cart price values to add new item
+
+        //modifies cart price values and adds new item
         cart.items.push(newItem);
         cart.subtotal = (parseFloat(cart.subtotal) + parseFloat(item.price)).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
@@ -133,10 +125,13 @@ class Menu extends Component {
 
         //updates cart cookie and state values to rerender page
         cookies.set("cart", cart, { path: "/" });
+
+        //finds size of cart cookie after adding item
         const newCookies = document.cookie;
         const newCookieFields = newCookies.split(";");
         const newSize = this.byteSize(newCookieFields[cartIndex]);
-        console.log(newSize);
+
+        //displays error popup if cookie limit is reached
         if(oldSize === newSize) {
             this.setState({limitPopupVisible: true});
         } else {
@@ -154,16 +149,10 @@ class Menu extends Component {
         const { cookies } = this.props;
         let cart = cookies.get("cart");
 
-        //removes item at index from cart
-        // let currItems = JSON.parse(localStorage.getItem('cartItems'));
-        // currItems.splice(ind, 1);
-        // localStorage.setItem('cartItems', JSON.stringify(currItems));
-
-        //modifies cart price values to remove item at index
+        //modifies cart price values and removes item at index
         cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.items[ind][2])).toFixed(2);
         cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
-        //cart.prices.splice(ind, 1);
         cart.items.splice(ind, 1);
 
         //updates cart cookie and state values to rerender page
@@ -171,15 +160,19 @@ class Menu extends Component {
         this.setState({ cartItems: cart.items, subTotal: cart.subtotal, tax: cart.tax, totalPrice: cart.total, cartKey: !this.state.cartKey, previewKey: !this.state.previewKey });
     }
 
+    /**
+     * Chages state to open or close add item error popup
+     */
     handleCloseModal = () => {
         this.setState({limitPopupVisible: !this.state.limitPopupVisible});
     }
 
     /**
-     * Changes cartPopupVisible state to open or close the popup
+     * Changes cartPopupVisible state to open or close the cart popup
      */
     toggleCart() {
         this.setState({ cartPopupVisible: !this.state.cartPopupVisible });
+        console.log(this.state.cartPopupVisible);
     }
 
     /**
