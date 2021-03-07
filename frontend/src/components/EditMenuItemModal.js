@@ -319,9 +319,9 @@ export default function EditMenuItemModal (props) {
                                             <FormControl margin='dense'
                                                 error = 
                                                 {   menuError && 
-                                                    ((item.name === "" && item.price !== "") || 
+                                                    (((item.name === "" && item.price !== "") || 
                                                     (item.name !== "" && item.price === "")) ||
-                                                    (parseInt(item.price) < 0)
+                                                    (parseInt(item.price) < 0))
                                                 }
                                             >
                                                 <OutlinedInput id={item.name + "priceinput"} name={item.name + "priceinput"} className="formTextInput"

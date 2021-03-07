@@ -224,6 +224,7 @@ export default function AdminMenuItems (props) {
     
     const [itemList, setItemList] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [checkboxUpdate, setCheckboxUpdate] = useState("");
     const [changeHeaderModal, setChangeHeaderModal] = useState(false);
     const [addItemModal, setAddItemModal] = useState(false);

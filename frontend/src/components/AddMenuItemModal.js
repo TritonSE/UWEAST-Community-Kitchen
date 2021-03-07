@@ -313,10 +313,10 @@ export default function AddMenuItemModal (props) {
                                         return(
                                             <FormControl margin='dense'
                                                 error = 
-                                                {   menuError && 
+                                                {   menuError && ( 
                                                     ((item.name === "" && item.price !== "") || 
                                                     (item.name !== "" && item.price === "")) ||
-                                                    (parseInt(item.price) < 0)
+                                                    (parseInt(item.price) < 0))
                                                 }
                                             >
                                                 <OutlinedInput id={item.name + "priceinput"} name={item.name + "priceinput"} className="formTextInput"

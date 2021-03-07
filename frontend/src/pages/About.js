@@ -34,13 +34,15 @@ class About extends Component {
         tax_total: "3.00",
         items: [
             {
-                name: "Food 1",
                 quantity: "2",
                 size: "Individual",
                 accommodations: ["Ketchup, Soy Sauce"],
                 specialInstructions: "No salt please!",
                 individual_price: "6.00",
                 individual_tax: "1.50",
+                popupValues: {
+                    title: "Food 1"
+                }
             },
         ],
         pickup_date: "2021-02-04"
