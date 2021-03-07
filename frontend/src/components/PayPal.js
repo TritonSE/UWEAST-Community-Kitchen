@@ -134,7 +134,6 @@ export default function PayPal(props) {
         }],
         shipping_type: 'PICKUP',
     }
-    console.log(cookies.cart);
     // THE FOLLOWING TWO METHODS ARE NOT USED. THEY WERE CREATED FOR
     // SERVER SIDE PAYMENT INTEGRATION, BUT THIS ISN'T BEST PRACTICE,
     // SO IT WAS NOT PURSUED. THEREFORE THESE METHODS ARE COMMENTED OUT.
@@ -194,7 +193,8 @@ export default function PayPal(props) {
                     // details here includes payer name, phone number, and email
 
                     // create order object
-                    let sendDate = new Date((props.selectedDate.getMonth()+1) + ' ' + props.selectedDate.getDate() + ', ' + props.selectedDate.getFullYear() + ' ' + props.selectedTime);
+                    let sendDate = new Date(props.selectedDate.getFullYear(),(props.selectedDate.getMonth()), props.selectedDate.getDate(),
+                        props.selectedTime.substring(0, 2), props.selectedTime.substring(3, 5));
                     const orderObj = {
                         "Customer": {
                             "Name": details.payer.name.given_name + " " + details.payer.name.surname,
@@ -210,7 +210,7 @@ export default function PayPal(props) {
                         cookies.cart.items.map((item) => {
                             return {
                                 "item": item[1],
-                                "quantity": item[3],
+                                "quantity": parseInt(item[3]),
                                 "size": item[4],
                                 "accommodations": 
                                     item[6] !== undefined
@@ -223,6 +223,7 @@ export default function PayPal(props) {
                             }
                         })
                     }
+                    console.log(orderObj);
                     // signal email automation by calling the /autoEmails/automate route, 
                     // this will automatically add the order to the database 
                     /*
@@ -276,7 +277,7 @@ export default function PayPal(props) {
                         setCookie("cart", newCart, { path: "/" });
                         //setCookie("cart");
                         
-                        history.push("/");
+                        history.push("/contact");
                     })
                     .catch(() => {
                         alert("Error...");
