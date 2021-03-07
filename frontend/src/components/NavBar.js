@@ -88,14 +88,16 @@ export default function NavBar(props) {
                 </Navbar.Brand>
 
                 {/* The shopping cart will only render if it is a mobile component */}
-                <div className="cart-icon">
-                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}
-                        onClick={OpenCart} />
+                <div className="cart-icon-container">
+                    <div className="cart-icon">
+                        <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}
+                            onClick={OpenCart} />
 
+                    </div>
+
+                    {/* Triggers on Collapse - Hamburger Icon replaces pages */}
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" style={{border: '1px solid white', marginLeft: 'calc(7vw)'}}/>
                 </div>
-
-                {/* Triggers on Collapse - Hamburger Icon replaces pages */}
-                <Navbar.Toggle aria-controls="responsive-navbar-nav" style={{border: '1px solid white', marginLeft: 'calc(7vw)'}}/>
 
                 {/* Right Hand Side of Navbar - Linked Pages (based off of Router paths in App.js) */}
                 <Navbar.Collapse id="responsive-navbar-nav">

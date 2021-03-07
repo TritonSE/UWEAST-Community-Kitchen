@@ -69,6 +69,10 @@
     color: #F9CE1D !important;
 }
 
+.cart-icon-container {
+    display: none;
+}
+
 @media only screen and (min-width: 1200px)  and (max-width: 1349px)
 {
     .navbar-brand {
@@ -102,9 +106,12 @@
         max-height: none;
     }
 
+    .cart-icon-container {
+        display: inline-block;
+    }
+
     .cart-icon {
         display: inline-block;
-        min-width: 27vw;
         text-align: right;
         transform: scale(2);
         -webkit-transform: scale(2);
@@ -130,9 +137,12 @@
         max-height: none;
     }
 
+    .cart-icon-container {
+        display: inline-block;
+    }
+
     .cart-icon {
         display: inline-block;
-        min-width: 22.5vw;
         text-align: right;
         transform: scale(2);
         -webkit-transform: scale(2);
@@ -162,40 +172,14 @@
         display: none;
     }
 
+    .cart-icon-container {
+        display: inline-block;
+    }
+
     .cart-icon {
         display: inline-block;
-        width: calc(35%);
         text-align: right;
         transform: scale(2);
         -webkit-transform: scale(2);
     }
 }
-
-/* Adjusts the distance between the hamburger and cart icon at different levels */
-@media only screen and (max-width: 610px) 
-{
-    .cart-icon {
-        width: calc(30%);
-    }
-} 
-
-@media only screen and (max-width: 532px) 
-{
-    .cart-icon {
-        width: calc(23%);
-    }
-} 
-
-@media only screen and (max-width: 400px) 
-{
-    .cart-icon {
-        width: calc(18%);
-    }
-} 
-
-@media only screen and (max-width: 300px) 
-{
-    .cart-icon {
-        width: calc(10%);
-    }
-} 
