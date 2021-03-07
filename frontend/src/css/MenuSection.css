@@ -44,7 +44,6 @@
   .menu-section
   {
     grid-template-columns: 150px minmax(auto, 1050px);
-    margin-top: 55px;
   }
 
   .menu-filter-wrapper

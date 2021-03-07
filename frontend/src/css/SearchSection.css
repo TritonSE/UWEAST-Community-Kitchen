@@ -11,8 +11,11 @@
   position: relative;
   object-fit: cover;
   object-position: center center;
-  height: calc(50vh - 70px);
   width: 100%;
+}
+
+.header-img {
+  height: calc(50vh - 70px);
 }
 
 @media only screen and (min-width: 1200px) {
@@ -21,6 +24,10 @@
     width: 100%;
     z-index: 1;
   } 
+
+  .header-img {
+    height: 50vh;
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1199px)
