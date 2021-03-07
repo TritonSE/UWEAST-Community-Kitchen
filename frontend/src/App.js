@@ -13,7 +13,6 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
-import Orders from './pages/Orders';
 
 function App() {
   return (

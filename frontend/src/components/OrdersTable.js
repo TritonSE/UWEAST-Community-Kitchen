@@ -46,7 +46,6 @@ const renderRow = (rowData, rowMeta) => {
     const length = rowData[6].length;
     // format the row information
     for(let i = 0; i < length; i++) {
-      console.log(rowData[6][i]);
       rows.push(createData(rowData[6][i].item, rowData[6][i].accommodations, rowData[6][i].specialInstructions, rowData[6][i].size, rowData[6][i].quantity));
     }
 

@@ -135,9 +135,9 @@ const columns = [
         filterOptions: {
           names: ["Pending Orders", "Completed Orders"],
           logic(order, filters) {
-            if (filters[0] == "Completed Orders") {
+            if (filters[0] === "Completed Orders") {
               return order === "Pending Orders";
-            } else if (filters[0] == "Pending Orders") {
+            } else if (filters[0] === "Pending Orders") {
               return order === "Completed Orders";
             }
   
