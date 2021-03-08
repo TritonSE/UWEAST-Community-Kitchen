@@ -81,7 +81,6 @@ export default function PayPal(props) {
                     tax_total: {
                         currency_code: "USD",
                         value: cookies.cart.tax,
-                        // cookies.cart.tax
                     },
                 }
             },
