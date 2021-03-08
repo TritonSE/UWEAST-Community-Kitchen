@@ -14,7 +14,6 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import CartSummary from './components/CartSummary';
-import Orders from './pages/Orders';
 import { CookiesProvider } from 'react-cookie';
 import { withCookies } from 'react-cookie';
 

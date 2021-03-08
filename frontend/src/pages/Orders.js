@@ -45,9 +45,9 @@ export default class Orders extends React.Component {
 
         const dateOne = date + `\n${val}`;
         const dateTwo = dateSubmission + `\n${val2}`;
-        return [dateOne, list.Customer.Name, list.Customer.Email, list.Customer.Phone, 
-            list.PayPal.Amount, list.Order, dateTwo, list.isCompleted ? "Completed Orders" : "Pending Orders", 
-            list._id];
+
+        return [list._id, dateOne, list.Customer.Name, list.Customer.Email, list.Customer.Phone, 
+            list.PayPal.Amount, list.Order, dateTwo, list.isCompleted ? "Completed Orders" : "Pending Orders"];
     }
 
     /**

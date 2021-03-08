@@ -25,6 +25,15 @@ import {
 // the column headers for the table
 const columns = [
     {
+      name: "Order ID",
+      options: {
+        display: true, 
+        viewColumns: true, 
+        filter: true,
+        filterType: 'textField'
+      }
+    },
+    {
       name: "Pick up Details",
       options: {
         filter: true,
@@ -126,9 +135,9 @@ const columns = [
         filterOptions: {
           names: ["Pending Orders", "Completed Orders"],
           logic(order, filters) {
-            if (filters[0] == "Completed Orders") {
+            if (filters[0] === "Completed Orders") {
               return order === "Pending Orders";
-            } else if (filters[0] == "Pending Orders") {
+            } else if (filters[0] === "Pending Orders") {
               return order === "Completed Orders";
             }
   
@@ -136,14 +145,6 @@ const columns = [
           },
           display: DisplayStatusFilters
         }
-      }
-    },
-    {
-      name: "Row ID",
-      options: {
-        display: false, 
-        viewColumns: false, 
-        filter: false
       }
     }
 ];
