@@ -25,12 +25,10 @@ export default function Custom404() {
                             <Navbar/>
                     </div>
                     <div className="Main">
-                        <div className="Background">
-                            <img id="Img404" src="https://foodess.com/wp-content/uploads/2018/09/food-photography-gear-2.jpg" alt="Girl in a jacket"/>
-                        </div>
+                        <div className="Background"/>
                         <section className="Info">
                             <p id="Title-404"> 404 </p>
-                            <p id="Description-404"> Page Not Found </p> 
+                            <p id="Description-404"> Page Not Found</p> 
                             <Button variant="contained" onClick={goToHomePage} style={{color: "black", backgroundColor: "#f9ce1d"}}>Back to Home</Button>
                         </section>
 

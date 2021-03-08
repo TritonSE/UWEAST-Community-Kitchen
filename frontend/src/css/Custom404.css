@@ -15,22 +15,23 @@
 }
 
 .Main {
+    /* background-color: slateblue; */
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .Background {
     flex: 1;
-}
-
-#Img404 {
-    max-width:100%;
-    height: auto;
-    /* max-height:100%; */
-    object-fit: contain;
+    background: url(https://foodess.com/wp-content/uploads/2018/09/food-photography-gear-2.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
 }
 
 .Info{
@@ -54,9 +55,11 @@
     font-style: italic;
 }
 
-@media only screen and (max-width: 1024px) {
+/* Tablet View */
+@media only screen and (max-width: 1024px){
     .Main {
         flex-direction: column-reverse;
+        overflow: scroll;
     }
 
     .Background {
@@ -66,7 +69,47 @@
         object-position: center center;
         height: calc(50vh - 70px);
         width: 100%;
-        overflow: hidden;
+    }
+
+    .Info{
+        justify-content: center;
+    }
+}
+
+@media only screen and  (min-width: 751px) and  (max-width: 1024px) and (orientation:portrait){
+    .Info > p{
+        padding: 20px;
+    }
+
+}
+
+/* Mobile View  */
+@media only screen and (max-width: 750px) {
+
+    .Info > p{
+        padding: 0px;
+    }
+
+    #Title-404 {
+        font-size:  50px;
+        border-bottom: 3px solid #f9ce1d;
+    }
+    
+    #Description-404{
+        font-size:  20px;
+        font-style: italic;
+    }
+
+}
+
+/* Mobile View  - Landscape  */
+@media only screen and (max-width: 900px) and (orientation:landscape){
+
+    .Background {
+        flex: none;
+        margin-top: 20px;
+        width: 100%;
+        height: 300px;
     }
 
 }
