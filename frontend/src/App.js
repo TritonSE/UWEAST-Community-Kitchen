@@ -14,6 +14,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import CartSummary from './components/CartSummary';
+import Custom404 from './pages/Custom404';
 import { CookiesProvider } from 'react-cookie';
 import { withCookies } from 'react-cookie';
 
@@ -24,6 +25,10 @@ function App() {
       <Router>
         {/* Switch gurantees that a URL can match to only one route*/}
         <Switch>
+          {/* Menu Page (Home) */}
+         <Route exact path="/">
+          <Menu/>
+        </Route>
           {/* Login Page */}
           <Route exact path="/login">
             <Login />
@@ -37,9 +42,11 @@ function App() {
             <ResetPassword />
           </Route>
           {/* About Page */}
-          <Route exact path="/about">
-            <About />
-          </Route>
+        <Route exact path="/about" component={() => { 
+          window.location = 'https://www.uweast.org'; 
+          return null;
+          } }>        
+        </Route>
           {/* Contact Page */}
           <Route exact path="/contact">
             <Contact />
@@ -54,7 +61,7 @@ function App() {
           </Route>
           {/* Any other URL is automatically matched to Menu Page */}
           <Route path="/">
-            <Menu />
+            <Custom404/>
           </Route>
         </Switch>
       </Router>
