@@ -1,0 +1,26 @@
+p Dear #{name},
+p Thank you for ordering from UWEAST Community Kitchen. The following are your order details.
+p #[strong Order ID:] #{transactionID}
+p #[strong Order Summary:]
+ul
+    each val in order
+        li= `${val.quantity} x ${val.item} (${val.size} Size)`
+            ul
+                li Accomodations: 
+                    if !val.accommodations || val.accommodations === '' 
+                        | n/a
+                    else
+                        = val.accommodations
+                li Special Instructions: 
+                    if !val.specialInstructions || val.specialInstructions === '' 
+                        | n/a
+                    else
+                        = val.specialInstructions
+p #[strong Pick Up Information:]
+p Your chosen pickup date is #[strong #{date} at #{time}] and the phone number you have provided is #[strong #{number}]. You will receive a text notification from UWEAST when your order is ready. The pickup address is 6523 University Ave San Diego, CA 92115.
+p #[strong Order Cancellation/Modification:]
+p Please remember that any cancellation or modifications to your order must happen within 24 hours of order placement. If you would like to make any changes to your order, send an email to #{primaryEmail} specifying your name, order ID, and your requested change.
+p NOTE: This is an automatically generated email. Please do not reply.
+    br
+    br
+    | UWEAST CK

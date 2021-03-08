@@ -8,6 +8,7 @@
  */
 import React from 'react'
 import { useHistory } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 
 const config = require('../config');
 
@@ -17,6 +18,9 @@ const BACKEND_URL = config.backend.uri;
 export default function PayPal(props) {
     const { cart } = props;
     let history = useHistory();
+    
+    //stores cookie object and function to remove cookie
+    const [cookies, removeCookie] = useCookies(["cart"]);
     // I assume the cart object looks like this:
     // {
     //     cart_total: "",
@@ -172,12 +176,12 @@ export default function PayPal(props) {
                     }).then((res) => {
                         if(res.ok){
                             alert('Transaction completed! You will receive a confirmation email shortly.');
-                            history.push("/");
                         } else {
                             alert('Transaction completed, but email automation failed. You paid for your meal, and should get a confirmation from PayPal');
-                            history.push("/");
-
                         }
+                        //clears the cart cookie after order is placed
+                        removeCookie("cart");
+                        history.push("/");
                     })
                     .catch(() => {
                         alert("Error");

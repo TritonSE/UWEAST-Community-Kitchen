@@ -17,6 +17,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
+import {getJWT, logout} from '../util/Auth';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
@@ -135,11 +136,12 @@ const DisplayDateFilters = (filterList, onChange, index, column) => {
  */
 const updateStatus = (value, tableMeta, updateValue, e) => {
     const setValue = (value === "Completed Orders") ? "Pending Orders" : "Completed Orders";
-    const getRowId = tableMeta.rowData[8];
+    const getRowId = tableMeta.rowData[0];
     
     const requestBody = {
       _id: getRowId,
-      isCompleted: (value === "Completed Orders") ? false : true
+      isCompleted: (value === "Completed Orders") ? false : true,
+      "token": getJWT()
     }
   
     fetch(`${BACKEND_URL}order/updatestatus`, {
@@ -149,8 +151,17 @@ const updateStatus = (value, tableMeta, updateValue, e) => {
         },
         body: JSON.stringify(requestBody)
     }).then(async result => {
-        if (result.ok) console.log(result.statusText);
-        updateValue(setValue, tableMeta.rowIndex);
+        if (result.ok) {
+          console.log(result.statusText);
+          updateValue(setValue, tableMeta.rowIndex);
+        }
+         // invalid admin token
+         else if(result.status === 401){
+          logout();
+          // refresh will cause a redirect to login page
+          window.location.reload();
+          return;
+      }
     })
     .catch(e => {
           console.log(e);
