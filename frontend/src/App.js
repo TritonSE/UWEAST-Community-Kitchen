@@ -1,3 +1,10 @@
+/**
+ * The file is responsible for the routing of all pages on the site with a corresponding URL. 
+ * 
+ * @summary     Routes all URLs to a specific page on the site. 
+ * @author      Amrit Kaur Singh
+ */
+
 import './App.css';
 
 import {
@@ -5,6 +12,8 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import { CookiesProvider } from 'react-cookie';
+import { withCookies } from 'react-cookie';
 
 import Menu from './pages/Menu';
 import About from './pages/About';
@@ -15,8 +24,6 @@ import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import CartSummary from './components/CartSummary';
 import Custom404 from './pages/Custom404';
-import { CookiesProvider } from 'react-cookie';
-import { withCookies } from 'react-cookie';
 
 function App() {
   return (
