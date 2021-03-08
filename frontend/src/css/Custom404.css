@@ -29,6 +29,7 @@
     flex: 1;
     background: url(https://foodess.com/wp-content/uploads/2018/09/food-photography-gear-2.jpg);
     background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
     width: 100%;
     height: 100%;
