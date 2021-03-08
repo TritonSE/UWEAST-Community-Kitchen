@@ -187,7 +187,7 @@ class Menu extends Component {
         return (
             <div>
                 <div className="navbar-wrapper">
-                    <Navbar toggleCart={this.toggleCart} />
+                    <Navbar toggleCart={this.toggleCart} itemCount={this.state.cartItems.length}/>
                 </div>
                 <Banner />
                 <div>

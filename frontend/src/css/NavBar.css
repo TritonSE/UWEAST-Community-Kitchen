@@ -49,6 +49,7 @@
 
 .cart-icon, .cart-icon-smaller-desktop {
     display: none;
+    cursor: pointer;
 }
 
 .navbar-bg-color { 

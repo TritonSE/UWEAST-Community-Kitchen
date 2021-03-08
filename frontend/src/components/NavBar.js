@@ -16,6 +16,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Logo from "../media/UWEAST_Logo_Detail_Transparent.png";
 import '../css/NavBar.css';
 import { isAuthenticated, logout } from '../util/Auth';
+import { useCookies } from 'react-cookie';
 
 // styled Badge for the cart icon
 const CartBadge = withStyles(({
@@ -35,6 +36,15 @@ export default function NavBar(props) {
 
     {/* history hook to redirect on logout */ }
     const history = useHistory();
+    const [cookies, setCookie] = useCookies(["cart"]);
+
+    const [state, setState] = React.useState({
+        isUserAuthenticated: false
+    });
+
+    {/* stores class names to toggle whether content is shown */ }
+    var adminContentClass;
+    var loginButtonClass;
 
     {/* removes login token and redirects to menu page */ }
     function Logout() {
@@ -99,7 +109,7 @@ export default function NavBar(props) {
                 <div className="cart-icon-container">
                     <div className="cart-icon">
                         <IconButton onClick={OpenCart}>
-                            <CartBadge badgeContent={cartItems.length}>
+                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
                                 <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
                             </CartBadge>
                         </IconButton>
@@ -141,7 +151,7 @@ export default function NavBar(props) {
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
                 <div className="cart-icon-smaller-desktop">
                     <IconButton onClick={() => props.toggleCart()}>
-                        <CartBadge badgeContent={cartItems.length}>
+                        <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
                             <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
                         </CartBadge>
                     </IconButton>
