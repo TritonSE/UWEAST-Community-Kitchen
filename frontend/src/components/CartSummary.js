@@ -97,9 +97,6 @@ const CartSummary = (props) => {
     //stored time that is selected
     const [selectedTime, setSelectedTime] = useState(null);
 
-    //stores time object to pass to PayPal component
-    const [cartTime, setCartTime] = useState(null);
-
     //stores whether the window size is mobile or not
     const [isMobile, setIsMobile] = useState((window.innerWidth < 768) ? true : false);
 
@@ -119,15 +116,6 @@ const CartSummary = (props) => {
 
     // map with all of the data that will be displayed in the item popup
     const [popupValues, setPopupValues] = useState(new Map());
-
-    // placeholder for rendering Paypal component until props handling is fixed in that component
-    const [paypalCart, setPaypalCart] = useState({
-        cart_total: "00.00",
-        item_total: "00.00",
-        tax_total: "00.00",
-        items: [],
-        pickup_date: ""
-    });
 
     /**
      * updates item in cart to reflect changes made in item popup
@@ -393,15 +381,14 @@ const CartSummary = (props) => {
                             label="Time"
                             value={selectedTime}
                             setSelectedTime={(time) => {
-                                const minTime = moment("7:59 AM", "HH:mm A");
+                                const minTime = moment("9:59 AM", "HH:mm A");
                                 const maxTime = moment("6:01 PM", "HH:mm A");
                                 let errorMsg = "";
                                 if (minTime.isBefore(time) && maxTime.isAfter(time)) {
                                     setSelectedTime(time.format("HH:mm A"));
-                                    setCartTime(time.format("HH:mm:ss"));
                                     errorMsg = false;
                                 } else {
-                                    errorMsg = "Select between 8:00 AM and 6:00 PM";
+                                    errorMsg = "Select between 10:00 AM and 6:00 PM";
                                 }
                                 setError(errorMsg);
                             }}
@@ -427,7 +414,7 @@ const CartSummary = (props) => {
                     </div>
                     {/* Renders PayPal component if all required fields are completed and return to menu button otherwise */}
                     <div className="return-button">
-                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= 20) ? <PayPal cart={paypalCart} selectedDate={selectedDate} selectedTime={selectedTime} /> : <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
+                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= 20) ? <PayPal selectedDate={selectedDate} selectedTime={selectedTime} /> : <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
                     </div>
                 </div>
             </div>
