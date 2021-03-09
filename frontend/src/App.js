@@ -1,3 +1,10 @@
+/**
+ * The file is responsible for the routing of all pages on the site with a corresponding URL. 
+ * 
+ * @summary     Routes all URLs to a specific page on the site. 
+ * @author      Amrit Kaur Singh
+ */
+
 import './App.css';
 
 import {
@@ -5,17 +12,17 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import { CookiesProvider } from 'react-cookie';
+import { withCookies } from 'react-cookie';
 
 import Menu from './pages/Menu';
-import About from './pages/About';
 import Admin from './pages/Admin';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import CartSummary from './components/CartSummary';
-import { CookiesProvider } from 'react-cookie';
-import { withCookies } from 'react-cookie';
+import Custom404 from './pages/Custom404';
 
 function App() {
   return (
@@ -24,6 +31,10 @@ function App() {
       <Router>
         {/* Switch gurantees that a URL can match to only one route*/}
         <Switch>
+          {/* Menu Page (Home) */}
+         <Route exact path="/">
+          <Menu/>
+        </Route>
           {/* Login Page */}
           <Route exact path="/login">
             <Login />
@@ -37,9 +48,11 @@ function App() {
             <ResetPassword />
           </Route>
           {/* About Page */}
-          <Route exact path="/about">
-            <About />
-          </Route>
+        <Route exact path="/about" component={() => { 
+          window.location = 'https://www.uweast.org'; 
+          return null;
+          } }>        
+        </Route>
           {/* Contact Page */}
           <Route exact path="/contact">
             <Contact />
@@ -54,7 +67,7 @@ function App() {
           </Route>
           {/* Any other URL is automatically matched to Menu Page */}
           <Route path="/">
-            <Menu />
+            <Custom404/>
           </Route>
         </Switch>
       </Router>

@@ -9,6 +9,7 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { Snackbar } from '@material-ui/core';
+import DOMPurify from 'dompurify';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
@@ -30,7 +31,7 @@ const ContactForm = () => {
     
     // make FormData into a js object to pass to route
     for(var [key, value] of formData.entries()) {
-      data[key] = value;
+      data[key] = DOMPurify.sanitize(value);;
     }
   
     try{

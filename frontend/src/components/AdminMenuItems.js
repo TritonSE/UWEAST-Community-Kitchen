@@ -8,7 +8,6 @@
  * @author      PatrickBrown1
  */
 
-
 import React, {useState, useEffect, useReducer} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import Snackbar from "@material-ui/core/Snackbar";
@@ -27,14 +26,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import '../css/AdminMenuItems.css';
 import AddMenuItemModal from './AddMenuItemModal.js';
 import EditMenuItemModal from './EditMenuItemModal.js';
 import ChangeHeaderModal from './ChangeHeaderModal.js';
-
-import {getJWT, logout} from '../util/Auth';
-
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -210,8 +207,7 @@ async function handleRemoveByID(id, itemList, setItemList, displayContent, setDi
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                "_id": id,
-                "token": getJWT()
+                "_id": id
             })
         }).then(res => {
             if(res.ok){
@@ -219,13 +215,6 @@ async function handleRemoveByID(id, itemList, setItemList, displayContent, setDi
                 setItemList(itemList.filter(x => x.id !== id));
                 // remove from filtered rows
                 setDisplayContent({displayContent: displayContent.displayContent.filter(x => x.id !== id)});
-            }
-             // invalid admin token
-             else if(res.status === 401){
-                logout();
-                // refresh will cause a redirect to login page
-                window.location.reload();
-                return;
             }
         })
     
@@ -254,6 +243,7 @@ export default function AdminMenuItems (props) {
 
     // fetch all menu items to display in table
     useEffect(() => {
+        
         var data = null;
         var imgUrl = null;
         const fetchData = async () => {
@@ -367,17 +357,8 @@ export default function AdminMenuItems (props) {
             },
             body: JSON.stringify({
                 "_id": itemID,
-                "isFeatured": newValue,
-                "token": getJWT()
+                "isFeatured": newValue
             })
-        }).then(res =>{
-             // invalid admin token
-             if(res.status === 401){
-                logout();
-                // refresh will cause a redirect to login page
-                window.location.reload();
-                return;
-            }
         })
     }
     if(loaded){
@@ -459,7 +440,9 @@ export default function AdminMenuItems (props) {
     }
     else{
         return (
-            <div>Loading...</div>
+            <div style={{color: "#f9ce1d", display: "flex", justifyContent: "center"}}>
+                <CircularProgress color='inherit' size={40}/>
+            </div>
         )
     }
 }
