@@ -127,7 +127,7 @@ export default function ChangeSecondaryEmailScreen (props) {
         }
 
         // make sure the email follows proper format
-        if (addSecondaryEmail && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(addSecondaryEmail) || addSecondaryEmail.length === 0) {
+        if ((addSecondaryEmail && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(addSecondaryEmail)) || addSecondaryEmail.length === 0) {
             setErrorMessage("Enter a valid email address.");
             setInputError(true);
             return;
