@@ -293,7 +293,7 @@ export default function AdminMenuItems (props) {
                 },
             })
             data = await urlFetch.json();
-            setHeaderImageURL(data.imageUrl.imageUrl);
+            setHeaderImageURL(data.imageUrl.imageUrl || '');
             setItemList(rows);
             setDisplay({displayContent: rows});
             setLoaded(true);
