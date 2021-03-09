@@ -78,7 +78,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### MongoBB (LocalHost) Set-Up
+### MongoDB (LocalHost) Set-Up
 
 This set-up sets up a MongoDB server locally on your laptop, and utilizes Compass as a visual reference for easy 
 management of the database without sever reliance on terminal commands. Both are recommended. 
