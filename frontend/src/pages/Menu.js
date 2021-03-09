@@ -190,6 +190,7 @@ class Menu extends Component {
                     <Navbar toggleCart={this.toggleCart} />
                 </div>
                 <Banner />
+                {/* Dialog is displayed if cart item limit is reached */}
                 <div>
                 <Dialog
                     open={this.state.limitPopupVisible}
