@@ -155,7 +155,7 @@ export default function PayPal(props) {
                         "Pickup": sendDate,
                         "PayPal": {
                             "Amount": parseFloat(cookies.cart.total).toFixed(2),
-                            "transactionID": details.id
+                            "transactionID": data.orderID
                         },
                         "Order": 
                         cookies.cart.items.map((item) => {
