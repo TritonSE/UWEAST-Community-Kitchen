@@ -196,7 +196,6 @@ export default function PayPal(props) {
                             total: "00.00"
                         }
                         setCookie("cart", newCart, { path: "/" });
-                        //setCookie("cart");
                         
                         history.push("/");
                         history.go(0);
