@@ -14,12 +14,17 @@
     margin-top: calc(-2vh);
     display: flex;
     justify-content: center;
-    margin-left: calc(-55px);
+    margin-left: calc(8px);
     font-family: 'roboto', sans-serif;
 }
 
 .justify-table-center {
-    width: calc(92%);
+    width: calc(100%);
+}
+
+div.orders-page-container > div > div > div {
+    min-width: auto;
+    max-width: auto;
 }
 
 /* Sets the background color for the table header column */
@@ -85,6 +90,102 @@ span.MuiButton-label > div > div:nth-child(1) {
 /* Allows for the time information to be on seperate lines */
 td { 
     white-space: pre; 
+}
+
+#table-cell-items {
+    width: calc(18.3%);
+}
+
+#table-cell-quanitity {
+    width: calc(11.8%);
+}
+
+#table-cell-size {
+    width: calc(6.9%);
+}
+
+#table-cell-acc {
+    width: calc(24.6%);
+}
+
+@media only screen and (min-width: 1470px) and (max-width: 1534px) {
+    #table-cell-items {
+        width: calc(20.6%);
+    }
+    
+    #table-cell-quanitity {
+        width: calc(9.8%);
+    }
+    
+    #table-cell-size {
+        width: calc(7.4%);
+    }
+    
+    #table-cell-acc {
+        width: calc(25.8%);
+    }
+
+    #MUIDataTableBodyRow-0 > td:nth-child(7) {
+        width: calc(135px);
+    }
+    
+    #MUIDataTableBodyRow-0 > td:nth-child(8) {
+        width: calc(11vw);
+    }
+}
+
+@media only screen and (min-width: 1343px) and (max-width: 1470px) {
+    #table-cell-items {
+        width: calc(20.3%);
+    }
+    
+    #table-cell-quanitity {
+        width: calc(9.8%);
+    }
+    
+    #table-cell-size {
+        width: calc(7.4%);
+    }
+    
+    #table-cell-acc {
+        width: calc(26.2%);
+    }
+
+    #MUIDataTableBodyRow-0 > td:nth-child(7) {
+        padding-left: calc(25px);
+    }
+    
+    #MUIDataTableBodyRow-0 > td:nth-child(8) {
+        width: calc(11vw);
+    }
+}
+
+@media only screen and (max-width: 1342px) {
+    #table-cell-items {
+        width: calc(20%);
+    }
+    
+    #table-cell-quanitity {
+        width: calc(9.8%);
+    }
+    
+    #table-cell-size {
+        width: calc(8.2%);
+    }
+    
+    #table-cell-acc {
+        width: calc(25.8%);
+    }
+
+    #MUIDataTableBodyRow-0 > td:nth-child(7) {
+        padding-left: calc(23px);
+    }
+}
+
+@media only screen and (max-width: 959px) {
+    .orders-page-container > div > div > div > div:nth-child(2) {
+        background-color: transparent;
+    }
 }
 
 
