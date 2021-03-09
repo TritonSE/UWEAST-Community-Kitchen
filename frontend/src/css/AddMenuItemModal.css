@@ -92,15 +92,15 @@
     justify-content: flex-start;
     width: 40px;
     margin: 0 !important;
-    padding: 20px 0px 0 0 !important;
+    padding: 21px 0px 0 0 !important;
 }
 .removeAddOnButton {
     background-color: var(--white) !important;
     color: var(--black) !important;
     width: 40px !important;
-    height: 29px !important;
+    height: 43px !important;
     font-size: 11px !important;
-    margin: -8px 0 0 0 !important;
+    margin: 0 !important;
     padding: 0 !important;
 }
 .removeAddOnButton:hover {
