@@ -8,11 +8,14 @@
  */
 
 import React, {useState, useEffect} from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   GoogleMap,
   useLoadScript,
   InfoWindow
 } from "@react-google-maps/api";
+
+import "../css/AccountsPages.css";
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
@@ -35,6 +38,7 @@ const options = {
 }
 
 const ContactMap = () => {
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: config.google.MAPS_API_CODE
   })
@@ -64,7 +68,17 @@ const ContactMap = () => {
   }, []);
 
   if(loadError) return "error loading";
-  if(!isLoaded) return "loading...";
+  if(!isLoaded){
+    return (
+      <html className="Account-Html">
+        <body className="Account-Body">
+          <div className="spinner">
+            <CircularProgress color='inherit' size={40}/>
+          </div>
+        </body>
+    </html>
+    )
+  };
 
   return (
     <>

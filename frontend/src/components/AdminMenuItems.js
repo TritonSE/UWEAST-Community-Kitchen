@@ -8,7 +8,6 @@
  * @author      PatrickBrown1
  */
 
-
 import React, {useState, useEffect, useReducer} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import Snackbar from "@material-ui/core/Snackbar";
@@ -27,14 +26,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import '../css/AdminMenuItems.css';
 import AddMenuItemModal from './AddMenuItemModal.js';
 import EditMenuItemModal from './EditMenuItemModal.js';
 import ChangeHeaderModal from './ChangeHeaderModal.js';
-
-import {getJWT, logout} from '../util/Auth';
-
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -97,10 +94,7 @@ const deleteConfirmationModal = (deleteConfirmation, setDeleteConfirmation, item
                 </Modal.Body>
                 
                 <Modal.Footer>
-                    <Button variant="primary" className="menuAddButton" onClick={() => {
-                        // REMOVE ITEM FROM MENU
-                        console.log("removing item from menu")
-                        
+                    <Button variant="primary" className="menuAddButton" onClick={() => {                        
                         // Call database, remove item from menu
                         handleRemoveByID(deleteConfirmation[1], itemList, setItemList, displayContent, setDisplayContent);
                         setDeleteConfirmation(["", ""]);
@@ -146,7 +140,6 @@ function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChan
                 <TableBody>
                     {display.displayContent.map((row, index) => {
                         const bgColor = index % 2 === 0 ? "evenrowbg" : "oddrowbg";
-                        // console.log(row);
                         return (
                             <TableRow key={row._id} className={bgColor}>
                                 <TableCell component="th" scope="row" className="menuRowText" width="5%">
@@ -177,7 +170,7 @@ function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChan
                                     row.basePrice.map((v) => <>${v[1]}<br /></>)
                                 }
                                 </TableCell>
-                                <TableCell align="left" className="menuRowText" width="30%">
+                                <TableCell align="left" className="menuRowText accommodationCell" width="30%">
                                 {
                                     row.options.map((v) => <p>{v[1].Description}</p>)
                                 }
@@ -208,30 +201,20 @@ function menuTable(display, setDisplay, setDeleteConfirmation, handleFeatureChan
  */
 async function handleRemoveByID(id, itemList, setItemList, displayContent, setDisplayContent){
     // remove from database
-    console.log("Removing " + id);
     await fetch(`${BACKEND_URL}item/remove`, {
             method: "DELETE",
             headers: {
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                "_id": id,
-                "token": getJWT()
+                "_id": id
             })
         }).then(res => {
             if(res.ok){
-                console.log("Remove successful!")
                 // remove from rows
                 setItemList(itemList.filter(x => x.id !== id));
                 // remove from filtered rows
                 setDisplayContent({displayContent: displayContent.displayContent.filter(x => x.id !== id)});
-            }
-             // invalid admin token
-             else if(res.status === 401){
-                logout();
-                // refresh will cause a redirect to login page
-                window.location.reload();
-                return;
             }
         })
     
@@ -241,6 +224,7 @@ export default function AdminMenuItems (props) {
     
     const [itemList, setItemList] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [checkboxUpdate, setCheckboxUpdate] = useState("");
     const [changeHeaderModal, setChangeHeaderModal] = useState(false);
     const [addItemModal, setAddItemModal] = useState(false);
@@ -259,6 +243,7 @@ export default function AdminMenuItems (props) {
 
     // fetch all menu items to display in table
     useEffect(() => {
+        
         var data = null;
         var imgUrl = null;
         const fetchData = async () => {
@@ -269,7 +254,6 @@ export default function AdminMenuItems (props) {
                 },
             })
             data = await res.json();
-            console.log(data.items);
             const rows = [];
             data.items.forEach(element => {
                 // log(element);
@@ -373,17 +357,8 @@ export default function AdminMenuItems (props) {
             },
             body: JSON.stringify({
                 "_id": itemID,
-                "isFeatured": newValue,
-                "token": getJWT()
+                "isFeatured": newValue
             })
-        }).then(res =>{
-             // invalid admin token
-             if(res.status === 401){
-                logout();
-                // refresh will cause a redirect to login page
-                window.location.reload();
-                return;
-            }
         })
     }
     if(loaded){
@@ -465,7 +440,9 @@ export default function AdminMenuItems (props) {
     }
     else{
         return (
-            <div>Loading...</div>
+            <div style={{color: "#f9ce1d", display: "flex", justifyContent: "center"}}>
+                <CircularProgress color='inherit' size={40}/>
+            </div>
         )
     }
 }
