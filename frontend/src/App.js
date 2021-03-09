@@ -16,7 +16,6 @@ import { CookiesProvider } from 'react-cookie';
 import { withCookies } from 'react-cookie';
 
 import Menu from './pages/Menu';
-import About from './pages/About';
 import Admin from './pages/Admin';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
