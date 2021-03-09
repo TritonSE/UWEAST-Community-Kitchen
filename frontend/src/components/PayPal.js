@@ -186,7 +186,7 @@ export default function PayPal(props) {
                         if(res.ok){
                             alert('Transaction completed! You will receive a confirmation email shortly.');
                         } else {
-                            alert('Transaction completed, but email automation failed. You paid for your meal, and should get a confirmation from PayPal');
+                            alert('Transaction completed, but email automation failed. You paid for your meal, and should get a confirmation from PayPal. Please contact us to set up your order.');
                         }
                         //clears the cart cookie after order is placed
                         let newCart = {
@@ -202,15 +202,14 @@ export default function PayPal(props) {
                         history.go(0);
                     })
                     .catch(() => {
-                        alert("Error...");
+                        alert("There was an internal error. Check your email for a recepit from PayPal, and contact us to set up your order.");
                     });
                 });
             },
             onCancel: () => {
             },
             onError: (err) => {
-                console.log(err);
-                alert("An error occurred!");
+                alert("An unexpected error occurred - your payment did not go through. Please try again later.");
 
             },
         })
