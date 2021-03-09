@@ -39,14 +39,15 @@ If you find your NPM version is out of date, you can install the latest version 
 
 ## Setup 
 
-*Note*: The corresponding config files in both backend and frontend manages what global variables are being set in that 
-        directory.
+*Note*: 
+The corresponding config files in both backend and frontend manages what global variables are being set in that 
+directory.
 
-        The config file contains "local" constants that are suitable during development stage, with the expectation that 
-        prioirty constants needed for production would be located inside of a dotenv file. Currently, the config files
-        have "local" constants defined internally, and can be ran independently of a dotenv file for development/testing
-        purposes. These "local" constants may also be changed as needed. However, if a corresponding value exists inside
-        of the dotenv file, be aware that it takes precedence over the corresponding "local" constant. 
+The config file contains "local" constants that are suitable during development stage, with the expectation that 
+prioirty constants needed for production would be located inside of a dotenv file. Currently, the config files
+have "local" constants defined internally, and can be ran independently of a dotenv file for development/testing
+purposes. These "local" constants may also be changed as needed. However, if a corresponding value exists inside
+of the dotenv file, be aware that it takes precedence over the corresponding "local" constant. 
 
 ### Running Backend (Locally)
 
@@ -127,7 +128,7 @@ This will establish the connection to your local databases and mantain it as lon
 run is also kept running. Visually, this will be seen as an ongoing lag on the window.  If you close the window or exit out in any way, the connection will be broken. 
 
 To add a MongoDB database via terminal, first run:
-    `mongo`
+`mongo`
 
 This will now allow you to edit your databases using the MongoDB shell.
 
@@ -166,5 +167,5 @@ If you run the backend (see section above) and connect to the database successfu
 spit out the following message:
 
             Established connection to MongoDB.
-            _Connection URI of DB_
+            mongodb://localhost:27017/MONGO_DB_NAME/
             Port: 9000
