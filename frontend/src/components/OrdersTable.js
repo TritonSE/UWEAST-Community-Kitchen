@@ -43,11 +43,10 @@ function createData(name, accommodations, specialInstructions, size, quantity) {
  */
 const renderRow = (rowData, rowMeta) => {
     const rows = []
-    const length = rowData[5].length;
+    const length = rowData[6].length;
     // format the row information
     for(let i = 0; i < length; i++) {
-      console.log(rowData[5][i]);
-      rows.push(createData(rowData[5][i].item, rowData[5][i].accommodations, rowData[5][i].specialInstructions, rowData[5][i].size, rowData[5][i].quantity));
+      rows.push(createData(rowData[6][i].item, rowData[6][i].accommodations, rowData[6][i].specialInstructions, rowData[6][i].size, rowData[6][i].quantity));
     }
 
     // styling for the cells in the dropdown
@@ -59,18 +58,18 @@ const renderRow = (rowData, rowMeta) => {
     return (
         <React.Fragment>
           <TableRow>
-            <TableCell style={{ padding: 0 }} colSpan={8}>
+            <TableCell style={{ padding: 0 }} colSpan={9}>
               <TableContainer>
                 <Table aria-label="simple table">
                 {/* The dropdown header */}
                   <TableHead>
                     <TableRow style={{border: 'none'}}>
                       <TableCell></TableCell>
-                      <TableCell style={{width: 'calc(14.3%)'}}>Items</TableCell>
-                      <TableCell style={{width: 'calc(8.6%)'}}>Quantity</TableCell>
-                      <TableCell style={{width: 'calc(15.9%)'}}>Size</TableCell>
-                      <TableCell style={{width: 'calc(27.6%)'}}>Accommodations</TableCell>
-                      <TableCell>Special Instructions</TableCell>
+                      <TableCell id="table-cell-items">Items</TableCell>
+                      <TableCell id="table-cell-quanitity">Quantity</TableCell>
+                      <TableCell id="table-cell-size">Size</TableCell>
+                      <TableCell id="table-cell-acc">Accommodations</TableCell>
+                      <TableCell id="table-cell-si">Special Instructions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -81,8 +80,8 @@ const renderRow = (rowData, rowMeta) => {
                         <TableCell><p style={stylingCell}>{row.name}</p></TableCell>
                         <TableCell><p style={stylingCell}>{row.quantity}</p></TableCell>
                         <TableCell><p style={stylingCell}>{row.size}</p></TableCell>
-                        <TableCell><p style={stylingCell}>{row.accommodations}</p></TableCell>
-                        <TableCell><p style={stylingCell}>{row.specialInstructions}</p></TableCell>                        
+                        <TableCell><p style={stylingCell}>{row.accommodations.length === 0 ? 'N/A' : row.accommodations}</p></TableCell>
+                        <TableCell><p style={stylingCell}>{row.specialInstructions.length === 0 ? 'N/A' : row.specialInstructions}</p></TableCell>                        
                       </TableRow>
                     ))}
                   </TableBody>
@@ -105,6 +104,7 @@ export default function OrdersTable(props) {
     rowsPerPageOptions: [10, 25, 50],
     renderExpandableRow: renderRow,
     searchOpen: true,
+    responsive: 'vertical'
   };
 
   // styling for the row

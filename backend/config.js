@@ -9,6 +9,9 @@ module.exports = {
     register_secret: process.env.REGISTER_SECRET || 'tritonse',
     jwt_secret: process.env.JWT_SECRET || 'keyboard cat'
   },
+  frontend: {
+    uri: process.env.FRONTEND_URI || 'http://localhost:3000/'
+  },
   db: {
     uri: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/'
   },

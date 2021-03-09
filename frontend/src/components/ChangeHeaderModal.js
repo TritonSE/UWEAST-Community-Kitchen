@@ -19,6 +19,7 @@ import { Button } from 'react-bootstrap';
 import { Modal, FormControl, OutlinedInput, Snackbar, IconButton } from '@material-ui/core';
 import '../css/ChangeHeaderModal.css';
 import ClearIcon from '@material-ui/icons/Clear';
+import {getJWT, logout} from '../util/Auth';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -50,7 +51,11 @@ export default function ChangeHeaderModal (props){
 
     // error handling
     const [menuError, setMenuError] = useState(false);
-    const [errorSnackbar, setErrorSnackbar] = useState(false);
+    const [errorSnackbar, setErrorSnackbar] = useState({
+        display: false,
+        message: ''
+    });
+    const [failedAdminAuth, setFailedAdminAuth] = useState(false);
 
     // form's states
     const [headerImageURL, setHeaderImageURL] = useState(props.headerImageURL);
@@ -60,14 +65,14 @@ export default function ChangeHeaderModal (props){
         // validate input
         if (headerImageURL === "")
         {
-            console.log("failed header image input");
             setMenuError(true);
-            setErrorSnackbar(true);
+            setErrorSnackbar({display: true, message: "URL cannot be empty"});
             return;
         }
         // create the object to oush to the database
         const imageURLObject = {
             "imageUrl": headerImageURL,
+            "token": getJWT()
         }
         // push to database
         await fetch(`${BACKEND_URL}menuImages/changeMenuImage`, {
@@ -83,64 +88,76 @@ export default function ChangeHeaderModal (props){
                 // refetch
                 setLoaded(false);
                 setShowModal(false);
+            } 
+            // invalid admin token
+            else if(res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
+            }
+            // system error on backend 
+            else if (res.status === 500){
+                setMenuError(true);
+                setErrorSnackbar({display: true, message: "A system error has occurred - try again later"});
+                return;
             }
             // failure
             else{
-                console.log("failed header image input");
                 setMenuError(true);
-                setErrorSnackbar(true);
+                setErrorSnackbar({display: true, message: "URL is either already in use or invalid"});
                 return;
             }
         })
 
     }
-    return(
-        <>
-            {/* Failure Snackbar */}
-            <Snackbar
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                open={errorSnackbar}
-                autoHideDuration={5000}
-                onClose={() => setErrorSnackbar(false)}
-                message={<span id="message-id">URL is either already in use or invalid</span>}
-            />
-            {/* Change header image Modal */}
-            <Modal open={showModal} onClose={() => setShowModal(false)} 
-                className="modalContainer" style={{display:'flex',alignItems:'center',justifyContent:'center'}}
-            >
-                <div className="modalBackground">
-                    <div className="modalHeader">
-                        {/* Modal close button */}
-                        <IconButton className="closeModalButton" 
-                            onClick={() => setShowModal(false)}
-                        >
-                            <ClearIcon/>
-                        </IconButton>
+        return(
+            <>
+                {/* Failure Snackbar */}
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    open={errorSnackbar.display}
+                    autoHideDuration={5000}
+                    onClose={() => setErrorSnackbar({...errorSnackbar, display: false})}
+                    message={<span id="message-id">{errorSnackbar.message}</span>}
+                />
+                {/* Change header image Modal */}
+                <Modal open={showModal} onClose={() => setShowModal(false)} 
+                    className="modalContainer" style={{display:'flex',alignItems:'center',justifyContent:'center'}}
+                >
+                    <div className="modalBackground">
+                        <div className="modalHeader">
+                            {/* Modal close button */}
+                            <IconButton className="closeModalButton" 
+                                onClick={() => setShowModal(false)}
+                            >
+                                <ClearIcon/>
+                            </IconButton>
+                        </div>
+                        <form autocomplete="off" onSubmit={(e) => handleSubmit(e)}>
+                            <div className="modalBody">
+                                {/* Header image URL */}
+                                <p className="formLabelText">Image Link {requiredAsterisk()}</p>
+                                <FormControl fullWidth error={menuError && headerImageURL === ""} className="formItem" margin='dense'>
+                                    <OutlinedInput name="imageUrl" id="imageUrl" className="formTextInput"
+                                        value={headerImageURL}
+                                        onChange={(e) => setHeaderImageURL(e.target.value)}
+                                        size="small"
+                                    />
+                                </FormControl>
+                            </div>
+                            <div className="modalFooter">
+                                {/* Change header button */}
+                                <Button className="changeHeaderButton" type="submit">
+                                    Change Header
+                                </Button>
+                            </div>
+                        </form>
                     </div>
-                    <form autocomplete="off" onSubmit={(e) => handleSubmit(e)}>
-                        <div className="modalBody">
-                            {/* Header image URL */}
-                            <p className="formLabelText">Image Link {requiredAsterisk()}</p>
-                            <FormControl fullWidth error={menuError && headerImageURL === ""} className="formItem" margin='dense'>
-                                <OutlinedInput name="imageUrl" id="imageUrl" className="formTextInput"
-                                    value={headerImageURL}
-                                    onChange={(e) => setHeaderImageURL(e.target.value)}
-                                    size="small"
-                                />
-                            </FormControl>
-                        </div>
-                        <div className="modalFooter">
-                            {/* Change header button */}
-                            <Button className="changeHeaderButton" type="submit">
-                                Change Header
-                            </Button>
-                        </div>
-                    </form>
-                </div>
-            </Modal>
-        </>
-    );
+                </Modal>
+            </>
+        );
 }

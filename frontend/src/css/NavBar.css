@@ -21,22 +21,20 @@
 }
 
 .navbar-brand {
-    padding-left: 1em;
+    padding-left: 0;
 }
+
 
 .brand-name {
     display: inline-block;
-    font-size: calc(20px);
-    text-align: center;
-    justify-content: center;
     color: #ffdf69;
     font-family: 'Roboto Slab', serif;
-    margin-left: calc(-1vw);
-    margin-top: calc(2vh);
+    margin-left: calc(-10px);
+    cursor: pointer;
 }
 
-.brand-name p {
-    font-size: calc(30px);
+.navbar-brand .brand-name p {
+    font-size: calc(28px);
     font-style: italic;
     font-family: 'Roboto Slab', serif;
 }
@@ -71,16 +69,11 @@
     color: #F9CE1D !important;
 }
 
-@media only screen and (min-width: 767px) and (max-width: 1349px) {
-    .cart-icon-smaller-desktop {
-        display: inline-block;
-        transform: scale(1.7);
-        -webkit-transform: scale(1.7);
-        margin-right: calc(0.5vw);    
-    }
+.cart-icon-container {
+    display: none;
 }
 
-@media only screen and (max-width: 1024px) 
+@media only screen and (min-width: 1200px)  and (max-width: 1349px)
 {
     .navbar-brand {
         padding-left: 0;
@@ -90,16 +83,73 @@
         max-height: auto;
     }
 
-    .navbar.navbar-bg-color .desktop-tabs {
+    .cart-icon {
         display: none;
     }
 
-    .brand-name {
-        display: none;
+    .cart-icon-smaller-desktop {
+        display: inline-block;
+        transform: scale(1.7);
+        -webkit-transform: scale(1.7);
+        margin-right: calc(0.5vw);    
+    }
+}
+
+@media only screen and (min-width: 944px) and (max-width: 1199px) {
+    .navbar-brand {
+        padding-left: 0;
+        padding-right: calc(1vw);
+        position: relative;
+    }
+
+    .navbar.navbar-bg-color {
+        max-height: none;
+    }
+
+    .cart-icon-container {
+        display: inline-block;
     }
 
     .cart-icon {
-        display: none;
+        display: inline-block;
+        text-align: right;
+        transform: scale(2);
+        -webkit-transform: scale(2);
+    }
+
+    .cart-icon-smaller-desktop {
+        display: none;  
+    }
+}
+
+@media only screen and (min-width: 767px) and (max-width: 945px) {
+    .navbar-brand {
+        padding-left: 0;
+        padding-right: calc(1vw);
+        position: relative;
+    }
+
+    .brand-name {
+        position: relative;
+    }
+
+    .navbar.navbar-bg-color {
+        max-height: none;
+    }
+
+    .cart-icon-container {
+        display: inline-block;
+    }
+
+    .cart-icon {
+        display: inline-block;
+        text-align: right;
+        transform: scale(2);
+        -webkit-transform: scale(2);
+    }
+
+    .cart-icon-smaller-desktop {
+        display: none;  
     }
 }
 
@@ -109,6 +159,7 @@
     .navbar-brand {
         padding-left: 0;
     }
+
     .navbar.navbar-bg-color {
         max-height: none;
     }
@@ -117,40 +168,18 @@
         display: none;
     }
 
+    .brand-name {
+        display: none;
+    }
+
+    .cart-icon-container {
+        display: inline-block;
+    }
+
     .cart-icon {
         display: inline-block;
-        width: calc(34%);
         text-align: right;
         transform: scale(2);
         -webkit-transform: scale(2);
     }
 }
-
-/* Adjusts the distance between the hamburger and cart icon at different levels */
-@media only screen and (max-width: 610px) 
-{
-    .cart-icon {
-        width: calc(30%);
-    }
-} 
-
-@media only screen and (max-width: 532px) 
-{
-    .cart-icon {
-        width: calc(23%);
-    }
-} 
-
-@media only screen and (max-width: 400px) 
-{
-    .cart-icon {
-        width: calc(18%);
-    }
-} 
-
-@media only screen and (max-width: 300px) 
-{
-    .cart-icon {
-        width: calc(10%);
-    }
-} 

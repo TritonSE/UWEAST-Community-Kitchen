@@ -44,7 +44,6 @@
   .menu-section
   {
     grid-template-columns: 150px minmax(auto, 1050px);
-    margin-top: 55px;
   }
 
   .menu-filter-wrapper
@@ -62,8 +61,7 @@
 {
   .menu-section
   {
-    grid-template-columns: 160px minmax(auto, 900px) 150px;
-    margin-top: 55px;
+    grid-template-columns: 150px minmax(auto, 900px) 150px;
   }
 
   .cart-preview
