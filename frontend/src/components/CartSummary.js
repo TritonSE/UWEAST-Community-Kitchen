@@ -389,6 +389,7 @@ const CartSummary = (props) => {
                                     errorMsg = false;
                                 } else {
                                     errorMsg = "Select between 10:00 AM and 6:00 PM";
+                                    setSelectedTime(null);
                                 }
                                 setError(errorMsg);
                             }}
