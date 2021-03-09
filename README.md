@@ -39,7 +39,6 @@ If you find your NPM version is out of date, you can install the latest version 
 
 ## Setup 
 
-*Note*: 
 The corresponding config files in both backend and frontend manages what global variables are being set in that 
 directory.
 
