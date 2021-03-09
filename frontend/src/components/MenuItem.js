@@ -8,7 +8,6 @@
 
 import React from 'react';
 import "../css/MenuItem.css";
-const config = require('../config');
 
 const MenuItem = ( {description, image, price, title, togglePopup, dietaryInfo, priceOptions, accommodations, id} ) => {
     return (

@@ -124,7 +124,7 @@ const MenuSection = ({onItemAdd}) => {
           <MenuItems foodCategories={visibleCategories} processForm={processForm} popupVisible={popupVisible} popupValues={popupValues} togglePopup={togglePopup}/>
         </div>
         <div className="menu-cart">
-      </div>
+        </div>
       </div>
     </div>
   )
