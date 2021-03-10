@@ -7,13 +7,14 @@
 
 import React, {useState, useEffect} from 'react';
 import "../css/SearchSection.css";
+import Header from "../media/default_header.jpg";
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
 const SearchSection = () => {
   // set a default header image here
-  var defaultImg = "https://idental.com.sg/wp-content/uploads/soft-food-for-braces-1200x675.png"
+  var defaultImg = Header
 
   const [headerImg, setHeaderImg] = useState(""); 
 

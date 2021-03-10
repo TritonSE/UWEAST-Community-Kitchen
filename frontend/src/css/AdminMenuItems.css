@@ -125,3 +125,6 @@
 .evenrowbg{
     background-color: var(--offwhite);
 }
+.accommodationCell{
+ min-width: 220px;
+}

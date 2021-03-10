@@ -1,10 +1,18 @@
+/**
+ * File contains all functions related to setting, removing, and accessing the admin token on the site
+ * using LocalStorage.
+ * 
+ * @summary   Functionality related to admin tokens. 
+ * @author    Amrit Kaur Singh
+ */
+
 const config = require('../config');
 
-const ADMIN_TOKEN_ATTRIBUTE = 'uweast-ck:admin-token'; //Genereated from backend using secret-id
+const ADMIN_TOKEN_ATTRIBUTE = 'uweast-ck:admin-token'; // genereated from backend using secret-id
 
 const BACKEND_URL = config.backend.uri;
 
-//Returns true if user is logged in, false otherwise
+// returns true if user is logged in, false otherwise
 async function isAuthenticated() {
     if (!localStorage.hasOwnProperty(ADMIN_TOKEN_ATTRIBUTE)){
         return false
@@ -29,7 +37,7 @@ async function isAuthenticated() {
     }
   }
   
-  //Retrieves the logged in user's JWT token from local storage
+// retrieves the logged in user's JWT token from local storage
 function getJWT() {
     if (!localStorage.hasOwnProperty(ADMIN_TOKEN_ATTRIBUTE)) {
       return null;
@@ -37,7 +45,7 @@ function getJWT() {
     return localStorage.getItem(ADMIN_TOKEN_ATTRIBUTE);
   }
   
-  //Sets the user's JWT token in local storage
+  // sets the user's JWT token in local storage
   function setJWT(token) {
     localStorage.setItem(ADMIN_TOKEN_ATTRIBUTE, token);
   }

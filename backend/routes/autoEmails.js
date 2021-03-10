@@ -13,7 +13,7 @@ const { findAllEmails, findPrimaryEmail } = require("../db/services/email");
 const { sendEmail } = require("../routes/services/mailer");
 const { addOrder } = require("../db/services/order");
 const { isValidated } = require("../middleware/validation");
-
+const config = require("../config");
 const router = express.Router();
 
 /**
@@ -66,6 +66,11 @@ router.post(
 
       // add hypens to phone number
       req.body.Customer.Phone = req.body.Customer.Phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+
+      // add spaces after commas in accommodation strings
+      for(var i=0; i < req.body.Order.length; i++ ){
+        req.body.Order[i].accommodations = req.body.Order[i].accommodations.replace(/,/g, ", ");
+      }
 
       // attempt to add order into Orders DB
       const order = await addOrder(req.body);

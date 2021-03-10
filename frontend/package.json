@@ -19,6 +19,7 @@
     "bootstrap": "^4.6.0",
     "bootstrap-daterangepicker": "^3.1.0",
     "date-fns": "^2.18.0",
+    "dompurify": "^2.2.6",
     "dotenv": "^8.2.0",
     "material-ui-search-bar": "^1.0.0",
     "moment": "^2.29.1",
