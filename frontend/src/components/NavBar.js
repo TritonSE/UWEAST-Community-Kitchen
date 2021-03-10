@@ -56,7 +56,11 @@ export default function NavBar(props) {
      * Renders the cart page for mobile navbar
      */
     function OpenCart() {
-        history.push("/cart");
+        if(window.innerWidth < 768) {
+            history.push("/cart");
+        } else {
+            props.toggleCart();
+        }
     }
 
     useEffect(() => {
