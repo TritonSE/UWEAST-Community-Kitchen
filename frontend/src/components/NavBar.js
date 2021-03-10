@@ -82,7 +82,7 @@ export default function NavBar(props) {
 
                     {/* Text to complement the logo */}
                     <div className="brand-name" >
-                        <p>Community Kitchen</p>
+                        <p>Baraka & Bilal Catering</p>
                     </div>
 
                 </Navbar.Brand>
