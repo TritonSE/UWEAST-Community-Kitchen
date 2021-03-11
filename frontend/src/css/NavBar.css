@@ -117,8 +117,8 @@
     .cart-icon {
         display: inline-block;
         text-align: right;
-        transform: scale(1.7);
-        -webkit-transform: scale(1.7);
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
     }
 
     .cart-icon-smaller-desktop {
@@ -147,7 +147,7 @@
 
     .cart-icon {
         display: inline-block;
-        width: calc(10%);
+        width: calc(20%);
         text-align: right;
         transform: scale(1.5);
         -webkit-transform: scale(1.5);   
