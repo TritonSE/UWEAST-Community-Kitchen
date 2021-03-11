@@ -93,36 +93,36 @@ td {
 }
 
 #table-cell-items {
-    width: calc(18.3%);
+    width: calc(25.8%);
 }
 
 #table-cell-quanitity {
-    width: calc(11.8%);
+    width: calc(8.9%);
 }
 
 #table-cell-size {
-    width: calc(6.9%);
+    width: calc(13%);
 }
 
 #table-cell-acc {
-    width: calc(24.6%);
+    width: calc(23.5%);
 }
 
 @media only screen and (min-width: 1470px) and (max-width: 1534px) {
     #table-cell-items {
-        width: calc(20.6%);
+        width: calc(26.6%);
     }
     
     #table-cell-quanitity {
-        width: calc(9.8%);
+        width: calc(9.2%);
     }
     
     #table-cell-size {
-        width: calc(7.4%);
+        width: calc(13.4%);
     }
     
     #table-cell-acc {
-        width: calc(25.8%);
+        width: calc(24.8%);
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -136,19 +136,19 @@ td {
 
 @media only screen and (min-width: 1343px) and (max-width: 1470px) {
     #table-cell-items {
-        width: calc(20.3%);
+        width: calc(26%);
     }
     
     #table-cell-quanitity {
-        width: calc(9.8%);
+        width: calc(9.4%);
     }
     
     #table-cell-size {
-        width: calc(7.4%);
+        width: calc(13.4%);
     }
     
     #table-cell-acc {
-        width: calc(26.2%);
+        width: calc(25.2%);
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -162,19 +162,19 @@ td {
 
 @media only screen and (max-width: 1342px) {
     #table-cell-items {
-        width: calc(20%);
+        width: calc(24.6%);
     }
     
     #table-cell-quanitity {
-        width: calc(9.8%);
+        width: calc(10.3%);
     }
     
     #table-cell-size {
-        width: calc(8.2%);
+        width: calc(16.2%);
     }
     
     #table-cell-acc {
-        width: calc(25.8%);
+        width: calc(20.3%);
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {

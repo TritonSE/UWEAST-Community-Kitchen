@@ -93,6 +93,12 @@ const renderRow = (rowData, rowMeta) => {
     )
 }
 
+const deleteOrder = (rowsDeleted, data, newTableData) => {
+  console.log(rowsDeleted);
+  console.log(data);
+  return false;
+}
+
 export default function OrdersTable(props) {
   
   // option props to pass into the table
@@ -100,9 +106,10 @@ export default function OrdersTable(props) {
     filter: true,
     expandableRowsOnClick: true,
     expandableRows: true,
-    selectableRows: 'none',
+    selectableRows: 'single',
     rowsPerPageOptions: [10, 25, 50],
     renderExpandableRow: renderRow,
+    onRowsDelete: deleteOrder,
     searchOpen: true,
     responsive: 'vertical'
   };
@@ -127,7 +134,8 @@ export default function OrdersTable(props) {
         root: {
           borderLeft: '2px solid #CCCCCC',
           borderRight: '2px solid #CCCCCC',
-        }
+        },
+        hover: { '&$root': { '&:hover': { backgroundColor: '#F1f1f1' }, } }
       },
       MuiTableCell: {
         root: {

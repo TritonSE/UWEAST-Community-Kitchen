@@ -146,7 +146,15 @@ const columns = [
           display: DisplayStatusFilters
         }
       }
-    }
+    },
+    {
+      name: "Id",
+      options: {
+        display: false, 
+        viewColumns: false, 
+        filter: false,
+      }  
+    },
 ];
 
 export { columns } ;
