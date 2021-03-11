@@ -48,6 +48,10 @@
     display: inline-flex;
 }
 
+.MuiButton-label {
+    color: #000000;
+}
+
 @media only screen and (max-width: 767px)
 {
     .cart-popup {
