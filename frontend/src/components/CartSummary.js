@@ -22,6 +22,8 @@ import { useHistory } from "react-router-dom";
 import PayPal from '../components/PayPal';
 import Navbar from '../components/NavBar';
 import MenuItemPopup from '../components/MenuItemPopup';
+import { makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
@@ -87,6 +89,45 @@ function loadItems(cart, popupFunc, removeItem) {
  */
 const CartSummary = (props) => {
     let history = useHistory();
+
+    //time and date picker style
+    const customTheme = createMuiTheme({
+        palette: {
+            primary: {
+                main: "#f9ce1d"
+            }
+        },
+        overrides: {
+            MuiInputLabel: {
+                root: {
+                    "&$focused": {
+                        color: "black"
+                    }
+                }
+            },
+        }
+    })
+
+    //input field underline colors
+    const useStyles = makeStyles({
+        underline: {
+            "&&&:before": {
+                borderColor: "#000000"
+            },
+            "&&:after": {
+                borderColor: "#f9ce1d"
+            }
+        }
+    });
+
+    const classes = useStyles();
+
+    //font size for mobile
+    const fontStyle = {
+        style: {
+            fontSize: "3vw",
+        }
+    }
 
     //stores cookie object and function to update cookie
     const [cookies, setCookie] = useCookies(["cart"]);
@@ -184,17 +225,17 @@ const CartSummary = (props) => {
             },
             body: JSON.stringify(bodyObj)
         }).then(async result => {
-                if (result.ok) {
-                    const json = await result.json();
+            if (result.ok) {
+                const json = await result.json();
 
-                    //displays item popup
-                    const popupValues = json.item;
-                    togglePopup(popupValues.Name, popupValues.Description, popupValues.Prices, popupValues.pictureURL, popupValues.dietaryInfo, popupValues.Accommodations, popupValues._id, fillIns);
-                }
-                else {
-                    console.log("error");
-                }
-            });
+                //displays item popup
+                const popupValues = json.item;
+                togglePopup(popupValues.Name, popupValues.Description, popupValues.Prices, popupValues.pictureURL, popupValues.dietaryInfo, popupValues.Accommodations, popupValues._id, fillIns);
+            }
+            else {
+                console.log("error");
+            }
+        });
     }
 
     /**
@@ -343,38 +384,29 @@ const CartSummary = (props) => {
                     <div className="date-time">
                         <div className="date-picker">
                             {/* Date picker to select a pickup date */}
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <KeyboardDatePicker
-                                    disableToolbar
-                                    variant="inline"
-                                    format="MM/dd/yyyy"
-                                    margin="normal"
-                                    id="date-picker-inline"
-                                    label="Date"
-                                    value={selectedDate}
-                                    onChange={handleDateChange}
-                                    disablePast={true}
-                                    shouldDisableDate={disableDates}
-                                    KeyboardButtonProps={{
-                                        'aria-label': 'change date',
-                                    }}
-                                    inputProps={
-                                        isMobile ?
-                                            {
-                                                style: {
-                                                    fontSize: "3vw"
-                                                }
-                                            } : {}}
-                                    InputLabelProps={
-                                        isMobile ?
-                                            {
-                                                style: {
-                                                    fontSize: "3vw"
-                                                }
-                                            } : {}}
-                                />
-                                {(!selectedDate || !selectedTime) ? <p className="select-error">Please select a date and a time</p> : null}
-                            </MuiPickersUtilsProvider>
+                            <MuiThemeProvider theme={customTheme}>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <KeyboardDatePicker
+                                        disableToolbar
+                                        variant="inline"
+                                        format="MM/dd/yyyy"
+                                        margin="normal"
+                                        id="date-picker-inline"
+                                        label="Date"
+                                        value={selectedDate}
+                                        onChange={handleDateChange}
+                                        disablePast={true}
+                                        shouldDisableDate={disableDates}
+                                        KeyboardButtonProps={{
+                                            'aria-label': 'change date',
+                                        }}
+                                        InputProps={{ classes }}
+                                        inputProps={isMobile ? { fontStyle } : {}}
+                                        InputLabelProps={isMobile ? { fontStyle } : {}}
+                                    />
+                                    {(!selectedDate || !selectedTime) ? <p className="select-error">Please select a date and a time</p> : null}
+                                </MuiPickersUtilsProvider>
+                            </MuiThemeProvider>
                         </div>
                         {/* Time picker to select a pickup time */}
                         <CustomTimePicker
@@ -395,6 +427,9 @@ const CartSummary = (props) => {
                             }}
                             setSize={isMobile}
                             errorMessage={error}
+                            theme={customTheme}
+                            inpProps={{ classes }}
+                            fontProps={{ fontStyle }}
                         />
                     </div>
                     <p className="pickup-date-info">NOTE: Earliest pickup is 3 days after order has been placed</p>
