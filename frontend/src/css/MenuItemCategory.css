@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
+
 .menu-item-category
 {
   width: calc(100% - 10px);
@@ -9,9 +12,10 @@
 
 .menu-item-category h2 
 {
-  font-size: 40px;
+  font-size: 35px;
   font-weight: bold;
   padding-bottom: 20px;
+  font-family: 'Josefin Sans', cursive;
 }
 
 .menu-item-category-grid 
@@ -21,7 +25,7 @@
 
 .menu-item-category 
 {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 450px) 
