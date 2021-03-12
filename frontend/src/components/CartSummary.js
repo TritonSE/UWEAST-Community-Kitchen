@@ -27,6 +27,7 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
+const MIN_CART_TOTAL = 3;
 
 /**
  * displays items currently in the cart and updates subtotal, tax, and total
@@ -446,11 +447,11 @@ const CartSummary = (props) => {
                     </div>
                     {/* Renders an error message if cart total is less than the $20 minimum */}
                     <div className="order-minimum">
-                        {(parseFloat(cart.cart_total) < 20) ? <span>Order minimum is $20. Please add ${(20 - parseFloat(cart.cart_total)).toFixed(2)} to your cart to proceed to checkout.</span> : null}
+                        {(parseFloat(cart.cart_total) < MIN_CART_TOTAL) ? <span>Order minimum is ${MIN_CART_TOTAL}. Please add ${(MIN_CART_TOTAL - parseFloat(cart.cart_total)).toFixed(2)} to your cart to proceed to checkout.</span> : null}
                     </div>
                     {/* Renders PayPal component if all required fields are completed and return to menu button otherwise */}
                     <div className="return-button">
-                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= 20) ? <PayPal selectedDate={selectedDate} selectedTime={selectedTime} /> : <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
+                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= MIN_CART_TOTAL) ? <PayPal selectedDate={selectedDate} selectedTime={selectedTime} /> : <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
                     </div>
                 </div>
             </div>
