@@ -49,6 +49,7 @@
 
 .cart-icon, .cart-icon-smaller-desktop {
     display: none;
+    cursor: pointer;
 }
 
 .navbar-bg-color { 
@@ -73,8 +74,7 @@
     display: none;
 }
 
-@media only screen and (min-width: 1200px)  and (max-width: 1349px)
-{
+@media only screen and (min-width: 1200px)  and (max-width: 1349px) {
     .navbar-brand {
         padding-left: 0;
     }
@@ -87,15 +87,19 @@
         display: none;
     }
 
+    .cart-icon-container {
+        display: none;
+    }
+
     .cart-icon-smaller-desktop {
         display: inline-block;
-        transform: scale(1.7);
-        -webkit-transform: scale(1.7);
+        transform: scale(1.25);
+        -webkit-transform: scale(1.25);
         margin-right: calc(0.5vw);    
     }
 }
 
-@media only screen and (min-width: 944px) and (max-width: 1199px) {
+@media only screen and (min-width: 945px) and (max-width: 1199px) {
     .navbar-brand {
         padding-left: 0;
         padding-right: calc(1vw);
@@ -113,8 +117,8 @@
     .cart-icon {
         display: inline-block;
         text-align: right;
-        transform: scale(2);
-        -webkit-transform: scale(2);
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
     }
 
     .cart-icon-smaller-desktop {
@@ -122,10 +126,10 @@
     }
 }
 
-@media only screen and (min-width: 767px) and (max-width: 945px) {
+@media only screen and (min-width: 767px) and (max-width: 944px) {
     .navbar-brand {
         padding-left: 0;
-        padding-right: calc(1vw);
+        padding-right: calc(0vw);
         position: relative;
     }
 
@@ -143,9 +147,10 @@
 
     .cart-icon {
         display: inline-block;
+        width: calc(20%);
         text-align: right;
-        transform: scale(2);
-        -webkit-transform: scale(2);
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);   
     }
 
     .cart-icon-smaller-desktop {
@@ -154,32 +159,87 @@
 }
 
 
-@media only screen and (max-width: 767px) 
-{
-    .navbar-brand {
-        padding-left: 0;
+@media only screen and (min-width: 541px) and (max-width: 767px) {
+    .cart-icon {
+        display: inline-block;
+        width: calc(20%);
+        text-align: right;
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+    }
+    .brand-name {
+        position: relative;
     }
 
     .navbar.navbar-bg-color {
         max-height: none;
     }
 
-    .navbar.navbar-bg-color .desktop-tabs, .cart-icon-smaller-desktop {
-        display: none;
-    }
-
-    .brand-name {
-        display: none;
-    }
-
     .cart-icon-container {
         display: inline-block;
     }
+    .navbar-brand {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .cart-icon-smaller-desktop {
+        display: none;  
+    }
+}
 
+@media only screen and (min-width: 345px) and (max-width: 540px) {
     .cart-icon {
         display: inline-block;
+        width: calc(30%);
         text-align: right;
-        transform: scale(2);
-        -webkit-transform: scale(2);
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+    }
+    .brand-name {
+        display: none;
+    }
+    .navbar.navbar-bg-color {
+        max-height: none;
+    }
+    .cart-icon-container {
+        display: inline-block;
+    }
+    .navbar-brand {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .cart-icon-smaller-desktop {
+        display: none;  
+    }
+}
+
+@media only screen and (max-width: 344px) {
+    .cart-icon {
+        display: inline-block;
+        text-align: center;
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+    }
+    .brand-name {
+        display: none;
+    }
+    .navbar.navbar-bg-color {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        max-height: none;
+    }
+    .cart-icon-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        display: inline-block;
+    }
+    .navbar-brand {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .cart-icon-smaller-desktop {
+        display: none;  
     }
 }
