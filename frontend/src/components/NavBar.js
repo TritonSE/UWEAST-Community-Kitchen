@@ -1,23 +1,42 @@
-import React, { useEffect } from 'react';
-/**
- * The NavBar component. Renders at the top of the website and is fixed to the top.
- * Contains all the relevant tabs that route the user to the specified page.
- * Cart Icon is used for the mobile/tablet rendering of the webpage. 
- * 
- */
+ /**
+  * The NavBar component. Renders at the top of the website and is fixed to the top.
+  * Cart Icon is used for the mobile/tablet rendering of the webpage. 
+  * 
+  * @summary NavBar at the top of each page, used to navigate the website.
+  */
+
+import React, {useEffect} from 'react';
 import { useHistory } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { withStyles } from '@material-ui/core/styles';
+import Badge from '@material-ui/core/Badge'
+import IconButton from '@material-ui/core/IconButton'
 import Logo from "../media/UWEAST_Logo_Detail_Transparent.png";
 import '../css/NavBar.css';
 import { isAuthenticated, logout } from '../util/Auth';
+import { useCookies } from 'react-cookie';
 
+// styled Badge for the cart icon
+const CartBadge = withStyles(({
+    badge: {
+      backgroundColor: "#F9CE1D",
+      color: "white"
+    }
+  }))(Badge);
 
+/**
+ * Renders the NavBar used to navigate the website
+ * 
+ * @param {any} props - props for the NavBar to use
+ * @returns {HTMLElement} - The NavBar
+ */
 export default function NavBar(props) {
 
     {/* history hook to redirect on logout */ }
     const history = useHistory();
+    const [cookies, setCookie] = useCookies(["cart"]);
 
     const [state, setState] = React.useState({
         isUserAuthenticated: false
@@ -29,7 +48,6 @@ export default function NavBar(props) {
 
     {/* removes login token and redirects to menu page */ }
     function Logout() {
-        logout();
         history.push("/login");
         history.go(0);
     }
@@ -38,7 +56,11 @@ export default function NavBar(props) {
      * Renders the cart page for mobile navbar
      */
     function OpenCart() {
-        history.push("/cart");
+        if(window.innerWidth < 768) {
+            history.push("/cart");
+        } else {
+            props.toggleCart();
+        }
     }
 
     useEffect(() => {
@@ -90,9 +112,11 @@ export default function NavBar(props) {
                 {/* The shopping cart will only render if it is a mobile component */}
                 <div className="cart-icon-container">
                     <div className="cart-icon">
-                        <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}
-                            onClick={OpenCart} />
-
+                        <IconButton onClick={OpenCart}>
+                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                            </CartBadge>
+                        </IconButton>
                     </div>
 
                     {/* Triggers on Collapse - Hamburger Icon replaces pages */}
@@ -130,8 +154,11 @@ export default function NavBar(props) {
 
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
                 <div className="cart-icon-smaller-desktop">
-                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}
-                        onClick={() => props.toggleCart()} />
+                    <IconButton onClick={() => props.toggleCart()}>
+                        <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                            <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                        </CartBadge>
+                    </IconButton>
                 </div>
             </Navbar>
         </html>
