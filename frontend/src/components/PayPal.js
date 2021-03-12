@@ -115,7 +115,7 @@ export default function PayPal(props) {
                     category: "PHYSICAL_GOODS"
                 }
             }), 
-                {   name: "taxes",
+                {   name: "Taxes",
                     description: "taxes",
                     unit_amount: {
                         currency_code: "USD",
@@ -142,7 +142,6 @@ export default function PayPal(props) {
             onApprove: async (data, actions) => {
                 return actions.order.capture().then(function(details) {
                     // details here includes payer name, phone number, and email
-
                     // create order object
                     let sendDate = new Date(props.selectedDate.getFullYear(),(props.selectedDate.getMonth()), props.selectedDate.getDate(),
                         props.selectedTime.substring(0, 2), props.selectedTime.substring(3, 5));
@@ -155,7 +154,7 @@ export default function PayPal(props) {
                         "Pickup": sendDate,
                         "PayPal": {
                             "Amount": parseFloat(cookies.cart.total).toFixed(2),
-                            "transactionID": data.orderID
+                            "transactionID": details.purchase_units[0].payments.captures[0].id
                         },
                         "Order": 
                         cookies.cart.items.map((item) => {
