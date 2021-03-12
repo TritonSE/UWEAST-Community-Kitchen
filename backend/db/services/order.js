@@ -67,16 +67,19 @@ async function findOrders() {
  */
 async function deleteOrder(id) {
 
-  Order.findAndModify({
-    query: {
-        _id:  new mongodb.ObjectID(id)
-    },
-    remove: true,
-    new: false
-  }, function (err, res) {
-    if (err) return false
-    return res
-  });
+  try {
+    return  Order.findOneAndDelete({_id: new mongodb.ObjectID(id)});
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+
+  // Order.findOneAndDelete({_id: new mongodb.ObjectID(id)},
+
+  //   function (err, res) {
+  //     if (err) return false
+  //     return res
+  // });
 }
 
 module.exports = {

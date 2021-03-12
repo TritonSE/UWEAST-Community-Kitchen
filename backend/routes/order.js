@@ -11,6 +11,8 @@ const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const router = express.Router();
 const { verify } = require("./services/jwt");
+const { findAllEmails, findPrimaryEmail } = require("../db/services/email");
+const { sendEmail } = require("../routes/services/mailer");
 const { deleteOrder, findOrders, updateStatus } = require("../db/services/order");
 
 // @body - Customer (with Name, Email, Phone), Pickup, Timestamps,
@@ -144,8 +146,12 @@ router.delete(
   async (req, res, next) => {
     try {
 
+      console.log(req.body);
+
       // try to add the order and respond with err msg or success
-      const removedOrder = await deleteOrder(req.body);
+      const removedOrder = await deleteOrder(req.body._id);
+      console.log(removedOrder);
+      console.log(!removedOrder);
       if (!removedOrder) {
         return res
           .status(400)
@@ -180,7 +186,7 @@ router.delete(
           };
   
           // send customer of removed order a cancellation receipt
-          sendEmail("customer-cancellation", removedOrder.Customer.email, locals, res);
+          sendEmail("customer-cancellation", removedOrder.Customer.Email, locals, res);
 
         }
       }
@@ -215,7 +221,8 @@ router.delete(
           }),
           order: removedOrder.Order,
           amount: removedOrder.PayPal.Amount,
-          transactionID: removedOrder.PayPal.transactionID
+          transactionID: removedOrder.PayPal.transactionID,
+          isComplete: removedOrder.isCompleted
         };
 
          // send UWEAST cancellation receipt for records

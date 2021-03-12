@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import Navbar from '../components/NavBar';
 import PayPal from '../components/PayPal';
+import {getJWT, logout} from '../util/Auth';
 
 const config = require('../config');
 
@@ -47,6 +48,32 @@ class About extends Component {
         ],
         pickup_date: "2021-02-04"
     }
+
+    async function test(){
+        const submission = {
+            "_id": "603da34392c47d51eb4ad183",
+            "customerReceipt": true,
+            "adminReceipt": true,
+            "token": getJWT(),
+        };
+
+        const response = await fetch(`${BACKEND_URL}order/cancelOrder`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(submission)
+          });
+    
+          // successful login
+          if (response.ok) {
+    
+            // set admin JWT 
+            const json = await response.json();
+            alert(json.msg);
+          }
+          else{
+              alert(response.status);
+          }
+    }
       return (
 
           <div>
@@ -54,7 +81,8 @@ class About extends Component {
               <div style={{marginTop: "30px"}}>
                   This is the About Page.
               </div>
-              <PayPal cart={cart}/>           
+              <PayPal cart={cart}/>        
+              <button onClick={test}> Click Me</button>   
           </div>
 
       )
