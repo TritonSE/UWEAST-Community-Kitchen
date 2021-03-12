@@ -128,7 +128,7 @@ router.post(
  * Sends an email to all individuals inside of the Emails DB with the form information.
  *
  * @body - Requires the order id of order to remove, admin token for authorization, and an indication of whether
- *         cancellation receipts must be sent to either customer or admins
+ *         cancellation receipts must be sent to either customer or admins.
  * @returns {status/object} - Successfully removed order sends a 200 status / unsuccessful an error status is sent
  */
 router.delete(
@@ -221,8 +221,7 @@ router.delete(
           }),
           order: removedOrder.Order,
           amount: removedOrder.PayPal.Amount,
-          transactionID: removedOrder.PayPal.transactionID,
-          isComplete: removedOrder.isCompleted
+          transactionID: removedOrder.PayPal.transactionID
         };
 
          // send UWEAST cancellation receipt for records

@@ -17,7 +17,6 @@ import { withCookies } from 'react-cookie';
 
 import Menu from './pages/Menu';
 import Admin from './pages/Admin';
-import About from './pages/About';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -49,13 +48,10 @@ function App() {
             <ResetPassword />
           </Route>
           {/* About Page */}
-        {/* <Route exact path="/about" component={() => { 
+        <Route exact path="/about" component={() => { 
           window.location = 'https://www.uweast.org'; 
           return null;
           } }>        
-        </Route> */}
-        <Route exact path="/about">
-          <About/>
         </Route>
           {/* Contact Page */}
           <Route exact path="/contact">
