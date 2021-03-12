@@ -102,7 +102,7 @@ class Menu extends Component {
         const oldCookieFields = oldCookies.split(";");
         oldCookieFields.forEach(function (value, index) {
             const cookieNameValue = value.split("=");
-            if(cookieNameValue[0] == " cart") {
+            if(cookieNameValue[0] === " cart") {
                 cartIndex = index;
             }
         });

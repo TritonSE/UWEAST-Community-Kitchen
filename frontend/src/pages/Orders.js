@@ -127,7 +127,7 @@ export default class Orders extends React.Component {
                 const formatedArray = this.formatArray(getOrdersList[i], date, formatCurrtime, dateSubmission, formatCurrtimeSubmission)
                 createArr.push(formatedArray);
             }
-            this.setState({ getOrders: createArr, Loading: false})
+            this.setState({ getOrders: createArr, Loading: false}) 
         })
         .catch(err => console.log(err));
     }

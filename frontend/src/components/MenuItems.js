@@ -18,7 +18,9 @@ const MenuItems = ({ foodCategories, processForm, popupVisible, popupValues, tog
       <div className="menu-items">
         {/** generates categories in the menu */}
         {foodCategories.map((categoryName, key) => {
-          return <MenuItemCategory key={key} categoryName={categoryName} key={key} processForm={processForm} popupVisible={popupVisible} popupValues={popupValues} togglePopup={togglePopup}/>
+          return <MenuItemCategory key={key} categoryName={categoryName} 
+                    processForm={processForm} popupVisible={popupVisible} 
+                    popupValues={popupValues} togglePopup={togglePopup}/>
         })}
       </div>
 

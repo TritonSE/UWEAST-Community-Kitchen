@@ -129,8 +129,7 @@ export default function ChangeEmailScreen (props) {
             <br />
             <br />
                 <span className={classes.span}>
-                    <TextField id="email-input" 
-                        size="small"
+                    <TextField size="small"
                         error={inputError} 
                         value={inputEmail} 
                         type="email" 

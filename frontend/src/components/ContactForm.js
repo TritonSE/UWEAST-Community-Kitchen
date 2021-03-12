@@ -45,13 +45,13 @@ const ContactForm = () => {
       });
       
       // successful response
-      if (response.status == 200){
+      if (response.status === 200){
         alert("Message sent!");
         // reload window to clear input boxes 
         window.location.reload();
         
         // malformed email
-      } else if(response.status == 400) {
+      } else if(response.status === 400) {
         setState({...state, snack: {message: 'Invalid Email Address!', open: true}});
 
         // system error

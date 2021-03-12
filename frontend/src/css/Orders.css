@@ -93,36 +93,53 @@ td {
 }
 
 #table-cell-items {
-    width: calc(25.8%);
+    width: calc(15.4%);
 }
 
 #table-cell-quanitity {
-    width: calc(8.9%);
+    width: calc(12.2%);
 }
 
 #table-cell-size {
-    width: calc(13%);
+    width: calc(7.4%);
 }
 
 #table-cell-acc {
-    width: calc(23.5%);
+    width: calc(25.5%);
+}
+
+/* Used for the custom toolbar when row is selected */
+.delete-order-icon {
+    transform: scale(1.3);
+    margin-right: calc(2vw);
+    color: var(--black);
+    cursor: pointer;
+}
+
+.delete-order-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.delete-order-form label {
+    margin-left: calc(0.6vw);
 }
 
 @media only screen and (min-width: 1470px) and (max-width: 1534px) {
     #table-cell-items {
-        width: calc(26.6%);
+        width: calc(16.2%);
     }
     
     #table-cell-quanitity {
-        width: calc(9.2%);
+        width: calc(12.6%);
     }
     
     #table-cell-size {
-        width: calc(13.4%);
+        width: calc(7.4%);
     }
     
     #table-cell-acc {
-        width: calc(24.8%);
+        width: calc(27%);
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -136,19 +153,19 @@ td {
 
 @media only screen and (min-width: 1343px) and (max-width: 1470px) {
     #table-cell-items {
-        width: calc(26%);
+        width: calc(18.4%);
     }
     
     #table-cell-quanitity {
-        width: calc(9.4%);
+        width: calc(10.2%);
     }
     
     #table-cell-size {
-        width: calc(13.4%);
+        width: calc(8%);
     }
     
     #table-cell-acc {
-        width: calc(25.2%);
+        width: calc(25.8%);
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -161,20 +178,26 @@ td {
 }
 
 @media only screen and (max-width: 1342px) {
+
+    /* Removes the stickyness of the checkboxs on the left */
+    .MuiTableCell-root.MuiTableCell-body.MUIDataTableSelectCell-root-40.MUIDataTableSelectCell-fixedLeft-42.MuiTableCell-paddingCheckbox {
+        position: relative;
+    }
+    
     #table-cell-items {
-        width: calc(24.6%);
+        width: calc(18.4%);
     }
     
     #table-cell-quanitity {
-        width: calc(10.3%);
+        width: calc(10.2%);
     }
     
     #table-cell-size {
-        width: calc(16.2%);
+        width: calc(8%);
     }
     
     #table-cell-acc {
-        width: calc(20.3%);
+        width: calc(26.3%);
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {

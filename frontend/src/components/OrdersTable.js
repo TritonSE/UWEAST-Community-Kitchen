@@ -28,6 +28,7 @@ import {
   createMuiTheme,
   MuiThemeProvider,
 } from "@material-ui/core/styles";
+import OrdersTableSelectToolbar from './OrdersTableSelectToolbar';
 
 // converts the data to an object list
 function createData(name, accommodations, specialInstructions, size, quantity) {
@@ -96,7 +97,10 @@ const renderRow = (rowData, rowMeta) => {
 const deleteOrder = (rowsDeleted, data, newTableData) => {
   console.log(rowsDeleted);
   console.log(data);
-  return false;
+}
+
+const deleteModal = (selectedRows, displayData, setSelectedRows) => {
+  return <OrdersTableSelectToolbar />
 }
 
 export default function OrdersTable(props) {
@@ -109,7 +113,8 @@ export default function OrdersTable(props) {
     selectableRows: 'single',
     rowsPerPageOptions: [10, 25, 50],
     renderExpandableRow: renderRow,
-    onRowsDelete: deleteOrder,
+    // onRowsDelete: deleteOrder,
+    customToolbarSelect: deleteModal,
     searchOpen: true,
     responsive: 'vertical'
   };
