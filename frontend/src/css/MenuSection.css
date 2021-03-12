@@ -18,8 +18,8 @@
 
   /* background-color: var(--miracle); */
 
-  background: rgb(242,241,246);
-  background: linear-gradient(90deg, rgba(242,241,246,1) 0%, rgba(207,198,174,1) 51%, rgba(242,241,246,1) 100%);
+  /* background: rgb(242,241,246);
+  background: linear-gradient(90deg, rgba(242,241,246,1) 0%, rgba(207,198,174,1) 51%, rgba(242,241,246,1) 100%); */
 }
 
 .menu-filter-wrapper
