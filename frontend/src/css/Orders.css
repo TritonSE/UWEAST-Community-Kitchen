@@ -180,7 +180,7 @@ td {
 @media only screen and (max-width: 1342px) {
 
     /* Removes the stickyness of the checkboxs on the left */
-    .MuiTableCell-root.MuiTableCell-body.MUIDataTableSelectCell-root-40.MUIDataTableSelectCell-fixedLeft-42.MuiTableCell-paddingCheckbox {
+    .orders-page-container > div > div > div > div:nth-child(3) > table > tbody > tr > td:nth-child(1) {
         position: relative;
     }
     
