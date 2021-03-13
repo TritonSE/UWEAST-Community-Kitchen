@@ -146,12 +146,9 @@ router.delete(
   async (req, res, next) => {
     try {
 
-      console.log(req.body);
-
       // try to add the order and respond with err msg or success
       const removedOrder = await deleteOrder(req.body._id);
-      console.log(removedOrder);
-      console.log(!removedOrder);
+
       if (!removedOrder) {
         return res
           .status(400)
