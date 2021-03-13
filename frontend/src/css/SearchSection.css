@@ -18,9 +18,13 @@
   height: calc(50vh - 70px);
 }
 
+.navbar-wrapper nav {
+  position: fixed;
+  width: 100%;
+}
+
 @media only screen and (min-width: 1200px) {
   .navbar-wrapper nav {
-    position: fixed !important;
     width: 100%;
     z-index: 1;
   } 
@@ -32,9 +36,27 @@
 
 @media only screen and (min-width: 768px) and (max-width: 1199px)
 {
+  .navbar-wrapper nav {
+    width: 100%;
+    z-index: 1;
+  } 
+  
   .search-section
   {
     position: relative;
-    top: 0px;
+    top: 116px;
+  }
+}
+
+@media only screen and (max-width: 768px)
+{
+  .navbar-wrapper nav {
+    width: 100%;
+    z-index: 1;
+  } 
+  
+  .search-section
+  {
+    position: relative;
   }
 }

@@ -47,6 +47,7 @@ class About extends Component {
         ],
         pickup_date: "2021-02-04"
     }
+
       return (
 
           <div>
@@ -54,7 +55,7 @@ class About extends Component {
               <div style={{marginTop: "30px"}}>
                   This is the About Page.
               </div>
-              <PayPal cart={cart}/>           
+              <PayPal cart={cart}/>        
           </div>
 
       )

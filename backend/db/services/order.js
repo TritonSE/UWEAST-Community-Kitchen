@@ -60,8 +60,31 @@ async function findOrders() {
   }
 }
 
+/**
+ * Delete a particular order in the collection, given its unique order id.
+ *
+ * @returns {[object]/boolean} - Found order(s) / false on error
+ */
+async function deleteOrder(id) {
+
+  try {
+    return  Order.findOneAndDelete({_id: new mongodb.ObjectID(id)});
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+
+  // Order.findOneAndDelete({_id: new mongodb.ObjectID(id)},
+
+  //   function (err, res) {
+  //     if (err) return false
+  //     return res
+  // });
+}
+
 module.exports = {
   addOrder,
   findOrders,
   updateStatus,
+  deleteOrder
 };
