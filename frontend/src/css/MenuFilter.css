@@ -1,14 +1,26 @@
-.menu-filter
-{
-  position: sticky;
-  width: 100%;
-  top: 120px;
-  width: 150px;
-}
-
 .toggled-filter 
 {
   border-width: 2px;
   background-color: rgb(51,51,51);
   color: #f9ce1d;
+}
+
+@media only screen and (min-width: 1200px) {
+  .menu-filter
+  {
+    position: sticky;
+    width: 100%;
+    top: 120px;
+    width: 150px;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .menu-filter
+  {
+    position: sticky;
+    width: 100%;
+    top: 170px;
+    width: 150px;
+  }
 }

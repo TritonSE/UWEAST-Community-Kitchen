@@ -41,6 +41,21 @@
   }
 }
 
+@media only screen and (min-width: 768px) and (max-width: 1199px)
+{
+  .navbar-wrapper nav {
+    position: fixed !important;
+    width: 100%;
+    z-index: 1;
+  } 
+  
+  .menu-section
+  {
+    position: relative;
+    top: 116px;
+  }
+}
+
 @media only screen and (min-width: 768px) and (max-width: 1350px) 
 {
   .menu-section

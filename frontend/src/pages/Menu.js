@@ -15,7 +15,6 @@ import CartPreview from '../components/CartPreview';
 import CartSummary from '../components/CartSummary';
 import SearchSection from '../components/SearchSection';
 import MenuSection from '../components/MenuSection';
-import Banner from '../components/Banner';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 import { withRouter } from 'react-router-dom';
@@ -187,9 +186,8 @@ class Menu extends Component {
         return (
             <div>
                 <div className="navbar-wrapper">
-                    <Navbar toggleCart={this.toggleCart} itemCount={this.state.cartItems.length}/>
+                    <Navbar page="home" toggleCart={this.toggleCart} itemCount={this.state.cartItems.length} />
                 </div>
-                <Banner />
                 {/* Dialog is displayed if cart item limit is reached */}
                 <div>
                 <Dialog
