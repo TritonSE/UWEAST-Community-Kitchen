@@ -27,6 +27,7 @@ export default class Orders extends React.Component {
         this.formatTime = this.formatTime.bind(this);
         this.formatDate = this.formatDate.bind(this);
         this.formatArray = this.formatArray.bind(this);
+        this.formatString = this.formatString.bind(this);
     }
 
     /**
@@ -46,8 +47,33 @@ export default class Orders extends React.Component {
         const dateOne = date + `\n${val}`;
         const dateTwo = dateSubmission + `\n${val2}`;
 
-        return [list.PayPal.transactionID, dateOne, list.Customer.Name, list.Customer.Email, list.Customer.Phone, 
+        let email = this.formatString(list.Customer.Email, 30);
+        let name = this.formatString(list.Customer.Name, 14);
+
+        return [list.PayPal.transactionID, dateOne, name, email, list.Customer.Phone, 
             list.PayPal.Amount, list.Order, dateTwo, list.isCompleted ? "Completed Orders" : "Pending Orders", list._id];
+    }
+
+    /**
+     * This method adds in '\n' so the line in the table will go to the next
+     * line. This allows for consist formating so the table doesn't have weird
+     * issues.  
+     * 
+     * @param {String} str - The string to format
+     * @param {String} length - Number of characters per line 
+     * @returns - restructured string
+     */
+    formatString(str, length) {
+        let tempEmail = str;
+        if(parseInt(str.length / length) > 0) {
+            let i = length;
+            while(i < str.length) {
+                tempEmail = tempEmail.slice(0, i) + '\n' + tempEmail.slice(i, str.length);  
+                i += 30;  
+            }
+        }
+
+        return tempEmail;
     }
 
     /**

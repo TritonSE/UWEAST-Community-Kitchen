@@ -77,7 +77,7 @@ const renderRow = (rowData, rowMeta) => {
                   {/* The dropdown row data */}
                     {rows.map(row => (
                       <TableRow key={row.name}>
-                        <TableCell style={{width: 'calc(48px)'}}></TableCell>
+                        <TableCell style={{width: 'calc(68px)'}}></TableCell>
                         <TableCell><p style={stylingCell}>{row.name}</p></TableCell>
                         <TableCell><p style={stylingCell}>{row.quantity}</p></TableCell>
                         <TableCell><p style={stylingCell}>{row.size}</p></TableCell>
