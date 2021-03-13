@@ -17,7 +17,9 @@ export default function OrdersTableSelectToolbar(props) {
     return (
         <div className="delete-order-icon">
             <FontAwesomeIcon icon={faTrash} onClick={() => setShow(true)} />
-            <DeleteOrder show={show} updateParentShow={setShow} /> 
+            <DeleteOrder show={show} updateParentShow={setShow} _id={props.data[9]} render={props.render} 
+                setSelectedRows={props.setSelectedRows}
+            /> 
         </div>
     )
 }

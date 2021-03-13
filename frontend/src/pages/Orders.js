@@ -8,7 +8,7 @@
 import React from 'react';
 import OrdersTable from '../components/OrdersTable';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {getJWT, logout} from '../util/Auth';
+import { getJWT, logout } from '../util/Auth';
 import '../css/Orders.css';
 
 const config = require('../config');
@@ -28,6 +28,7 @@ export default class Orders extends React.Component {
         this.formatDate = this.formatDate.bind(this);
         this.formatArray = this.formatArray.bind(this);
         this.formatString = this.formatString.bind(this);
+        this.getOrders = this.getOrders.bind(this);
     }
 
     /**
@@ -71,6 +72,17 @@ export default class Orders extends React.Component {
                 tempEmail = tempEmail.slice(0, i) + '\n' + tempEmail.slice(i, str.length);  
                 i += 30;  
             }
+
+            console.log(tempEmail + ": " + tempEmail.length);
+        } else {
+            const difference = length - str.length;
+            let i = 0;
+            while (i < difference) {
+                tempEmail += " ";
+                i++;
+            }
+
+            console.log(tempEmail + ": " +  tempEmail.length);
         }
 
         return tempEmail;
@@ -114,10 +126,7 @@ export default class Orders extends React.Component {
         return dateSubmission 
     }
 
-    /**
-     * Get all the orders from the database.
-     */
-    componentDidMount() {
+    getOrders() {
         fetch(`${BACKEND_URL}order`, {
             method: 'POST',
             headers: {
@@ -157,6 +166,13 @@ export default class Orders extends React.Component {
         })
         .catch(err => console.log(err));
     }
+
+    /**
+     * Get all the orders from the database.
+     */
+    componentDidMount() {
+        this.getOrders();
+    }
     
     render() {
         return (
@@ -168,7 +184,7 @@ export default class Orders extends React.Component {
                 </div> : 
                 <div className="orders-table">
                     <div className="justify-table-center">
-                        <OrdersTable orders={this.state.getOrders} />
+                        <OrdersTable orders={this.state.getOrders} render={this.getOrders} />
                     </div>
                 </div>
                 }

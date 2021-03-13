@@ -10,7 +10,7 @@
  * @summary The Orders table implementation.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import MUIDataTable from "mui-datatables";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -94,26 +94,31 @@ const renderRow = (rowData, rowMeta) => {
     )
 }
 
-const deleteOrder = (rowsDeleted, data, newTableData) => {
-  console.log(rowsDeleted);
-  console.log(data);
-}
-
-const deleteModal = (selectedRows, displayData, setSelectedRows) => {
-  return <OrdersTableSelectToolbar />
-}
-
 export default function OrdersTable(props) {
-  
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  const deleteModal = (selectedRows, displayData, setSelectedRows) => {
+    const index = selectedRows.data[0].index;
+    const data = displayData[index].data;
+    
+    return <OrdersTableSelectToolbar data={data} render={props.render} setSelectedRows={setSelectedRows} />
+  }
+
   // option props to pass into the table
   const options = {
     filter: true,
     expandableRowsOnClick: true,
     expandableRows: true,
     selectableRows: 'single',
+    rowsSelected: selectedRows,
+    onRowSelectionChange: (rowsSelectedData, allRows, rowsSelected) => {
+      console.log("RowsSelectedData: ", rowsSelectedData);
+      console.log("AllRows: ", allRows);
+      console.log("rowsSelected: ", rowsSelected);
+      setSelectedRows(rowsSelected);
+    },
     rowsPerPageOptions: [10, 25, 50],
     renderExpandableRow: renderRow,
-    // onRowsDelete: deleteOrder,
     customToolbarSelect: deleteModal,
     searchOpen: true,
     responsive: 'vertical'

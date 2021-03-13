@@ -12,7 +12,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { getJWT } from '../util/Auth';
+import Snackbar from '@material-ui/core/Snackbar';
 import '../css/Orders.css';
+
+const config = require('../config');
+
+const BACKEND_URL = config.backend.uri;
 
 export default function DeleteOrder(props) {
     const [showModal, setShow] = useState(false);
@@ -27,43 +33,72 @@ export default function DeleteOrder(props) {
         setShow(false);
         props.updateParentShow(false);
     }
+
+    const orderDeletion = () => {
+        fetch(`${BACKEND_URL}order/cancelOrder`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "token": getJWT(),
+                _id: props._id,
+                adminReceipt: admin,
+                customerReceipt: customer
+            })
+        }).then(res => {
+             // invalid admin token
+            if(res.status >= 400){
+                console.log('Error!')
+            }
+            return res.json();
+        })
+        .then(data => {
+            hideModal();
+            props.setSelectedRows([]);  
+            props.render();      
+        })
+        .catch(err => console.log(err));
+    }
     
     return (
-        <Modal 
-            show={showModal} 
-            onHide={(e) => hideModal()} 
-            backdrop='static'
-            style={{"marginTop": "30vh"}}
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>Delete Order</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <div>
-                    <p>Are you sure you want to remove {"this order"} from the menu?</p>
+        <div>
+            <Modal 
+                show={showModal} 
+                onHide={(e) => hideModal()} 
+                backdrop='static'
+                style={{"marginTop": "30vh"}}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete Order</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div>
+                        <p>Are you sure you want to remove {"this order"} from the menu?</p>
 
-                    <form className="delete-order-form">
-                        <div>
-                            <input type="checkbox" id="users-email" checked={admin} onChange={(e) => setAdmin(!admin)}/>
-                            <label for="users-email">Send confirmation email to admins.</label>
-                        </div>
+                        <form className="delete-order-form">
+                            <div>
+                                <input type="checkbox" id="users-email" checked={admin} onChange={(e) => setAdmin(!admin)}/>
+                                <label for="users-email">Send confirmation email to admins.</label>
+                            </div>
 
-                        <div>
-                            <input type="checkbox" id="customer-email" checked={customer} onChange={(e) => setCustomer(!customer)}/>
-                            <label for="customer-email">Send confirmation email to customer. </label>
-                        </div>
-                    </form>
-                </div>
-            </Modal.Body>
-            
-            <Modal.Footer>
-                <Button variant="primary" className="menuAddButton" onClick={() => console.log('clicked')}>
-                    Remove Item
-                </Button>
-                <Button variant="secondary" onClick={() => hideModal()} >
-                    Cancel
-                </Button>
-            </Modal.Footer>
-        </Modal>
+                            <div>
+                                <input type="checkbox" id="customer-email" checked={customer} onChange={(e) => setCustomer(!customer)}/>
+                                <label for="customer-email">Send confirmation email to customer. </label>
+                            </div>
+                        </form>
+                    </div>
+                </Modal.Body>
+                
+                <Modal.Footer>
+                    <Button variant="primary" className="menuAddButton" onClick={() => orderDeletion()}>
+                        Remove Item
+                    </Button>
+                    <Button variant="secondary" onClick={() => hideModal()} >
+                        Cancel
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </div>
     );
 }

@@ -121,13 +121,16 @@ export default function NavBar(props) {
 
                 {/* The shopping cart will only render if it is a mobile component */}
                 <div className="cart-icon-container">
-                    <div className="cart-icon">
-                        <IconButton onClick={OpenCart}>
-                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
-                                <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
-                            </CartBadge>
-                        </IconButton>
-                    </div>
+                    {
+                        window.location.pathname === "/" ? 
+                        <div className="cart-icon">
+                            <IconButton onClick={OpenCart}>
+                                <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                                </CartBadge>
+                            </IconButton>
+                        </div> : null
+                    }
 
                     {/* Triggers on Collapse - Hamburger Icon replaces pages */}
                     <Navbar.Toggle style={{border: '1px solid white', marginLeft: 'calc(7vw)'}}/>
@@ -163,13 +166,16 @@ export default function NavBar(props) {
                 </Navbar.Collapse>
 
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
-                <div className="cart-icon-smaller-desktop">
-                    <IconButton onClick={() => props.toggleCart()}>
-                        <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
-                            <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
-                        </CartBadge>
-                    </IconButton>
-                </div>
+                {
+                    window.location.pathname === "/" ? 
+                    <div className="cart-icon-smaller-desktop">
+                        <IconButton onClick={() => props.toggleCart()}>
+                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                            </CartBadge>
+                        </IconButton>
+                    </div> : null
+                }
             </Navbar>
             {props.page === "home" ? <Banner navbarHeight={sizes.height} /> : null}
             
