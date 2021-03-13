@@ -64,10 +64,6 @@ router.post(
 
     try {
 
-      //testing 
-      req.body.Customer.Email = "aksingh@ucsd.edu";
-      req.body.Customer.Name = "Amrit Singh";
-
       // add hypens to phone number
       req.body.Customer.Phone = req.body.Customer.Phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 
