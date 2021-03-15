@@ -82,7 +82,7 @@ export default function DeleteOrder(props) {
                 show={showModal} 
                 onHide={(e) => hideModal()} 
                 backdrop='static'
-                style={{"marginTop": "30vh"}}
+                centered
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Delete Order</Modal.Title>

@@ -240,7 +240,7 @@ td {
 /* Styling for 'completed' orders dropdown */
 .orders-status .dropdown-menu-completed {
     border: none;
-    background-color: var(--offwhite);
+    background-color: var(--lightgrey);
     padding: calc(0.4vw);
     border-radius: calc(1vh);
     cursor: pointer;

@@ -9,7 +9,7 @@ import React from 'react';
 import OrdersTable from '../components/OrdersTable';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getJWT, logout } from '../util/Auth';
-import {  Snackbar } from '@material-ui/core';
+import {  Snackbar, SnackbarContent  } from '@material-ui/core';
 import '../css/Orders.css';
 
 const config = require('../config');
@@ -196,8 +196,9 @@ export default class Orders extends React.Component {
                     </div>
                 </div>
                 }
-                <Snackbar open={this.state.Error} autoHideDuration={3000} onClose={() => this.formatError(false, "")} 
-                    message={this.state.ErrorMessage}/>
+                <Snackbar open={this.state.Error} autoHideDuration={3000} onClose={() => this.formatError(false, "")}>
+                    <SnackbarContent message={this.state.ErrorMessage} style={{ color: 'white'}} />
+                </Snackbar>
             </div>
         )
     }
