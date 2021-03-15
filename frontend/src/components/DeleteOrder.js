@@ -12,7 +12,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { getJWT } from '../util/Auth';
+import { getJWT, logout } from '../util/Auth';
 import '../css/Orders.css';
 
 const config = require('../config');
@@ -48,13 +48,22 @@ export default function DeleteOrder(props) {
             })
         }).then(res => {
              // invalid admin token
-            if(res.status >= 400){
+             if (res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
+            }
+
+             // order could not be deleted 
+            else if(res.status >= 400){
                 props.error(true, "Error! Could not Delete Order");
                 hideModal();
                 props.setSelectedRows([]);  
                 props.render();  
                 return;
             }
+
             return res.json();
         })
         .then(data => {
@@ -80,17 +89,17 @@ export default function DeleteOrder(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <div>
-                        <p>Are you sure you want to remove {"this order"} from the menu?</p>
+                        <p>Are you sure you want to permanently remove {"this order"} from your order history?</p>
 
                         <form className="delete-order-form">
                             <div>
                                 <input type="checkbox" id="users-email" checked={admin} onChange={(e) => setAdmin(!admin)}/>
-                                <label for="users-email">Send confirmation email to admins.</label>
+                                <label for="users-email">Send cancellation email to admins.</label>
                             </div>
 
                             <div>
                                 <input type="checkbox" id="customer-email" checked={customer} onChange={(e) => setCustomer(!customer)}/>
-                                <label for="customer-email">Send confirmation email to customer. </label>
+                                <label for="customer-email">Send cancellation email to customer. </label>
                             </div>
                         </form>
 
