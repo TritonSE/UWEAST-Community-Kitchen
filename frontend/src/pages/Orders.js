@@ -9,6 +9,7 @@ import React from 'react';
 import OrdersTable from '../components/OrdersTable';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getJWT, logout } from '../util/Auth';
+import {  Snackbar } from '@material-ui/core';
 import '../css/Orders.css';
 
 const config = require('../config');
@@ -22,6 +23,8 @@ export default class Orders extends React.Component {
         this.state = {
             getOrders: [],
             Loading: true,
+            Error: false,
+            ErrorMessage: ""
         }
 
         this.formatTime = this.formatTime.bind(this);
@@ -29,6 +32,14 @@ export default class Orders extends React.Component {
         this.formatArray = this.formatArray.bind(this);
         this.formatString = this.formatString.bind(this);
         this.getOrders = this.getOrders.bind(this);
+        this.formatError = this.formatError.bind(this);
+    }
+
+    formatError(isError, message) {
+        this.setState({
+            Error: isError,
+            ErrorMessage: message
+        })
     }
 
     /**
@@ -73,7 +84,6 @@ export default class Orders extends React.Component {
                 i += 30;  
             }
 
-            console.log(tempEmail + ": " + tempEmail.length);
         } else {
             const difference = length - str.length;
             let i = 0;
@@ -81,8 +91,6 @@ export default class Orders extends React.Component {
                 tempEmail += " ";
                 i++;
             }
-
-            console.log(tempEmail + ": " +  tempEmail.length);
         }
 
         return tempEmail;
@@ -184,10 +192,12 @@ export default class Orders extends React.Component {
                 </div> : 
                 <div className="orders-table">
                     <div className="justify-table-center">
-                        <OrdersTable orders={this.state.getOrders} render={this.getOrders} />
+                        <OrdersTable orders={this.state.getOrders} render={this.getOrders} error={this.formatError}/>
                     </div>
                 </div>
                 }
+                <Snackbar open={this.state.Error} autoHideDuration={3000} onClose={() => this.formatError(false, "")} 
+                    message={this.state.ErrorMessage}/>
             </div>
         )
     }

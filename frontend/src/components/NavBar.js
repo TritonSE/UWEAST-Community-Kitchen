@@ -40,7 +40,6 @@ export default function NavBar(props) {
     const history = useHistory();
     const [cookies, setCookie] = useCookies(["cart"]);
     const [resizeListener, sizes] = useResizeAware();
-
     const [state, setState] = React.useState({
         isUserAuthenticated: false
     });
@@ -129,6 +128,13 @@ export default function NavBar(props) {
                                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
                                 </CartBadge>
                             </IconButton>
+                        </div> : (sizes.width <= 767 || sizes.width >= 1200) ? 
+                        <div className="cart-icon">
+                            <IconButton onClick={OpenCart}>
+                                <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                                </CartBadge>
+                            </IconButton>
                         </div> : null
                     }
 
@@ -167,7 +173,14 @@ export default function NavBar(props) {
 
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
                 {
-                    window.location.pathname === "/" ? 
+                    window.location.pathname !== "/dsd" ? 
+                    <div className="cart-icon-smaller-desktop">
+                        <IconButton onClick={() => props.toggleCart()}>
+                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                            </CartBadge>
+                        </IconButton>
+                    </div> : (sizes.width <= 767 || sizes.width >= 1200) ? 
                     <div className="cart-icon-smaller-desktop">
                         <IconButton onClick={() => props.toggleCart()}>
                             <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>

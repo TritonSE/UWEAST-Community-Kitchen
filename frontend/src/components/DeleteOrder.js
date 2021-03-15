@@ -13,12 +13,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { getJWT } from '../util/Auth';
-import Snackbar from '@material-ui/core/Snackbar';
 import '../css/Orders.css';
 
 const config = require('../config');
 
 const BACKEND_URL = config.backend.uri;
+const PAYPAL_URL = "https://www.paypal.com/activity/payment/"
 
 export default function DeleteOrder(props) {
     const [showModal, setShow] = useState(false);
@@ -49,14 +49,20 @@ export default function DeleteOrder(props) {
         }).then(res => {
              // invalid admin token
             if(res.status >= 400){
-                console.log('Error!')
+                props.error(true, "Error! Could not Delete Order");
+                hideModal();
+                props.setSelectedRows([]);  
+                props.render();  
+                return;
             }
             return res.json();
         })
         .then(data => {
             hideModal();
+            props.error(true, data.msg);
             props.setSelectedRows([]);  
-            props.render();      
+            props.render();     
+             
         })
         .catch(err => console.log(err));
     }
@@ -87,6 +93,12 @@ export default function DeleteOrder(props) {
                                 <label for="customer-email">Send confirmation email to customer. </label>
                             </div>
                         </form>
+
+                        <span>
+                            <p className="note-paypal">Note: Deleting this order will not automatically refund it to the customer. 
+                            If you need to refund this order, you can do a manual refund by clicking 
+                            {' '}<a href={`${PAYPAL_URL}${props.paypalId}`} target="_blank">here</a>.</p>
+                        </span>
                     </div>
                 </Modal.Body>
                 

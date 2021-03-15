@@ -101,7 +101,7 @@ export default function OrdersTable(props) {
     const index = selectedRows.data[0].index;
     const data = displayData[index].data;
     
-    return <OrdersTableSelectToolbar data={data} render={props.render} setSelectedRows={setSelectedRows} />
+    return <OrdersTableSelectToolbar data={data} render={props.render} setSelectedRows={setSelectedRows} error={props.error}/>
   }
 
   // option props to pass into the table
@@ -112,9 +112,6 @@ export default function OrdersTable(props) {
     selectableRows: 'single',
     rowsSelected: selectedRows,
     onRowSelectionChange: (rowsSelectedData, allRows, rowsSelected) => {
-      console.log("RowsSelectedData: ", rowsSelectedData);
-      console.log("AllRows: ", allRows);
-      console.log("rowsSelected: ", rowsSelected);
       setSelectedRows(rowsSelected);
     },
     rowsPerPageOptions: [10, 25, 50],

@@ -125,6 +125,15 @@ td {
     margin-left: calc(0.6vw);
 }
 
+.orders-page-container > div > div > div > div:nth-child(3) > table > tbody > tr > td:nth-child(1) {
+    position: relative;
+}
+
+.note-paypal {
+    margin-top: calc(2vh);
+    color: var(--darkgrey)
+}
+
 @media only screen and (min-width: 1470px) and (max-width: 1534px) {
     #table-cell-items {
         width: calc(14.7%);
@@ -180,10 +189,6 @@ td {
 @media only screen and (max-width: 1342px) {
 
     /* Removes the stickyness of the checkboxs on the left */
-    .orders-page-container > div > div > div > div:nth-child(3) > table > tbody > tr > td:nth-child(1) {
-        position: relative;
-    }
-    
     #table-cell-items {
         width: calc(14.7%);
     }

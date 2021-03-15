@@ -236,7 +236,7 @@ router.delete(
     } else if(isUWEASTError){
       msg = "Order successfully deleted. However, an email cancellation could not be sent to admin emails due to an internal error."
     } else {
-      ms = "Order successfully deleted!"
+      msg = "Order successfully deleted!"
     }
 
     return res.status(200).json({ msg: msg });
