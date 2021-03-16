@@ -113,7 +113,7 @@ export default function DeleteOrder(props) {
                 
                 <Modal.Footer>
                     <Button variant="primary" className="menuAddButton" onClick={() => orderDeletion()}>
-                        Remove Item
+                        Remove Order
                     </Button>
                     <Button variant="secondary" onClick={() => hideModal()} >
                         Cancel
