@@ -376,9 +376,9 @@ const CartSummary = (props) => {
             {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
             <div className="cart-wrapper">
                 {/* Renders navbar if device is mobile */}
-                {(window.innerWidth < 768) ? <div className="navbar-wrapper">
+                {(window.innerWidth < 768) ? 
                     <Navbar itemCount={cart.items.length}/>
-                </div> : <div className="background" onClick={props.toggleCart}></div>}
+                 : <div className="background" onClick={props.toggleCart}></div>}
                 <div className="cart-popup">
                     <span className="pickup-title">Choose Pickup Time</span>
                     <div className="date-time">
