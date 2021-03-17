@@ -13,7 +13,7 @@ const MenuItem = ( {description, image, price, title, togglePopup, dietaryInfo, 
     return (
       <div className="menu-item" onClick={() => togglePopup(title, description, priceOptions, image, dietaryInfo, accommodations, id)}>
         <div className="menu-image">
-          <img src={image} alt="Item Image"></img>
+          <img src={image} alt={title}></img>
         </div>
         <div className="menu-text">
           <h3 className="menu-name">{title}</h3>

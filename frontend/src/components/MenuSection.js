@@ -41,7 +41,7 @@ const MenuSection = ({onItemAdd}) => {
 
   // changes visible categories when filter button is clicked
   const changeVisibleCategories = categoryName => {
-    if(categoryName == "Whole Menu") {
+    if(categoryName === "Whole Menu") {
       displayedCategories = defaultCategories;
     }
     else {
@@ -50,7 +50,7 @@ const MenuSection = ({onItemAdd}) => {
       displayedCategories.push(categoryName);
     }
 
-    if(displayedCategories.length == 0) {
+    if(displayedCategories.length === 0) {
       displayedCategories = defaultCategories;
     }
     
@@ -81,7 +81,7 @@ const MenuSection = ({onItemAdd}) => {
     });
 
     // converts the FormData to a JSON string, optional
-    var json = JSON.stringify(object);
+    // var json = JSON.stringify(object);
 
     // calls parent function to add item from popup to cart
     onItemAdd(object);

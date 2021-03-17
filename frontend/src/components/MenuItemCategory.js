@@ -16,7 +16,7 @@ const BACKEND_URL = config.backend.uri;
 
 const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues, togglePopup }) => {
   // array that stores menu items for the current category
-  const [menuItems, setMenuItems] = useState(new Array());
+  const [menuItems, setMenuItems] = useState([]);
   const menuItemValues = [];
 
   /**

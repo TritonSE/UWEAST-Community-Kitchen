@@ -256,7 +256,7 @@ export default function AdminMenuItems (props) {
     useEffect(() => {
         
         var data = null;
-        var imgUrl = null;
+        // var imgUrl = null;
         const fetchData = async () => {
             const res = await fetch(`${BACKEND_URL}item/`, {
                 method: "GET",

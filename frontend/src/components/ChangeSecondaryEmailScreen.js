@@ -184,8 +184,7 @@ export default function ChangeSecondaryEmailScreen (props) {
             {/* The textfield */}
             <div className="add-secondary-email">
                 <span className={classes.span}>
-                    <TextField id="email-input" 
-                        size="small"
+                    <TextField size="small"
                         error={inputError} 
                         value={addSecondaryEmail} 
                         type="email" 

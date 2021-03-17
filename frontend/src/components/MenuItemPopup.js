@@ -24,7 +24,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
      */
     const getInitialAccommodationsCost = () => {
         var sum = 0;
-        if(values.get("fillIns") != undefined) {
+        if(values.get("fillIns") !== undefined) {
             values.get("accommodations").forEach((accommodation) => {
                 if(values.get("fillIns").accommodations.includes(accommodation.Description)) {
                     sum += parseFloat(accommodation.Price);
@@ -35,10 +35,10 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
     }
 
     // TODO: fix the absurd tertiary statements here...
-    const [quantity, setQuantity] = useState((values.get("fillIns") != undefined) ? parseInt(values.get("fillIns").quantity) : 1);
+    const [quantity, setQuantity] = useState((values.get("fillIns") !== undefined) ? parseInt(values.get("fillIns").quantity) : 1);
     // if individual price exists, use that as default; otherwise, use family
     const [accommodationCost, setAccommodationCost] = useState(getInitialAccommodationsCost());
-    const [currPrice, setCurrPrice] = useState(parseFloat((values.get("fillIns") != undefined) ? ((values.get("fillIns").size == "Individual") ? values.get("price").Individual : values.get("price").Family) : (("Individual" in values.get("price")) ? values.get("price").Individual : values.get("price").Family)) + parseFloat(accommodationCost));
+    const [currPrice, setCurrPrice] = useState(parseFloat((values.get("fillIns") !== undefined) ? ((values.get("fillIns").size === "Individual") ? values.get("price").Individual : values.get("price").Family) : (("Individual" in values.get("price")) ? values.get("price").Individual : values.get("price").Family)) + parseFloat(accommodationCost));
     const [totalPrice, setTotalPrice] = useState(parseFloat(currPrice * quantity));
 
     /**
@@ -49,12 +49,12 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
      */
     const changeQuantity = sign => {
         // two scenarios: increments or decrements quantity
-        if(sign == "+") {
+        if(sign === "+") {
             setQuantity(quantity + 1);
             // calulates on quantity + 1 b/c state hasn't updated yet
             setTotalPrice(currPrice * (quantity + 1));
         }
-        else if(sign == "-") {
+        else if(sign === "-") {
             if(quantity > 1) {
                 setQuantity(quantity - 1);
                 // calulates on quantity - 1 b/c state hasn't updated yet
@@ -99,8 +99,8 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
             //       depending on which size this is, whether both sizes are 
             //       available, and whether an item is passed in to fill populate fields)
             <label className="choice-label">
-                <input onClick={() => handleSize(price)} type="radio" name="size" value={name} defaultChecked={(name == "Individual" || ((values.get("fillIns") != undefined) && values.get("fillIns").size == name) || !("Individual" in values.get("price")))} required />
-                <span onClick={() => handleSize(price)} className="label-title">{name + " "}<span title="Suited for 5-6 people"><img src={info} className={(name == "Family") ? "size-info" : "hidden size-info"} alt="Size Info"/></span>{(hasBothPrices) ? " +($" + parseFloat(price - values.get("price").Individual).toFixed(2) + ")": null}</span>
+                <input onClick={() => handleSize(price)} type="radio" name="size" value={name} defaultChecked={(name === "Individual" || ((values.get("fillIns") !== undefined) && values.get("fillIns").size === name) || !("Individual" in values.get("price")))} required />
+                <span onClick={() => handleSize(price)} className="label-title">{name + " "}<span title="Suited for 5-6 people"><img src={info} className={(name === "Family") ? "size-info" : "hidden size-info"} alt="Size Info"/></span>{(hasBothPrices) ? " +($" + parseFloat(price - values.get("price").Individual).toFixed(2) + ")": null}</span>
             </label>
         );
     }
@@ -122,7 +122,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
      */
     const renderAccommodations = () => {
         // return nothing if there are no accommodations
-        if(values.get("accommodations").length == 0) return;
+        if(values.get("accommodations").length === 0) return;
         else {
             return (
                 /** Header */
@@ -137,7 +137,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                         <label className="choice-label">
 
                             <input type="checkbox" name="accommodations" 
-                                defaultChecked={values.get("fillIns") != undefined && values.get("fillIns").accommodations.includes(accommodation.Description)}
+                                defaultChecked={values.get("fillIns") !== undefined && values.get("fillIns").accommodations.includes(accommodation.Description)}
                                 value={accommodation.Description} id={accommodation.Description} onChange={(e) => handleAccommodation(e.target.checked, accommodation.Price)} />
 
                             <span className="label-title">{accommodation.Description + " +($" + parseFloat(accommodation.Price).toFixed(2) + ")"}</span>
@@ -171,7 +171,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
     const renderDietaryInfo = () => {
         // returns nothing in the trivial case that there is no information to show
         // this is so that the horizontal line (<hr/>) will not render
-        if (numDietaryInfo() == 0) return;
+        if (numDietaryInfo() === 0) return;
         else {
             return (
                 <>
@@ -239,7 +239,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                                     <i>optional</i>
                                 </div>
                                 <p className="instructions-note">Special accommodations can be made for orders placed in advanced but are not guaranteed, please <a href="/contact">contact us</a> directly for more info.</p>
-                                <textarea name="instructions" maxLength="75" className="instructions-textarea" defaultValue={(values.get("fillIns") != undefined) ? values.get("fillIns").instructions : ""}></textarea>
+                                <textarea name="instructions" maxLength="75" className="instructions-textarea" defaultValue={(values.get("fillIns") !== undefined) ? values.get("fillIns").instructions : ""}></textarea>
                             </div>
 
                             {/** quantity selection */}
@@ -258,7 +258,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
                             <input name="popupValues" type="hidden" value={JSON.stringify(Object.fromEntries(values))} />
                             <input name="price" type="hidden" value={parseFloat(totalPrice).toFixed(2)} />
                             <input name="quantity" type="hidden" value={quantity} />
-                            <input className="submit-order-button" type="submit" value={(values.get("fillIns") != undefined) ? "Save Changes: $" + parseFloat(totalPrice).toFixed(2) : "Add " + quantity + " to cart: $" + parseFloat(totalPrice).toFixed(2)} />
+                            <input className="submit-order-button" type="submit" value={(values.get("fillIns") !== undefined) ? "Save Changes: $" + parseFloat(totalPrice).toFixed(2) : "Add " + quantity + " to cart: $" + parseFloat(totalPrice).toFixed(2)} />
                         </form>
                     </div>
 
