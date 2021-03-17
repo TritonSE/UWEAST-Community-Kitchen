@@ -22,6 +22,20 @@ import {
     renderDateFilters    
 } from '../util/OrdersTableFunctions';
 
+// formarts the time so it can be turned into a Date object
+const convertToTimeInt = (data) => {
+    const splitTime = data.split('\n');
+    const date = splitTime[0].split("/");
+    const time = splitTime[1].split(" ")[0].split(":");
+
+    const hoursTwo = time[0].length === 1 ? "0"+time[0] : time[0];
+    const minutesTwo = time[1]; 
+
+    const formatedTime = hoursTwo + ":" + minutesTwo;
+    const dateTwo = new Date(date[2] +  "-" + date[0] + "-" + date[1]  + "T" + formatedTime + ":00");
+    return dateTwo.getTime();
+}
+
 // the column headers for the table
 const columns = [
     {
@@ -30,7 +44,8 @@ const columns = [
         display: true, 
         viewColumns: true, 
         filter: true,
-        filterType: 'textField'
+        filterType: 'textField',
+        sortThirdClickReset: true,
       }
     },
     {
@@ -42,6 +57,15 @@ const columns = [
           render: renderDateFilters,
           update: updateDateFilters
         },
+        sortCompare: (order) => {
+          return (obj1, obj2) => {
+            const timeOne = convertToTimeInt(obj1.data);
+            const timeTwo = convertToTimeInt(obj2.data);
+            
+            return (timeOne - timeTwo) * (order === 'asc' ? 1 : -1);
+          }
+        },
+        sortThirdClickReset: true,
         filterOptions: {
           names: [],
           logic(date, filters) {
@@ -63,27 +87,39 @@ const columns = [
       name: "Name",
       options: {
         filter: true,
-        filterType: 'textField'
+        filterType: 'textField',
+        sortThirdClickReset: true,
       }  
     },
     {
       name: "Email",
       options: {
         filter: true,
-        filterType: 'textField'
+        filterType: 'textField',
+        sortThirdClickReset: true,
       }    
     },
     {
       name: "Phone Number",
       options: {
         filter: true,
-        filterType: 'textField'
+        filterType: 'textField',
+        sortThirdClickReset: true,
       }  
     },
     {
       name: "Amount Paid",
       options: {
-        filter: false
+        filter: false,
+        sortCompare: (order) => {
+          return (obj1, obj2) => {
+            const priceOne = parseFloat(obj1.data);
+            const priceTwo = parseFloat(obj2.data);
+            
+            return (priceOne - priceTwo) * (order === 'asc' ? 1 : -1);
+          }
+        },
+        sortThirdClickReset: true,
       }  
     },
     {
@@ -103,6 +139,15 @@ const columns = [
           render: renderDateFilters,
           update: updateDateFilters
         },
+        sortCompare: (order) => {
+          return (obj1, obj2) => {
+            const timeOne = convertToTimeInt(obj1.data);
+            const timeTwo = convertToTimeInt(obj2.data);
+            
+            return (timeOne - timeTwo) * (order === 'asc' ? 1 : -1);
+          }
+        },
+        sortThirdClickReset: true,
         filterOptions: {
           names: [],
           logic(date, filters) {
@@ -124,6 +169,7 @@ const columns = [
       name: "Order Status",
       options: {
         filter: true,
+        sortThirdClickReset: true,
         filterType: 'custom',
         customBodyRender: renderStatus,
         customFilterListOptions: {
@@ -131,6 +177,21 @@ const columns = [
             if(options[0] === "All Orders") return [];
             return options;
           },
+        },
+        sortCompare: (order) => {
+          return (obj1, obj2) => {
+            const orderOne = obj1.data;
+            const orderTwo = obj2.data;
+
+            console.log("one: ", orderOne);
+            console.log("two: ", orderTwo);
+
+            if(orderOne > orderTwo) {
+              return order === 'asc' ? 1 : -1;
+            } else {
+              return order === 'asc' ? -1 : 1;
+            }
+          }
         },
         filterOptions: {
           names: ["Pending Orders", "Completed Orders"],

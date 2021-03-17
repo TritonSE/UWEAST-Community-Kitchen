@@ -59,7 +59,7 @@ export default class Orders extends React.Component {
         const dateOne = date + `\n${val}`;
         const dateTwo = dateSubmission + `\n${val2}`;
 
-        let email = this.formatString(list.Customer.Email, 30);
+        let email = this.formatString(list.Customer.Email, 24);
         let name = this.formatString(list.Customer.Name, 14);
 
         return [list.PayPal.transactionID, dateOne, name, email, list.Customer.Phone, 
@@ -81,7 +81,7 @@ export default class Orders extends React.Component {
             let i = length;
             while(i < str.length) {
                 tempEmail = tempEmail.slice(0, i) + '\n' + tempEmail.slice(i, str.length);  
-                i += 30;  
+                i += length;  
             }
 
         } else {

@@ -93,19 +93,19 @@ td {
 }
 
 #table-cell-items {
-    width: calc(13%);
+    width: 13%;
 }
 
 #table-cell-quanitity {
-    width: calc(10.6%);
+    width: 11%;
 }
 
 #table-cell-size {
-    width: calc(9.3%);
+    width: 10.6%;
 }
 
 #table-cell-acc {
-    width: calc(30.5%);
+    width: 28%;
 }
 
 /* Used for the custom toolbar when row is selected */
@@ -136,19 +136,19 @@ td {
 
 @media only screen and (min-width: 1470px) and (max-width: 1534px) {
     #table-cell-items {
-        width: calc(14.7%);
+        width: 14.7%;
     }
     
     #table-cell-quanitity {
-        width: calc(8.8%);
+        width: 8.5%;
     }
     
     #table-cell-size {
-        width: calc(10.2%);
+        width: 11.2%;
     }
     
     #table-cell-acc {
-        width: calc(32.8%);
+        width: 28.5%;
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -162,19 +162,19 @@ td {
 
 @media only screen and (min-width: 1343px) and (max-width: 1470px) {
     #table-cell-items {
-        width: calc(14.7%);
+        width: 14.7%;
     }
     
     #table-cell-quanitity {
-        width: calc(8.8%);
+        width: 9.4%;
     }
     
     #table-cell-size {
-        width: calc(10.2%);
+        width: 11.8%;
     }
     
     #table-cell-acc {
-        width: calc(32.8%);
+        width: 29%;
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
