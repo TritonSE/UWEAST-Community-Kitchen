@@ -55,7 +55,7 @@ export default function ChangeHeaderModal (props){
         display: false,
         message: ''
     });
-    const [failedAdminAuth, setFailedAdminAuth] = useState(false);
+    // const [failedAdminAuth, setFailedAdminAuth] = useState(false);
 
     // form's states
     const [headerImageURL, setHeaderImageURL] = useState(props.headerImageURL);

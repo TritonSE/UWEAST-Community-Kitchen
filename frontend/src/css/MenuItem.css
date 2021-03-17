@@ -13,6 +13,7 @@
   color: black;
   overflow: scroll;
   overflow-x: hidden;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
 }
 
 .menu-item::-webkit-scrollbar 
@@ -66,6 +67,7 @@
   padding: 0px;
   line-height: 1.2em;
   color: #747474;
+  margin-top: 5px;
 }
 
 .menu-price

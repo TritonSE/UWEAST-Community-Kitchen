@@ -114,7 +114,7 @@ export default function FormDialog() {
         handleClose();
       } 
       // invalid email
-      else if(response.status == 400){
+      else if(response.status === 400){
         document.body.style.cursor= null;
         setState({...state, error:{display: true, message: "Invalid Email"}});
       }

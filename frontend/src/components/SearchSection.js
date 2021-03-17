@@ -27,7 +27,7 @@ const SearchSection = () => {
       if (result.ok) {
         const json = await result.json();
 
-        if(json.imageUrl != undefined) {
+        if(json.imageUrl !== undefined && json.imageUrl !== null) {
           setHeaderImg(json.imageUrl.imageUrl);
         }
       }
@@ -39,7 +39,7 @@ const SearchSection = () => {
 
   return (
     <div className="search-section">
-      <img alt="Menu Image" src={headerImg} className="header-img" onError={(e)=>{e.target.src=defaultImg}} />
+      <img alt="Menu banner" src={headerImg} className="header-img" onError={(e)=>{e.target.src=defaultImg}} />
     </div>
   );
 }

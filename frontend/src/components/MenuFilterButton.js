@@ -20,7 +20,7 @@ const MenuFilterButton = ( {categoryName, changeVisibleCategories, toggledFilter
     }
 
     // logic to check whether or not the filter button should be highlighted
-    let filterMatch = (categoryName === toggledFilter) && (categoryName != "Whole Menu");
+    let filterMatch = (categoryName === toggledFilter) && (categoryName !== "Whole Menu");
 
     return (
       <button 

@@ -11,7 +11,9 @@ const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const router = express.Router();
 const { verify } = require("./services/jwt");
-const { addOrder, findOrders, updateStatus } = require("../db/services/order");
+const { findAllEmails, findPrimaryEmail } = require("../db/services/email");
+const { sendEmail } = require("../routes/services/mailer");
+const { deleteOrder, findOrders, updateStatus } = require("../db/services/order");
 
 // @body - Customer (with Name, Email, Phone), Pickup, Timestamps,
 // @body - PayPal(with Amount and transactionID),
@@ -118,6 +120,130 @@ router.post(
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server err");
+    }
+  }
+);
+
+/**
+ * Sends an email to all individuals inside of the Emails DB with the form information.
+ *
+ * @body - Requires the order id of order to remove, admin token for authorization, and an indication of whether
+ *         cancellation receipts must be sent to either customer or admins.
+ * @returns {status/object} - Successfully removed order sends a 200 status / unsuccessful an error status is sent
+ */
+router.delete(
+  "/cancelOrder",
+  [
+    body("_id").isString(),
+    body("customerReceipt").isBoolean(),
+    body("adminReceipt").isBoolean(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
+  async (req, res, next) => {
+    try {
+
+      // try to add the order and respond with err msg or success
+      const removedOrder = await deleteOrder(req.body._id);
+
+      if (!removedOrder) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Order could not be removed" }] });
+      }
+
+      let isCustomerError = false; 
+      let isUWEASTError = false; 
+
+      // send customer cancellation receipt 
+      if(req.body.customerReceipt){
+
+        // get primary email from collection
+        const primaryEmail = await findPrimaryEmail();
+
+        // only send email if there is a primary email in the DB
+        if(!primaryEmail){
+          isCustomerError = true; 
+        } else {
+          
+          let locals = {
+            name: removedOrder.Customer.Name,
+            date: new Date(removedOrder.Pickup).toLocaleDateString(),
+            time: new Date(removedOrder.Pickup).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            order: removedOrder.Order,
+            amount: removedOrder.PayPal.Amount,
+            transactionID: removedOrder.PayPal.transactionID,
+            primaryEmail: primaryEmail.email,
+          };
+  
+          // send customer of removed order a cancellation receipt
+          sendEmail("customer-cancellation", removedOrder.Customer.Email, locals, res);
+
+        }
+      }
+
+      // send admins cancellation receipt 
+      if(req.body.adminReceipt){
+
+         // retrieve all emails inside of Emails DB
+          const emails = await findAllEmails();
+          if (!emails.length) {
+            return res.status(400).json({ errors: [{ msg: "no emails found" }] });
+          }
+
+          dbemails = emails.map(function (item) {
+            return item.email;
+          });
+        
+        // only send email if there are recipient emails in the DB
+        if(!dbemails){
+          isUWEASTError = true;
+        } else {
+
+        let locals = {
+
+          name: removedOrder.Customer.Name,
+          email: removedOrder.Customer.Email,
+          number: removedOrder.Customer.Phone,
+          date: new Date(removedOrder.Pickup).toLocaleDateString(),
+          time: new Date(removedOrder.Pickup).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          order: removedOrder.Order,
+          amount: removedOrder.PayPal.Amount,
+          transactionID: removedOrder.PayPal.transactionID
+        };
+
+         // send UWEAST cancellation receipt for records
+         sendEmail("uweast-cancellation", dbemails, locals, res);
+      }
+    }
+
+    let msg; 
+
+    // message customization, dependent on any errors in sending emails 
+    if(isCustomerError && isUWEASTError){
+      msg = "Order successfully deleted. However, no email cancellations were sent out due to an internal error."
+    } else if(isCustomerError){
+      msg = "Order successfully deleted. However, an email cancellation could not be sent to the customer due to an internal error."
+    } else if(isUWEASTError){
+      msg = "Order successfully deleted. However, an email cancellation could not be sent to admin emails due to an internal error."
+    } else {
+      msg = "Order successfully deleted!"
+    }
+
+    return res.status(200).json({ msg: msg });
+
+    } catch (err) {
+      console.error(err.message);
+      return res.status(500).send("Server error");
     }
   }
 );

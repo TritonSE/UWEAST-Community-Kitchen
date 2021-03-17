@@ -5,7 +5,7 @@
   * @summary NavBar at the top of each page, used to navigate the website.
   */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useHistory } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -17,6 +17,8 @@ import Logo from "../media/UWEAST_Logo_Detail_Transparent.png";
 import '../css/NavBar.css';
 import { isAuthenticated, logout } from '../util/Auth';
 import { useCookies } from 'react-cookie';
+import Banner from '../components/Banner';
+import useResizeAware from 'react-resize-aware'
 
 // styled Badge for the cart icon
 const CartBadge = withStyles(({
@@ -37,7 +39,7 @@ export default function NavBar(props) {
     {/* history hook to redirect on logout */ }
     const history = useHistory();
     const [cookies, setCookie] = useCookies(["cart"]);
-
+    const [resizeListener, sizes] = useResizeAware();
     const [state, setState] = React.useState({
         isUserAuthenticated: false
     });
@@ -62,6 +64,11 @@ export default function NavBar(props) {
             props.toggleCart();
         }
     }
+
+    /**
+     * Change the navbar height state so that banner moves down naturally
+     */
+    
 
     useEffect(() => {
         isAuthenticated().then(async result => {
@@ -94,6 +101,8 @@ export default function NavBar(props) {
             </head>
             {/* Left Hand Side of Navbar - Title & Image linked to Menu Page */}
             <Navbar className="navbar navbar-bg-color" collapseOnSelect expand="xl" variant="dark">
+                {/** Tracks navbar size, used to make sure that banner overlap does not occur on mobile toggle */}
+                {resizeListener}
                 
                 {/* Left Hand Side of Navbar - Title & Image linked to Menu Page */}
                 <Navbar.Brand href="/">
@@ -104,23 +113,33 @@ export default function NavBar(props) {
 
                     {/* Text to complement the logo */}
                     <div className="brand-name" >
-                        <p>Community Kitchen</p>
+                        <p>Baraka & Bilal Catering</p>
                     </div>
 
                 </Navbar.Brand>
 
                 {/* The shopping cart will only render if it is a mobile component */}
                 <div className="cart-icon-container">
-                    <div className="cart-icon">
-                        <IconButton onClick={OpenCart}>
-                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
-                                <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
-                            </CartBadge>
-                        </IconButton>
-                    </div>
+                    {
+                        window.location.pathname === "/" ? 
+                        <div className="cart-icon">
+                            <IconButton onClick={OpenCart}>
+                                <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                                </CartBadge>
+                            </IconButton>
+                        </div> : (sizes.width <= 767 || sizes.width >= 1200) ? 
+                        <div className="cart-icon">
+                            <IconButton onClick={OpenCart}>
+                                <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                    <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                                </CartBadge>
+                            </IconButton>
+                        </div> : null
+                    }
 
                     {/* Triggers on Collapse - Hamburger Icon replaces pages */}
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" style={{border: '1px solid white', marginLeft: 'calc(7vw)'}}/>
+                    <Navbar.Toggle style={{border: '1px solid white', marginLeft: 'calc(7vw)'}}/>
                 </div>
 
                 {/* Right Hand Side of Navbar - Linked Pages (based off of Router paths in App.js) */}
@@ -153,14 +172,26 @@ export default function NavBar(props) {
                 </Navbar.Collapse>
 
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
-                <div className="cart-icon-smaller-desktop">
-                    <IconButton onClick={() => props.toggleCart()}>
-                        <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
-                            <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
-                        </CartBadge>
-                    </IconButton>
-                </div>
+                {
+                    window.location.pathname !== "/dsd" ? 
+                    <div className="cart-icon-smaller-desktop">
+                        <IconButton onClick={() => props.toggleCart()}>
+                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                            </CartBadge>
+                        </IconButton>
+                    </div> : (sizes.width <= 767 || sizes.width >= 1200) ? 
+                    <div className="cart-icon-smaller-desktop">
+                        <IconButton onClick={() => props.toggleCart()}>
+                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
+                            </CartBadge>
+                        </IconButton>
+                    </div> : null
+                }
             </Navbar>
+            {props.page === "home" ? <Banner navbarHeight={sizes.height} /> : null}
+            
         </html>
     )
 }

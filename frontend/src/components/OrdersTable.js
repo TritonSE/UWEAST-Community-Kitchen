@@ -10,7 +10,7 @@
  * @summary The Orders table implementation.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import MUIDataTable from "mui-datatables";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -28,6 +28,7 @@ import {
   createMuiTheme,
   MuiThemeProvider,
 } from "@material-ui/core/styles";
+import OrdersTableSelectToolbar from './OrdersTableSelectToolbar';
 
 // converts the data to an object list
 function createData(name, accommodations, specialInstructions, size, quantity) {
@@ -76,7 +77,7 @@ const renderRow = (rowData, rowMeta) => {
                   {/* The dropdown row data */}
                     {rows.map(row => (
                       <TableRow key={row.name}>
-                        <TableCell style={{width: 'calc(48px)'}}></TableCell>
+                        <TableCell style={{width: 'calc(68px)'}}></TableCell>
                         <TableCell><p style={stylingCell}>{row.name}</p></TableCell>
                         <TableCell><p style={stylingCell}>{row.quantity}</p></TableCell>
                         <TableCell><p style={stylingCell}>{row.size}</p></TableCell>
@@ -94,15 +95,28 @@ const renderRow = (rowData, rowMeta) => {
 }
 
 export default function OrdersTable(props) {
-  
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  const deleteModal = (selectedRows, displayData, setSelectedRows) => {
+    const index = selectedRows.data[0].index;
+    const data = displayData[index].data;
+    
+    return <OrdersTableSelectToolbar data={data} render={props.render} setSelectedRows={setSelectedRows} error={props.error}/>
+  }
+
   // option props to pass into the table
   const options = {
     filter: true,
     expandableRowsOnClick: true,
     expandableRows: true,
-    selectableRows: 'none',
+    selectableRows: 'single',
+    rowsSelected: selectedRows,
+    onRowSelectionChange: (rowsSelectedData, allRows, rowsSelected) => {
+      setSelectedRows(rowsSelected);
+    },
     rowsPerPageOptions: [10, 25, 50],
     renderExpandableRow: renderRow,
+    customToolbarSelect: deleteModal,
     searchOpen: true,
     responsive: 'vertical'
   };
@@ -127,7 +141,8 @@ export default function OrdersTable(props) {
         root: {
           borderLeft: '2px solid #CCCCCC',
           borderRight: '2px solid #CCCCCC',
-        }
+        },
+        hover: { '&$root': { '&:hover': { backgroundColor: '#F1f1f1' }, } }
       },
       MuiTableCell: {
         root: {

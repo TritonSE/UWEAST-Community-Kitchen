@@ -32,6 +32,9 @@ import '../css/AdminMenuItems.css';
 import AddMenuItemModal from './AddMenuItemModal.js';
 import EditMenuItemModal from './EditMenuItemModal.js';
 import ChangeHeaderModal from './ChangeHeaderModal.js';
+
+import {getJWT, logout} from '../util/Auth';
+
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
@@ -207,7 +210,8 @@ async function handleRemoveByID(id, itemList, setItemList, displayContent, setDi
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                "_id": id
+                "_id": id,
+                "token": getJWT()
             })
         }).then(res => {
             if(res.ok){
@@ -215,6 +219,13 @@ async function handleRemoveByID(id, itemList, setItemList, displayContent, setDi
                 setItemList(itemList.filter(x => x.id !== id));
                 // remove from filtered rows
                 setDisplayContent({displayContent: displayContent.displayContent.filter(x => x.id !== id)});
+            }
+            // invalid token
+            else if (res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
             }
         })
     
@@ -245,7 +256,7 @@ export default function AdminMenuItems (props) {
     useEffect(() => {
         
         var data = null;
-        var imgUrl = null;
+        // var imgUrl = null;
         const fetchData = async () => {
             const res = await fetch(`${BACKEND_URL}item/`, {
                 method: "GET",
@@ -357,9 +368,18 @@ export default function AdminMenuItems (props) {
             },
             body: JSON.stringify({
                 "_id": itemID,
-                "isFeatured": newValue
+                "isFeatured": newValue,
+                "token": getJWT()
             })
-        })
+        }).then(res => {
+            // invalid admin token
+            if (res.status === 401){
+                logout();
+                // refresh will cause a redirect to login page
+                window.location.reload();
+                return;
+            }
+        });
     }
     if(loaded){
         return (  

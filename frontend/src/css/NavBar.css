@@ -75,6 +75,7 @@
 }
 
 @media only screen and (min-width: 1200px)  and (max-width: 1349px) {
+
     .navbar-brand {
         padding-left: 0;
     }
@@ -159,7 +160,7 @@
 }
 
 
-@media only screen and (min-width: 541px) and (max-width: 767px) {
+@media only screen and (min-width: 580px) and (max-width: 767px) {
     .cart-icon {
         display: inline-block;
         width: calc(20%);
@@ -187,7 +188,7 @@
     }
 }
 
-@media only screen and (min-width: 345px) and (max-width: 540px) {
+@media only screen and (min-width: 345px) and (max-width: 579px) {
     .cart-icon {
         display: inline-block;
         width: calc(30%);

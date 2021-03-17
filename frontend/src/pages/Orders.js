@@ -8,7 +8,8 @@
 import React from 'react';
 import OrdersTable from '../components/OrdersTable';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {getJWT, logout} from '../util/Auth';
+import { getJWT, logout } from '../util/Auth';
+import {  Snackbar, SnackbarContent  } from '@material-ui/core';
 import '../css/Orders.css';
 
 const config = require('../config');
@@ -22,11 +23,23 @@ export default class Orders extends React.Component {
         this.state = {
             getOrders: [],
             Loading: true,
+            Error: false,
+            ErrorMessage: ""
         }
 
         this.formatTime = this.formatTime.bind(this);
         this.formatDate = this.formatDate.bind(this);
         this.formatArray = this.formatArray.bind(this);
+        this.formatString = this.formatString.bind(this);
+        this.getOrders = this.getOrders.bind(this);
+        this.formatError = this.formatError.bind(this);
+    }
+
+    formatError(isError, message) {
+        this.setState({
+            Error: isError,
+            ErrorMessage: message
+        })
     }
 
     /**
@@ -46,8 +59,41 @@ export default class Orders extends React.Component {
         const dateOne = date + `\n${val}`;
         const dateTwo = dateSubmission + `\n${val2}`;
 
-        return [list._id, dateOne, list.Customer.Name, list.Customer.Email, list.Customer.Phone, 
-            list.PayPal.Amount, list.Order, dateTwo, list.isCompleted ? "Completed Orders" : "Pending Orders"];
+        let email = this.formatString(list.Customer.Email, 24);
+        let name = this.formatString(list.Customer.Name, 14);
+
+        return [list.PayPal.transactionID, dateOne, name, email, list.Customer.Phone, 
+            list.PayPal.Amount, list.Order, dateTwo, list.isCompleted ? "Completed Orders" : "Pending Orders", list._id];
+    }
+
+    /**
+     * This method adds in '\n' so the line in the table will go to the next
+     * line. This allows for consist formating so the table doesn't have weird
+     * issues.  
+     * 
+     * @param {String} str - The string to format
+     * @param {String} length - Number of characters per line 
+     * @returns - restructured string
+     */
+    formatString(str, length) {
+        let tempEmail = str;
+        if(parseInt(str.length / length) > 0) {
+            let i = length;
+            while(i < str.length) {
+                tempEmail = tempEmail.slice(0, i) + '\n' + tempEmail.slice(i, str.length);  
+                i += length;  
+            }
+
+        } else {
+            const difference = length - str.length;
+            let i = 0;
+            while (i < difference) {
+                tempEmail += " ";
+                i++;
+            }
+        }
+
+        return tempEmail;
     }
 
     /**
@@ -88,10 +134,7 @@ export default class Orders extends React.Component {
         return dateSubmission 
     }
 
-    /**
-     * Get all the orders from the database.
-     */
-    componentDidMount() {
+    getOrders() {
         fetch(`${BACKEND_URL}order`, {
             method: 'POST',
             headers: {
@@ -127,9 +170,16 @@ export default class Orders extends React.Component {
                 const formatedArray = this.formatArray(getOrdersList[i], date, formatCurrtime, dateSubmission, formatCurrtimeSubmission)
                 createArr.push(formatedArray);
             }
-            this.setState({ getOrders: createArr, Loading: false})
+            this.setState({ getOrders: createArr, Loading: false}) 
         })
         .catch(err => console.log(err));
+    }
+
+    /**
+     * Get all the orders from the database.
+     */
+    componentDidMount() {
+        this.getOrders();
     }
     
     render() {
@@ -142,10 +192,13 @@ export default class Orders extends React.Component {
                 </div> : 
                 <div className="orders-table">
                     <div className="justify-table-center">
-                        <OrdersTable orders={this.state.getOrders} />
+                        <OrdersTable orders={this.state.getOrders} render={this.getOrders} error={this.formatError}/>
                     </div>
                 </div>
                 }
+                <Snackbar open={this.state.Error} autoHideDuration={3000} onClose={() => this.formatError(false, "")}>
+                    <SnackbarContent message={this.state.ErrorMessage} style={{ color: 'white'}} />
+                </Snackbar>
             </div>
         )
     }

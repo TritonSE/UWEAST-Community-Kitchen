@@ -93,36 +93,62 @@ td {
 }
 
 #table-cell-items {
-    width: calc(18.3%);
+    width: 13%;
 }
 
 #table-cell-quanitity {
-    width: calc(11.8%);
+    width: 11%;
 }
 
 #table-cell-size {
-    width: calc(6.9%);
+    width: 10.6%;
 }
 
 #table-cell-acc {
-    width: calc(24.6%);
+    width: 28%;
+}
+
+/* Used for the custom toolbar when row is selected */
+.delete-order-icon {
+    transform: scale(1.3);
+    margin-right: calc(2vw);
+    color: var(--black);
+    cursor: pointer;
+}
+
+.delete-order-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.delete-order-form label {
+    margin-left: calc(0.6vw);
+}
+
+.orders-page-container > div > div > div > div:nth-child(3) > table > tbody > tr > td:nth-child(1) {
+    position: relative;
+}
+
+.note-paypal {
+    margin-top: calc(2vh);
+    color: var(--darkgrey)
 }
 
 @media only screen and (min-width: 1470px) and (max-width: 1534px) {
     #table-cell-items {
-        width: calc(20.6%);
+        width: 14.7%;
     }
     
     #table-cell-quanitity {
-        width: calc(9.8%);
+        width: 8.5%;
     }
     
     #table-cell-size {
-        width: calc(7.4%);
+        width: 11.2%;
     }
     
     #table-cell-acc {
-        width: calc(25.8%);
+        width: 28.5%;
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -136,19 +162,19 @@ td {
 
 @media only screen and (min-width: 1343px) and (max-width: 1470px) {
     #table-cell-items {
-        width: calc(20.3%);
+        width: 14.7%;
     }
     
     #table-cell-quanitity {
-        width: calc(9.8%);
+        width: 9.4%;
     }
     
     #table-cell-size {
-        width: calc(7.4%);
+        width: 11.8%;
     }
     
     #table-cell-acc {
-        width: calc(26.2%);
+        width: 29%;
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -161,20 +187,22 @@ td {
 }
 
 @media only screen and (max-width: 1342px) {
+
+    /* Removes the stickyness of the checkboxs on the left */
     #table-cell-items {
-        width: calc(20%);
+        width: calc(14.7%);
     }
     
     #table-cell-quanitity {
-        width: calc(9.8%);
+        width: calc(8.8%);
     }
     
     #table-cell-size {
-        width: calc(8.2%);
+        width: calc(10.2%);
     }
     
     #table-cell-acc {
-        width: calc(25.8%);
+        width: calc(32.8%);
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -212,7 +240,7 @@ td {
 /* Styling for 'completed' orders dropdown */
 .orders-status .dropdown-menu-completed {
     border: none;
-    background-color: var(--offwhite);
+    background-color: var(--lightgrey);
     padding: calc(0.4vw);
     border-radius: calc(1vh);
     cursor: pointer;

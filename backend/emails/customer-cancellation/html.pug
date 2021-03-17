@@ -1,0 +1,26 @@
+p Dear #{name},
+p This is a notification to let you know that your order has been CANCELLED. Please retain this confirmation email for your records.
+p #[strong Order ID:] #{transactionID}
+p #[strong Order Summary:]
+ul
+    each val in order
+        li= `${val.quantity} x ${val.item} (${val.size} Size)`
+            ul
+                li Accomodations: 
+                    if !val.accommodations || val.accommodations === '' 
+                        | n/a
+                    else
+                        = val.accommodations
+                li Special Instructions: 
+                    if !val.specialInstructions || val.specialInstructions === '' 
+                        | n/a
+                    else
+                        = val.specialInstructions
+p #[strong Total Amount:] #{amount}
+p #[strong Pickup:] #{date} at #{time}
+p If any refund has been given to your order, you may expect to receive a seperate refund notification email from PayPal soon.
+p Please contact us immediately at #{primaryEmail} if you believe a mistake has been made. 
+p NOTE: This is an automatically generated email. Please do not reply.
+    br
+    br
+    | Baraka & Bilal Catering
