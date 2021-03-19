@@ -27,7 +27,8 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
-const MIN_CART_TOTAL = 20;
+const MIN_CART_TOTAL = config.website.MIN_CART_TOTAL;
+
 
 /**
  * displays items currently in the cart and updates subtotal, tax, and total
