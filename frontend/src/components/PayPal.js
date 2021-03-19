@@ -183,7 +183,7 @@ export default function PayPal(props) {
                         body: JSON.stringify(orderObj),
                     }).then((res) => {
                         if(res.ok){
-                            alert('Transaction completed! You will receive a confirmation email shortly.');
+                            alert('Thank you for your payment. Your transaction has been completed, and a receipt for your purchase has been emailed to you.');
                         } else {
                             alert('Transaction completed, but email automation failed. You paid for your meal, and should get a confirmation from PayPal. Please contact us to set up your order.');
                         }
