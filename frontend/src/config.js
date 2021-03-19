@@ -1,4 +1,3 @@
-require('dotenv').config();
 
 module.exports = {
   app: {
@@ -8,6 +7,9 @@ module.exports = {
     uri: process.env.BACKEND_URI || 'http://localhost:9000/'
   },
   google: {
-    MAPS_API_CODE: process.env.MAPS_API_CODE || "AIzaSyAYe12_fPCYzLJawQNeabZORGYE5a5GnEU"
+    MAPS_API_CODE: process.env.REACT_APP_MAPS_API_CODE || "AIzaSyAYe12_fPCYzLJawQNeabZORGYE5a5GnEU"
+  },
+  website: {
+    MIN_CART_TOTAL: process.env.REACT_APP_MIN_CART_TOTAL || "20"
   }
 };
