@@ -250,6 +250,7 @@ td {
     background-color: var(--yellow);
     text-align: center;
     height: 38px;
+    width: 113px;
     border-radius: calc(1vh);
 }
 
@@ -257,6 +258,4 @@ td {
     padding-top: calc(9px);
     font-family: 'roboto', sans-serif;
     font-weight: 500;
-    padding-left: 0.4vw;
-    padding-right: 0.4vw;
 }
