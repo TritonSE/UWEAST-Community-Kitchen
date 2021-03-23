@@ -232,7 +232,9 @@ td {
 .orders-status .dropdown-menu-pending {
     border: none;
     background-color: var(--yellow);
-    padding: calc(0.4vw);
+    height: 38px;
+    width: 113px;
+    padding-left: 10px;
     border-radius: calc(1vh);
     cursor: pointer;
 }
@@ -241,7 +243,9 @@ td {
 .orders-status .dropdown-menu-completed {
     border: none;
     background-color: var(--lightgrey);
-    padding: calc(0.4vw);
+    height: 38px;
+    width: 113px;
+    padding-left: 10px;
     border-radius: calc(1vh);
     cursor: pointer;
 }

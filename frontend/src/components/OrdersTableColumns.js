@@ -218,6 +218,14 @@ const columns = [
         filterType: 'dropdown',
         sortThirdClickReset: true,
         customBodyRender: renderPaypalStatus,
+        sortCompare: (order) => {
+          return (obj1, obj2) => {
+            const paypalOne = obj1.data;
+            const paypalTwo = obj2.data;
+            
+            return (paypalOne - paypalTwo) * (order === 'asc' ? 1 : -1);
+          }
+        }
       }
     },
     {

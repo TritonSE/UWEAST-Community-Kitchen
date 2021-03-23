@@ -192,16 +192,19 @@ const renderStatus = (value, tableMeta, updateValue) => {
 
 const renderPaypalStatus = (value, tableMeta, updateValue) => {
   let obj = {};
+  let paypalStatus = "Pending";
 
-  if(value === "Rejected") {
+  if(value === 2) {
     obj.backgroundColor = '#EF6649';
-  } else if(value === "Accepted") {
+    paypalStatus = "Rejected";
+  } else if(value === 1) {
     obj.backgroundColor = '#5AE44E';
+    paypalStatus = "Accepted";
   } 
 
   return (
     <div className="paypal-order-status" style={obj}>
-      <p>{value}</p>
+      <p>{paypalStatus}</p>
     </div>    
   )
 }
