@@ -59,7 +59,7 @@ const renderRow = (rowData, rowMeta) => {
     return (
         <React.Fragment>
           <TableRow>
-            <TableCell style={{ padding: 0 }} colSpan={9}>
+            <TableCell style={{ padding: 0 }} colSpan={10}>
               <TableContainer>
                 <Table aria-label="simple table">
                 {/* The dropdown header */}

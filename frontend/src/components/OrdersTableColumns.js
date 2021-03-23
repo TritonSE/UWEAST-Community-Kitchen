@@ -19,7 +19,8 @@ import {
     DisplayDateFilters,
     DisplayStatusFilters,
     updateDateFilters,
-    renderDateFilters    
+    renderDateFilters,
+    renderPaypalStatus    
 } from '../util/OrdersTableFunctions';
 
 // formarts the time so it can be turned into a Date object
@@ -206,6 +207,17 @@ const columns = [
           },
           display: DisplayStatusFilters
         }
+      }
+    },
+    {
+      name: "Paypal Status",
+      options: {
+        display: true, 
+        viewColumns: true, 
+        filter: true,
+        filterType: 'dropdown',
+        sortThirdClickReset: true,
+        customBodyRender: renderPaypalStatus,
       }
     },
     {

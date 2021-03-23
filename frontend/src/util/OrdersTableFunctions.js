@@ -190,10 +190,27 @@ const renderStatus = (value, tableMeta, updateValue) => {
     )
 }
 
+const renderPaypalStatus = (value, tableMeta, updateValue) => {
+  let obj = {};
+
+  if(value === "Rejected") {
+    obj.backgroundColor = '#EF6649';
+  } else if(value === "Accepted") {
+    obj.backgroundColor = '#5AE44E';
+  } 
+
+  return (
+    <div className="paypal-order-status" style={obj}>
+      <p>{value}</p>
+    </div>    
+  )
+}
+
 export {
     renderStatus,
     DisplayDateFilters,
     DisplayStatusFilters,
     updateDateFilters,
-    renderDateFilters    
+    renderDateFilters,
+    renderPaypalStatus    
 }
