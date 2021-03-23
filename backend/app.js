@@ -43,6 +43,7 @@ app.use("/jwt", require("./routes/jwt"));
 app.use("/cart", require("./routes/cart"));
 app.use("/order", require("./routes/order"));
 app.use("/menuImages", require("./routes/menuImages"));
+app.use("/paypal", require("./routes/paypal"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

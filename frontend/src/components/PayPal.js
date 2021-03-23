@@ -66,7 +66,7 @@ export default function PayPal(props) {
             shipping_preference: 'NO_SHIPPING',
         },
         purchase_units: [{
-            description: "Food order from UWEAST Kitchen",
+            description: "Biraka & Bilal Catering Order Confirmation",
             // Deals with pricing of the cart
             amount: {
                 currency_code: "USD",
@@ -145,6 +145,7 @@ export default function PayPal(props) {
                     // create order object
                     let sendDate = new Date(props.selectedDate.getFullYear(),(props.selectedDate.getMonth()), props.selectedDate.getDate(),
                         props.selectedTime.substring(0, 2), props.selectedTime.substring(3, 5));
+                    
                     const orderObj = {
                         "Customer": {
                             "Name": details.payer.name.given_name + " " + details.payer.name.surname,
@@ -173,6 +174,7 @@ export default function PayPal(props) {
                             }
                         })
                     }
+
                     // signal email automation by calling the /autoEmails/automate route, 
                     // this will automatically add the order to the database 
                     return fetch(`${BACKEND_URL}autoEmails/automate`, {

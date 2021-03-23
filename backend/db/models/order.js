@@ -16,6 +16,10 @@ const orderSchema = new mongoose.Schema(
     PayPal: {
       Amount: { type: String, required: true },
       transactionID: { type: String, required: true },
+      // 0 - Pending PayPal IPN verfication (Pending)
+      // 1 - PayPal IPN verified order (Approved)
+      // 2 - Bad Order that most likely got past site security, such as inconsistent price total (Rejected)
+      status: {type: Number, default: 0}
     },
     Order: [
       {

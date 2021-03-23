@@ -64,6 +64,9 @@ router.post(
 
     try {
 
+      // all orders have tentative approval, and will be waiting on final PayPal IPN approval
+      req.body.PayPal.status = 0;
+
       // add hypens to phone number
       req.body.Customer.Phone = req.body.Customer.Phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 
