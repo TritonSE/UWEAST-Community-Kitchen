@@ -141,6 +141,7 @@ export default function OrdersTable(props) {
         root: {
           borderLeft: '2px solid #CCCCCC',
           borderRight: '2px solid #CCCCCC',
+          borderBottom: '2px solid #CCCCCC'
         },
         hover: { '&$root': { '&:hover': { backgroundColor: '#F1f1f1' }, } }
       },
