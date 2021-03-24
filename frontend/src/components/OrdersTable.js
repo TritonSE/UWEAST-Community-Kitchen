@@ -124,6 +124,12 @@ export default function OrdersTable(props) {
   // styling for the row
   const getMuiTheme = () =>
   createMuiTheme({
+    palette: {
+      primary: {
+        main: '#000',
+        contrastText: '#fff',
+      },
+    },
     overrides: {
       MUIDataTable: {
         paper: {
