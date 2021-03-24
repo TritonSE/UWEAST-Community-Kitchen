@@ -1,23 +1,3 @@
-/* .toggled-filter 
-{
-  border-width: 2px;
-  background-color: rgb(51,51,51);
-  color: #f9ce1d;
-} */
-
-.toggled-filter 
-{
-  /* background: black;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-
-  border-width: 2px;
-  background-color: rgb(51,51,51); */
-}
-
 
 @media only screen and (min-width: 1200px) {
   .menu-filter

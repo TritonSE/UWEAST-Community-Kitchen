@@ -6,10 +6,17 @@
  * @author    Navid Boloorian
  */
 
-import React from 'react';
+// import React from 'react';
+import React, { useEffect} from 'react';
 import '../css/MenuFilterButton.css';
 
 const MenuFilterButton = ( {categoryName, changeVisibleCategories, toggledFilter, setToggledFilter} ) => {
+
+  // on load of screen, default filter button highlighted
+  useEffect(() => {
+    categoryName = "Whole Menu";
+    updateFilters();
+  }, []);
 
     /**
      * Function that groups the filter toggling state calls.

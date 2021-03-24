@@ -96,8 +96,21 @@ class CartPreview extends Component {
                     <div className="order-summary">
                         <span>Total Price</span><span className="add-price">${this.state.totalPrice}</span>
                     </div>
+                    <style type="text/css">
+                        {`
+                        .btn-gold {
+                            background-color: #f9ce1d;
+                            border-color: #f9ce1d; 
+                            color: #000000;
+                        }
+                        .btn-gold:hover{
+                            background-color: #f0cb38;
+                            border-color: #f0cb38;
+                        }
+                        `}
+                    </style>
                     {/* button to open the cart summary */}
-                    <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="review-order-button" onClick={this.props.toggleCart}>Review Order</Button>
+                    <Button variant="gold" onClick={this.props.toggleCart} block>Review Order</Button>
                 </div>
             </div>
         )

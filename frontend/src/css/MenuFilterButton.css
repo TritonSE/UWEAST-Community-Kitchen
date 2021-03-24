@@ -18,6 +18,7 @@
   background-color: rgb(51,51,51);
   color: #f9ce1d;
 } */
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
 
 .menu-filter-button 
 {
@@ -34,6 +35,7 @@
   border-radius: 2px;
 	position: relative;
   background-color: rgb(231, 226, 226);
+  font-family: 'Josefin Sans', cursive;
 
 }
 
@@ -60,7 +62,7 @@
   width: 100%;
 }
 
-.menu-filter-button:focus {
+.toggled-filter{
   background: rgb(51,51,51);
   width: 100%;
   border-radius: 2px;

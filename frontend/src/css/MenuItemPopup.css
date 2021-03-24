@@ -233,6 +233,10 @@
   font-size: 20px;
 }
 
+.submit-order-button:hover{
+  background-color: rgb(36, 35, 35);
+}
+
 /* iPad Landscape ----------- */
 @media only screen and (max-width : 1024px) {
   .menu-item-popup {
