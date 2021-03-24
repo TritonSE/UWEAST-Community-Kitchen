@@ -1,5 +1,5 @@
 
-.menu-filter-button 
+/* .menu-filter-button 
 {
   border: 1px #949090 solid;
   box-shadow: 0px 3px 2px  #1d1d1c33;
@@ -17,4 +17,51 @@
 .menu-filter-button:hover{
   background-color: rgb(51,51,51);
   color: #f9ce1d;
+} */
+
+.menu-filter-button 
+{
+  /* margin: 20px auto; */
+  margin-bottom: 7px;
+  border: 3px black solid;
+  display: block;
+	border: none;
+  height: 35px;
+  width: 100%;
+	/* padding: 10px 44px; */
+	font-size: 16px;
+  box-shadow: 0px 3px 2px  #1d1d1c33;
+  border-radius: 2px;
+	position: relative;
+  background-color: rgb(231, 226, 226);
+
+}
+
+.menu-filter-button::before {
+  transition: all 0.85s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  content: "";
+  width: 10%;
+  height: 100%;
+  background: rgb(51,51,51);
+  border-radius: 2px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.menu-filter-button span {
+  color: white;
+  mix-blend-mode: difference;
+}
+
+.menu-filter-button:not(:focus):hover::before {
+  background: rgb(51,51,51);
+  border-radius: 2px;
+  width: 100%;
+}
+
+.menu-filter-button:focus {
+  background: rgb(51,51,51);
+  width: 100%;
+  border-radius: 2px;
 }
