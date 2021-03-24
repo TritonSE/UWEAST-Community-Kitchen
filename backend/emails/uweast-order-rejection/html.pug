@@ -1,0 +1,21 @@
+p Dear all,
+p This is a notification to let you know that order #[strong #{transactionID}] has been REJECTED.
+p 
+    if verified
+        | The order appears to have been successfully verified from PayPal, indicating that the order has been paid for and should exist as a valid transaction on your account history. 
+p 
+    if reason === 'CONTENTS'
+        | However, there appears to be issues with the contents of the order, since the order breakdown in terms of the items, sizes, accomodations, and prices chosen do not all seem to match the website menu at this time. 
+    else if reason === 'PRICE'
+        | However, there appears to be issues with validating the prices in this order. The expected gross payment of the order was $#{expected_amount} based off the order breakdown, yet $#{actual_amount} was really charged. This may possibly suggest 3rd party interference that led to a potential security breach.
+    else if reason === 'MISMATCH'
+        | However, it seems the amount paid to PayPal $#{expected_amount} and the amount total tagged for the order $#{actual_amount} for the purchase differ. 
+p 
+    if !verified
+        | PayPal cannot verify this order, indicating that a valid transaction was not made via PayPal and the order is potentially unpaid for.
+p #[strong Next Steps:]
+p We suggest attempting to find the PayPal receipts for this order, either by checking your mail history for email confirmation receipts or your transaction history on PayPal's website. If no such receipt can be found, it may indicate a fraud order placed by a 3rd party, and you may want to reach out to the customer of this order for proof of payment. You may also want to check the order breakdown, and validate that the correct amount was paid for the order for further inspection.  
+p NOTE: This is an automatically generated email. Please do not reply.
+    br
+    br
+    | Baraka & Bilal Catering
