@@ -6,7 +6,7 @@
   position: fixed;
   background-color: rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(4px);
-  z-index: 3;
+  z-index: 13;
   top: 0;
   left: 0;
 }
@@ -24,7 +24,9 @@
   top: 50%;
   transform: translate(-50%, -50%);
   padding: 25px;
-  z-index: 4;
+  z-index: 14;
+  border-radius: 10px;
+
 }
 
 .group-popup {
@@ -61,6 +63,7 @@
   font-weight: bold;
   color: black;
   margin-bottom: 0px;
+  
 }
 
 .desc-popup
@@ -184,7 +187,7 @@
 {
   min-width: 30px;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 28px;
   transform: translateY(-15%);
   display: inline-block;
 }
