@@ -114,7 +114,7 @@ export default function ChangeEmailScreen (props) {
         <div> 
             <br />
             <h1 className="emailHeading">Change Primary Email</h1>
-            <p className="emailDescription">Order confirmations and customer inquiries will be sent to this email.</p>
+            <p className="emailDescription">Order confirmations/cancellations and customer inquiries will be sent to this email.</p>
 
             <span>
                 <TextField id="primary-email-disabled" 

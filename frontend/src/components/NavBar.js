@@ -173,14 +173,14 @@ export default function NavBar(props) {
 
                 {/* The shopping cart will only render for smaller desktop screens/tablets */}
                 {
-                    window.location.pathname !== "/dsd" ? 
+                    window.location.pathname === "/" ? 
                     <div className="cart-icon-smaller-desktop">
                         <IconButton onClick={() => props.toggleCart()}>
                             <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
                                 <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
                             </CartBadge>
                         </IconButton>
-                    </div> : (sizes.width <= 767 || sizes.width >= 1200) ? 
+                    </div> : (sizes.width <= 767) ? 
                     <div className="cart-icon-smaller-desktop">
                         <IconButton onClick={() => props.toggleCart()}>
                             <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>

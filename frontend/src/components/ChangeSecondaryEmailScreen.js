@@ -173,7 +173,7 @@ export default function ChangeSecondaryEmailScreen (props) {
     return (
         <div className="secondary-emails-container"> 
             <h1 className="emailHeading">Change Secondary Email</h1>
-            <p className="emailDescription">Order confirmations will be sent to this email.</p>
+            <p className="emailDescription">Order confirmations/cancellations will be sent to this email.</p>
             
             <div className="secondary-emails">
                 {secondaryEmails.map((secondary, ind) => (
