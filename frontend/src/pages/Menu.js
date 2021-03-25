@@ -33,6 +33,8 @@ class Menu extends Component {
     constructor(props) {
         super(props);
 
+        // const { urlData } = this.props.location;
+
         //creates cart cookie with default values if it doesn't exist
         if (!this.props.cookies.get("cart")) {
             let newCart = {
@@ -180,6 +182,29 @@ class Menu extends Component {
     updateItems() {
         this.setState({ cartItems: this.props.cookies.get("cart").items, subTotal: this.props.cookies.get("cart").subtotal, tax: this.props.cookies.get("cart").tax, totalPrice: this.props.cookies.get("cart").total, previewKey: !this.state.previewKey });
     }
+
+    /**
+     * Parses state information to determine whether to display its cart summary to the user. Utilizes information
+     * passed by NavBar upon cart icon click. If not called by NavBar, will just do normal render of entire page. 
+     */
+    componentDidMount() {
+        let showCart = false;
+
+        // parse location object to see if cart must be toggled upon render
+        try{
+            showCart = this.props.location.state.toggleCart; 
+        } catch(err){
+            showCart = false;
+        }
+
+        // toggle cart if required
+        if(showCart){
+            this.toggleCart();
+        }
+
+        // clear loaded values so refreshes/redirects start anew
+        this.props.history.replace('/', null);
+     }
 
     render() {
 
