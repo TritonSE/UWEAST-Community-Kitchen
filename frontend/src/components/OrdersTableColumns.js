@@ -29,7 +29,8 @@ const convertToTimeInt = (data) => {
     const date = splitTime[0].split("/");
     const time = splitTime[1].split(" ")[0].split(":");
 
-    const hoursTwo = time[0].length === 1 ? "0"+time[0] : time[0];
+    let hoursTwo = time[0].length === 1 ? "0"+time[0] : time[0];
+    hoursTwo = data.includes("P.M.") && hoursTwo !== '12' ? parseInt(hoursTwo) + 12 : ( data.includes("A.M.") && hoursTwo === 12 ? 0 : hoursTwo );
     const minutesTwo = time[1]; 
 
     const formatedTime = hoursTwo + ":" + minutesTwo;
@@ -184,9 +185,6 @@ const columns = [
             const orderOne = obj1.data;
             const orderTwo = obj2.data;
 
-            console.log("one: ", orderOne);
-            console.log("two: ", orderTwo);
-
             if(orderOne > orderTwo) {
               return order === 'asc' ? 1 : -1;
             } else {
@@ -215,6 +213,14 @@ const columns = [
         display: true, 
         viewColumns: true, 
         filter: true,
+        filterOptions: {
+          names: ['Pending', 'Accepted', 'Rejected'],
+          logic: (location, filters, row) => {
+            if(filters[0] === 'Pending') return location !== 0;
+            else if(filters[0] === 'Accepted') return location !== 1;
+            else return location !== 2;
+          }
+        },
         filterType: 'dropdown',
         sortThirdClickReset: true,
         customBodyRender: renderPaypalStatus,
