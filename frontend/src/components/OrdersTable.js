@@ -118,7 +118,58 @@ export default function OrdersTable(props) {
     renderExpandableRow: renderRow,
     customToolbarSelect: deleteModal,
     searchOpen: true,
-    responsive: 'vertical'
+    responsive: 'vertical',
+    // download: false,
+    print: false,
+    downloadOptions: {filename: 'Baraka_Catering_Orders.csv', separator: ','},
+    onDownload: (buildHead, buildBody, columns, data) => {
+
+      columns.splice(-1,1);
+
+      data = data.map((row) => {
+
+        // order breakdown
+        let order = row.data[6];
+
+        let row_str = "";
+        for(var i =0; i < order.length; i++){
+          let item = order[i].item;
+          let size = order[i].size;
+          let qty = order[i].quantity;
+          let accommodations = order[i].accommodations;
+          let specialInstructions = order[i].specialInstructions;
+
+          let rep = `${qty} x ${item} (${size}) ${accommodations === '' ? '': `: ${accommodations}`} ${specialInstructions === '' ? '':`\nSI: ${specialInstructions}`}\n\n`;
+          row_str += rep;
+        }
+
+        // paypal status 
+        let status = "Pending";
+
+        if(row.data[9] === 1){
+          status = "Accepted";
+        } else if(row.data[9] === 2){
+          status = "Rejected";
+        }
+
+
+        const temp = [
+          row.data[0], // order id
+          row.data[1], // pickup
+          row.data[2], // name
+          row.data[3], // email
+          row.data[4], // number
+          row.data[5], // amount
+          row_str, // order breakdown 
+          row.data[7], // submission
+          row.data[8], // status
+          status // paypal status 
+        ];
+        return { data: temp };
+      });
+
+      return `${buildHead(columns)}${buildBody(data)}`.trim();
+    }
   };
 
   // styling for the row
