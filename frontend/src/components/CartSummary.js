@@ -452,7 +452,17 @@ const CartSummary = (props) => {
                     </div>
                     {/* Renders PayPal component if all required fields are completed and return to menu button otherwise */}
                     <div className="return-button">
-                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= MIN_CART_TOTAL) ? <PayPal selectedDate={selectedDate} selectedTime={selectedTime} /> : 
+                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= MIN_CART_TOTAL) ?
+                        <div>
+                               {
+                                    cart.items.length > 9 ?
+                                    <p className="slow-payment-note"> <span style={{color: "red"}}>NOTE:</span> Since your order contains many items, it may take longer for the PayPal checkout to load. We recommend using card instead for payment.</p>
+                                    :
+                                    null
+                                }
+                             <PayPal selectedDate={selectedDate} selectedTime={selectedTime} /> 
+                        </div>
+                         : 
                         <div>
                              <style type="text/css">
                                 {`

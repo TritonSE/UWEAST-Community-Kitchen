@@ -136,6 +136,47 @@ export default function PayPal(props) {
     React.useEffect(() => {
         window.paypal
         .Buttons({
+
+            // onClick is called when the button is clicked, makes server call to validate order first
+            onClick: function(data, actions) {
+
+                let submission = {
+                    "Amount": cookies.cart.total,
+                    "Order": cookies.cart.items.map((item) => {
+                        return {
+                            "id": item[0],
+                            "item": item[1],
+                            "quantity": parseInt(item[3]),
+                            "size": item[4],
+                            "accommodations": 
+                                item[6] !== undefined
+                                    ? (Array.isArray(item[6]) 
+                                        ? item[6].join(",") 
+                                        : item[6]
+                                    )
+                                    : "",
+                            "specialInstructions": item[5],
+                        }
+                    })
+                };
+
+                // call server to validate cart order 
+                return fetch(`${BACKEND_URL}paypal/validate`, {
+                    method: 'post',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(submission)
+                }).then(function(res) {
+
+                    if(res.ok){
+                        return actions.resolve();
+                    } else {
+                        alert(JSON.stringify(res.body))
+                        return actions.reject();
+                    }
+                })
+            },
             createOrder: async(data, actions) => {
                 return actions.order.create(paypalOrderObject);
             },

@@ -1,6 +1,8 @@
 const express = require("express");
 var querystring = require('querystring');
+const { body } = require("express-validator");
 var request = require('request');
+const { isValidated } = require("../middleware/validation");
 const { updatePayPalStatus, findOrderByTid } = require("../db/services/order");
 const { findAllEmails } = require("../db/services/email");
 const { getAllMenuItems } = require("../db/services/item");
@@ -258,6 +260,96 @@ router.post(
         }
       }
     });
+  }
+);
+
+async function validatePrice(order, payment_amount){
+
+  // compose a dictionary of all items in database, with key = id and value being JSON object
+  let menuItems = await getAllMenuItems();
+   let dict_menuItems = {};
+   for(var j = 0; j < menuItems.length; j++){ 
+     dict_menuItems[menuItems[j]["_id"]] = menuItems[j];
+  }
+
+  // determine how much should be paid for these items using database prices
+   let expected_total = 0;
+   let expected_tax = 0;
+   for(var i=0; i < order.length; i++){
+     // get order item to inspect via its id
+     let item_id = order[i]["id"];
+
+     try{
+      // extract relevent order information that would influence final price 
+      let quantity = order[i]["quantity"];
+      let size = order[i]["size"];
+      let accommodations = order[i]["accommodations"];
+      if(accommodations === ''){
+        accommodations = [];
+      } else {
+         accommodations = order[i]["accommodations"].split(',');
+      }
+
+
+      // get the corresponding item object from DB
+      let item_object = dict_menuItems[item_id];
+
+      // size price
+      let item_price = parseFloat(item_object["Prices"][size]);
+
+      // add to base price by accommodations chosen 
+      for(var k = 0; k < accommodations.length; k++){
+        let accom_price = parseFloat(getAccomPrice(accommodations[k], item_object["Accommodations"]));
+        item_price += accom_price;
+      }
+
+      // multiply base price using quantity 
+      item_price *= quantity;
+
+      // update total cart price 
+      expected_total = (parseFloat(expected_total) + item_price).toFixed(2);
+
+       // update total cart price to include tax
+      expected_tax = (expected_total * TAX_RATE).toFixed(2);
+
+     } catch(err){
+      return false;
+     }
+
+   }
+
+   let total = (parseFloat(expected_total) + parseFloat(expected_tax)).toFixed(2);
+
+   if(total != payment_amount.toFixed(2)){
+    return false;
+   }
+
+   return true;
+};
+
+router.post(
+  "/validate",
+  [
+    body("Order").notEmpty(),
+    body("Amount").notEmpty(),
+    isValidated,
+  ],
+  async (req, res, next) => {
+
+    let valid_order = await validatePrice(req.body.Order, parseFloat(req.body.Amount));
+
+    // validate order cost
+    if(!valid_order){
+      return res.status(400).json({ errors: [{ msg: "Invalid Order" }] });
+    }
+
+    // validate it meets minimum amount
+    if(parseFloat(Amount) < 20){
+      return res.status(400).json({ errors: [{ msg: "Insufficient Amount" }] });
+    }
+
+    return res.status(200).json({ success: true });;
+
   }
 );
 

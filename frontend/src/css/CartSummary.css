@@ -83,7 +83,7 @@
         width: 50%;
     }
 
-    .pickup-date-info {
+    .pickup-date-info, .slow-payment-note {
         height: auto;
         font-size: 3.1vw;
         margin-top: 1.2vw;
@@ -258,7 +258,7 @@
         width: 35%;
     }
 
-    .pickup-date-info {
+    .pickup-date-info, .slow-payment-note {
         height: auto;
         font-size: 11px;
         margin-top: 7.5px;
@@ -374,4 +374,8 @@
         color: red;
         margin-bottom: 10px;
     }
+}
+
+.slow-payment-note{
+    width: 100%;
 }
