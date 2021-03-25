@@ -154,8 +154,7 @@ export default function PayPal(props) {
                                         ? item[6].join(",") 
                                         : item[6]
                                     )
-                                    : "",
-                            "specialInstructions": item[5],
+                                    : ""
                         }
                     })
                 };
@@ -172,7 +171,7 @@ export default function PayPal(props) {
                     if(res.ok){
                         return actions.resolve();
                     } else {
-                        alert(JSON.stringify(res.body))
+                        alert("Your order cannot be processed at the moment. Please contact us directly for placement.");
                         return actions.reject();
                     }
                 })
@@ -251,7 +250,6 @@ export default function PayPal(props) {
             },
             onError: (err) => {
                 alert("An unexpected error occurred - your payment did not go through. Please try again later.");
-
             },
         })
         .render(paypalRef.current);
