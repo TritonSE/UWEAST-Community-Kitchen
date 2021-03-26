@@ -124,14 +124,14 @@ export default function NavBar(props) {
                         window.location.pathname === "/" ? 
                         <div className="cart-icon">
                             <IconButton onClick={OpenCart}>
-                                <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                <CartBadge badgeContent={(props.itemCount) ? props.itemCount : (cookies.cart ? cookies.cart.items.length : 0)}>
                                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
                                 </CartBadge>
                             </IconButton>
                         </div> : (sizes.width <= 767 || sizes.width >= 1200) ? 
                         <div className="cart-icon">
                             <IconButton onClick={OpenCart}>
-                                <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                                <CartBadge badgeContent={(props.itemCount) ? props.itemCount : (cookies.cart ? cookies.cart.items.length : 0)}>
                                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
                                 </CartBadge>
                             </IconButton>
@@ -176,14 +176,14 @@ export default function NavBar(props) {
                     window.location.pathname !== "/dsd" ? 
                     <div className="cart-icon-smaller-desktop">
                         <IconButton onClick={() => props.toggleCart()}>
-                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : (cookies.cart ? cookies.cart.items.length : 0)}>
                                 <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
                             </CartBadge>
                         </IconButton>
                     </div> : (sizes.width <= 767 || sizes.width >= 1200) ? 
                     <div className="cart-icon-smaller-desktop">
                         <IconButton onClick={() => props.toggleCart()}>
-                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : cookies.cart.items.length}>
+                            <CartBadge badgeContent={(props.itemCount) ? props.itemCount : (cookies.cart ? cookies.cart.items.length : 0)}>
                                 <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
                             </CartBadge>
                         </IconButton>
