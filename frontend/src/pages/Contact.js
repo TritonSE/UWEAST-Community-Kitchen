@@ -9,6 +9,7 @@ import Navbar from '../components/NavBar';
 import ContactMap from '../components/ContactMap';
 import ContactForm from '../components/ContactForm';
 import "../css/Contact.css";
+import CookiesBanner from "../components/CookiesBanner";
 
 const Contact = () => {
     return (
@@ -22,6 +23,7 @@ const Contact = () => {
                     <ContactForm />
                 </div>
             </div>
+            <CookiesBanner/>
         </div>
     )
   }

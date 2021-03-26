@@ -23,6 +23,8 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import "../css/Menu.css";
 import { Button } from 'react-bootstrap';
 
+import CookiesBanner from "../components/CookiesBanner";
+
 class Menu extends Component {
 
     //Cookies object used to access and modify cookies
@@ -232,6 +234,7 @@ class Menu extends Component {
                 {/** search section is the top, non-menu half of the page */}
                 <SearchSection />
                 <MenuSection onItemAdd={this.handleAdd} />
+                <CookiesBanner/>
             </div>
 
         )
