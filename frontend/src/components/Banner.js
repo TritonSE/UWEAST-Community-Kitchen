@@ -7,15 +7,13 @@
 
 import React from 'react';
 import "../css/Banner.css";
-
-const config = require('../config');
-const MIN_CART_TOTAL = config.website.MIN_CART_TOTAL;
+import {MIN_CART_TOTAL_CHECKOUT} from '../util/constants.js';
 
 const Banner = ({navbarHeight}) => {
 
     return (
       <div className="banner" style={{top: navbarHeight}}>
-        <p>All orders require a ${MIN_CART_TOTAL} MINIMUM and are PICKUP only. All menu items are halal.</p>
+        <p>All orders require a ${MIN_CART_TOTAL_CHECKOUT} MINIMUM and are PICKUP only. All menu items are halal.</p>
       </div>
     )
   }

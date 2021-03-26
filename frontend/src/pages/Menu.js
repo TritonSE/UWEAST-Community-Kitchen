@@ -22,6 +22,7 @@ import {Link} from 'react-router-dom';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import "../css/Menu.css";
 import { Button } from 'react-bootstrap';
+import {ORDER_SERVICE_TAX_RATE} from '../util/constants.js';
 
 class Menu extends Component {
 
@@ -121,7 +122,7 @@ class Menu extends Component {
         //modifies cart price values and adds new item
         cart.items.push(newItem);
         cart.subtotal = (parseFloat(cart.subtotal) + parseFloat(item.price)).toFixed(2);
-        cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
+        cart.tax = (parseFloat(cart.subtotal) * ORDER_SERVICE_TAX_RATE).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
 
         //updates cart cookie and state values to rerender page
@@ -152,7 +153,7 @@ class Menu extends Component {
 
         //modifies cart price values and removes item at index
         cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.items[ind][2])).toFixed(2);
-        cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
+        cart.tax = (parseFloat(cart.subtotal) * ORDER_SERVICE_TAX_RATE).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
         cart.items.splice(ind, 1);
 

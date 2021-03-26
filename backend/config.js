@@ -20,8 +20,6 @@ module.exports = {
     pass: process.env.UWEAST_USER_PASSWORD || ""
   },
   paypal: {
-    PAYPAL_CLIENT_ID: process.env.PAYPAL_CLIENT_ID || "",
-    PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET || "",
-    PAYPAL_ClIENT_EMAIL: process.env.PAYPAL_ClIENT_EMAIL || "",
+    PAYPAL_ClIENT_EMAIL: process.env.PAYPAL_CLIENT_EMAIL || "",
   }
 };

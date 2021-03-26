@@ -24,10 +24,12 @@ import Navbar from '../components/NavBar';
 import MenuItemPopup from '../components/MenuItemPopup';
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import {MIN_CART_TOTAL_CHECKOUT, MIN_PICKUP_ELAPSE_DAYS, ORDER_SERVICE_TAX_RATE, MIN_PICKUP_TIME, MAX_PICKUP_TIME} from '../util/constants.js';
 
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
-const MIN_CART_TOTAL = config.website.MIN_CART_TOTAL;
+
+const MIN_ORDER_ITEMS_FOR_PAYPAL_WARNING = 10;
 
 
 /**
@@ -180,7 +182,7 @@ const CartSummary = (props) => {
 
         //updates cart price values
         cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.items[popupValues.fillIns.index][2]) + parseFloat(item.price)).toFixed(2);
-        cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
+        cart.tax = (parseFloat(cart.subtotal) * ORDER_SERVICE_TAX_RATE).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
 
         //replaces old item with edited item
@@ -318,7 +320,7 @@ const CartSummary = (props) => {
     const disableDates = (date) => {
         let currDate = new Date();
         const numDays = new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0).getDate();
-        return (currDate.getMonth() === date.getMonth() && date.getDate() - 3 < currDate.getDate()) || (currDate.getMonth() + 1 === date.getMonth() && date.getDate() < currDate.getDate() + 3 - numDays);
+        return (currDate.getMonth() === date.getMonth() && date.getDate() - MIN_PICKUP_ELAPSE_DAYS < currDate.getDate()) || (currDate.getMonth() + 1 === date.getMonth() && date.getDate() < currDate.getDate() + MIN_PICKUP_ELAPSE_DAYS - numDays);
     }
 
     /**
@@ -332,7 +334,7 @@ const CartSummary = (props) => {
 
         //modifies cart price values and removes item at index
         cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.items[ind][2])).toFixed(2);
-        cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
+        cart.tax = (parseFloat(cart.subtotal) * ORDER_SERVICE_TAX_RATE).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
         cart.items.splice(ind, 1);
 
@@ -415,14 +417,14 @@ const CartSummary = (props) => {
                             label="Time"
                             value={selectedTime}
                             setSelectedTime={(time) => {
-                                const minTime = moment("9:59 AM", "HH:mm A");
-                                const maxTime = moment("6:01 PM", "HH:mm A");
+                                const minTime = moment(MIN_PICKUP_TIME, "HH:mm A");
+                                const maxTime = moment(MAX_PICKUP_TIME, "HH:mm A");
                                 let errorMsg = "";
                                 if (minTime.isBefore(time) && maxTime.isAfter(time)) {
                                     setSelectedTime(time.format("HH:mm A"));
                                     errorMsg = false;
                                 } else {
-                                    errorMsg = "Select between 10:00 AM and 6:00 PM";
+                                    errorMsg = `Select between ${MIN_PICKUP_TIME} and ${MAX_PICKUP_TIME}`;
                                     setSelectedTime(null);
                                 }
                                 setError(errorMsg);
@@ -434,7 +436,7 @@ const CartSummary = (props) => {
                             fontProps={{ fontStyle }}
                         />
                     </div>
-                    <p className="pickup-date-info">NOTE: Earliest pickup is 3 days after order has been placed</p>
+                    <p className="pickup-date-info">NOTE: Earliest pickup is {MIN_PICKUP_ELAPSE_DAYS} days after order has been placed</p>
                     <h1 className="summary-title">Order Summary</h1>
                     <div className="cart-items">
                         {/* loads and displays all items currently in the cart */}
@@ -448,14 +450,14 @@ const CartSummary = (props) => {
                     </div>
                     {/* Renders an error message if cart total is less than the $20 minimum */}
                     <div className="order-minimum">
-                        {(parseFloat(cart.cart_total) < MIN_CART_TOTAL) ? <span>Order minimum is ${MIN_CART_TOTAL}. Please add ${(MIN_CART_TOTAL - parseFloat(cart.cart_total)).toFixed(2)} to your cart to proceed to checkout.</span> : null}
+                        {(parseFloat(cart.cart_total) < MIN_CART_TOTAL_CHECKOUT) ? <span>Order minimum is ${MIN_CART_TOTAL_CHECKOUT}. Please add ${(MIN_CART_TOTAL_CHECKOUT - parseFloat(cart.cart_total)).toFixed(2)} to your cart to proceed to checkout.</span> : null}
                     </div>
                     {/* Renders PayPal component if all required fields are completed and return to menu button otherwise */}
                     <div className="return-button">
-                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= MIN_CART_TOTAL) ?
+                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= MIN_CART_TOTAL_CHECKOUT) ?
                         <div>
                                {
-                                    cart.items.length > 9 ?
+                                    cart.items.length >= MIN_ORDER_ITEMS_FOR_PAYPAL_WARNING ?
                                     <p className="slow-payment-note"> <span style={{color: "red"}}>NOTE:</span> Since your order contains many items, it may take longer for the PayPal checkout to load. We recommend using card instead for payment.</p>
                                     :
                                     null

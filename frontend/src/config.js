@@ -8,8 +8,5 @@ module.exports = {
   },
   google: {
     MAPS_API_CODE: process.env.REACT_APP_MAPS_API_CODE || "AIzaSyAYe12_fPCYzLJawQNeabZORGYE5a5GnEU"
-  },
-  website: {
-    MIN_CART_TOTAL: process.env.REACT_APP_MIN_CART_TOTAL || "20"
   }
 };
