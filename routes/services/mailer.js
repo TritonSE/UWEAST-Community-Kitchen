@@ -21,7 +21,7 @@ const transporter =
         host: "smtp.gmail.com",
         port: 465,
         secure: true,
-        auth: config.uweast,
+        auth: config.uweast.pass,
       });
 
 // template based sender object
