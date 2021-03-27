@@ -152,7 +152,6 @@ const updateStatus = (value, tableMeta, updateValue, e) => {
         body: JSON.stringify(requestBody)
     }).then(async result => {
         if (result.ok) {
-          console.log(result.statusText);
           updateValue(setValue, tableMeta.rowIndex);
         }
          // invalid admin token

@@ -373,7 +373,6 @@ const CartSummary = (props) => {
      * Loads cart popup or page when window is resized
      */
     const handleResize = () => {
-        console.log("resize called");
         if (window.innerWidth >= 768) {
             history.push({
                 pathname: "/",
