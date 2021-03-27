@@ -1,5 +1,0 @@
-#Dotenv
-.env
-node_modules/
-.eslintcache
-debug.log
