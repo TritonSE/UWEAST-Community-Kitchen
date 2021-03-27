@@ -225,7 +225,7 @@ class Menu extends Component {
         console.log("Config: \n");
         console.log("Maps API: " + config.google.MAPS_API_CODE);
         console.log("Backend: " + config.backend.uri);
-        console.log("ENV: \n");
+        console.log("ENV:  \n");
         console.log("Maps API: " + process.env.REACT_APP_MAPS_API_CODE);
         console.log("Backend: " + process.env.REACT_APP_BACKEND_URI);
      }
