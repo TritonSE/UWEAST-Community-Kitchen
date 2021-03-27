@@ -8,6 +8,7 @@
  *  2) DELETE call to remove a secondary email
  * 
  * @summary     Handles functionality of secondary emails on Admin page.
+ * @author      Amitesh Sharma
  */
 
 import React, { useState, useEffect } from 'react';
@@ -75,6 +76,7 @@ const renderNode = (email, secondaryEmails, setSecondaryEmails, updateSecondaryE
         })  
     }
     
+    // renders a node containing the secondary email
     return (
         <div>
             <p className="secondary-email-name">{email}</p>

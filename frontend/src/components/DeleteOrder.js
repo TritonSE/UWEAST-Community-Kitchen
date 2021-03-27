@@ -7,7 +7,8 @@
  * It also only renders when the trash can is clicked
  * on the toolbar. 
  * 
- * @summary The delete order modal. 
+ * @summary     The delete order modal. 
+ * @author      Amitesh Sharma
  */
 
 import React, { useState, useEffect } from 'react';
@@ -29,11 +30,13 @@ export default function DeleteOrder(props) {
         setShow(props.show);
     }, [props])
 
+    // hides the delete order modal
     const hideModal = () => {
         setShow(false);
         props.updateParentShow(false);
     }
 
+    // deletes the order from the database
     const orderDeletion = () => {
         fetch(`${BACKEND_URL}order/cancelOrder`, {
             method: 'DELETE',
@@ -47,15 +50,15 @@ export default function DeleteOrder(props) {
                 customerReceipt: customer
             })
         }).then(res => {
-             // invalid admin token
-             if (res.status === 401){
+            // invalid admin token
+            if (res.status === 401){
                 logout();
                 // refresh will cause a redirect to login page
                 window.location.reload();
                 return;
             }
 
-             // order could not be deleted 
+            // order could not be deleted 
             else if(res.status >= 400){
                 props.error(true, "Error! Could not Delete Order");
                 hideModal();
@@ -67,6 +70,7 @@ export default function DeleteOrder(props) {
             return res.json();
         })
         .then(data => {
+            // reset to initial states
             hideModal();
             props.error(true, data.msg);
             props.setSelectedRows([]);  
@@ -87,6 +91,7 @@ export default function DeleteOrder(props) {
                 <Modal.Header closeButton>
                     <Modal.Title>Delete Order</Modal.Title>
                 </Modal.Header>
+                {/* The modal body */}
                 <Modal.Body>
                     <div>
                         <p>Are you sure you want to permanently remove {"this order"} from your order history?</p>
