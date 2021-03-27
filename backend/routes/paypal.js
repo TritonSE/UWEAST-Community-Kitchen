@@ -1,3 +1,13 @@
+/**
+ * This file is responsible for PayPal related functionality, namely validating orders before
+ * PayPal smart buttons are enabled and an PayPal IPN listener that listens for approved transactions
+ * from PayPal's servers, after they have been made through the main website. Both routes are
+ * security counter-measures, checking for proper and valid payment. 
+ *
+ * @summary   Code for routes involved with PayPal Smart Buttons/Server.
+ * @author    Amrit Kaur Singh
+ */
+
 const express = require("express");
 var querystring = require('querystring');
 const { body } = require("express-validator");

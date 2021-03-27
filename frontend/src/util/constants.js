@@ -1,3 +1,7 @@
+/**
+ * Contains global constants for this directory. 
+ */
+
 // frontend specific global constants
 export const MIN_PICKUP_TIME = "10:00 AM";
 export const MAX_PICKUP_TIME = "6:00 PM";
