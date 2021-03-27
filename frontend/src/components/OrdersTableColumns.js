@@ -10,7 +10,8 @@
  * Order Status contains props for a custom body inside the table
  * Cell. 
  * 
- * @summary Column details for orders table.
+ * @summary   Column details for orders table.
+ * @author    Amitesh Sharma
  */
 
 // import helper functions from utils
@@ -25,14 +26,17 @@ import {
 
 // formarts the time so it can be turned into a Date object
 const convertToTimeInt = (data) => {
+    // extract the necessary information
     const splitTime = data.split('\n');
     const date = splitTime[0].split("/");
     const time = splitTime[1].split(" ")[0].split(":");
 
+    // convert the hours to military 
     let hoursTwo = time[0].length === 1 ? "0"+time[0] : time[0];
     hoursTwo = data.includes("P.M.") && hoursTwo !== '12' ? parseInt(hoursTwo) + 12 : ( data.includes("A.M.") && hoursTwo === 12 ? 0 : hoursTwo );
     const minutesTwo = time[1]; 
-
+  
+    // return the formatted time
     const formatedTime = hoursTwo + ":" + minutesTwo;
     const dateTwo = new Date(date[2] +  "-" + date[0] + "-" + date[1]  + "T" + formatedTime + ":00");
     return dateTwo.getTime();
@@ -40,6 +44,7 @@ const convertToTimeInt = (data) => {
 
 // the column headers for the table
 const columns = [
+    //properties for each column header
     {
       name: "Order ID",
       options: {
@@ -55,10 +60,12 @@ const columns = [
       options: {
         filter: true,
         filterType: 'custom',
+        // custome filter dialog
         customFilterListOptions: {
           render: renderDateFilters,
           update: updateDateFilters
         },
+        // custom sort for dates
         sortCompare: (order) => {
           return (obj1, obj2) => {
             const timeOne = convertToTimeInt(obj1.data);
@@ -113,6 +120,7 @@ const columns = [
       name: "Amount Paid",
       options: {
         filter: false,
+        // custom sort for amount
         sortCompare: (order) => {
           return (obj1, obj2) => {
             const priceOne = parseFloat(obj1.data);
@@ -137,6 +145,7 @@ const columns = [
       options: {
         filter: true,
         filterType: 'custom',
+        // custome filter dialog
         customFilterListOptions: {
           render: renderDateFilters,
           update: updateDateFilters

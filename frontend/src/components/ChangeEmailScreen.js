@@ -3,6 +3,7 @@
  * the "emails" tab under the "Admin" page.
  * 
  * @summary     Handles changing primary email functionality.
+ * @author      Amitesh Sharma
  */
 
 import React, { useState, useEffect } from 'react';
@@ -17,6 +18,7 @@ import '../css/ChangeEmailScreen.css';
 const config = require('../config');
 const BACKEND_URL = config.backend.uri;
 
+// styling used for the textfield outline
 const useStyles = makeStyles((theme) => ({
     span: {
       "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -44,6 +46,7 @@ export default function ChangeEmailScreen (props) {
         }
     }
 
+    // sets some state variables when page loads 
     useEffect(() => {
         setSecondaryEmails(props.emails);
         updateStatePrimaryEmail(props.primaryEmail);
@@ -90,6 +93,7 @@ export default function ChangeEmailScreen (props) {
             })
         }).then(res => {
             if(res.ok){
+                // clear any textfields and reset all states
                 setInputError(false);
                 setOpen(true);
                 setPrimaryEmail("");
@@ -116,6 +120,7 @@ export default function ChangeEmailScreen (props) {
             <h1 className="emailHeading">Change Primary Email</h1>
             <p className="emailDescription">Order confirmations/cancellations and customer inquiries will be sent to this email.</p>
 
+            {/* Contains the current primary email */}
             <span>
                 <TextField id="primary-email-disabled" 
                     size="small"
@@ -128,6 +133,7 @@ export default function ChangeEmailScreen (props) {
 
             <br />
             <br />
+            {/* Textfield that is used to update the primary email */}
                 <span className={classes.span}>
                     <TextField size="small"
                         error={inputError} 

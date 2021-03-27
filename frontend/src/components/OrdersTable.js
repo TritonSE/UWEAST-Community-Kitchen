@@ -7,7 +7,8 @@
  * Pickup Details, Name, email, Phone number, Price, Submission Date, Order Status,
  * Items, Quantity, Size, Accommodations, Special Instructions
  * 
- * @summary The Orders table implementation.
+ * @summary     The Orders table implementation.
+ * @author      Amitesh Sharma
  */
 
 import React, { useState } from 'react';
@@ -97,6 +98,7 @@ const renderRow = (rowData, rowMeta) => {
 export default function OrdersTable(props) {
   const [selectedRows, setSelectedRows] = useState([]);
 
+  // renders the custom toolbar when a row is selected
   const deleteModal = (selectedRows, displayData, setSelectedRows) => {
     const index = selectedRows.data[0].index;
     const data = displayData[index].data;
@@ -111,6 +113,7 @@ export default function OrdersTable(props) {
     expandableRows: true,
     selectableRows: 'single',
     rowsSelected: selectedRows,
+    // updates the selected rows
     onRowSelectionChange: (rowsSelectedData, allRows, rowsSelected) => {
       setSelectedRows(rowsSelected);
     },
@@ -119,7 +122,6 @@ export default function OrdersTable(props) {
     customToolbarSelect: deleteModal,
     searchOpen: true,
     responsive: 'vertical',
-    // download: false,
     print: false,
     downloadOptions: {filename: 'Baraka_Catering_Orders.csv', separator: ','},
     onDownload: (buildHead, buildBody, columns, data) => {
