@@ -190,7 +190,6 @@ class Menu extends Component {
      */
     toggleCart() {
         this.setState({ cartPopupVisible: !this.state.cartPopupVisible });
-        console.log(this.state.cartPopupVisible);
     }
 
     /**

@@ -17,9 +17,8 @@ const {
   setFeatured,
   getItemById
 } = require("../db/services/item");
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
-const { token } = require("morgan");
 const { verify } = require("./services/jwt");
 const router = express.Router();
 

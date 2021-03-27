@@ -21,7 +21,7 @@ const {ORDER_SERVICE_TAX_RATE, MIN_CART_TOTAL_CHECKOUT} = require('../util/const
 const config = require("../config");
 const router = express.Router();
 
-
+// sends email to UWEAST admins notifiying of a rejection order
 async function setUpEmail(data, res){
   // retrieve all emails inside of Emails DB
   const emails = await findAllEmails();
@@ -100,7 +100,6 @@ async function inspectValidIPNResponse(req, res){
 
   // approve order
   await updatePayPalStatus(order._id, 1);
-  //console.log("Approved");
 }
 
 /**
@@ -125,7 +124,6 @@ async function inspectInvalidIPNResponse(req, res){
      }
      setUpEmail(locals,res);
      // IPN invalid, log for manual investigation
-     //console.error('Invalid IPN!'.error);
 }
 
 /**
