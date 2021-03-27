@@ -136,7 +136,7 @@ const DisplayDateFilters = (filterList, onChange, index, column) => {
  */
 const updateStatus = (value, tableMeta, updateValue, e) => {
     const setValue = (value === "Completed Orders") ? "Pending Orders" : "Completed Orders";
-    const getRowId = tableMeta.rowData[9];
+    const getRowId = tableMeta.rowData[10];
     
     const requestBody = {
       _id: getRowId,
@@ -152,7 +152,6 @@ const updateStatus = (value, tableMeta, updateValue, e) => {
         body: JSON.stringify(requestBody)
     }).then(async result => {
         if (result.ok) {
-          console.log(result.statusText);
           updateValue(setValue, tableMeta.rowIndex);
         }
          // invalid admin token
@@ -190,10 +189,30 @@ const renderStatus = (value, tableMeta, updateValue) => {
     )
 }
 
+const renderPaypalStatus = (value, tableMeta, updateValue) => {
+  let obj = {};
+  let paypalStatus = "Pending";
+
+  if(value === 2) {
+    obj.backgroundColor = '#EF6649';
+    paypalStatus = "Rejected";
+  } else if(value === 1) {
+    obj.backgroundColor = '#5AE44E';
+    paypalStatus = "Accepted";
+  } 
+
+  return (
+    <div className="paypal-order-status" style={obj}>
+      <p>{paypalStatus}</p>
+    </div>    
+  )
+}
+
 export {
     renderStatus,
     DisplayDateFilters,
     DisplayStatusFilters,
     updateDateFilters,
-    renderDateFilters    
+    renderDateFilters,
+    renderPaypalStatus    
 }

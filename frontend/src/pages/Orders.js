@@ -63,7 +63,7 @@ export default class Orders extends React.Component {
         let name = this.formatString(list.Customer.Name, 14);
 
         return [list.PayPal.transactionID, dateOne, name, email, list.Customer.Phone, 
-            list.PayPal.Amount, list.Order, dateTwo, list.isCompleted ? "Completed Orders" : "Pending Orders", list._id];
+            list.PayPal.Amount, list.Order, dateTwo, list.isCompleted ? "Completed Orders" : "Pending Orders", list.PayPal.status, list._id];
     }
 
     /**

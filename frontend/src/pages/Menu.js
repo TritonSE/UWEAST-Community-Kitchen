@@ -22,6 +22,7 @@ import {Link} from 'react-router-dom';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import "../css/Menu.css";
 import { Button } from 'react-bootstrap';
+import {ORDER_SERVICE_TAX_RATE} from '../util/constants.js';
 
 import CookiesBanner from "../components/CookiesBanner";
 
@@ -34,6 +35,8 @@ class Menu extends Component {
 
     constructor(props) {
         super(props);
+
+        // const { urlData } = this.props.location;
 
         //creates cart cookie with default values if it doesn't exist
         if (!this.props.cookies.get("cart")) {
@@ -128,7 +131,7 @@ class Menu extends Component {
         //modifies cart price values and adds new item
         cart.items.push(newItem);
         cart.subtotal = (parseFloat(cart.subtotal) + parseFloat(item.price)).toFixed(2);
-        cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
+        cart.tax = (parseFloat(cart.subtotal) * ORDER_SERVICE_TAX_RATE).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
 
         //updates cart cookie and state values to rerender page
@@ -166,7 +169,7 @@ class Menu extends Component {
 
         //modifies cart price values and removes item at index
         cart.subtotal = (parseFloat(cart.subtotal) - parseFloat(cart.items[ind][2])).toFixed(2);
-        cart.tax = (parseFloat(cart.subtotal) * 0.0775).toFixed(2);
+        cart.tax = (parseFloat(cart.subtotal) * ORDER_SERVICE_TAX_RATE).toFixed(2);
         cart.total = (parseFloat(cart.subtotal) + parseFloat(cart.tax)).toFixed(2);
         cart.items.splice(ind, 1);
 
@@ -187,7 +190,6 @@ class Menu extends Component {
      */
     toggleCart() {
         this.setState({ cartPopupVisible: !this.state.cartPopupVisible });
-        console.log(this.state.cartPopupVisible);
     }
 
     /**
@@ -196,6 +198,29 @@ class Menu extends Component {
     updateItems() {
         this.setState({ cartItems: this.props.cookies.get("cart").items, subTotal: this.props.cookies.get("cart").subtotal, tax: this.props.cookies.get("cart").tax, totalPrice: this.props.cookies.get("cart").total, previewKey: !this.state.previewKey });
     }
+
+    /**
+     * Parses state information to determine whether to display its cart summary to the user. Utilizes information
+     * passed by NavBar upon cart icon click. If not called by NavBar, will just do normal render of entire page. 
+     */
+    componentDidMount() {
+        let showCart = false;
+
+        // parse location object to see if cart must be toggled upon render
+        try{
+            showCart = this.props.location.state.toggleCart; 
+        } catch(err){
+            showCart = false;
+        }
+
+        // toggle cart if required
+        if(showCart){
+            this.toggleCart();
+        }
+
+        // clear loaded values so refreshes/redirects start anew
+        this.props.history.replace('/', null);
+     }
 
     render() {
 

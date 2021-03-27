@@ -93,19 +93,19 @@ td {
 }
 
 #table-cell-items {
-    width: 13%;
+    width: 12.5%;
 }
 
 #table-cell-quanitity {
-    width: 11%;
+    width: 10%;
 }
 
 #table-cell-size {
-    width: 10.6%;
+    width: 9.5%;
 }
 
 #table-cell-acc {
-    width: 28%;
+    width: 24.7%;
 }
 
 /* Used for the custom toolbar when row is selected */
@@ -134,21 +134,21 @@ td {
     color: var(--darkgrey)
 }
 
-@media only screen and (min-width: 1470px) and (max-width: 1534px) {
+@media only screen and (min-width: 1470px) and (max-width: 1575px) {
     #table-cell-items {
-        width: 14.7%;
+        width: 14.5%;
     }
     
     #table-cell-quanitity {
-        width: 8.5%;
+        width: 8%;
     }
     
     #table-cell-size {
-        width: 11.2%;
+        width: 11%;
     }
     
     #table-cell-acc {
-        width: 28.5%;
+        width: 27%;
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -162,19 +162,19 @@ td {
 
 @media only screen and (min-width: 1343px) and (max-width: 1470px) {
     #table-cell-items {
-        width: 14.7%;
+        width: 14.5%;
     }
     
     #table-cell-quanitity {
-        width: 9.4%;
+        width: 8%;
     }
     
     #table-cell-size {
-        width: 11.8%;
+        width: 11%;
     }
     
     #table-cell-acc {
-        width: 29%;
+        width: 27%;
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -190,19 +190,19 @@ td {
 
     /* Removes the stickyness of the checkboxs on the left */
     #table-cell-items {
-        width: calc(14.7%);
+        width: 14.5%;
     }
     
     #table-cell-quanitity {
-        width: calc(8.8%);
+        width: 8%;
     }
     
     #table-cell-size {
-        width: calc(10.2%);
+        width: 11%;
     }
     
     #table-cell-acc {
-        width: calc(32.8%);
+        width: 27%;
     }
 
     #MUIDataTableBodyRow-0 > td:nth-child(7) {
@@ -232,7 +232,9 @@ td {
 .orders-status .dropdown-menu-pending {
     border: none;
     background-color: var(--yellow);
-    padding: calc(0.4vw);
+    height: 38px;
+    width: 113px;
+    padding-left: 10px;
     border-radius: calc(1vh);
     cursor: pointer;
 }
@@ -241,7 +243,23 @@ td {
 .orders-status .dropdown-menu-completed {
     border: none;
     background-color: var(--lightgrey);
-    padding: calc(0.4vw);
+    height: 38px;
+    width: 113px;
+    padding-left: 10px;
     border-radius: calc(1vh);
     cursor: pointer;
+}
+
+.paypal-order-status {
+    background-color: var(--yellow);
+    text-align: center;
+    height: 38px;
+    width: 113px;
+    border-radius: calc(1vh);
+}
+
+.paypal-order-status p {
+    padding-top: calc(9px);
+    font-family: 'roboto', sans-serif;
+    font-weight: 500;
 }

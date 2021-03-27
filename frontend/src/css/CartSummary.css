@@ -83,7 +83,7 @@
         width: 50%;
     }
 
-    .pickup-date-info {
+    .pickup-date-info, .slow-payment-note {
         height: auto;
         font-size: 3.1vw;
         margin-top: 1.2vw;
@@ -137,7 +137,7 @@
     .order-totalprices {
         margin-top: 4.8vw;
         text-align: right;
-        font-size: 3.7vw;
+        font-size: 3.3vw;
         font-weight: bold;
         padding-bottom: 1.6vw;
     }
@@ -258,7 +258,7 @@
         width: 35%;
     }
 
-    .pickup-date-info {
+    .pickup-date-info, .slow-payment-note {
         height: auto;
         font-size: 11px;
         margin-top: 7.5px;
@@ -311,7 +311,7 @@
     .order-totalprices {
         margin-top: 30px;
         text-align: right;
-        font-size: 80%;
+        font-size: 90%;
         font-weight: bold;
         padding-bottom: 10px;
     }
@@ -374,4 +374,8 @@
         color: red;
         margin-bottom: 10px;
     }
+}
+
+.slow-payment-note{
+    width: 100%;
 }

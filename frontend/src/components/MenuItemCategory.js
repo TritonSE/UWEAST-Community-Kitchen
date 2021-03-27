@@ -41,7 +41,7 @@ const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues
         setMenuItems(menuItemValues);
       }
       else {
-        console.log("error");
+        console.log(`Could not load items for category ${categoryName}`);
       }
     })
 

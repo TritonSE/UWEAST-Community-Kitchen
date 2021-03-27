@@ -1,3 +1,10 @@
+/**
+ * Central file and intial source point of backend. Establishes database connection, and redirects Express routes
+ * to appropriate sub-compartments for implementation. 
+ * 
+ * @summary   Initialization of backend. 
+ * @author    Amrit Kaur Singh, Thomas Garry
+ */
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -14,8 +21,8 @@ mongoose.set("useNewUrlParser", true);
 mongoose.connect(config.db.uri);
 mongoose.connection.once("open", async () => {
   console.log("Established connection to MongoDB.");
-  console.log(config.db.uri);
-  console.log("Port: " + config.app.port);
+  // console.log(config.db.uri);
+  console.log("Server starting at Port: " + config.app.port);
 });
 
 const app = express();
@@ -35,14 +42,13 @@ app.get("/", function (req, res) {
   res.status(200).json({ message: "Abandon All Hope Ye Who Enter Here..." });
 });
 app.use("/user", require("./routes/user"));
-app.use("/cart", require("./routes/cart"));
 app.use("/autoEmails", require("./routes/autoEmails"));
 app.use("/email", require("./routes/email"));
 app.use("/item", require("./routes/item"));
 app.use("/jwt", require("./routes/jwt"));
-app.use("/cart", require("./routes/cart"));
 app.use("/order", require("./routes/order"));
 app.use("/menuImages", require("./routes/menuImages"));
+app.use("/paypal", require("./routes/paypal"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -20,14 +20,12 @@
   padding-bottom: 10px;
   font-family: 'Josefin Sans', cursive;
   background-color: #FAFAFA;
-  /* background-color: hotpink; */
 }
 
 .menu-item-category-grid 
 {
   display: grid;
   background-color: #FAFAFA;
-  /* background-color: hotpink; */
 }
 
 .menu-item-category 

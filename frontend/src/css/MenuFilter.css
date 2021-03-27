@@ -1,9 +1,3 @@
-.toggled-filter 
-{
-  border-width: 2px;
-  background-color: rgb(51,51,51);
-  color: #f9ce1d;
-}
 
 @media only screen and (min-width: 1200px) {
   .menu-filter

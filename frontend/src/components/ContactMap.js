@@ -14,6 +14,8 @@ import {
   useLoadScript,
   InfoWindow
 } from "@react-google-maps/api";
+import {CONTACT_PHONE_NUMBER} from '../util/constants.js';
+
 
 import "../css/AccountsPages.css";
 
@@ -98,7 +100,7 @@ const ContactMap = () => {
             }
             
             <p className="info-label">Call us at</p>
-            <p className="info-value">(619) 831-7883</p>
+            <p className="info-value">{CONTACT_PHONE_NUMBER}</p>
             <p className="info-label">Find us at</p>
             <p className="info-value">6523 University Ave <br/> San Diego, CA 92115</p>
           </div>

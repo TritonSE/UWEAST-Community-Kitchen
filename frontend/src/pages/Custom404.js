@@ -31,7 +31,14 @@ export default function Custom404() {
                             <Navbar/>
                     </div>
                     <div className="Main">
-                        <div className="Background"/>
+                        {/* Image on lefthand side */}
+                        <div className="Background"> 
+                            {/* Cite the image source */}
+                            <div style={{position: "absolute", bottom: "0", left: "0",  textAlign:"right", color: "white",  textShadow: "1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000"}}> 
+                                Photo by Dan Gold on Unsplash 
+                            </div> 
+                        </div>
+                        {/* Information and redirect button on righthand side */}
                         <section className="Info">
                             <p id="Title-404"> 404 </p>
                             <p id="Description-404"> Page Not Found</p> 

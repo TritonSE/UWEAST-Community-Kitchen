@@ -1,5 +1,5 @@
 /**
- * File sets up the menuImage mongoose schema.
+ * File sets up the menuImage mongoose schema. Collection should always just be 1 document in size. 
  *
  * @summary   Creation of the menuImage DB.
  */

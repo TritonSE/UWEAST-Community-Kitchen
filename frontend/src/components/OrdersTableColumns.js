@@ -10,7 +10,8 @@
  * Order Status contains props for a custom body inside the table
  * Cell. 
  * 
- * @summary Column details for orders table.
+ * @summary   Column details for orders table.
+ * @author    Amitesh Sharma
  */
 
 // import helper functions from utils
@@ -19,18 +20,23 @@ import {
     DisplayDateFilters,
     DisplayStatusFilters,
     updateDateFilters,
-    renderDateFilters    
+    renderDateFilters,
+    renderPaypalStatus    
 } from '../util/OrdersTableFunctions';
 
 // formarts the time so it can be turned into a Date object
 const convertToTimeInt = (data) => {
+    // extract the necessary information
     const splitTime = data.split('\n');
     const date = splitTime[0].split("/");
     const time = splitTime[1].split(" ")[0].split(":");
 
-    const hoursTwo = time[0].length === 1 ? "0"+time[0] : time[0];
+    // convert the hours to military 
+    let hoursTwo = time[0].length === 1 ? "0"+time[0] : time[0];
+    hoursTwo = data.includes("P.M.") && hoursTwo !== '12' ? parseInt(hoursTwo) + 12 : ( data.includes("A.M.") && hoursTwo === 12 ? 0 : hoursTwo );
     const minutesTwo = time[1]; 
-
+  
+    // return the formatted time
     const formatedTime = hoursTwo + ":" + minutesTwo;
     const dateTwo = new Date(date[2] +  "-" + date[0] + "-" + date[1]  + "T" + formatedTime + ":00");
     return dateTwo.getTime();
@@ -38,6 +44,7 @@ const convertToTimeInt = (data) => {
 
 // the column headers for the table
 const columns = [
+    // the order id column
     {
       name: "Order ID",
       options: {
@@ -48,26 +55,33 @@ const columns = [
         sortThirdClickReset: true,
       }
     },
+    // the pick up details column
     {
       name: "Pick up Details",
       options: {
         filter: true,
         filterType: 'custom',
+        // custom filter dialog
         customFilterListOptions: {
+          // custom filter for pick up
           render: renderDateFilters,
+          // custom updating inside the filter dialog
           update: updateDateFilters
         },
+        // custom sort for dates
         sortCompare: (order) => {
           return (obj1, obj2) => {
             const timeOne = convertToTimeInt(obj1.data);
             const timeTwo = convertToTimeInt(obj2.data);
             
+            // if timeOne - timeTwo < 0, it's less, otherwise, it's greater
             return (timeOne - timeTwo) * (order === 'asc' ? 1 : -1);
           }
         },
         sortThirdClickReset: true,
         filterOptions: {
           names: [],
+          // custom filtering logic when selected
           logic(date, filters) {
             const getDate = date.split("\n")[0];
             if (filters[0] && filters[1]) {
@@ -79,10 +93,12 @@ const columns = [
             }
             return false;
           },
+          // displays the filter node when applied
           display: DisplayDateFilters
         }
       }  
     },
+    // the name column
     {
       name: "Name",
       options: {
@@ -91,6 +107,7 @@ const columns = [
         sortThirdClickReset: true,
       }  
     },
+    // the email column
     {
       name: "Email",
       options: {
@@ -99,6 +116,7 @@ const columns = [
         sortThirdClickReset: true,
       }    
     },
+    // the phone number column
     {
       name: "Phone Number",
       options: {
@@ -107,21 +125,25 @@ const columns = [
         sortThirdClickReset: true,
       }  
     },
+    // the amount paid column
     {
       name: "Amount Paid",
       options: {
         filter: false,
+        // custom sort for amount
         sortCompare: (order) => {
           return (obj1, obj2) => {
             const priceOne = parseFloat(obj1.data);
             const priceTwo = parseFloat(obj2.data);
             
+            // if priceOne - priceTwo < 0, it's less, otherwise, it's greater
             return (priceOne - priceTwo) * (order === 'asc' ? 1 : -1);
           }
         },
         sortThirdClickReset: true,
       }  
     },
+    // the order Description
     {
       name: "Order Description",
       options: {
@@ -130,26 +152,33 @@ const columns = [
         filter: false
       }
     },
+    // the submission details
     {
       name: "Submission Details",
       options: {
         filter: true,
         filterType: 'custom',
+        // custome filter dialog
         customFilterListOptions: {
+          // custom rendering for filter in dialog
           render: renderDateFilters,
+          // custom updating for submission filter
           update: updateDateFilters
         },
+        // custom sorting for submission details
         sortCompare: (order) => {
           return (obj1, obj2) => {
             const timeOne = convertToTimeInt(obj1.data);
             const timeTwo = convertToTimeInt(obj2.data);
             
+            // if timeOne - timeTwo < 0, it's less, otherwise, it's greater
             return (timeOne - timeTwo) * (order === 'asc' ? 1 : -1);
           }
         },
         sortThirdClickReset: true,
         filterOptions: {
           names: [],
+          // custom logic for getting orders when filters are applied
           logic(date, filters) {
             const getDate = date.split("\n")[0];
             if (filters[0] && filters[1]) {
@@ -165,12 +194,14 @@ const columns = [
         }
       }  
     },
+    // the order status column
     {
       name: "Order Status",
       options: {
         filter: true,
         sortThirdClickReset: true,
         filterType: 'custom',
+        // custom dropdown inside the filter dialog
         customBodyRender: renderStatus,
         customFilterListOptions: {
           render: (options) => {
@@ -178,14 +209,14 @@ const columns = [
             return options;
           },
         },
+        // custom sort function when the column is sorted
         sortCompare: (order) => {
           return (obj1, obj2) => {
             const orderOne = obj1.data;
             const orderTwo = obj2.data;
-
-            console.log("one: ", orderOne);
-            console.log("two: ", orderTwo);
-
+            
+            // if true, then pending is before completed
+            // otherwise, completed comes before pending
             if(orderOne > orderTwo) {
               return order === 'asc' ? 1 : -1;
             } else {
@@ -194,7 +225,9 @@ const columns = [
           }
         },
         filterOptions: {
+          // labels for the dropdown 
           names: ["Pending Orders", "Completed Orders"],
+          // custom logic for getting orders that are 'completed' or 'pending'
           logic(order, filters) {
             if (filters[0] === "Completed Orders") {
               return order === "Pending Orders";
@@ -208,8 +241,43 @@ const columns = [
         }
       }
     },
+    // the paypal status column
+    {
+      name: "Paypal Status",
+      options: {
+        display: true, 
+        viewColumns: true, 
+        filter: true,
+        filterOptions: {
+          // labels to replace '0', '1', and '2'
+          names: ['Pending', 'Accepted', 'Rejected'],
+          // custom filtering logic
+          logic: (location, filters, row) => {
+            if(filters[0] === 'Pending') return location !== 0;
+            else if(filters[0] === 'Accepted') return location !== 1;
+            else return location !== 2;
+          }
+        },
+        filterType: 'dropdown',
+        sortThirdClickReset: true,
+        // custom design inside the row
+        customBodyRender: renderPaypalStatus,
+        sortCompare: (order) => {
+          return (obj1, obj2) => {
+            const paypalOne = obj1.data;
+            const paypalTwo = obj2.data;
+            
+            // if paypalOne - paypalTwo < 0, it's less, otherwise, it's greater
+            return (paypalOne - paypalTwo) * (order === 'asc' ? 1 : -1);
+          }
+        }
+      }
+    },
+    // the row id column
     {
       name: "Id",
+      // all options are false so it will not show in the table
+      // this data is used for backend calls
       options: {
         display: false, 
         viewColumns: false, 

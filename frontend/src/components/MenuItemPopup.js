@@ -159,7 +159,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         const dietaryInfo = Object.entries(values.get("dietary-info"));
         var count = 0;
         // loop through all the dietaryInfo and account for ones that are true
-        for (const [key, value] of dietaryInfo) {
+        for (const [, value] of dietaryInfo) {
             if(value) count++;
         }
         return count;
@@ -190,10 +190,6 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         }
     }
 
-    function enlargeImage(){
-        alert(values.get("image"));
-    }
-
     return (
         <>
             {/** div that fades out the background */}
@@ -204,7 +200,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
 
                     {/** Left side with dish details */}
                     <div className="left-popup">
-                        <div className="popup-image" style={{backgroundImage: "url(" + values.get("image") + ")", backgroundSize:"cover"}} onClick={enlargeImage}>
+                        <div className="popup-image" style={{backgroundImage: "url(" + values.get("image") + ")", backgroundSize:"cover"}}>
                             <div className="popup-image-price"><h3>{"$" + parseFloat(currPrice).toFixed(2)}</h3></div>
                         </div>
                         <div className="popup-item-info">

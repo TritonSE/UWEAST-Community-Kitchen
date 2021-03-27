@@ -66,7 +66,7 @@ export default function PayPal(props) {
             shipping_preference: 'NO_SHIPPING',
         },
         purchase_units: [{
-            description: "Food order from UWEAST Kitchen",
+            description: "Biraka & Bilal Catering Order Confirmation",
             // Deals with pricing of the cart
             amount: {
                 currency_code: "USD",
@@ -136,6 +136,46 @@ export default function PayPal(props) {
     React.useEffect(() => {
         window.paypal
         .Buttons({
+
+            // onClick is called when the button is clicked, makes server call to validate order first
+            onClick: function(data, actions) {
+
+                let submission = {
+                    "Amount": cookies.cart.total,
+                    "Order": cookies.cart.items.map((item) => {
+                        return {
+                            "id": item[0],
+                            "item": item[1],
+                            "quantity": parseInt(item[3]),
+                            "size": item[4],
+                            "accommodations": 
+                                item[6] !== undefined
+                                    ? (Array.isArray(item[6]) 
+                                        ? item[6].join(",") 
+                                        : item[6]
+                                    )
+                                    : ""
+                        }
+                    })
+                };
+
+                // call server to validate cart order 
+                return fetch(`${BACKEND_URL}paypal/validate`, {
+                    method: 'post',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(submission)
+                }).then(function(res) {
+
+                    if(res.ok){
+                        return actions.resolve();
+                    } else {
+                        alert("Your order cannot be processed at the moment. Please contact us directly for placement.");
+                        return actions.reject();
+                    }
+                })
+            },
             createOrder: async(data, actions) => {
                 return actions.order.create(paypalOrderObject);
             },
@@ -145,6 +185,7 @@ export default function PayPal(props) {
                     // create order object
                     let sendDate = new Date(props.selectedDate.getFullYear(),(props.selectedDate.getMonth()), props.selectedDate.getDate(),
                         props.selectedTime.substring(0, 2), props.selectedTime.substring(3, 5));
+                    
                     const orderObj = {
                         "Customer": {
                             "Name": details.payer.name.given_name + " " + details.payer.name.surname,
@@ -173,6 +214,7 @@ export default function PayPal(props) {
                             }
                         })
                     }
+
                     // signal email automation by calling the /autoEmails/automate route, 
                     // this will automatically add the order to the database 
                     return fetch(`${BACKEND_URL}autoEmails/automate`, {
@@ -208,7 +250,6 @@ export default function PayPal(props) {
             },
             onError: (err) => {
                 alert("An unexpected error occurred - your payment did not go through. Please try again later.");
-
             },
         })
         .render(paypalRef.current);

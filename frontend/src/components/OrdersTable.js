@@ -7,7 +7,8 @@
  * Pickup Details, Name, email, Phone number, Price, Submission Date, Order Status,
  * Items, Quantity, Size, Accommodations, Special Instructions
  * 
- * @summary The Orders table implementation.
+ * @summary     The Orders table implementation.
+ * @author      Amitesh Sharma
  */
 
 import React, { useState } from 'react';
@@ -59,12 +60,13 @@ const renderRow = (rowData, rowMeta) => {
     return (
         <React.Fragment>
           <TableRow>
-            <TableCell style={{ padding: 0 }} colSpan={9}>
+            <TableCell style={{ padding: 0 }} colSpan={10}>
               <TableContainer>
                 <Table aria-label="simple table">
                 {/* The dropdown header */}
                   <TableHead>
                     <TableRow style={{border: 'none'}}>
+                      {/* The table headers individual names */}
                       <TableCell></TableCell>
                       <TableCell id="table-cell-items">Items</TableCell>
                       <TableCell id="table-cell-quanitity">Quantity</TableCell>
@@ -77,6 +79,7 @@ const renderRow = (rowData, rowMeta) => {
                   {/* The dropdown row data */}
                     {rows.map(row => (
                       <TableRow key={row.name}>
+                        {/* The table row information */}
                         <TableCell style={{width: 'calc(68px)'}}></TableCell>
                         <TableCell><p style={stylingCell}>{row.name}</p></TableCell>
                         <TableCell><p style={stylingCell}>{row.quantity}</p></TableCell>
@@ -95,8 +98,10 @@ const renderRow = (rowData, rowMeta) => {
 }
 
 export default function OrdersTable(props) {
+  // keep track of the selected rows
   const [selectedRows, setSelectedRows] = useState([]);
 
+  // renders the custom toolbar when a row is selected
   const deleteModal = (selectedRows, displayData, setSelectedRows) => {
     const index = selectedRows.data[0].index;
     const data = displayData[index].data;
@@ -106,24 +111,88 @@ export default function OrdersTable(props) {
 
   // option props to pass into the table
   const options = {
+    // allows for filtering
     filter: true,
+    // allows for rows to expand on click
     expandableRowsOnClick: true,
     expandableRows: true,
+    renderExpandableRow: renderRow,
+    // only select one row
     selectableRows: 'single',
+    // keeps track of the selected rows
     rowsSelected: selectedRows,
+    // updates the selected rows
     onRowSelectionChange: (rowsSelectedData, allRows, rowsSelected) => {
       setSelectedRows(rowsSelected);
     },
     rowsPerPageOptions: [10, 25, 50],
-    renderExpandableRow: renderRow,
     customToolbarSelect: deleteModal,
+    // allows searchbar to initially be open
     searchOpen: true,
-    responsive: 'vertical'
+    // on mobile screens, it renders the table vertically 
+    responsive: 'vertical',
+    print: false,
+    // downloading the orders table as a csv
+    downloadOptions: {filename: 'Baraka_Catering_Orders.csv', separator: ','},
+    onDownload: (buildHead, buildBody, columns, data) => {
+
+      columns.splice(-1,1);
+
+      data = data.map((row) => {
+
+        // order breakdown
+        let order = row.data[6];
+
+        let row_str = "";
+        for(var i =0; i < order.length; i++){
+          let item = order[i].item;
+          let size = order[i].size;
+          let qty = order[i].quantity;
+          let accommodations = order[i].accommodations;
+          let specialInstructions = order[i].specialInstructions;
+
+          let rep = `${qty} x ${item} (${size}) ${accommodations === '' ? '': `: ${accommodations}`} ${specialInstructions === '' ? '':`\nSI: ${specialInstructions}`}\n\n`;
+          row_str += rep;
+        }
+
+        // paypal status 
+        let status = "Pending";
+
+        if(row.data[9] === 1){
+          status = "Accepted";
+        } else if(row.data[9] === 2){
+          status = "Rejected";
+        }
+
+
+        const temp = [
+          row.data[0], // order id
+          row.data[1], // pickup
+          row.data[2], // name
+          row.data[3], // email
+          row.data[4], // number
+          row.data[5], // amount
+          row_str, // order breakdown 
+          row.data[7], // submission
+          row.data[8], // status
+          status // paypal status 
+        ];
+        return { data: temp };
+      });
+
+      return `${buildHead(columns)}${buildBody(data)}`.trim();
+    }
   };
 
   // styling for the row
   const getMuiTheme = () =>
   createMuiTheme({
+    palette: {
+      primary: {
+        main: '#000',
+        contrastText: '#fff',
+      },
+    },
     overrides: {
       MUIDataTable: {
         paper: {
@@ -141,6 +210,7 @@ export default function OrdersTable(props) {
         root: {
           borderLeft: '2px solid #CCCCCC',
           borderRight: '2px solid #CCCCCC',
+          borderBottom: '2px solid #CCCCCC'
         },
         hover: { '&$root': { '&:hover': { backgroundColor: '#F1f1f1' }, } }
       },
