@@ -59,7 +59,7 @@ async function sendEmail(template, to_email, locals, res) {
       // log emails successfully sent
       console.log(`Email ${template} has been sent to ${to_email}.`);
     } else {
-      console.log(`Error: Email ${template} could not be sent to ${to_email}.`);
+      console.error(`Error: Email ${template} could not be sent to ${to_email}.`);
       return res.status(500).send("Server err");
     }
   }

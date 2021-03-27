@@ -4,48 +4,16 @@
  * Also allows for an order's status to be updated.
  *
  * @summary   Routes to modify the orders DB specifically finding and updating.
- * @author    Thomas Garry
+ * @author    Thomas Garry, Amrit Kaur Singh
  */
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
-const router = express.Router();
 const { verify } = require("./services/jwt");
 const { findAllEmails, findPrimaryEmail } = require("../db/services/email");
 const { sendEmail } = require("../routes/services/mailer");
 const { deleteOrder, findOrders, updateStatus } = require("../db/services/order");
-
-// @body - Customer (with Name, Email, Phone), Pickup, Timestamps,
-// @body - PayPal(with Amount and transactionID),
-// @body - Order (array of objects with item string, quantity and extra array),
-// @return -  success:true if order is changed
-// router.post(
-//   "/insert",
-//   [
-//     body("Customer").notEmpty(),
-//     body("Pickup").notEmpty(),
-//     body("PayPal").notEmpty(),
-//     body("Timestamps").notEmpty(),
-//     body("Order").notEmpty(),
-//     isValidated,
-//   ],
-//   async (req, res, next) => {
-//     try {
-//       // try to add the order and respond with err msg or success
-//       const orderSuccessful = await addOrder(req.body);
-//       if (!orderSuccessful) {
-//         return res
-//           .status(400)
-//           .json({ errors: [{ msg: "Order unsuccessful" }] });
-//       } else {
-//         return res.status(200).json({ success: true });
-//       }
-//     } catch (err) {
-//       console.error(err.message);
-//       res.status(500).send("Server err");
-//     }
-//   }
-// );
+const router = express.Router();
 
 /**
  * Finds orders filtered on isCompleted and/or Customer.

@@ -1,3 +1,10 @@
+/**
+ * Central file and intial source point of backend. Establishes database connection, and redirects Express routes
+ * to appropriate sub-compartments for implementation. 
+ * 
+ * @summary   Initialization of backend. 
+ * @author    Amrit Kaur Singh, Thomas Garry
+ */
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");

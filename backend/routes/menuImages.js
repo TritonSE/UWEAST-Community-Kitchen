@@ -8,9 +8,9 @@
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
-const router = express.Router();
 const { changeMenuImage, findMenuImage } = require("../db/services/menuImages");
 const { verify } = require("./services/jwt");
+const router = express.Router();
 
 /**
  * Changes the menu image in the DB.

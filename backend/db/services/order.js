@@ -4,7 +4,7 @@
  * as find orders.
  *
  * @summary   Creation of interaction with order DB.
- * @author    Thomas Garry
+ * @author    Thomas Garry, Amrit Kaur Singh
  */
 const mongodb = require("mongodb");
 const { Order } = require("../models/order");

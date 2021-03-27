@@ -8,9 +8,11 @@ const mongoose = require("mongoose");
 // Prices set to 2 decimal places
 const itemSchema = new mongoose.Schema({
   Name: { type: String, required: true },
+  // assumes its a valid image url
   pictureURL: { type: String, required: true },
   Description: { type: String, required: true },
   Category: { type: String, required: true },
+  // only one price is required, though both may be filled out too
   Prices: {
     Individual: {
       type: String,
@@ -50,7 +52,6 @@ const itemSchema = new mongoose.Schema({
     ],
     default: [],
   },
-  // tags: { type: [String], required: true },
 });
 const Item = mongoose.model("Item", itemSchema);
 
