@@ -122,7 +122,7 @@ export default function DeleteOrder(props) {
                         <span>
                             <p className="note-paypal">Note: Deleting this order will not automatically refund it to the customer. 
                             If you need to refund this order, you can do a manual refund by clicking 
-                            {' '}<a href={`${PAYPAL_URL}${props.paypalId}`} target="_blank">here</a>.</p>
+                            {' '}<a href={`${PAYPAL_URL}${props.paypalId}`} target="_blank" rel="noreferrer">here</a>.</p>
                         </span>
                     </div>
                 </Modal.Body>

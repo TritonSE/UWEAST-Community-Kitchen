@@ -159,7 +159,7 @@ const MenuItemPopup = ({ values, togglePopup, processForm }) => {
         const dietaryInfo = Object.entries(values.get("dietary-info"));
         var count = 0;
         // loop through all the dietaryInfo and account for ones that are true
-        for (const [key, value] of dietaryInfo) {
+        for (const [, value] of dietaryInfo) {
             if(value) count++;
         }
         return count;

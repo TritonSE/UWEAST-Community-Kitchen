@@ -148,9 +148,12 @@ router.post(
     res.sendStatus(200);
     res.end();
 
-    let isProduction = false;
+    // determine URL based off of config file (production vs development)
+    let isProduction = config.app.env === 'development' ? false:true;
   
+    // development utilizes sandbox testing
     let strSimulator  = "https://ipnpb.sandbox.paypal.com/cgi-bin/webscr";
+    // production utilizes live url 
     let strLive = "https://ipnpb.paypal.com/cgi-bin/webscr";
     let paypalURL = strSimulator;
     
