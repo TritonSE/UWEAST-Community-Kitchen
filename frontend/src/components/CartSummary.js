@@ -148,10 +148,10 @@ const CartSummary = (props) => {
 
     //stores the cart object
     const [cart, setCart] = useState({
-        cart_total: props.total || cookies.cart.total,
-        item_total: props.subtotal || cookies.cart.subtotal,
-        tax_total: props.tax || cookies.cart.tax,
-        items: props.items || cookies.cart.items
+        total: props.total || (cookies.cart ? cookies.cart.total : "00.00"),
+        subtotal: props.subtotal || (cookies.cart ? cookies.cart.subtotal : "00.00"),
+        tax: props.tax || (cookies.cart ? cookies.cart.tax : "00.00"),
+        items: props.items || (cookies.cart ? cookies.cart.items : [])
     });
 
     // stores whether or not the item popup is currently visible
@@ -160,12 +160,22 @@ const CartSummary = (props) => {
     // map with all of the data that will be displayed in the item popup
     const [popupValues, setPopupValues] = useState(new Map());
 
+    //key to update paypal component when state changes
+    const [paypalKey, setPaypalKey] = useState(false);
+
     /**
      * updates item in cart to reflect changes made in item popup
      * 
      * @param {*} item - edited item object to add to cart
      */
     const onItemEdit = (item) => {
+
+        //check if cookies are disabled
+        if(!navigator.cookieEnabled) {
+            alert("Please enable your cookies and reload the page to use this website.");
+            return;
+        }
+
         //gets current cart object from cookies
         let cart = cookies.cart;
 
@@ -190,9 +200,9 @@ const CartSummary = (props) => {
         //updates cart cookie and state values to rerender page
         setCookie("cart", cart, { path: "/" });
         const newCart = {
-            cart_total: cart.total,
-            item_total: cart.subtotal,
-            tax_total: cart.tax,
+            total: cart.total,
+            subtotal: cart.subtotal,
+            tax: cart.tax,
             items: cart.items
         }
         setCart(newCart);
@@ -201,6 +211,8 @@ const CartSummary = (props) => {
         if (!isMobile) {
             props.updateItems();
         }
+        
+        setPaypalKey(!paypalKey);
     }
 
     const editItem = (item, ind) => {
@@ -327,6 +339,13 @@ const CartSummary = (props) => {
      * @param {*} ind - index of the item to be removed 
      */
     const handleRemove = (ind) => {
+
+        //check if cookies are disabled
+        if(!navigator.cookieEnabled) {
+            alert("Please enable your cookies and reload the page to use this website.");
+            return;
+        }
+
         //gets current cart object from cookies
         let cart = cookies.cart;
 
@@ -339,9 +358,9 @@ const CartSummary = (props) => {
         //updates cart cookie and state values to rerender page
         setCookie("cart", cart, { path: "/" });
         const newCart = {
-            cart_total: cart.total,
-            item_total: cart.subtotal,
-            tax_total: cart.tax,
+            total: cart.total,
+            subtotal: cart.subtotal,
+            tax: cart.tax,
             items: cart.items
         }
         setCart(newCart);
@@ -442,17 +461,17 @@ const CartSummary = (props) => {
                     </div>
                     <div className="order-totalprices">
                         <br />
-                        Subtotal: ${cart.item_total}<br />
-                        Tax: ${cart.tax_total}<br />
-                        Total Price: ${cart.cart_total}
+                        Subtotal: ${cart.subtotal}<br />
+                        Tax: ${cart.tax}<br />
+                        Total Price: ${cart.total}
                     </div>
                     {/* Renders an error message if cart total is less than the $20 minimum */}
                     <div className="order-minimum">
-                        {(parseFloat(cart.cart_total) < MIN_CART_TOTAL) ? <span>Order minimum is ${MIN_CART_TOTAL}. Please add ${(MIN_CART_TOTAL - parseFloat(cart.cart_total)).toFixed(2)} to your cart to proceed to checkout.</span> : null}
+                        {(parseFloat(cart.total) < MIN_CART_TOTAL) ? <span>Order minimum is ${MIN_CART_TOTAL}. Please add ${(MIN_CART_TOTAL - parseFloat(cart.total)).toFixed(2)} to your cart to proceed to checkout.</span> : null}
                     </div>
                     {/* Renders PayPal component if all required fields are completed and return to menu button otherwise */}
                     <div className="return-button">
-                        {(selectedTime && selectedDate && parseFloat(cart.cart_total) >= MIN_CART_TOTAL) ? <PayPal selectedDate={selectedDate} selectedTime={selectedTime} /> : <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
+                        {(selectedTime && selectedDate && parseFloat(cart.total) >= MIN_CART_TOTAL) ? <PayPal key={paypalKey} selectedDate={selectedDate} selectedTime={selectedTime} /> : <Button style={{ backgroundColor: "#f9ce1d", borderColor: "#f9ce1d", color: "#000000" }} className="return" onClick={(isMobile) ? () => history.push("/") : () => props.toggleCart()}>Return to Menu</Button>}
                     </div>
                 </div>
             </div>
