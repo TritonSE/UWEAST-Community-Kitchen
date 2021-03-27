@@ -38,9 +38,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ methods: ["GET", "POST", "PUT", "DELETE"] }));
 
 //Routers
-app.get("/", function (req, res) {
-  res.status(200).json({ message: "Abandon All Hope Ye Who Enter Here..." });
-});
 app.use("/user", require("./routes/user"));
 app.use("/autoEmails", require("./routes/autoEmails"));
 app.use("/email", require("./routes/email"));
@@ -49,6 +46,23 @@ app.use("/jwt", require("./routes/jwt"));
 app.use("/order", require("./routes/order"));
 app.use("/menuImages", require("./routes/menuImages"));
 app.use("/paypal", require("./routes/paypal"));
+
+// production 
+if(config.app.env === 'production'){
+  // link React frontend
+  app.use(express.static(path.join(__dirname, "client", "build")));
+
+  // any routes called that are not handled by server are forwarded to frontend
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+  
+// development
+} else {
+  app.get("/", function (req, res) {
+    res.status(200).json({ message: "Abandon All Hope Ye Who Enter Here..." });
+  });
+}
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
