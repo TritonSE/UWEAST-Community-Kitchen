@@ -66,6 +66,7 @@ const renderRow = (rowData, rowMeta) => {
                 {/* The dropdown header */}
                   <TableHead>
                     <TableRow style={{border: 'none'}}>
+                      {/* The table headers individual names */}
                       <TableCell></TableCell>
                       <TableCell id="table-cell-items">Items</TableCell>
                       <TableCell id="table-cell-quanitity">Quantity</TableCell>
@@ -78,6 +79,7 @@ const renderRow = (rowData, rowMeta) => {
                   {/* The dropdown row data */}
                     {rows.map(row => (
                       <TableRow key={row.name}>
+                        {/* The table row information */}
                         <TableCell style={{width: 'calc(68px)'}}></TableCell>
                         <TableCell><p style={stylingCell}>{row.name}</p></TableCell>
                         <TableCell><p style={stylingCell}>{row.quantity}</p></TableCell>
@@ -96,6 +98,7 @@ const renderRow = (rowData, rowMeta) => {
 }
 
 export default function OrdersTable(props) {
+  // keep track of the selected rows
   const [selectedRows, setSelectedRows] = useState([]);
 
   // renders the custom toolbar when a row is selected
@@ -108,21 +111,28 @@ export default function OrdersTable(props) {
 
   // option props to pass into the table
   const options = {
+    // allows for filtering
     filter: true,
+    // allows for rows to expand on click
     expandableRowsOnClick: true,
     expandableRows: true,
+    renderExpandableRow: renderRow,
+    // only select one row
     selectableRows: 'single',
+    // keeps track of the selected rows
     rowsSelected: selectedRows,
     // updates the selected rows
     onRowSelectionChange: (rowsSelectedData, allRows, rowsSelected) => {
       setSelectedRows(rowsSelected);
     },
     rowsPerPageOptions: [10, 25, 50],
-    renderExpandableRow: renderRow,
     customToolbarSelect: deleteModal,
+    // allows searchbar to initially be open
     searchOpen: true,
+    // on mobile screens, it renders the table vertically 
     responsive: 'vertical',
     print: false,
+    // downloading the orders table as a csv
     downloadOptions: {filename: 'Baraka_Catering_Orders.csv', separator: ','},
     onDownload: (buildHead, buildBody, columns, data) => {
 

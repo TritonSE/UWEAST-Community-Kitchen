@@ -23,9 +23,14 @@ const PAYPAL_URL = "https://www.paypal.com/activity/payment/"
 
 export default function DeleteOrder(props) {
     const [showModal, setShow] = useState(false);
+
+    // if true, sends receipt to admin users
     const [admin, setAdmin] = useState(true);
+
+    // if true, sends receipt to customer
     const [customer, setCustomer] = useState(false);
 
+    // sets the modal when component initially renders
     useEffect(() => {
         setShow(props.show);
     }, [props])
@@ -44,10 +49,10 @@ export default function DeleteOrder(props) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "token": getJWT(),
-                _id: props._id,
-                adminReceipt: admin,
-                customerReceipt: customer
+                "token": getJWT(), // string
+                _id: props._id, // string
+                adminReceipt: admin, // boolean
+                customerReceipt: customer // boolean
             })
         }).then(res => {
             // invalid admin token
@@ -59,7 +64,8 @@ export default function DeleteOrder(props) {
             }
 
             // order could not be deleted 
-            else if(res.status >= 400){
+            else if(res.status >= 400) {
+                // renders the error message
                 props.error(true, "Error! Could not Delete Order");
                 hideModal();
                 props.setSelectedRows([]);  
@@ -82,6 +88,7 @@ export default function DeleteOrder(props) {
     
     return (
         <div>
+            {/* The delete order modal that renders when the trash can icon is clicked */}
             <Modal 
                 show={showModal} 
                 onHide={(e) => hideModal()} 
@@ -96,18 +103,22 @@ export default function DeleteOrder(props) {
                     <div>
                         <p>Are you sure you want to permanently remove {"this order"} from your order history?</p>
 
+                        {/* The checkboxes for the deletion modal */}
                         <form className="delete-order-form">
+                            {/* Checkboxes for admin receipts */}
                             <div>
                                 <input type="checkbox" id="users-email" checked={admin} onChange={(e) => setAdmin(!admin)}/>
                                 <label for="users-email">Send cancellation email to admins.</label>
                             </div>
 
+                            {/* Checkboxes for customer receipts */}
                             <div>
                                 <input type="checkbox" id="customer-email" checked={customer} onChange={(e) => setCustomer(!customer)}/>
                                 <label for="customer-email">Send cancellation email to customer. </label>
                             </div>
                         </form>
-
+                        
+                        {/* Note for refunding paypal order */}
                         <span>
                             <p className="note-paypal">Note: Deleting this order will not automatically refund it to the customer. 
                             If you need to refund this order, you can do a manual refund by clicking 
@@ -116,6 +127,7 @@ export default function DeleteOrder(props) {
                     </div>
                 </Modal.Body>
                 
+                {/* The buttons at the bottom of the modal */}
                 <Modal.Footer>
                     <Button variant="primary" className="menuAddButton" onClick={() => orderDeletion()}>
                         Remove Order
