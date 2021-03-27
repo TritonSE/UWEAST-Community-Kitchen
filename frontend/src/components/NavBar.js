@@ -188,7 +188,7 @@
  
                  {/* The shopping cart will only render for smaller desktop screens/tablets */}
                  {
-                    <div className="cart-icon">
+                    <div className="cart-icon-smaller-desktop">
                         <IconButton onClick={goToMenuPageAndOpenCart}>
                             <CartBadge badgeContent={(props.itemCount) ? props.itemCount : (cookies.cart ? cookies.cart.items.length : 0)}>
                                 <FontAwesomeIcon icon={faShoppingCart} style={{ color: 'white' }}/>
