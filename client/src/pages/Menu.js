@@ -26,8 +26,6 @@ import {ORDER_SERVICE_TAX_RATE} from '../util/constants.js';
 
 import CookiesBanner from "../components/CookiesBanner";
 
-const config = require('../config');
-
 class Menu extends Component {
 
     //Cookies object used to access and modify cookies
@@ -222,12 +220,6 @@ class Menu extends Component {
 
         // clear loaded values so refreshes/redirects start anew
         this.props.history.replace('/', null);
-        console.log("Config: \n");
-        console.log("Maps API: " + config.google.MAPS_API_CODE);
-        console.log("Backend: " + config.backend.uri);
-        console.log("ENV:  \n");
-        console.log("Maps API: " + process.env.REACT_APP_MAPS_API_CODE);
-        console.log("Backend: " + process.env.REACT_APP_BACKEND_URI);
      }
 
     render() {
