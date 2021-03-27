@@ -12,6 +12,7 @@
  * displays an error message to let the user know.
  * 
  * @summary     Modal used to change the header image of the Menu page.
+ * @author      Alejandro Rodriguez Pascual 
  */
 
 import React, { useState } from 'react';
