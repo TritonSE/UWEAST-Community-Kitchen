@@ -22,7 +22,7 @@ mongoose.connect(config.db.uri);
 mongoose.connection.once("open", async () => {
   console.log("Established connection to MongoDB.");
   // console.log(config.db.uri);
-  // console.log("Port: " + config.app.port);
+  console.log("Server starting at Port: " + config.app.port);
 });
 
 const app = express();
