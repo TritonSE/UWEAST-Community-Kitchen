@@ -20,16 +20,6 @@
  
  export default function Admin() {
  
-     // constructor(props) {
-     //     super(props);
-     //     this.state = {
-     //         currentScreen: "orders"
-     //     }
- 
-     //     //Admin NavBar binding
-     //     this.adminNavBar = this.adminNavBar.bind(this);
-     // }
- 
      const [state, setState] = React.useState({
          isAuthenticatingUser: true,
          isUserAuthenticated: false,
@@ -113,12 +103,6 @@
                    {/* This is the contents on the admin page */}
                    <div class="admin-section">
                          {adminNavBar()}
-     
-                         {/* <div class="col-12">
-                             <h2 class="admin-title">Orders</h2>
-                             <p>View placed orders and mark them as fulfilled.</p>
-                             <a class="btn btn-primary" href="/orders" role="button">Orders</a>
-                         </div> */}
                          {state.currentScreen === "orders" && <Orders />}
                          {state.currentScreen === "menu" && <AdminMenuItems />}
                          {state.currentScreen === "email" && <Emails />}

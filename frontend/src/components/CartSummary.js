@@ -144,7 +144,7 @@ const CartSummary = (props) => {
     const [selectedTime, setSelectedTime] = useState(null);
 
     //stores whether the window size is mobile or not
-    const [isMobile, setIsMobile] = useState((window.innerWidth < 768) ? true : false);
+    const [isMobile] = useState((window.innerWidth < 768) ? true : false);
 
     //stores the error message for time picker
     const [error, setError] = useState("");

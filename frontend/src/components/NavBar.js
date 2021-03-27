@@ -5,7 +5,7 @@
   * @summary NavBar at the top of each page, used to navigate the website.
   */
 
- import React, {useEffect, useState} from 'react';
+ import React, {useEffect} from 'react';
  import { useHistory } from "react-router-dom";
  import { Navbar, Nav } from 'react-bootstrap';
  import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -38,33 +38,22 @@
 
     const MAX_MOBILE_RENDER = 768; // exclusive 
  
-     {/* history hook to redirect on logout */ }
+     // history hook to redirect on logout
      const history = useHistory();
-     const [cookies, setCookie] = useCookies(["cart"]);
+     const [cookies] = useCookies(["cart"]);
      const [resizeListener, sizes] = useResizeAware();
      const [state, setState] = React.useState({
          isUserAuthenticated: false
      });
  
-     {/* stores class names to toggle whether content is shown */ }
+     // stores class names to toggle whether content is shown
      var adminContentClass;
      var loginButtonClass;
  
-     {/* removes login token and redirects to menu page */ }
+     // removes login token and redirects to menu page
      function Logout() {
          history.push("/login");
          history.go(0);
-     }
- 
-     /**
-      * Renders the cart page for mobile navbar
-      */
-     function OpenCart() {
-         if(window.innerWidth < 768) {
-             history.push("/cart");
-         } else {
-             props.toggleCart();
-         }
      }
 
      /**
@@ -89,20 +78,19 @@
 
  
      /**
-      * Change the navbar height state so that banner moves down naturally
+      * Called once upon render - checks to see if user is authenticated, as it changes what navbar the user
+      * will be presented.
       */
-     
- 
      useEffect(() => {
          isAuthenticated().then(async result => {
              if (!result) {
                  logout();
              }
-             setState({ ...state, isUserAuthenticated: result });
+             setState(state => ({isUserAuthenticated: result }));
          })
      }, []);
  
-     {/* Hides admin content (admin page + logout) or login button depending on whether user is logged in */ }
+     // hides admin content (admin page + logout) or login button depending on whether user is logged in 
      if (state.isUserAuthenticated) {
          adminContentClass = "nav-link";
          loginButtonClass = "nav-link d-none";
@@ -111,7 +99,7 @@
          loginButtonClass = "nav-link";
      }
  
-     {/* Check current page from props to change active nav-link color */ }
+     // check current page from props to change active nav-link color
      function isPageActive(pageToCheck) {
          return (pageToCheck === window.location.pathname) ? " active" : "";
      }
