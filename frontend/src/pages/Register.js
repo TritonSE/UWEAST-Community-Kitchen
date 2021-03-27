@@ -139,6 +139,13 @@ export default function Register() {
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    //check if cookies are disabled
+    if(!navigator.cookieEnabled) {
+      setState({...state, snack: {message: 'Please enable your cookies and reload the page to access registeration functionality.', open: true}});
+      return;
+    }
+
     setState({ ...state, form_disabled: true });
 
     // display loading cursor 

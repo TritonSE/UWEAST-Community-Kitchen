@@ -35,12 +35,10 @@ app.get("/", function (req, res) {
   res.status(200).json({ message: "Abandon All Hope Ye Who Enter Here..." });
 });
 app.use("/user", require("./routes/user"));
-app.use("/cart", require("./routes/cart"));
 app.use("/autoEmails", require("./routes/autoEmails"));
 app.use("/email", require("./routes/email"));
 app.use("/item", require("./routes/item"));
 app.use("/jwt", require("./routes/jwt"));
-app.use("/cart", require("./routes/cart"));
 app.use("/order", require("./routes/order"));
 app.use("/menuImages", require("./routes/menuImages"));
 app.use("/paypal", require("./routes/paypal"));

@@ -118,6 +118,12 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    //check if cookies are disabled
+    if(!navigator.cookieEnabled) {
+      setState({...state, snack: {message: 'Please enable your cookies and reload the page to access login functionality.', open: true}});
+      return;
+    }
+
     // temporarily disable form to prevent spam clicks
     setState({ ...state, form_disabled: true });
 

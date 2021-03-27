@@ -36,87 +36,6 @@ async function setUpEmail(data, res){
 
 }
 
-function getAccomPrice(acc, arr){
-  for(var i = 0; i < arr.length; i++)
-  {
-    if(arr[i].Description == acc)
-    {
-      return arr[i].Price;
-    }
-  }
-
-  throw 500;
-}
-
-async function priceValidation(order, payment_amount, txn_id, res){
-  let menuItems = await getAllMenuItems();
-   let dict_menuItems = {};
-   for(var j = 0; j < menuItems.length; j++){ 
-     dict_menuItems[menuItems[j]["Name"]] = menuItems[j];
-    }
-
-   let expected_total = 0;
-   for(var i=0; i < order.Order.length; i++){
-     let item_name = order.Order[i]["item"];
-
-     try{
-      let quantity = order.Order[i]["quantity"];
-      let size = order.Order[i]["size"];
-      let accommodations = order.Order[i]["accommodations"].split(', ');
-      if(accommodations.length === 1 && accommodations[0] === ''){
-        accommodations = [];
-      }
-
-      let item_object = dict_menuItems[item_name];
-
-      let item_price = parseFloat(item_object["Prices"][size]);
-
-      for(var k = 0; k < accommodations.length; k++){
-
-        let accom_price = parseFloat(getAccomPrice(accommodations[k], item_object["Accommodations"]));
-        item_price += accom_price;
-      }
-
-      item_price *= quantity;
-
-      expected_total += item_price;
-     } catch(err){
-      //console.log("Rejected: Bad Price Verification");
-      await updatePayPalStatus(order._id, 2);
-      let locals = {
-        transactionID: txn_id,
-        verified: true,
-        reason: "CONTENTS",
-        expected_amount: expected_total,
-        actual_amount: payment_amount
-      }
-      setUpEmail(locals,res);
-      return true;
-     }
-
-   }
-
-   expected_total += (expected_total * ORDER_SERVICE_TAX_RATE)
-   expected_total = expected_total.toFixed(2);
-
-
-   if(expected_total != payment_amount){
-    // console.log("Rejected: Expected not equal to Total Paid");
-    await updatePayPalStatus(order._id, 2);
-    let locals = {
-      transactionID: txn_id,
-      verified: true,
-      reason: "PRICE",
-      expected_amount: expected_total,
-      actual_amount: payment_amount
-    }
-    setUpEmail(locals,res);
-    return true;
-   }
-
-   return false;
-}
-
 /**
  * Helper function that inspects a valid response from PayPal for a specific transaction. Checks transaction to make
  * sure payment is completed (money is guranteed to be received), and amount paid matches with database records. 
@@ -135,11 +54,6 @@ async function inspectValidIPNResponse(req, res){
    var payment_amount = req.body['mc_gross'];
 
    // only proceed if the checkout transaction has been fully completed, and transaction comes from the right merchant
-  //  if(txn_type != 'express_checkout'){
-  //    return;
-  //  }
-
-  console.log("Verified");
 
    if(payment_status != 'Completed'){
      return;
@@ -160,8 +74,6 @@ async function inspectValidIPNResponse(req, res){
     return;
   }
 
-  console.log(`${payment_amount} vs ${order.PayPal.Amount}`);
-
    // verify gross amount paid are same 
    if(payment_amount != order.PayPal.Amount){
     await updatePayPalStatus(order._id, 2);
@@ -176,17 +88,18 @@ async function inspectValidIPNResponse(req, res){
     return;
    }
 
-   // verify order total is correct based off of items bought 
-  //  if(await priceValidation(order, payment_amount, txn_id, res)){
-  //    return;
-  //  }
-
   // approve order
   await updatePayPalStatus(order._id, 1);
-  console.log("Approved");
-
+  //console.log("Approved");
 }
 
+/**
+ * Helper function that inspects an invalid response from PayPal for a specific transaction. It checks to see if 
+ * the transaction exists in the database, changing its status to rejected if it does. 
+ * 
+ * @param {*} req - A request containing all transaction information from PayPal for a specific order 
+ * @param {*} res - Response to send back 
+ */
 async function inspectInvalidIPNResponse(req, res){
      // try to find the corresponding order in the database
      let txn_id = req.body['txn_id']; 
@@ -202,7 +115,7 @@ async function inspectInvalidIPNResponse(req, res){
      }
      setUpEmail(locals,res);
      // IPN invalid, log for manual investigation
-     console.error('Invalid IPN!'.error);
+     //console.error('Invalid IPN!'.error);
 }
 
 /**
@@ -284,13 +197,25 @@ router.post(
         
         // unsuccessful validation 
         } else if (body.substring(0, 7) === 'INVALID') {
-            return;
             inspectInvalidIPNResponse(req, res)
         }
       }
     });
   }
 );
+
+// helper function that gets the price of the accomodation, if it exists
+function getAccomPrice(acc, arr){
+  for(var i = 0; i < arr.length; i++)
+  {
+    if(arr[i].Description == acc)
+    {
+      return arr[i].Price;
+    }
+  }
+
+  throw 500;
+}
 
 /**
  * Helper function that is responsible for validating a certain order, checking for valid items in order, and

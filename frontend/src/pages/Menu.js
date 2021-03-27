@@ -24,6 +24,8 @@ import "../css/Menu.css";
 import { Button } from 'react-bootstrap';
 import {ORDER_SERVICE_TAX_RATE} from '../util/constants.js';
 
+import CookiesBanner from "../components/CookiesBanner";
+
 class Menu extends Component {
 
     //Cookies object used to access and modify cookies
@@ -50,19 +52,19 @@ class Menu extends Component {
         //stores items currently in the cart using local storage
         this.state = {
             //stores items currently in the cart
-            cartItems: this.props.cookies.get("cart").items,
+            cartItems: this.props.cookies.get("cart") ? this.props.cookies.get("cart").items : [],
 
             //stores whether cart sumarry is currently visible or not
             cartPopupVisible: (this.props.location && this.props.location.cartVisible) ? this.props.location.cartVisible : false,
 
             //stores subtotal of items in the cart
-            subTotal: this.props.cookies.get("cart").subtotal,
+            subTotal: this.props.cookies.get("cart") ? this.props.cookies.get("cart").subtotal : "00.00",
 
             //stores total tax of items in the cart
-            tax: this.props.cookies.get("cart").tax,
+            tax: this.props.cookies.get("cart") ? this.props.cookies.get("cart").tax : "00.00",
 
             //stores total price of items in cart
-            totalPrice: this.props.cookies.get("cart").total,
+            totalPrice: this.props.cookies.get("cart") ? this.props.cookies.get("cart").total : "00.00",
 
             //key values to update child components when a state changes
             cartKey: false,
@@ -92,6 +94,13 @@ class Menu extends Component {
      * @param {*} item - item object to add to the cart
      */
     handleAdd = (item) => {
+
+        //check if cookies are disabled
+        if(!navigator.cookieEnabled) {
+            alert("Please enable your cookies and reload the page to use this website.");
+            return;
+        }
+
         //gets current cart object from cookies
         const { cookies } = this.props;
         let cart = cookies.get("cart");
@@ -147,6 +156,13 @@ class Menu extends Component {
      * @param {number} ind - index of the item to be removed 
      */
     handleRemove = (ind) => {
+
+        //check if cookies are disabled
+        if(!navigator.cookieEnabled) {
+            alert("Please enable your cookies and reload the page to use this website.");
+            return;
+        }
+
         //gets current cart object from cookies
         const { cookies } = this.props;
         let cart = cookies.get("cart");
@@ -244,6 +260,7 @@ class Menu extends Component {
                 {/** search section is the top, non-menu half of the page */}
                 <SearchSection />
                 <MenuSection onItemAdd={this.handleAdd} />
+                <CookiesBanner/>
             </div>
 
         )
