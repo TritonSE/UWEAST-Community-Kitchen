@@ -65,12 +65,6 @@ export default function DeleteOrder(props) {
 
             // order could not be deleted 
             else if(res.status >= 400) {
-                console.log(JSON.stringify({
-                    "token": getJWT(), // string
-                    _id: props._id, // string
-                    adminReceipt: admin, // boolean
-                    customerReceipt: customer // boolean
-                }));
                 // renders the error message
                 props.error(true, "Error! Could not Delete Order");
                 hideModal();
