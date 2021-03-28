@@ -149,9 +149,13 @@ router.delete(
             transactionID: removedOrder.PayPal.transactionID,
             primaryEmail: primaryEmail.email,
           };
-  
-          // send customer of removed order a cancellation receipt
-          sendEmail("customer-cancellation", removedOrder.Customer.Email, locals, res);
+
+          try{
+            // send customer of removed order a cancellation receipt
+            sendEmail("customer-cancellation", removedOrder.Customer.Email, locals, res);
+          } catch(err){
+            isCustomerError = true;
+          }
 
         }
       }
@@ -189,8 +193,12 @@ router.delete(
           transactionID: removedOrder.PayPal.transactionID
         };
 
-         // send UWEAST cancellation receipt for records
+        try{
+          // send UWEAST cancellation receipt for records
          sendEmail("uweast-cancellation", dbemails, locals, res);
+        } catch(err){
+          isUWEASTError = true;
+        }
       }
     }
 
