@@ -49,20 +49,26 @@ const mail =
 async function sendEmail(template, to_email, locals, res) {
     // sends email only if mail has been successfully setup
     if (mail != null) {
-      await mail.send({
-        template: template,
-        message: {
-          from: config.uweast.user,
-          to: to_email,
-        },
-        locals: locals,
-      });
+      try{
+        await mail.send({
+          template: template,
+          message: {
+            from: config.uweast.user,
+            to: to_email,
+          },
+          locals: locals,
+        });
+      } catch(err){
+        logger.error(`Error: Email ${template} could not be sent to ${to_email}. \n${err}`);
+        console.error(`Error: Email ${template} could not be sent to ${to_email}. \n${err}`);
+        throw 500;
+      }
       // log emails successfully sent
       logger.error(`Email ${template} has been sent to ${to_email}.`);
       console.log(`Email ${template} has been sent to ${to_email}.`);
     } else {
       logger.error(`Error: Email ${template} could not be sent to ${to_email}.`);
-      console.error(`Error: Email ${template} could not be sent to ${to_email}.`);
+      console.error(`Error: Email ${template} could not be sent to ${to_email}. Null mailer.`);
       throw 500;
       //return res.status(500).send("Server err");
     }
