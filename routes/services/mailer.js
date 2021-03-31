@@ -60,6 +60,7 @@ async function sendEmail(template, to_email, locals, res) {
         });
       } catch(err){
         logger.error(`Error: Email ${template} could not be sent to ${to_email}. \n${err}`);
+        console.error(`Auth: ${config.uweast}`);
         console.error(`Error: Email ${template} could not be sent to ${to_email}. \n${err}`);
         throw 500;
       }
