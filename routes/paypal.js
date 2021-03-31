@@ -69,6 +69,8 @@ async function inspectValidIPNResponse(req, res){
      return;
    }
 
+   console.log(`Status: ${payment_status} & TID: ${txn_id}`);
+
    if(receiver_email != config.paypal.PAYPAL_ClIENT_EMAIL){
     return;
   }
@@ -76,6 +78,7 @@ async function inspectValidIPNResponse(req, res){
    // try to find the corresponding order in the database
    let order = await findOrderByTid(txn_id);
    if(!order){
+      console.log(`No such TID in DB.`);
       return;
    }
 
