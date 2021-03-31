@@ -132,6 +132,7 @@ export default function PayPal(props) {
         }],
         shipping_type: 'PICKUP',
     }
+
     // To show PayPal buttons once the component loads
     React.useEffect(() => {
         window.paypal
@@ -180,7 +181,14 @@ export default function PayPal(props) {
                 return actions.order.create(paypalOrderObject);
             },
             onApprove: async (data, actions) => {
+                
+                // disable screen so automation can go through without user clicking out 
+                props.disableScreen();
+                // loading cursor to indicate to the user they need to wait 
+                document.body.style.cursor= 'wait';
+
                 return actions.order.capture().then(function(details) {
+
                     // details here includes payer name, phone number, and email
                     // create order object
                     let sendDate = new Date(props.selectedDate.getFullYear(),(props.selectedDate.getMonth()), props.selectedDate.getDate(),
@@ -224,12 +232,18 @@ export default function PayPal(props) {
                         },
                         body: JSON.stringify(orderObj),
                     }).then((res) => {
+                        // restore screen back to normal 
+                        document.body.style.cursor= null;
+                        props.enableScreen();
+
+                        // notify user 
                         if(res.ok){
                             alert('Thank you for your payment. Your transaction has been completed, and a receipt for your purchase has been emailed to you.');
                         } else {
                             alert('Transaction completed, but email automation failed. You paid for your meal, and should get a confirmation from PayPal. Please contact us to set up your order.');
                         }
-                        //clears the cart cookie after order is placed
+
+                        // clears the cart cookie after order is placed
                         let newCart = {
                             items: [],
                             subtotal: "00.00",
@@ -238,17 +252,23 @@ export default function PayPal(props) {
                         }
                         setCookie("cart", newCart, { path: "/" });
                         
+                        // refresh window 
                         history.push("/");
                         history.go(0);
                     })
                     .catch(() => {
+                        document.body.style.cursor= null;
                         alert("There was an internal error. Check your email for a recepit from PayPal, and contact us to set up your order.");
                     });
                 });
             },
             onCancel: () => {
+                document.body.style.cursor= null;
+                props.enableScreen();
             },
             onError: (err) => {
+                document.body.style.cursor= null;
+                props.enableScreen();
                 alert("An unexpected error occurred - your payment did not go through. Please try again later.");
             },
         })

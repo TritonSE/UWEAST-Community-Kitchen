@@ -30,6 +30,9 @@ export default function DeleteOrder(props) {
     // if true, sends receipt to customer
     const [customer, setCustomer] = useState(false);
 
+    // if true disables the both buttons 
+    const [buttonDisabled, setButtonDisabled] = useState(false);
+
     // sets the modal when component initially renders
     useEffect(() => {
         setShow(props.show);
@@ -43,6 +46,13 @@ export default function DeleteOrder(props) {
 
     // deletes the order from the database
     const orderDeletion = () => {
+
+        // disable button to prevent spam clicks
+        setButtonDisabled(true);
+
+        // loading cursor to indicate to user they have to wait
+        document.body.style.cursor= 'wait';
+
         fetch(`${BACKEND_URL}order/cancelOrder`, {
             method: 'DELETE',
             headers: {
@@ -57,6 +67,8 @@ export default function DeleteOrder(props) {
         }).then(res => {
             // invalid admin token
             if (res.status === 401){
+                document.body.style.cursor= null;
+                setButtonDisabled(false);
                 logout();
                 // refresh will cause a redirect to login page
                 window.location.reload();
@@ -65,6 +77,8 @@ export default function DeleteOrder(props) {
 
             // order could not be deleted 
             else if(res.status >= 400) {
+                document.body.style.cursor= null;
+                setButtonDisabled(false);
                 // renders the error message
                 props.error(true, "Error! Could not Delete Order");
                 hideModal();
@@ -76,6 +90,8 @@ export default function DeleteOrder(props) {
             return res.json();
         })
         .then(data => {
+            document.body.style.cursor= null;
+            setButtonDisabled(false);
             // reset to initial states
             hideModal();
             props.error(true, data.msg);
@@ -108,7 +124,7 @@ export default function DeleteOrder(props) {
                             {/* Checkboxes for admin receipts */}
                             <div>
                                 <input type="checkbox" id="users-email" checked={admin} onChange={(e) => setAdmin(!admin)}/>
-                                <label for="users-email">Send cancellation email to admins.</label>
+                                <label for="users-email">Send cancellation email to primary/secondary emails.</label>
                             </div>
 
                             {/* Checkboxes for customer receipts */}
@@ -129,10 +145,10 @@ export default function DeleteOrder(props) {
                 
                 {/* The buttons at the bottom of the modal */}
                 <Modal.Footer>
-                    <Button variant="primary" className="menuAddButton" onClick={() => orderDeletion()}>
+                    <Button variant="primary" className="menuAddButton" onClick={() => orderDeletion()} disabled={buttonDisabled}>
                         Remove Order
                     </Button>
-                    <Button variant="secondary" onClick={() => hideModal()} >
+                    <Button variant="secondary" onClick={() => hideModal()} disabled={buttonDisabled} >
                         Cancel
                     </Button>
                 </Modal.Footer>

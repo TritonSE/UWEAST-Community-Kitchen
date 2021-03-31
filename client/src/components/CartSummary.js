@@ -9,7 +9,7 @@
  * edit cart.
  * @author Dhanush Nanjunda Reddy
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
@@ -385,6 +385,24 @@ const CartSummary = (props) => {
     }
 
     /**
+     * Disables entire screen so user can't click or click out of anything. Used by PayPal Buttons. 
+     */
+    const disableScreen = useCallback(
+         () => {
+        document.getElementById("cover").hidden = false;
+        }
+      );
+
+    /**
+     * Enables entire screen so normal clicking functionality can be used. Used by PayPal Buttons. 
+     */
+    const enableScreen = useCallback(
+        () => {
+            document.getElementById("cover").hidden = true;
+        }
+    );
+
+    /**
      * Adds event listener to load cart popup or page when window is resized
      */
     useEffect(() => {
@@ -481,7 +499,7 @@ const CartSummary = (props) => {
                                     :
                                     null
                                 }
-                            <PayPal key={paypalKey} selectedDate={selectedDate} selectedTime={selectedTime} /> 
+                            <PayPal key={paypalKey} selectedDate={selectedDate} selectedTime={selectedTime} disableScreen={disableScreen} enableScreen={enableScreen}/> 
                         </div> 
                         
                         : 
@@ -505,6 +523,8 @@ const CartSummary = (props) => {
                     </div>
                 </div>
             </div>
+            {/* covers entire screen, disabling usage of all content if not hidden  */}
+            <div id="cover" className="" style={{backgroundColor: "grey", opacity: "0", bottom: "0", left: "0", right: "0", top:"0", position: "fixed", zIndex: "100"}} hidden> </div>
         </div>
     )
 }

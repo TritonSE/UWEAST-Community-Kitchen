@@ -25,13 +25,21 @@ const ContactForm = () => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
+
+    // disable submit button temporarily to avoid spam clicks
+    var form = document.getElementById("contact-form");
+    var elements = form.elements;
+    elements[elements.length - 1].disabled = true;
+
+    // display loading cursor 
+    document.body.style.cursor= 'wait';
   
     const formData = new FormData(e.target);
     let data = {};
     
     // make FormData into a js object to pass to route
     for(var [key, value] of formData.entries()) {
-      data[key] = DOMPurify.sanitize(value);;
+      data[key] = DOMPurify.sanitize(value);
     }
   
     try{
@@ -46,21 +54,28 @@ const ContactForm = () => {
       
       // successful response
       if (response.status === 200){
+        document.body.style.cursor= null;
         alert("Message sent!");
         // reload window to clear input boxes 
         window.location.reload();
         
         // malformed email
       } else if(response.status === 400) {
+        document.body.style.cursor= null;
+        elements[elements.length - 1].disabled = false;
         setState({...state, snack: {message: 'Invalid Email Address!', open: true}});
 
         // system error
       } else {
+        document.body.style.cursor= null;
+        elements[elements.length - 1].disabled = false;
         setState({...state, snack: {message: 'System Error: Cannot send email!', open: true}});
       }
       
       // general error
     } catch(error){
+      document.body.style.cursor= null;
+      elements[elements.length - 1].disabled = false;
       setState({...state, snack: {message: 'System Error: Cannot send email!', open: true}});
     }
   };
@@ -78,7 +93,7 @@ const ContactForm = () => {
       <div className="contact-form-text">
       <h1>CONTACT US</h1>
       <p>Please email us using the form below</p>
-      <form onSubmit={sendMessage}>
+      <form id="contact-form" onSubmit={sendMessage}>
         <input type="text" name="name" className="first-input contact-form-input" placeholder="Your Name" required/>
         <br />
         <input type="text" name="email" className="contact-form-input" placeholder="Your Email" required />
