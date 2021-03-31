@@ -75,18 +75,27 @@ async function inspectValidIPNResponse(req, res){
     return;
   }
 
-   // try to find the corresponding order in the database
-   let order = await findOrderByTid(txn_id);
-   if(!order){
-      console.log(`No such TID in DB.`);
-      return;
-   }
-
    // process refund 
    if(payment_status === 'Refunded'){
+     // get original transaction id 
+    var parent_txt_id = req.body['parent_txn_id'];
+
+    let order = await findOrderByTid(parent_txt_id);
+    if(!order){
+       console.log(`No such TID in DB.`);
+       return;
+    }
+
     await updatePayPalStatus(order._id, 3);
     return;
    }
+
+     // try to find the corresponding order in the database
+     let order = await findOrderByTid(txn_id);
+     if(!order){
+        console.log(`No such TID in DB.`);
+        return;
+     }
 
    // order already marked bad, return 
    if(order.PayPal.status === 2){
