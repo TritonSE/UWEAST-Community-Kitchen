@@ -65,7 +65,7 @@ router.post(
   "/updateStatus",
   [
     body("_id").isString(),
-    body("isCompleted").isBoolean(),
+    body("isCompleted").isInt(),
     body("token").custom(async (token) => {
       // verify token
       return await verify(token);

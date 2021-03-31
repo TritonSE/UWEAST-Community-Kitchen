@@ -250,6 +250,17 @@ td {
     cursor: pointer;
 }
 
+/* Styling for 'completed' orders dropdown */
+.orders-status .dropdown-menu-cancelled {
+    border: none;
+    background-color: rgb(239, 102, 73);
+    height: 38px;
+    width: 113px;
+    padding-left: 10px;
+    border-radius: calc(1vh);
+    cursor: pointer;
+}
+
 .paypal-order-status {
     background-color: var(--yellow);
     text-align: center;

@@ -65,6 +65,7 @@ const updateDateFilters = (filterList, filterPos, index) => {
 const DisplayStatusFilters = (filterList, onChange, index, column) => {
     
     const filterStatus = (event, picker) => {
+      // alert(JSON.stringify(filterList));
       filterList[index][0] = event.target.value;
       // update the filter 
       onChange(filterList[index], index, column);
@@ -83,6 +84,7 @@ const DisplayStatusFilters = (filterList, onChange, index, column) => {
           <MenuItem value={"All Orders"}>All Orders</MenuItem>
           <MenuItem value={"Pending Orders"}>Pending Orders</MenuItem>
           <MenuItem value={"Completed Orders"}>Completed Orders</MenuItem>
+          <MenuItem value={"Cancelled Orders"}>Cancelled Orders</MenuItem>
         </Select>
       </FormControl>
     )
@@ -135,12 +137,20 @@ const DisplayDateFilters = (filterList, onChange, index, column) => {
  * @param {Object} e 
  */
 const updateStatus = (value, tableMeta, updateValue, e) => {
-    const setValue = (value === "Completed Orders") ? "Pending Orders" : "Completed Orders";
+
+    const setValue = e.target.value;
     const getRowId = tableMeta.rowData[10];
+
+    let isCompleted = 0; 
+    if(e.target.value === "Completed Orders"){
+      isCompleted = 1; 
+    } else if(e.target.value === "Cancelled Orders"){
+      isCompleted = 2; 
+    }
     
     const requestBody = {
       _id: getRowId,
-      isCompleted: (value === "Completed Orders") ? false : true,
+      isCompleted: isCompleted,
       "token": getJWT()
     }
   
@@ -174,9 +184,15 @@ const updateStatus = (value, tableMeta, updateValue, e) => {
  * @param {object} tableMeta - Information about the row
  */
 const renderStatus = (value, tableMeta, updateValue) => {
+    let statusClass = "dropdown-menu-pending";
+    if(value === "Completed Orders"){
+      statusClass = "dropdown-menu-completed";
+    } else if(value === "Cancelled Orders"){
+      statusClass = "dropdown-menu-cancelled";
+    }
     return (
         <div className="orders-status">
-            <select className={(value === "Completed Orders") ? "dropdown-menu-completed" : "dropdown-menu-pending"} value={value} 
+            <select className={statusClass} value={value} 
             onChange={(e) => updateStatus(value, tableMeta, updateValue, e)}
                 onClick={(e) => {
                     // this prevents the current row from expanding
@@ -184,6 +200,7 @@ const renderStatus = (value, tableMeta, updateValue) => {
                 }}>
                 <option value={"Pending Orders"}>Pending</option>
                 <option value={"Completed Orders"}>Completed</option>
+                <option value={"Cancelled Orders"}>Cancelled</option>
             </select> 
         </div>  
     )

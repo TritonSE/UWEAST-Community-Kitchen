@@ -32,7 +32,7 @@ async function addOrder(raw_order) {
  * completed or not.
  *
  * @param {string} id - The id of the order to be modified
- * @param {boolean} update - True or false value to set to isCompleted
+ * @param {Number} update - Integer value to set isCompleted
  * @returns {object/boolean} - Updated order / false on error
  */
 async function updateStatus(id, update) {

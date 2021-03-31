@@ -30,7 +30,10 @@ const orderSchema = new mongoose.Schema(
         specialInstructions: { type: String, default: "" },
       },
     ],
-    isCompleted: { type: Boolean, default: false },
+    // 0 - pending (default)
+    // 1 - completed 
+    // 2 - cancelled
+    isCompleted: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

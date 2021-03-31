@@ -61,9 +61,15 @@ export default class Orders extends React.Component {
 
         let email = this.formatString(list.Customer.Email, 24);
         let name = this.formatString(list.Customer.Name, 14);
+        let isCompleted = "Pending Orders";
+        if(list.isCompleted === 1){
+            isCompleted = "Completed Orders";
+        } else if (list.isCompleted === 2){
+            isCompleted = "Cancelled Orders";
+        }
 
         return [list.PayPal.transactionID, dateOne, name, email, list.Customer.Phone, 
-            list.PayPal.Amount, list.Order, dateTwo, list.isCompleted ? "Completed Orders" : "Pending Orders", list.PayPal.status, list._id];
+            list.PayPal.Amount, list.Order, dateTwo, isCompleted, list.PayPal.status, list._id];
     }
 
     /**
