@@ -11,7 +11,6 @@
 const nodemailer = require("nodemailer");
 const config = require("../../config");
 const Email = require("email-templates");
-const logger = require('../../logger/winston');
 
 
 // transporter object for nodemailer
@@ -59,18 +58,15 @@ async function sendEmail(template, to_email, locals, res) {
           locals: locals,
         });
       } catch(err){
-        logger.error(`Error: Email ${template} could not be sent to ${to_email}. \n${err}`);
-        console.error(`Auth: ${JSON.stringify(config.uweast)}`);
         console.error(`Error: Email ${template} could not be sent to ${to_email}. \n${err}`);
-        throw 500;
+        return false;
       }
       // log emails successfully sent
-      logger.error(`Email ${template} has been sent to ${to_email}.`);
       console.log(`Email ${template} has been sent to ${to_email}.`);
+      return true;
     } else {
-      logger.error(`Error: Email ${template} could not be sent to ${to_email}.`);
       console.error(`Error: Email ${template} could not be sent to ${to_email}. Null mailer.`);
-      throw 500;
+      return false; 
       //return res.status(500).send("Server err");
     }
   }

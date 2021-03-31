@@ -37,7 +37,7 @@ async function changeMenuImage(raw_menu) {
  * @returns {object} - The first MenuImage in the DB
  */
 async function findMenuImage() {
-  return MenuImage.findOne({}).exec();
+  return await MenuImage.findOne({}).exec();
 }
 
 module.exports = {

@@ -42,7 +42,7 @@ async function setUpEmail(data, res){
   }
 
   // send UWEAST a notification that an order has been rejected
-  sendEmail("uweast-order-rejection", dbemail, locals, res);
+  await sendEmail("uweast-order-rejection", dbemail, locals, res);
 
 }
 

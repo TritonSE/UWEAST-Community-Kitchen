@@ -117,10 +117,15 @@ router.post(
       };
 
       // send UWEAST an order receipt
-      sendEmail("uweast-receipt", dbemail, locals, res);
+      await sendEmail("uweast-receipt", dbemail, locals, res);
 
       // send customer copy of order receipt
-      sendEmail("customer-receipt", req.body.Customer.Email, locals, res);
+      const custEmailSent = await sendEmail("customer-receipt", req.body.Customer.Email, locals, res);
+
+      // return error if email could not be sent to customer 
+      if(!custEmailSent){
+        throw 500;
+      }
 
       return res.status(200).json({ success: true });
     } catch (err) {
@@ -165,7 +170,12 @@ router.post(
       };
 
       // send UWEAST a notification that someone wants to contact them
-      sendEmail("contact-message", dbemails, locals, res);
+      const emailSent = await sendEmail("contact-message", dbemails, locals, res);
+
+      // return error if email could not be sent to customer 
+      if(!emailSent){
+        throw 500;
+      }
 
       return res.status(200).json({ success: true });
     } catch (err) {

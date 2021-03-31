@@ -150,12 +150,8 @@ router.delete(
             primaryEmail: primaryEmail.email,
           };
 
-          try{
-            // send customer of removed order a cancellation receipt
-            sendEmail("customer-cancellation", removedOrder.Customer.Email, locals, res);
-          } catch(err){
-            isCustomerError = true;
-          }
+           // send customer of removed order a cancellation receipt
+           isCustomerError = ! (await sendEmail("customer-cancellation", removedOrder.Customer.Email, locals, res));
 
         }
       }
@@ -193,12 +189,8 @@ router.delete(
           transactionID: removedOrder.PayPal.transactionID
         };
 
-        try{
-          // send UWEAST cancellation receipt for records
-         sendEmail("uweast-cancellation", dbemails, locals, res);
-        } catch(err){
-          isUWEASTError = true;
-        }
+         // send UWEAST cancellation receipt for records
+         isUWEASTError = !(await sendEmail("uweast-cancellation", dbemails, locals, res));
       }
     }
 

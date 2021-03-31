@@ -62,7 +62,7 @@ async function addSecondaryEmail(raw_email) {
  * @returns {object/nul} - Mongo Object for primary email / null
  */
 async function findPrimaryEmail() {
-  return Email.findOne({ isPrimary: true }).exec();
+  return await Email.findOne({ isPrimary: true }).exec();
 }
 
 /**
@@ -71,7 +71,7 @@ async function findPrimaryEmail() {
  * @returns {[object]} - Array of Mongo Objects for secondary emails / [] (empty)
  */
 async function findAllSecondaryEmails() {
-  return Email.find({ isPrimary: false }).exec();
+  return await Email.find({ isPrimary: false }).exec();
 }
 
 /**
@@ -100,7 +100,7 @@ async function deleteSecondaryEmail(incomingEmail) {
  * @returns {[object]} - Returns an array of all emails in collection, where emails are JSON objects.
  */
 async function findAllEmails() {
-  return Email.find({}).exec();
+  return await Email.find({}).exec();
 }
 
 module.exports = {

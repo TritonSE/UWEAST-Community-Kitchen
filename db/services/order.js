@@ -53,7 +53,7 @@ async function updateStatus(id, update) {
  */
 async function findOrders() {
   try {
-    return Order.find({}).exec();
+    return await Order.find({}).exec();
   } catch (err) {
     console.error(err);
     return false;
@@ -68,7 +68,7 @@ async function findOrders() {
 async function deleteOrder(id) {
 
   try {
-    return  Order.findOneAndDelete({_id: new mongodb.ObjectID(id)});
+    return await Order.findOneAndDelete({_id: new mongodb.ObjectID(id)});
   } catch (err) {
     console.error(err);
     return false;

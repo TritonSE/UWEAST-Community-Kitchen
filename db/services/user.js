@@ -31,7 +31,7 @@ async function addNewUser(raw_user) {
  * @returns {object/boolean} - Order object / null
  */
 async function findOneUser(incomingEmail) {
-  return User.findOne({ email: incomingEmail }).exec();
+  return await User.findOne({ email: incomingEmail }).exec();
 }
 
 /**
@@ -41,7 +41,7 @@ async function findOneUser(incomingEmail) {
  * @returns {object/boolean} - Updated object
  */
 async function updateOneUser(updated_user) {
-  return updated_user.save();
+  return await updated_user.save();
 }
 
 module.exports = {

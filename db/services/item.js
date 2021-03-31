@@ -17,7 +17,7 @@ const { Item } = require("../models/item");
  */
 async function getAllMenuItems() {
   try {
-    return Item.find({}).exec();
+    return await Item.find({}).exec();
   } catch (err) {
     return false;
   }
@@ -31,7 +31,7 @@ async function getAllMenuItems() {
  */
 async function addNewItem(info) {
   try {
-    return Item.create(info);
+    return await Item.create(info);
   } catch (err) {
     return false;
   }
@@ -93,7 +93,7 @@ async function setFeatured(id, featured) {
  */
 async function getItemById(id) {
   try {
-    return Item.findOne({_id: new mongodb.ObjectID(id)}).exec();
+    return await Item.findOne({_id: new mongodb.ObjectID(id)}).exec();
   } catch (err) {
     return false;
   }
