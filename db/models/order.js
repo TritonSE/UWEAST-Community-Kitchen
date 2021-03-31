@@ -19,6 +19,7 @@ const orderSchema = new mongoose.Schema(
       // 0 - Pending PayPal IPN verfication (Pending) <--- Too long on this stage indicates 3rd party interference
       // 1 - PayPal IPN verified order (Approved)
       // 2 - Bad Order that most likely got past site security (Rejected)
+      // 3 - Fully refunded order (Full Refund)
       status: {type: Number, default: 0}
     },
     Order: [

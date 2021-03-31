@@ -252,12 +252,13 @@ const columns = [
         filter: true,
         filterOptions: {
           // labels to replace '0', '1', and '2'
-          names: ['Pending', 'Accepted', 'Rejected'],
+          names: ['Pending', 'Accepted', 'Rejected', 'Refunded'],
           // custom filtering logic
           logic: (location, filters, row) => {
             if(filters[0] === 'Pending') return location !== 0;
             else if(filters[0] === 'Accepted') return location !== 1;
-            else return location !== 2;
+            else if(filters[0] === 'Rejected') return location !== 2;
+            else return location !== 3;
           }
         },
         filterType: 'dropdown',

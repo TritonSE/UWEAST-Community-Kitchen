@@ -162,6 +162,8 @@ export default function OrdersTable(props) {
           status = "Accepted";
         } else if(row.data[9] === 2){
           status = "Rejected";
+        } else if(row.data[9] === 3){
+          status = "Rejected";
         }
 
 

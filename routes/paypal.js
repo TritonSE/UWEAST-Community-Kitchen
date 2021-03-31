@@ -65,7 +65,7 @@ async function inspectValidIPNResponse(req, res){
 
    // only proceed if the checkout transaction has been fully completed, and transaction comes from the right merchant
 
-   if(payment_status != 'Completed'){
+   if(payment_status != 'Completed' && payment_status != 'Refunded'){
      return;
    }
 
@@ -77,6 +77,12 @@ async function inspectValidIPNResponse(req, res){
    let order = await findOrderByTid(txn_id);
    if(!order){
       return;
+   }
+
+   // process refund 
+   if(payment_status === 'Refunded'){
+    await updatePayPalStatus(order._id, 3);
+    return;
    }
 
    // order already marked bad, return 

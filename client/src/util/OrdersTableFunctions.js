@@ -213,9 +213,14 @@ const renderPaypalStatus = (value, tableMeta, updateValue) => {
   if(value === 2) {
     obj.backgroundColor = '#EF6649';
     paypalStatus = "Rejected";
-  } else if(value === 1) {
+  } 
+  else if(value === 1) {
     obj.backgroundColor = '#5AE44E';
     paypalStatus = "Accepted";
+  } 
+  else if(value === 3) {
+    obj.backgroundColor = '#87CEFA';
+    paypalStatus = "Refunded";
   } 
 
   return (
