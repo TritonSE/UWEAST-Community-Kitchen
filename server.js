@@ -9,9 +9,9 @@ const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const logger = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const logger = require('./logger/winston');
 const mongoose = require("mongoose");
 const config = require("./config");
 
@@ -20,6 +20,7 @@ mongoose.set("useUnifiedTopology", true);
 mongoose.set("useNewUrlParser", true);
 mongoose.connect(config.db.uri);
 mongoose.connection.once("open", async () => {
+  logger.error(`Established connection to MongoDB.`);
   console.log("Established connection to MongoDB.");
   // console.log(config.db.uri);
   console.log("Server starting at Port: " + config.app.port);
@@ -28,7 +29,6 @@ mongoose.connection.once("open", async () => {
 const app = express();
 
 //Middleware
-app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
