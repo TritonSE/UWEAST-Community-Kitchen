@@ -33,12 +33,21 @@ const convertToTimeInt = (data) => {
 
     // convert the hours to military 
     let hoursTwo = time[0].length === 1 ? "0"+time[0] : time[0];
-    hoursTwo = data.includes("P.M.") && hoursTwo !== '12' ? parseInt(hoursTwo) + 12 : ( data.includes("A.M.") && hoursTwo === 12 ? 0 : hoursTwo );
+    if(hoursTwo === '12') {
+      hoursTwo = '00'
+    }
+
+    if(data.includes('P.M.')) {
+      hoursTwo = parseInt(hoursTwo, 10) + 12;
+    } else if (data.includes('A.M.')) {
+      hoursTwo = parseInt(hoursTwo, 10)
+    }
+
     const minutesTwo = time[1]; 
   
     // return the formatted time
     const formatedTime = hoursTwo + ":" + minutesTwo;
-    const dateTwo = new Date(date[2] +  "-" + date[0] + "-" + date[1]  + "T" + formatedTime + ":00");
+    const dateTwo = new Date(date[2] +  "-" + date[0] + "-" + ( date[1].length === 1 ? "0"+date[1] : date[1] )  + "T" + formatedTime + ":00");
     return dateTwo.getTime();
 }
 

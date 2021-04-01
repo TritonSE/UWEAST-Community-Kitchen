@@ -83,6 +83,7 @@ export default class Orders extends React.Component {
      */
     formatString(str, length) {
         let tempEmail = str;
+        if(str.includes('\n')) return str; 
         if(parseInt(str.length / length) > 0) {
             let i = length;
             while(i < str.length) {
@@ -98,7 +99,7 @@ export default class Orders extends React.Component {
                 i++;
             }
         }
-
+        
         return tempEmail;
     }
 
