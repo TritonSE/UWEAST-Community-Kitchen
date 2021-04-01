@@ -1,7 +1,9 @@
 /**
  * This renders the modal that displays a form of editable
  * fields for the order, including customer contact information,
- * pickup, and any order notes for internal admin use. 
+ * pickup, and any order notes for internal admin use. However, aside for
+ * checking for empty fields, it does not do any sort of validation 
+ * on input, assuming fields are correct (especially email field). 
  * 
  * It also only renders when the pen icon is clicked
  * on the toolbar. 
@@ -12,7 +14,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { FormControl, OutlinedInput,  InputAdornment} from '@material-ui/core';
+import { FormControl, OutlinedInput} from '@material-ui/core';
+import {  Snackbar } from '@material-ui/core';
 import { getJWT, logout } from '../util/Auth';
 import '../css/Orders.css';
 
@@ -24,7 +27,7 @@ export default function EditOrder(props) {
 
     // formats the pickup date string so its readable by the form field
     function formatPickUpString(s){
-       // s = s.replace(/\n/g, '');
+      
         s = s.split('\n');
         var d = s[0].split('/');
         var t = s[1].split(':');
@@ -50,8 +53,16 @@ export default function EditOrder(props) {
         email: props.data[3],
         number: props.data[4],
         pickup: formatPickUpString(props.data[1]),
-        // amount: parseFloat(props.data[5]),
-        note: props.data[11]
+        note: props.data[11], 
+        snack: {
+            message: '',
+            open: false
+          },
+        errors: {
+            name: false,
+            email: false, 
+            number: false
+        }
     });
 
     const handleChange = (prop) => (event) => {
@@ -67,8 +78,16 @@ export default function EditOrder(props) {
             email: props.data[3],
             number: props.data[4],
             pickup: formatPickUpString(props.data[1]),
-            // amount: parseFloat(props.data[5]),
-            note: props.data[11]
+            note: props.data[11],
+            snack: {
+                message: '',
+                open: false
+              },
+            errors: {
+                name: false,
+                email: false, 
+                number: false
+            }
         });
     }, [props])
 
@@ -77,6 +96,14 @@ export default function EditOrder(props) {
         setShow(false);
         props.updateParentShow(false);
     }
+
+    // hides snackbar
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setState({...state, snack: {...state.snack, open: false}});
+      };
 
     // saves the order edits to the database
     const saveEditingChanges = () => {
@@ -87,6 +114,30 @@ export default function EditOrder(props) {
         // loading cursor to indicate to user they have to wait
         document.body.style.cursor= 'wait';
 
+        let nameErr = false; 
+        let emailErr = false; 
+        let phoneErr = false; 
+
+        // validate for non-empty inputs 
+        if(state.name.trim() === "" ){
+            nameErr = true; 
+        }
+        if(state.email.trim() === "" ){
+            emailErr = true; 
+        }
+        if(state.number.trim() === ""){
+            phoneErr = true; 
+        }
+
+        // return and display error if any fields are empty 
+        if(nameErr || emailErr || phoneErr){
+            document.body.style.cursor= null;
+            setButtonDisabled(false);
+            setState({...state, snack:{message: 'Field(s) cannot be empty', open: true}, errors:{name: nameErr, email: emailErr, number: phoneErr}});
+            return; 
+        }
+
+        // make backend call 
         fetch(`${BACKEND_URL}order/editOrder`, {
             method: 'POST',
             headers: {
@@ -96,16 +147,29 @@ export default function EditOrder(props) {
                 "token": getJWT(), // string
                 _id: props.data[10], // string
                 Customer: {
-                    Name: state.name,
-                    Email: state.email,
-                    Phone: state.number,
+                    Name: state.name.trim(),
+                    Email: state.email.trim(),
+                    Phone: state.number.trim(),
                 },
             Pickup: state.pickup,
-            Notes: state.note
+            Notes: state.note.trim()
         })
         }).then(res => {
+
+            // worked 
+            if(res.status === 200){
+                document.body.style.cursor= null;
+                setButtonDisabled(false);
+                 // reset to initial states
+                props.error(true, "Edits Successfuly Saved");
+                hideModal();
+                props.setSelectedRows([]);  
+                props.render();
+                return;
+
+            }
             // invalid admin token
-            if (res.status === 401){
+            else if (res.status === 401){
                 document.body.style.cursor= null;
                 setButtonDisabled(false);
                 logout();
@@ -125,18 +189,6 @@ export default function EditOrder(props) {
                 props.render();  
                 return;
             }
-
-            return res.json();
-        })
-        .then(data => {
-            document.body.style.cursor= null;
-            setButtonDisabled(false);
-            // reset to initial states
-            props.error(true, "Edits Successfuly Saved");
-            hideModal();
-            props.setSelectedRows([]);  
-            props.render();     
-             
         })
         .catch(err => console.log(err));
     }
@@ -163,6 +215,7 @@ export default function EditOrder(props) {
                             <p className="formLabelText">Name </p>
                             <FormControl  margin='dense'>
                                 <OutlinedInput id="name" 
+                                    error={state.errors.name}
                                     value={state.name}
                                     onChange={handleChange('name')}
                                     size="small"
@@ -172,6 +225,7 @@ export default function EditOrder(props) {
                              <p className="formLabelText">Email </p>
                             <FormControl  margin='dense'>
                                 <OutlinedInput id="email" 
+                                    error={state.errors.email}
                                     value={state.email}
                                     onChange={handleChange('email')}
                                     size="small"
@@ -182,6 +236,7 @@ export default function EditOrder(props) {
                             <p className="formLabelText">Phone Number </p>
                             <FormControl  margin='dense'>
                                 <OutlinedInput id="number" 
+                                    error={state.errors.number}
                                     value={state.number}
                                     onChange={handleChange('number')}
                                     size="small"
@@ -211,18 +266,24 @@ export default function EditOrder(props) {
                                 />
                             </FormControl>
                         </form>
+                        {/* note at bottom  */}
+                        <span>
+                            <p className="note-paypal"> <span style={{color: "red"}}> *</span> Verify the email and phone number are correct!</p>
+                        </span>
                     </div>
                 </Modal.Body>
                 
                 {/* The buttons at the bottom of the modal */}
                 <Modal.Footer>
                     <Button variant="primary" className="menuAddButton" onClick={() => saveEditingChanges()} disabled={buttonDisabled}>
-                        Save
+                        Save Changes
                     </Button>
                     <Button variant="secondary" onClick={() => hideModal()} disabled={buttonDisabled} >
                         Cancel
                     </Button>
                 </Modal.Footer>
+                {/* error messages displayed at bottom of screen */}
+             <Snackbar open={state.snack.open} autoHideDuration={6000} onClose={handleSnackClose} message={state.snack.message}/>
             </Modal>
         </div>
     );
