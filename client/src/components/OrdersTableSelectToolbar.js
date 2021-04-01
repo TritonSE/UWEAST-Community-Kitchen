@@ -13,21 +13,36 @@
 
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons'
 import DeleteOrder from './DeleteOrder';
+import EditOrder from './EditOrder';
+
 
 export default function OrdersTableSelectToolbar(props) {
     // show the toolbar
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState({
+        showDelete: false,
+        showEdit: false,
+    });
 
     return (
-        <div className="delete-order-icon">
-            {/* Delete icon */}
-            <FontAwesomeIcon icon={faTrash} onClick={() => setShow(true)} />
-            {/* The modal that renders when the trash icon is clicked */}
-            <DeleteOrder show={show} updateParentShow={setShow} _id={props.data[10]} render={props.render} 
-                setSelectedRows={props.setSelectedRows} error={props.error} paypalId={props.data[0]}
-            /> 
+        <div className="custom-toolbar-container">
+             <div className="delete-order-icon">
+                {/* Delete icon */}
+                <FontAwesomeIcon icon={faTrash} onClick={() => setShow({showEdit: false, showDelete: true})} />
+                {/* The modal that renders when the trash icon is clicked */}
+                <DeleteOrder show={show.showDelete} updateParentShow={setShow} _id={props.data[10]} render={props.render} 
+                    setSelectedRows={props.setSelectedRows} error={props.error} paypalId={props.data[0]}
+                /> 
+            </div>
+            <div className="delete-order-icon">
+                {/* Delete icon */}
+                <FontAwesomeIcon icon={faPen} onClick={() => setShow({showDelete: false, showEdit: true})} />
+                {/* The modal that renders when the trash icon is clicked */}
+                <EditOrder show={show.showEdit} updateParentShow={setShow} data={props.data} render={props.render} 
+                    setSelectedRows={props.setSelectedRows} error={props.error}
+                /> 
+            </div>
         </div>
     )
 }

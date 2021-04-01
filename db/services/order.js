@@ -52,12 +52,13 @@ async function updateStatus(id, update) {
  * @returns {[object]/boolean} - Found order(s) / false on error
  */
 async function findOrders() {
-  try {
-    return await Order.find({}).exec();
-  } catch (err) {
-    console.error(err);
-    return false;
-  }
+    return Order.find({}, null, {sort: {createdAt: -1}}, function (err, products){
+      if(err) {
+        console.error(err)
+        return false; 
+      }
+      return products; 
+    });
 }
 
 /**
@@ -108,6 +109,26 @@ async function updatePayPalStatus(id, status) {
   }
 }
 
+/**
+ * Edits any aspect of the order and updates to DB. 
+ *
+ * @param {string} id - The id of the object edited
+ * @param {object} info - Any subset of the aspects of the order object
+ * @returns {object/boolean} - The updated order object / false on err
+ */
+async function editOrder(id, info) {
+  try {
+    // edit the item
+    return await Order.updateOne(
+      { _id: new mongodb.ObjectID(id) },
+      { $set: info }
+    ).exec();
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
 
 module.exports = {
   addOrder,
@@ -115,5 +136,6 @@ module.exports = {
   updateStatus,
   deleteOrder,
   findOrderByTid,
-  updatePayPalStatus
+  updatePayPalStatus,
+  editOrder
 };

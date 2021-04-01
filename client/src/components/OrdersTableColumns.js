@@ -287,6 +287,16 @@ const columns = [
         filter: false,
       }  
     },
+    {
+      name: "notes",
+      // all options are false so it will not show in the table
+      // this data is represented on row extension as notes
+      options: {
+        display: false, 
+        viewColumns: false, 
+        filter: false,
+      }  
+    },
 ];
 
 export { columns } ;

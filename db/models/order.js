@@ -35,6 +35,8 @@ const orderSchema = new mongoose.Schema(
     // 1 - completed 
     // 2 - cancelled
     isCompleted: { type: Number, default: 0 },
+    // contains any notes on the order
+    Notes: {type: String, default: ""}
   },
   { timestamps: true }
 );

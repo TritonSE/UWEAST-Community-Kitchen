@@ -114,6 +114,7 @@ router.post(
         primaryEmail: primaryEmail.email,
         ordersPageLink: `${config.frontend.uri}admin`,
         dbemail: dbemail,
+        amount: req.body.PayPal.Amount, 
       };
 
       // send UWEAST an order receipt

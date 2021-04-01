@@ -17,7 +17,8 @@ ul
                         | n/a
                     else
                         = val.specialInstructions
-p #[strong Total Amount:] #{amount}
+p #[strong Total Amount:] $#{amount}
+p #[strong Order Notes:] #{notes}
 p #[strong Customer Information:]
 ul
     li= `Name: ${name}`

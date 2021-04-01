@@ -82,7 +82,6 @@ async function inspectValidIPNResponse(req, res){
 
     let order = await findOrderByTid(parent_txt_id);
     if(!order){
-       console.log(`No such TID in DB.`);
        return;
     }
 
@@ -90,10 +89,9 @@ async function inspectValidIPNResponse(req, res){
     return;
    }
 
-     // try to find the corresponding order in the database
+     // try to find the corresponding order in the database for newly inputted order
      let order = await findOrderByTid(txn_id);
      if(!order){
-        console.log(`No such TID in DB.`);
         return;
      }
 
@@ -132,9 +130,9 @@ async function inspectInvalidIPNResponse(req, res){
      let txn_id = req.body['txn_id']; 
      let order = await findOrderByTid(txn_id);
      if(!order || order.PayPal.status === 2){
-
          return;
      }
+     // order found, mark it as a bad order
      await updatePayPalStatus(order._id, 2);
      let locals = {
        transactionID: txn_id,
@@ -142,6 +140,7 @@ async function inspectInvalidIPNResponse(req, res){
      }
      setUpEmail(locals,res);
      // IPN invalid, log for manual investigation
+     console.error(`IPN Listener: Received INVALID for transaction id ${txn_id}`)
 }
 
 /**

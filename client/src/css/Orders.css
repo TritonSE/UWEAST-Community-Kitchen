@@ -108,12 +108,21 @@ td {
     width: 24.7%;
 }
 
+.custom-toolbar-container{
+    display: flex;
+    flex-direction: row;
+}
+
 /* Used for the custom toolbar when row is selected */
 .delete-order-icon {
     transform: scale(1.3);
     margin-right: calc(2vw);
     color: var(--black);
     cursor: pointer;
+}
+
+.delete-order-icon:hover{
+    color: var(--darkgrey);
 }
 
 .delete-order-form {

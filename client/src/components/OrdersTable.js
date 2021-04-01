@@ -44,7 +44,7 @@ function createData(name, accommodations, specialInstructions, size, quantity) {
  * @param {Object} rowMeta - Index of the data
  */
 const renderRow = (rowData, rowMeta) => {
-    const rows = []
+    const rows = [];
     const length = rowData[6].length;
     // format the row information
     for(let i = 0; i < length; i++) {
@@ -77,17 +77,31 @@ const renderRow = (rowData, rowMeta) => {
                   </TableHead>
                   <TableBody>
                   {/* The dropdown row data */}
-                    {rows.map(row => (
-                      <TableRow key={row.name}>
-                        {/* The table row information */}
-                        <TableCell style={{width: 'calc(68px)'}}></TableCell>
-                        <TableCell><p style={stylingCell}>{row.name}</p></TableCell>
-                        <TableCell><p style={stylingCell}>{row.quantity}</p></TableCell>
-                        <TableCell><p style={stylingCell}>{row.size}</p></TableCell>
-                        <TableCell><p style={stylingCell}>{row.accommodations.length === 0 ? 'N/A' : row.accommodations}</p></TableCell>
-                        <TableCell><p style={stylingCell}>{row.specialInstructions.length === 0 ? 'N/A' : row.specialInstructions}</p></TableCell>                        
-                      </TableRow>
+                    {rows.map((row) => (
+                      <>
+                           <TableRow key={row.name}>
+                            {/* The table row information */}
+                            <TableCell style={{width: 'calc(68px)'}}></TableCell>
+                            <TableCell><p style={stylingCell}>{row.name}</p></TableCell>
+                            <TableCell><p style={stylingCell}>{row.quantity}</p></TableCell>
+                            <TableCell><p style={stylingCell}>{row.size}</p></TableCell>
+                            <TableCell><p style={stylingCell}>{row.accommodations.length === 0 ? 'N/A' : row.accommodations}</p></TableCell>
+                            <TableCell><p style={stylingCell}>{row.specialInstructions.length === 0 ? 'N/A' : row.specialInstructions}</p></TableCell>                        
+                          </TableRow>
+                      </>
                     ))}
+                    {/* displays notes information, if there is any */}
+                    {
+                      rowData[11] != "" ? 
+                      <TableRow >
+                          <TableCell style={{width: 'calc(68px)'}}></TableCell>
+                          <TableCell style={{whiteSpace: "pre-wrap"}} colSpan="10"><p><b>Notes: {'\n\n'}</b> 
+                          {rowData[11]}
+                          </p></TableCell>
+                      </TableRow>
+                      :
+                      null
+                    }
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -136,11 +150,12 @@ export default function OrdersTable(props) {
     downloadOptions: {filename: 'Baraka_Catering_Orders.csv', separator: ','},
     onDownload: (buildHead, buildBody, columns, data) => {
 
-      columns.splice(-1,1);
+      // remove last two columns, as they will not be shown on table 
+      columns.splice(-2,2);
 
       data = data.map((row) => {
 
-        // order breakdown
+        // build order breakdown as a string
         let order = row.data[6];
 
         let row_str = "";
@@ -155,7 +170,12 @@ export default function OrdersTable(props) {
           row_str += rep;
         }
 
-        // paypal status 
+        // add in any notes if some exist
+        if(row.data[11] != ""){
+          row_str += `\n\nNotes: ${row.data[11]}`;
+        }
+
+        // paypal status, map numeric to value
         let status = "Pending";
 
         if(row.data[9] === 1){
@@ -163,7 +183,7 @@ export default function OrdersTable(props) {
         } else if(row.data[9] === 2){
           status = "Rejected";
         } else if(row.data[9] === 3){
-          status = "Rejected";
+          status = "Refunded";
         }
 
 

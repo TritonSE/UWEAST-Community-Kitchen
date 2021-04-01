@@ -12,7 +12,7 @@ const { isValidated } = require("../middleware/validation");
 const { verify } = require("./services/jwt");
 const { findAllEmails, findPrimaryEmail } = require("../db/services/email");
 const { sendEmail } = require("../routes/services/mailer");
-const { deleteOrder, findOrders, updateStatus } = require("../db/services/order");
+const { deleteOrder, findOrders, updateStatus, editOrder } = require("../db/services/order");
 const router = express.Router();
 
 /**
@@ -186,7 +186,8 @@ router.delete(
           }),
           order: removedOrder.Order,
           amount: removedOrder.PayPal.Amount,
-          transactionID: removedOrder.PayPal.transactionID
+          transactionID: removedOrder.PayPal.transactionID,
+          notes: removedOrder.Notes
         };
 
          // send UWEAST cancellation receipt for records
@@ -212,6 +213,42 @@ router.delete(
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server error");
+    }
+  }
+);
+
+/**
+ * Edits any of the item attributes, the only required attribute is _id.
+ *
+ * @body {string} _id - Id of object to be edited and
+ *                Prices, Accommodations, etc - any of the attributes
+ *                of the item object to be edited
+ * @body {string} token - Admin token to verify for authorization
+ * @returns {status/object} - 200 with success / 400 err
+ */
+router.post(
+  "/editOrder",
+  [
+    body("_id").notEmpty(),
+    body("Customer").notEmpty().optional(),
+    body("Pickup").notEmpty().optional(),
+    body("Notes").notEmpty().isString().optional(),
+    body("token").custom(async (token) => {
+      // verify token
+      return await verify(token);
+    }),
+    isValidated,
+  ],
+  async (req, res, next) => {
+    const edit = await editOrder(req.body._id, req.body);
+    // if there is an error or item is not found
+    if (edit === false || (edit && edit.n !== 1)) {
+      console.log("Bad edit");
+      res
+        .status(400)
+        .json({ errors: [{ msg: "edit unsuccessful/ not found" }] });
+    } else {
+      res.status(200).json({ success: true });
     }
   }
 );

@@ -69,7 +69,7 @@ export default class Orders extends React.Component {
         }
 
         return [list.PayPal.transactionID, dateOne, name, email, list.Customer.Phone, 
-            list.PayPal.Amount, list.Order, dateTwo, isCompleted, list.PayPal.status, list._id];
+            list.PayPal.Amount, list.Order, dateTwo, isCompleted, list.PayPal.status, list._id, list.Notes];
     }
 
     /**
