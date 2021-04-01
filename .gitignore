@@ -1,4 +1,6 @@
-node_modules
+#Dotenv
+.env
+node_modules/
 .eslintcache
 debug.log
-.env
+.DS_Store
