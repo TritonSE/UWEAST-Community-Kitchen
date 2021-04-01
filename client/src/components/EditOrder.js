@@ -118,7 +118,6 @@ export default function EditOrder(props) {
             else if(res.status >= 400) {
                 document.body.style.cursor= null;
                 setButtonDisabled(false);
-                alert(JSON.stringify(res.body));
                 // renders the error message
                 props.error(true, "Error! Could not Save Changes");
                 hideModal();

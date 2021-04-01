@@ -232,7 +232,7 @@ router.post(
     body("_id").notEmpty(),
     body("Customer").notEmpty().optional(),
     body("Pickup").notEmpty().optional(),
-    body("Notes").notEmpty().isString().optional(),
+    body("Notes").isString().optional(),
     body("token").custom(async (token) => {
       // verify token
       return await verify(token);
