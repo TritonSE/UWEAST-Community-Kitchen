@@ -19,8 +19,9 @@ const transporter =
     ? null
     : nodemailer.createTransport({
         host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
+        port: 587,
+        secure: false,
+        // account email + password
         auth: config.uweast,
       });
 
