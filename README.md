@@ -8,7 +8,8 @@ This repository contains all source code for this project, and is divided up int
 
 ### Production 
 During production, the Express backend hosts the React frontend, pushing all domain requests not taken care of by
-the Express routes to the frontend's index.html located at `\client\public\index.html`.
+the Express routes to the frontend's index.html located at `\client\public\index.html`. Website itself is hosted using
+Heroku on a custom subdomain. 
 
 ### Important Notes
 For future PRs related to informational changes on the site, particulary minimum payment amount, tax rate, etc., many
