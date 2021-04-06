@@ -169,7 +169,7 @@ router.post(
     let isProduction = config.app.env === 'development' ? false:true;
     //isProduction = false;
 
-    console.log("IPN Production: " + isProduction);
+    //console.log("IPN Production: " + isProduction);
   
     // development utilizes sandbox testing
     let strSimulator  = "https://ipnpb.sandbox.paypal.com/cgi-bin/webscr";
