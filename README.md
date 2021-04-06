@@ -6,8 +6,14 @@ This repository contains all source code for this project, and is divided up int
 
 *Fronted* compromises of all folders and files inside of `\client`. It utilizes React components to render visual designs. The React Router located within the App.js file provides the central source of navigation in the browser via available URL paths, rendering the corresponding screen by calling a corresponding React component. All major screens/pages that are rendered inside of App.js can be found inside of src/pages, with each of those pages usually having their own set of subcomponents being called from src/components. All React components have their corresponding (i.e., same name, different extension) css files located inside of src/css. 
 
+### Production 
 During production, the Express backend hosts the React frontend, pushing all domain requests not taken care of by
-the Express routes to the frontend's index.html located at `\client\public\index.html`. 
+the Express routes to the frontend's index.html located at `\client\public\index.html`.
+
+### Important Notes
+For future PRs related to informational changes on the site, particulary minimum payment amount, tax rate, etc., many
+of these contexutal global constants have been defined within the constants.js files of the frontend (`\client\src\util\constants.js`) and backend (`\util\constants.js`). Some constants have to be changed in *both* files, so
+be careful as to do that! However, once changed, all respective parts that reference those global constants will be readapted. 
 
 ## Dependencies 
 
