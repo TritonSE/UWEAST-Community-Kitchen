@@ -201,6 +201,7 @@ export default function ResetPassword() {
 
       // successful reset
       if (response.ok) {
+        document.body.style.cursor= null;
         alert("Password Successfully Reset!");
         history.push("/login");
         history.go(0);
