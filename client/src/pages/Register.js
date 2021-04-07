@@ -210,6 +210,7 @@ export default function Register() {
 
       // successful registration
       if (response.ok) {
+        document.body.style.cursor= null;
         const json = await response.json();
         setJWT(json.token);
         history.push("/admin");
