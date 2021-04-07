@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "format": "prettier --write .",
+    "lint-fix": "eslint --fix --cache --report-unused-disable-directives . ; prettier --write .",
+    "lint-check": "eslint --cache --report-unused-disable-directives . && prettier --check ."
   },
   "dependencies": {
     "@paypal/checkout-server-sdk": "^1.0.2",
@@ -25,5 +28,12 @@
     "pug": "^3.0.0",
     "request": "^2.88.2",
     "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "prettier": "^2.2.1"
   }
 }
