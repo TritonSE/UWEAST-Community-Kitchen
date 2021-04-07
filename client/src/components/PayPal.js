@@ -172,7 +172,7 @@ export default function PayPal(props) {
                     if(res.ok){
                         return actions.resolve();
                     } else {
-                        alert("Your order cannot be processed at the moment. Please contact us directly for placement.");
+                        alert("Your order cannot be processed at the moment. Please clear out your cart and retry, or contact us directly for placement.");
                         return actions.reject();
                     }
                 })

@@ -1,17 +1,20 @@
 # UWEAST-Community-Kitchen
 
-This repository contains all source code for this project, and is divided up into two main folders - *Backend* & *Frontend*.
+This repository contains all source code for this project, and is divided up into two main components - *Backend* & *Frontend*.
 
-*Backend* utilizes Express routes that are validated using middleware, and many of which utilize services in conjuction with Mongoose schmeas to make updates/removals/queries on MongoDB. All MongoDB related functionality is stored with the db 
-folder, sepreated into models (Mongoose schemas)  and services (changes to a specific table in the MongoDB using Mongoose).
-All routes are handled within the routes folder, with each specific set of routes seperated by functionality, and making usage
-of specific services within the db/services folder. 
+*Backend* compromises of all folders and files in the root directory, excluding `\client`. It utilizes Express routes that are validated using middleware, and many of which utilize services in conjuction with Mongoose schmeas to make updates/removals/queries on MongoDB. All MongoDB related functionality is stored with the db folder, sepreated into models (Mongoose schemas)  and services (changes to a specific table in the MongoDB using Mongoose). All routes are handled within the routes folder, with each specific set of routes seperated by functionality, and making usage of specific services within the db/services folder. 
 
-*Fronted* utilizes React components to render visual designs. The React Router located within the App.js file provides
-the central source of navigation in the browser via available URL paths, rendering the corresponding screen by calling
-a corresponding React component. All major screens/pages that are rendered inside of App.js can be found inside of 
-src/pages, with each of those pages usually having their own set of subcomponents being called from src/components. All 
-React components have their corresponding (i.e., same name, different extension) css files located inside of src/css. 
+*Frontend* compromises of all folders and files inside of `\client`. It utilizes React components to render visual designs. The React Router located within the App.js file provides the central source of navigation in the browser via available URL paths, rendering the corresponding screen by calling a corresponding React component. All major screens/pages that are rendered inside of App.js can be found inside of src/pages, with each of those pages usually having their own set of subcomponents being called from src/components. All React components have their corresponding (i.e., same name, different extension) css files located inside of src/css. 
+
+### Production 
+During production, the Express backend hosts the React frontend, pushing all domain requests not taken care of by
+the Express routes to the frontend's index.html located at `\client\public\index.html`. Website itself is hosted using
+Heroku on a custom subdomain. 
+
+### Important Notes
+For future PRs related to informational changes on the site, particulary minimum payment amount, tax rate, etc., many
+of these contexutal global constants have been defined within the constants.js files of the frontend (`\client\src\util\constants.js`) and backend (`\util\constants.js`). Some constants have to be changed in *both* files, so
+be careful as to do that! However, once changed, all respective parts that reference those global constants will be readapted. 
 
 ## Dependencies 
 
@@ -50,7 +53,7 @@ of the dotenv file, be aware that it takes precedence over the corresponding "lo
 
 ### Running Backend (Locally)
 
-While in the root level of the `backend` directory, you can run:
+While in the root level directory, you can run:
 
 ### `npm install`
 ### `npm start`
@@ -62,12 +65,12 @@ The page will not re-load upon edits.
 
 *Note*: Backend is a combination of MongoDB, Mongoose, and Express. Hence, it requires connection to a proper local MongoDB
       database (via localhost), or connection to a remote one on a hosting server like AtlasDB. Either one is fine, but
-      the URL link in `backend/config.js` for the `db.uri` value must be updated properly. If you'd like to set-up
+      the URL link in `\config.js` for the `db.uri` value must be updated properly. If you'd like to set-up
       a local MongoDB database for usage, please see the _MongoDB (LocalHost)_ section below. 
 
 ### Running Frontend (Locally)
 
-While in the root level of the `frontend` directory, you can run:
+While in the `\client` directory, you can run:
 
 ### `npm install`
 ### `npm start`

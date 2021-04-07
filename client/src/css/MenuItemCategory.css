@@ -1,6 +1,14 @@
 
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
 
+.no-items-available-text{
+  display: flex;
+  justify-content: center;
+  color: black;
+  font-family: 'Josefin Sans', cursive;
+  font-size: larger;
+}
+
 .menu-item-category
 {
   width: calc(100% - 10px);

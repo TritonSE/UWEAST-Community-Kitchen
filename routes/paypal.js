@@ -167,7 +167,9 @@ router.post(
 
     // determine URL based off of config file (production vs development)
     let isProduction = config.app.env === 'development' ? false:true;
-    isProduction = false;
+    //isProduction = false;
+
+    //console.log("IPN Production: " + isProduction);
   
     // development utilizes sandbox testing
     let strSimulator  = "https://ipnpb.sandbox.paypal.com/cgi-bin/webscr";
