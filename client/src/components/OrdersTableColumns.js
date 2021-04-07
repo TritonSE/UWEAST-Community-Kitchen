@@ -239,11 +239,11 @@ const columns = [
           // custom logic for getting orders that are 'completed' or 'pending'
           logic(order, filters) {
             if (filters[0] === "Completed Orders") {
-              return order != "Completed Orders";
+              return order !== "Completed Orders";
             } else if (filters[0] === "Pending Orders") {
-              return order != "Pending Orders";
+              return order !== "Pending Orders";
             } else if (filters[0] === "Cancelled Orders") {
-              return order != "Cancelled Orders";
+              return order !== "Cancelled Orders";
             }
   
             return false;

@@ -92,7 +92,7 @@ const renderRow = (rowData, rowMeta) => {
                     ))}
                     {/* displays notes information, if there is any */}
                     {
-                      rowData[11] != "" ? 
+                      rowData[11] !== "" ? 
                       <TableRow >
                           <TableCell style={{width: 'calc(68px)'}}></TableCell>
                           <TableCell style={{whiteSpace: "pre-wrap"}} colSpan="10"><p><b>Notes: {'\n\n'}</b> 
@@ -171,7 +171,7 @@ export default function OrdersTable(props) {
         }
 
         // add in any notes if some exist
-        if(row.data[11] != ""){
+        if(row.data[11] !== ""){
           row_str += `\n\nNotes: ${row.data[11]}`;
         }
 

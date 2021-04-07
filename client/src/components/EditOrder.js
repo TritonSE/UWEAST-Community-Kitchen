@@ -35,9 +35,9 @@ export default function EditOrder(props) {
         if(suffix[1] === "P.M."){
             t[0] = parseInt(t[0]) + 12;
         }
-        t[0] = t[0].length == 1 ? "0" + t[0]: t[0]; // hours
-        d[0] = d[0].length == 1 ? "0" + d[0]: d[0]; // month
-        d[1] = d[1].length == 1 ? "0" + d[1]: d[1]; // day 
+        t[0] = t[0].length === 1 ? "0" + t[0]: t[0]; // hours
+        d[0] = d[0].length === 1 ? "0" + d[0]: d[0]; // month
+        d[1] = d[1].length === 1 ? "0" + d[1]: d[1]; // day 
         d = `${d[2]}-${d[0]}-${d[1]}T${t[0]}:${suffix[0]}`;
 
         return d;
