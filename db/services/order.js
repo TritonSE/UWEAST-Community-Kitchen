@@ -52,13 +52,13 @@ async function updateStatus(id, update) {
  * @returns {[object]/boolean} - Found order(s) / false on error
  */
 async function findOrders() {
-    return Order.find({}, null, {sort: {createdAt: -1}}, function (err, products){
-      if(err) {
-        console.error(err)
-        return false; 
-      }
-      return products; 
-    });
+  return Order.find({}, null, { sort: { createdAt: -1 } }, (err, products) => {
+    if (err) {
+      console.error(err);
+      return false;
+    }
+    return products;
+  });
 }
 
 /**
@@ -67,9 +67,8 @@ async function findOrders() {
  * @returns {[object]/boolean} - Found order(s) / false on error
  */
 async function deleteOrder(id) {
-
   try {
-    return await Order.findOneAndDelete({_id: new mongodb.ObjectID(id)});
+    return await Order.findOneAndDelete({ _id: new mongodb.ObjectID(id) });
   } catch (err) {
     console.error(err);
     return false;
@@ -77,22 +76,21 @@ async function deleteOrder(id) {
 }
 
 /**
- * Retrieve a particular order using its PayPal transaction id. 
+ * Retrieve a particular order using its PayPal transaction id.
  *
  * @returns {[object]/boolean} - Found order / false on error
  */
 async function findOrderByTid(tid) {
-
   try {
-    return await Order.findOne({ 'PayPal.transactionID': tid }).exec();
+    return await Order.findOne({ "PayPal.transactionID": tid }).exec();
   } catch (err) {
     return false;
   }
 }
 
 /**
- * Edits an order's PayPal status to signify its verification after 
- * PayPal IPN gets through. 
+ * Edits an order's PayPal status to signify its verification after
+ * PayPal IPN gets through.
  *
  * @param {string} id - The id of the order to be modified
  * @param {Number} status - 0 indicates pending (default), 1 indicates approval, 2 indicates disapproval
@@ -102,7 +100,7 @@ async function updatePayPalStatus(id, status) {
   try {
     return await Order.updateOne(
       { _id: new mongodb.ObjectID(id) },
-      { $set: { 'PayPal.status': status } }
+      { $set: { "PayPal.status": status } }
     ).exec();
   } catch (err) {
     return false;
@@ -110,7 +108,7 @@ async function updatePayPalStatus(id, status) {
 }
 
 /**
- * Edits any aspect of the order and updates to DB. 
+ * Edits any aspect of the order and updates to DB.
  *
  * @param {string} id - The id of the object edited
  * @param {object} info - Any subset of the aspects of the order object
@@ -119,16 +117,12 @@ async function updatePayPalStatus(id, status) {
 async function editOrder(id, info) {
   try {
     // edit the item
-    return await Order.updateOne(
-      { _id: new mongodb.ObjectID(id) },
-      { $set: info }
-    ).exec();
+    return await Order.updateOne({ _id: new mongodb.ObjectID(id) }, { $set: info }).exec();
   } catch (err) {
     console.error(err);
     return false;
   }
 }
-
 
 module.exports = {
   addOrder,
@@ -137,5 +131,5 @@ module.exports = {
   deleteOrder,
   findOrderByTid,
   updatePayPalStatus,
-  editOrder
+  editOrder,
 };

@@ -1,14 +1,14 @@
-.Border{
-    border: 6px solid #f9ce1d;
-    padding: 2vw;
-    display: flex;
-    width: fit-content;
-    flex-direction: column;
+.Border {
+  border: 6px solid #f9ce1d;
+  padding: 2vw;
+  display: flex;
+  width: fit-content;
+  flex-direction: column;
 }
 
-.Main{
-    display: flex;
-    flex-direction: column;
-    margin-top: 5vw;
-    align-items: center;
+.Main {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5vw;
+  align-items: center;
 }

@@ -1,10 +1,9 @@
-.banner 
-{
+.banner {
   display: grid;
   justify-content: center;
   background-color: white;
   width: 100%;
-  color: black; 
+  color: black;
   min-height: 28px;
   font-weight: bold;
   z-index: 1;
@@ -14,32 +13,25 @@
   position: absolute;
 }
 
-.banner p
-{
+.banner p {
   padding: 0px;
   margin: 0px;
 }
 
-@media only screen and (min-width: 1199px) 
-{
-  .banner 
-  {
+@media only screen and (min-width: 1199px) {
+  .banner {
     position: fixed;
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1199px) 
-{
-  .banner 
-  {
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+  .banner {
     position: fixed;
   }
 }
 
-@media only screen and (max-width: 768px) 
-{
-  .banner 
-  {
+@media only screen and (max-width: 768px) {
+  .banner {
     position: fixed;
   }
 }

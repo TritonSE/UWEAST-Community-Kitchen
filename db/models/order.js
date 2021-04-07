@@ -20,7 +20,7 @@ const orderSchema = new mongoose.Schema(
       // 1 - PayPal IPN verified order (Approved)
       // 2 - Bad Order that most likely got past site security (Rejected)
       // 3 - Fully refunded order (Full Refund)
-      status: {type: Number, default: 0}
+      status: { type: Number, default: 0 },
     },
     Order: [
       {
@@ -32,11 +32,11 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     // 0 - pending (default)
-    // 1 - completed 
+    // 1 - completed
     // 2 - cancelled
     isCompleted: { type: Number, default: 0 },
     // contains any notes on the order
-    Notes: {type: String, default: ""}
+    Notes: { type: String, default: "" },
   },
   { timestamps: true }
 );

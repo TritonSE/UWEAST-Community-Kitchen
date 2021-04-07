@@ -1,107 +1,135 @@
 /**
- * Individual buttons that handle toggle the display of sections onclick. 
+ * Individual buttons that handle toggle the display of sections onclick.
  * Toggling is based on props so that they dynamically change.
- * 
+ *
  * @summary   Individual buttons that toggle the display of sections.
  * @author    Navid Boloorian
  */
 
-import React, { useState, useEffect} from 'react';
-import '../css/MenuItemCategory.css';
-import MenuItem from './MenuItem';
-import MenuItemPopup from './MenuItemPopup';
+import React, { useState, useEffect } from "react";
+import "../css/MenuItemCategory.css";
+import MenuItem from "./MenuItem";
+import MenuItemPopup from "./MenuItemPopup";
 
-const config = require('../config');
+const config = require("../config");
+
 const BACKEND_URL = config.backend.uri;
 
-const MenuItemCategory = ({ categoryName, processForm, popupVisible, popupValues, togglePopup }) => {
+const MenuItemCategory = ({
+  categoryName,
+  processForm,
+  popupVisible,
+  popupValues,
+  togglePopup,
+}) => {
   // array that stores menu items for the current category
   const [menuItems, setMenuItems] = useState([]);
   const menuItemValues = [];
 
-  // utilized to indicate user that loading is happening for this category 
+  // utilized to indicate user that loading is happening for this category
   const [loading, setLoading] = useState(false);
 
   /**
    * useEffect() is called to get information from database
    */
   useEffect(() => {
-    // indicate loading to user while call is being made 
+    // indicate loading to user while call is being made
     setLoading(true);
 
-    fetch(`${BACKEND_URL}item/`)
-    .then(async result => {
+    fetch(`${BACKEND_URL}item/`).then(async (result) => {
       if (result.ok) {
         const json = await result.json();
 
-        for(var i = 0; i < json.items.length; i++) {
+        for (let i = 0; i < json.items.length; i++) {
           // since "featured" isn't a category, we need to handle it differently
-          let isCategoryEqual = json.items[i].Category === categoryName;
-          let isFeatured = (categoryName === "Featured") && (json.items[i].isFeatured);
+          const isCategoryEqual = json.items[i].Category === categoryName;
+          const isFeatured = categoryName === "Featured" && json.items[i].isFeatured;
 
           // is stored only if the category name is the same as json's category
-          if((json.items !== undefined) && (isCategoryEqual || isFeatured)) {
+          if (json.items !== undefined && (isCategoryEqual || isFeatured)) {
             menuItemValues.push(json.items[i]);
           }
         }
         // update states, and take away loading state
         setMenuItems(menuItemValues);
         setLoading(false);
-      }
-      else {
+      } else {
         console.log(`Could not load items for category ${categoryName}`);
       }
-    })
+    });
 
-  /**
-   * sets dependency on categoryName, meaning that whenever categoryName 
-   * changes, useEffect is called again. This is necessary so that when filters * are clicked data is actually reloaded
-   */
+    /**
+     * sets dependency on categoryName, meaning that whenever categoryName
+     * changes, useEffect is called again. This is necessary so that when filters * are clicked data is actually reloaded
+     */
   }, [categoryName]);
 
   // display to user while database call is being made (loading)
-  if(loading){
-    return(
-      <>
-      <div className="menu-item-category">
-        <h2> {categoryName} </h2>
-        <div className="no-items-available-text"> <p> Loading... </p>  </div>
-      </div>
-    </>
-    )
-  }
-  // database call finished, show results to user 
-  else{
+  if (loading) {
     return (
       <>
-        {/** popup is created here, if it is visible it is rendered */}
-        {popupVisible ? <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} /> : null}
         <div className="menu-item-category">
           <h2> {categoryName} </h2>
-          {menuItems.length === 0 ?
-              <div className="no-items-available-text"> <p> No items currently available. </p>  </div>
-              :
-              <div className="menu-item-category-grid">
-              {/** generate menu items based off of array */}
-              {menuItems.map((menuItem, key) => {
-                let title = menuItem.Name;
-                let image = menuItem.pictureURL;
-                let description = menuItem.Description;
-                // since some items will only have a family pricing option, we use individual as the default; if individual doesnt exist, use family instead
-                let price = ("Individual" in menuItem.Prices) ? menuItem.Prices.Individual : menuItem.Prices.Family
-                let accommodations = menuItem.Accommodations;
-                let priceOptions = menuItem.Prices;
-                let dietaryInfo = menuItem.dietaryInfo;
-                let id = menuItem._id;
-  
-                return <MenuItem title={title} image={image} price={price} description={description} togglePopup={togglePopup} key={key} dietaryInfo={dietaryInfo} priceOptions={priceOptions} accommodations={accommodations} id={id}/>
-              })}
-            </div>
-            }
+          <div className="no-items-available-text">
+            {" "}
+            <p> Loading... </p>{" "}
+          </div>
         </div>
       </>
-  )
+    );
   }
-}
+  // database call finished, show results to user
+
+  return (
+    <>
+      {/** popup is created here, if it is visible it is rendered */}
+      {popupVisible ? (
+        <MenuItemPopup values={popupValues} togglePopup={togglePopup} processForm={processForm} />
+      ) : null}
+      <div className="menu-item-category">
+        <h2> {categoryName} </h2>
+        {menuItems.length === 0 ? (
+          <div className="no-items-available-text">
+            {" "}
+            <p> No items currently available. </p>{" "}
+          </div>
+        ) : (
+          <div className="menu-item-category-grid">
+            {/** generate menu items based off of array */}
+            {menuItems.map((menuItem, key) => {
+              const title = menuItem.Name;
+              const image = menuItem.pictureURL;
+              const description = menuItem.Description;
+              // since some items will only have a family pricing option, we use individual as the default; if individual doesnt exist, use family instead
+              const price =
+                "Individual" in menuItem.Prices
+                  ? menuItem.Prices.Individual
+                  : menuItem.Prices.Family;
+              const accommodations = menuItem.Accommodations;
+              const priceOptions = menuItem.Prices;
+              const { dietaryInfo } = menuItem;
+              const id = menuItem._id;
+
+              return (
+                <MenuItem
+                  title={title}
+                  image={image}
+                  price={price}
+                  description={description}
+                  togglePopup={togglePopup}
+                  key={key}
+                  dietaryInfo={dietaryInfo}
+                  priceOptions={priceOptions}
+                  accommodations={accommodations}
+                  id={id}
+                />
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
 
 export default MenuItemCategory;

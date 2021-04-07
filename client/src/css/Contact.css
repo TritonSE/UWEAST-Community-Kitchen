@@ -1,16 +1,13 @@
-.contact-wrapper 
-{
+.contact-wrapper {
   width: 100vw;
   display: grid;
 }
 
-.contact-form::-webkit-scrollbar
-{
+.contact-form::-webkit-scrollbar {
   width: 0px;
 }
 
-.contact-form
-{
+.contact-form {
   display: grid;
   box-shadow: 2px 2px #e4e4e4;
   border: 5px solid #f9ce1d;
@@ -18,32 +15,27 @@
   margin-top: 20px;
 }
 
-.contact-form-text h1
-{
+.contact-form-text h1 {
   font-weight: bolder;
 }
 
-.contact-form-text p 
-{
+.contact-form-text p {
   color: #8d8d8d;
 }
 
-.first-input 
-{
+.first-input {
   margin-top: 30px;
 }
 
-.contact-form-input 
-{
+.contact-form-input {
   display: inline;
   border: 0px;
   border-bottom: 3px #8d8d8d solid;
   margin-bottom: 40px;
   width: calc(100% - 100px);
-} 
+}
 
-.contact-form-submit 
-{
+.contact-form-submit {
   display: inline;
   justify-self: center;
   border: 0px;
@@ -55,8 +47,7 @@
   border-radius: 3px;
 }
 
-.contact-form-section
-{
+.contact-form-section {
   display: grid;
   align-items: center;
   justify-content: center;
@@ -64,8 +55,7 @@
   height: 100%;
 }
 
-.contact-form 
-{
+.contact-form {
   display: grid;
   justify-content: center;
   align-items: center;
@@ -73,61 +63,50 @@
   overflow: auto;
 }
 
-.info-label 
-{
+.info-label {
   margin: 0px;
 }
 
-.info-value 
-{
+.info-value {
   font-weight: bold;
 }
 
-@media only screen and (min-height: 1300px) and (max-height: 1400px)
-{
-  .contact-form 
-  {
+@media only screen and (min-height: 1300px) and (max-height: 1400px) {
+  .contact-form {
     height: calc(100% - 160px);
   }
 }
 
-@media only screen and (max-width: 768px) 
-{
-  body 
-  {
+@media only screen and (max-width: 768px) {
+  body {
     overflow-x: hidden;
   }
 
-  .contact-wrapper
-  {
+  .contact-wrapper {
     grid-template-areas:
-     "top"
-     "bottom";
+      "top"
+      "bottom";
     grid-template-rows: auto 50vh;
     overflow-x: hidden;
   }
 
-  .contact-form-text h1
-  {
+  .contact-form-text h1 {
     font-size: 6vw;
     margin-top: 20px;
   }
 
-  .contact-form-text p 
-  {
+  .contact-form-text p {
     font-size: 4vw;
   }
 
-  .contact-map-section
-  {
+  .contact-map-section {
     grid-area: bottom;
     height: 100%;
     width: 100vw;
     min-height: 50vh;
   }
 
-  .contact-form-section 
-  {
+  .contact-form-section {
     display: grid;
     grid-area: top;
     width: 100%;
@@ -138,63 +117,53 @@
     min-height: 50vh;
   }
 
-  .contact-form 
-  {
+  .contact-form {
     justify-self: center;
     overflow: auto;
     width: calc(100% - 40px);
   }
 
-  .contact-form form 
-  {
+  .contact-form form {
     width: calc(100vw - 20px);
   }
 
-  .info-wrapper
-  {
+  .info-wrapper {
     padding-left: 30px;
     padding-right: 30px;
   }
 }
 
-@media only screen and (max-width: 768px)
-{
-  body 
-  {
+@media only screen and (max-width: 768px) {
+  body {
     overflow-x: hidden;
   }
 
-  .contact-wrapper
-  {
+  .contact-wrapper {
     grid-template-areas:
-     "top"
-     "bottom";
+      "top"
+      "bottom";
     grid-template-rows: auto 50vh;
     overflow-x: hidden;
   }
 
-  .contact-form-text h1
-  {
+  .contact-form-text h1 {
     margin-top: 20px;
     font-size: 6vw;
   }
 
-  .contact-form-text p
-  {
+  .contact-form-text p {
     font-size: 4vw;
     margin-bottom: -20px;
   }
 
-  .contact-map-section
-  {
+  .contact-map-section {
     grid-area: bottom;
     height: 100%;
     width: 100vw;
     min-height: 50vh;
   }
 
-  .contact-form-section 
-  {
+  .contact-form-section {
     display: grid;
     grid-area: top;
     width: 100%;
@@ -205,61 +174,51 @@
     min-height: 50vh;
   }
 
-  .contact-form 
-  {
+  .contact-form {
     justify-self: center;
     overflow: auto;
     width: calc(100% - 40px);
   }
 
-  .contact-form form 
-  {
+  .contact-form form {
     width: calc(100vw - 20px);
   }
 
-  .info-wrapper
-  {
+  .info-wrapper {
     padding-left: 30px;
     padding-right: 30px;
   }
 }
 
-@media only screen and (min-width: 769px) and (max-width: 1024px) 
-{
-  body 
-  {
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  body {
     overflow-x: hidden;
   }
 
-  .contact-wrapper
-  {
+  .contact-wrapper {
     grid-template-areas:
-     "top"
-     "bottom";
+      "top"
+      "bottom";
     grid-template-rows: auto 50vh;
     overflow-x: hidden;
   }
 
-  .contact-form-text h1
-  {
+  .contact-form-text h1 {
     margin-top: 20px;
   }
 
-  .contact-form-text p 
-  {
+  .contact-form-text p {
     margin-bottom: -20px;
   }
 
-  .contact-map-section
-  {
+  .contact-map-section {
     grid-area: bottom;
     height: 100%;
     width: 100vw;
     min-height: 50vh;
   }
 
-  .contact-form-section 
-  {
+  .contact-form-section {
     display: grid;
     grid-area: top;
     width: 100%;
@@ -270,62 +229,51 @@
     min-height: 50vh;
   }
 
-  .contact-form 
-  {
+  .contact-form {
     justify-self: center;
     overflow: auto;
     width: calc(100% - 40px);
   }
 
-  .contact-form form 
-  {
+  .contact-form form {
     width: calc(100vw - 20px);
   }
 
-  .info-wrapper
-  {
+  .info-wrapper {
     padding-left: 30px;
     padding-right: 30px;
   }
 }
 
-@media only screen and (min-width: 1025px) 
-{
-  .contact-wrapper
-  {
+@media only screen and (min-width: 1025px) {
+  .contact-wrapper {
     height: calc(100vh - 75px);
     grid-template-columns: 50vw 50vw;
   }
 
-  .contact-map-section
-  {
+  .contact-map-section {
     height: 100%;
   }
 
-  .contact-form 
-  {
+  .contact-form {
     min-height: calc(100% - 100px);
     width: calc(50vw - 100px);
   }
 
-  .contact-form form 
-  {
+  .contact-form form {
     width: 100%;
   }
 
-  .contact-form-text 
-  {
+  .contact-form-text {
     width: 100%;
     width: calc(50vw - 120px);
   }
 
-  .contact-form-submit
-  {
+  .contact-form-submit {
     margin-bottom: 5px;
   }
 
-  .info-wrapper
-  {
+  .info-wrapper {
     padding: 30px;
   }
 }

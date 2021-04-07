@@ -48,9 +48,8 @@ async function addSecondaryEmail(raw_email) {
       email = new Email(raw_email);
       await email.save();
       return email;
-    } else {
-      return false;
     }
+    return false;
   } catch (err) {
     return false;
   }
@@ -81,17 +80,16 @@ async function findAllSecondaryEmails() {
  * @returns {object/boolean} - true on deletion / false
  */
 async function deleteSecondaryEmail(incomingEmail) {
-  let email = await Email.findOne({
+  const email = await Email.findOne({
     email: incomingEmail,
     isPrimary: false,
   }).exec();
   // if there is no email found return false
   if (!email) {
     return false;
-  } else {
-    await Email.deleteOne({ email: incomingEmail }).exec();
-    return true;
   }
+  await Email.deleteOne({ email: incomingEmail }).exec();
+  return true;
 }
 
 /**

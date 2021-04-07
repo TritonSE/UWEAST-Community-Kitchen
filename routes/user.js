@@ -11,13 +11,10 @@
 const express = require("express");
 const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
-const {
-  addNewUser,
-  findOneUser,
-  updateOneUser,
-} = require("../db/services/user");
-const { sendEmail } = require("../routes/services/mailer");
+const { addNewUser, findOneUser, updateOneUser } = require("../db/services/user");
+const { sendEmail } = require("./services/mailer");
 const { createJWT } = require("./services/jwt");
+
 const router = express.Router();
 const config = require("../config");
 const crypto = require("crypto");
@@ -56,16 +53,15 @@ router.post(
       const addSuccesful = await addNewUser(user);
       if (!addSuccesful) {
         return res.status(409).json({ errors: [{ msg: "Duplicate User" }] });
-      } else {
-        // created user, return email and token
-        const payload = {
-          email: email,
-        };
-        res.status(200).json({
-          email: email,
-          token: createJWT(payload),
-        });
       }
+      // created user, return email and token
+      const payload = {
+        email,
+      };
+      res.status(200).json({
+        email,
+        token: createJWT(payload),
+      });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
@@ -92,24 +88,20 @@ router.post(
       // check if user exists
       const user = await findOneUser(email);
       if (!user) {
-        return res
-          .status(401)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
+        return res.status(401).json({ errors: [{ msg: "Invalid Credentials" }] });
       }
       // compare user password with passed in value
-      user.comparePassword(password, function (err, isMatch) {
+      user.comparePassword(password, (err, isMatch) => {
         if (err) throw err;
         if (!isMatch) {
-          return res
-            .status(401)
-            .json({ errors: [{ msg: "Invalid Credentials" }] });
+          return res.status(401).json({ errors: [{ msg: "Invalid Credentials" }] });
         }
         // matched user, return email and token
         const payload = {
-          email: email,
+          email,
         };
         res.status(200).json({
-          email: email,
+          email,
           token: createJWT(payload),
         });
       });
@@ -154,9 +146,7 @@ router.post(
 
       // generate a random password
       const passLength = getRandomArbitrary(MIN_PASS_LENGTH, MAX_PASS_LENGTH);
-      const randomlyGeneratedPass = crypto
-        .randomBytes(passLength)
-        .toString("hex");
+      const randomlyGeneratedPass = crypto.randomBytes(passLength).toString("hex");
 
       // set user's password to the randomly generated one
       user.password = randomlyGeneratedPass;
@@ -164,9 +154,7 @@ router.post(
       // attempt to update the password for the user
       const updatedUser = await updateOneUser(user);
       if (!updatedUser) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Could not update user..." }] });
+        return res.status(400).json({ errors: [{ msg: "Could not update user..." }] });
       }
 
       // send an automated email to the user containing their new randomly generated password
@@ -216,13 +204,11 @@ router.post(
       }
 
       // check if the old password matches the email (authenticated user)
-      user.comparePassword(oldPassword, function (err, isMatch) {
+      user.comparePassword(oldPassword, (err, isMatch) => {
         if (err) throw err;
         // error: Old Password does not match!
         if (!isMatch) {
-          return res
-            .status(401)
-            .json({ errors: [{ msg: "Invalid Credentials" }] });
+          return res.status(401).json({ errors: [{ msg: "Invalid Credentials" }] });
         }
       });
 
@@ -232,9 +218,7 @@ router.post(
       const updatedUser = await updateOneUser(user);
       // error: Password could not be updated
       if (!updatedUser) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Password Could Not Be Updated!" }] });
+        return res.status(400).json({ errors: [{ msg: "Password Could Not Be Updated!" }] });
       }
 
       // success!
