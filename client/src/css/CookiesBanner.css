@@ -1,10 +1,9 @@
-.container{
-    /* width: fit-content; */
-    color: #f9ce1d;
-    background-color: #333333;
-   
+.container {
+  /* width: fit-content; */
+  color: #f9ce1d;
+  background-color: #333333;
 }
 
-.container p{
-    vertical-align: middle;
+.container p {
+  vertical-align: middle;
 }

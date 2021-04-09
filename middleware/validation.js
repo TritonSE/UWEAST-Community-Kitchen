@@ -10,20 +10,16 @@ const isValidated = (req, res, next) => {
   const result = validationResult(req);
   if (result.isEmpty()) {
     return next();
-  } else {
-    // send 401 status if a reason for validation failure was an expired/fraud JWT admin token
-    for (var i = 0; i < result.errors.length; i++) {
-      if (result.errors[i].param === "token") {
-        return res
-          .status(401)
-          .json({
-            message:
-              "Cannot process request for unauthenticated user - login first",
-          });
-      }
-    }
-    return res.status(400).json({ message: "User input is malformed" });
   }
+  // send 401 status if a reason for validation failure was an expired/fraud JWT admin token
+  for (let i = 0; i < result.errors.length; i++) {
+    if (result.errors[i].param === "token") {
+      return res.status(401).json({
+        message: "Cannot process request for unauthenticated user - login first",
+      });
+    }
+  }
+  return res.status(400).json({ message: "User input is malformed" });
 };
 
 module.exports = {

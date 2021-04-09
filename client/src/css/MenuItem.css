@@ -1,12 +1,10 @@
-.menu-item:hover 
-{
+.menu-item:hover {
   cursor: pointer;
   /* background-color: yellowgreen; */
-  box-shadow: 0px 3px 6px #F9CE1D;
+  box-shadow: 0px 3px 6px #f9ce1d;
 }
 
-.menu-item 
-{
+.menu-item {
   position: relative;
   width: 100%;
   background-color: #ffffff;
@@ -18,32 +16,27 @@
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
 }
 
-.menu-item::-webkit-scrollbar 
-{
+.menu-item::-webkit-scrollbar {
   display: none;
   width: 0px;
 }
 
-.menu-image
-{
+.menu-image {
   overflow: hidden;
 }
 
-.menu-image img
-{
+.menu-image img {
   width: 100%;
   height: 100%;
   border-radius: 5px;
   object-fit: cover;
 }
 
-.menu-text
-{
+.menu-text {
   padding: 5px;
 }
 
-.menu-text
-{
+.menu-text {
   overflow: scroll;
   overflow-x: hidden;
   word-break: break-word;
@@ -54,16 +47,14 @@
   width: 0px;
 }
 
-.menu-text h3
-{
+.menu-text h3 {
   font-size: 16px;
   font-weight: bold;
   margin: 0px;
   padding: 0px;
 }
 
-.menu-text p 
-{
+.menu-text p {
   font-size: 14px;
   margin: 0px;
   padding: 0px;
@@ -72,8 +63,7 @@
   margin-top: 5px;
 }
 
-.menu-price
-{
+.menu-price {
   position: absolute;
   top: 0;
   left: 0;
@@ -86,20 +76,16 @@
   color: black;
 }
 
-@media only screen and (max-width: 768px) 
-{
-  .menu-item 
-  {
+@media only screen and (max-width: 768px) {
+  .menu-item {
     height: 80px;
     grid-template-columns: 80px auto;
     grid-template-rows: 80px;
   }
 }
 
-@media only screen and (min-width: 768px) 
-{
-  .menu-item 
-  {
+@media only screen and (min-width: 768px) {
+  .menu-item {
     height: 100px;
     grid-template-columns: 100px auto;
     grid-template-rows: 100px;

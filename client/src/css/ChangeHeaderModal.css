@@ -1,94 +1,94 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 :root {
-    --yellow: #f9ce1d;
-    --black: black;
-    --lightgrey: #cccccc;
-    --darkgrey: #747474;
-    --white: #FFFFFF;
-    --offwhite: #F1f1f1;
+  --yellow: #f9ce1d;
+  --black: black;
+  --lightgrey: #cccccc;
+  --darkgrey: #747474;
+  --white: #ffffff;
+  --offwhite: #f1f1f1;
 }
 
-.modalContainer{
-    font-family: 'Roboto', sans-serif !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 40px 20px 20px;
+.modalContainer {
+  font-family: "Roboto", sans-serif !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 40px 20px 20px;
 }
 
-.modalHeader{
-    font-family: 'Roboto', sans-serif !important;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
+.modalHeader {
+  font-family: "Roboto", sans-serif !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }
 
-.modalBackground{
-    max-height: 700px;
-    min-width: 400px;
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-    height: auto;
-    background-color: white;
-    overflow: hidden;
-    padding: 10px 20px 20px 20px;
+.modalBackground {
+  max-height: 700px;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  height: auto;
+  background-color: white;
+  overflow: hidden;
+  padding: 10px 20px 20px 20px;
 }
 
-.formItem{
-    font-size: 16px !important;
-    margin: 0 0 20px 0 !important;
+.formItem {
+  font-size: 16px !important;
+  margin: 0 0 20px 0 !important;
 }
 
-.formTextInput{
-    height: 28px !important;
-    margin-top: 10px;
+.formTextInput {
+  height: 28px !important;
+  margin-top: 10px;
 }
 
 .formLabelText {
-    display: inline-block;
-    font-weight: bold;
-    margin: 0px !important;
+  display: inline-block;
+  font-weight: bold;
+  margin: 0px !important;
 }
 
 .closeModalButton {
-    background-color: var(--white) !important;
-    border: 1px solid var(--white) !important;
-    color: var(--black) !important;
-    width: 40px !important;
-    height: 29px !important;
-    font-size: 12px !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  background-color: var(--white) !important;
+  border: 1px solid var(--white) !important;
+  color: var(--black) !important;
+  width: 40px !important;
+  height: 29px !important;
+  font-size: 12px !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .modalFooter {
-    padding-top: 10px;
-    height: auto;
-    display: flex;
-    flex-direction: row;
+  padding-top: 10px;
+  height: auto;
+  display: flex;
+  flex-direction: row;
 }
 
 .modalFooter > * {
-    margin-left: 0px;
+  margin-left: 0px;
 }
 
 .changeHeaderButton {
-    font-family: 'Roboto', sans-serif !important;
-    background-color: var(--yellow) !important;
-    border: 1px solid var(--yellow) !important;
-    color: var(--black) !important;
-    font-weight: bold !important;
-    width: 150px;
-    height: 40px !important;
+  font-family: "Roboto", sans-serif !important;
+  background-color: var(--yellow) !important;
+  border: 1px solid var(--yellow) !important;
+  color: var(--black) !important;
+  font-weight: bold !important;
+  width: 150px;
+  height: 40px !important;
 }
 
 .requiredAsterisk {
-    display: inline-block;
-    font-family: 'Roboto', sans-serif;
-    color: red;
-    font-weight: bold;
-    margin: 0;
-    font-size: 16px;
+  display: inline-block;
+  font-family: "Roboto", sans-serif;
+  color: red;
+  font-weight: bold;
+  margin: 0;
+  font-size: 16px;
 }

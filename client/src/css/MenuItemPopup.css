@@ -1,5 +1,4 @@
-.greyout 
-{
+.greyout {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -11,8 +10,7 @@
   left: 0;
 }
 
-.menu-item-popup 
-{
+.menu-item-popup {
   width: 975px;
   max-width: 90vw;
   background-color: white;
@@ -26,7 +24,6 @@
   padding: 25px;
   z-index: 14;
   border-radius: 10px;
-
 }
 
 .group-popup {
@@ -34,8 +31,7 @@
   flex-direction: row;
 }
 
-.close-button 
-{
+.close-button {
   position: absolute;
   right: 2px;
   top: -8px;
@@ -43,8 +39,7 @@
   font-size: 30px;
 }
 
-.close-button:hover
-{
+.close-button:hover {
   cursor: pointer;
 }
 
@@ -58,16 +53,13 @@
   margin-left: 20px;
 }
 
-.title-popup
-{
+.title-popup {
   font-weight: bold;
   color: black;
   margin-bottom: 0px;
-  
 }
 
-.desc-popup
-{
+.desc-popup {
   color: #747474;
 }
 
@@ -75,8 +67,7 @@
   background-color: #747474;
 }
 
-.dietary-info 
-{
+.dietary-info {
   color: #747474;
 }
 
@@ -84,15 +75,13 @@
   margin-bottom: 10px;
 }
 
-.section-title 
-{
-  background-color: #CCCCCC;
+.section-title {
+  background-color: #cccccc;
   margin-bottom: 10px;
   padding: 2px 20px;
 }
 
-.section-title h3
-{
+.section-title h3 {
   font-size: 22px;
   font-weight: bold;
   margin-bottom: 0px;
@@ -113,7 +102,7 @@
 
 .popup-image-price {
   float: right;
-  background-color: #CCCCCC;
+  background-color: #cccccc;
   border-top-right-radius: 20px;
   width: 145px;
   height: 60px;
@@ -127,8 +116,7 @@
   color: black;
 }
 
-.right-popup
-{
+.right-popup {
   overflow: scroll;
   overflow-x: hidden;
   display: flex;
@@ -140,15 +128,13 @@
   width: 0px;
 }
 
-.choice-label 
-{
+.choice-label {
   display: block;
   margin-bottom: 0px;
   margin-left: 20px;
 }
 
-.label-title 
-{
+.label-title {
   margin-left: 5px;
 }
 
@@ -157,8 +143,8 @@
 }
 
 .size-info {
-    width: 14px;
-    height: 14px;
+  width: 14px;
+  height: 14px;
 }
 
 .instructions-note {
@@ -167,15 +153,13 @@
   font-size: 11px;
 }
 
-.instructions-textarea
-{
-  border-width:1px;
+.instructions-textarea {
+  border-width: 1px;
   margin-left: 20px;
   width: calc(100% - 40px);
 }
 
-.quantity-buttons 
-{
+.quantity-buttons {
   text-align: center;
   display: flex;
   justify-content: center;
@@ -183,8 +167,7 @@
   margin: 5px 0px;
 }
 
-.quantity-number 
-{
+.quantity-number {
   min-width: 30px;
   font-weight: bold;
   font-size: 28px;
@@ -192,8 +175,7 @@
   display: inline-block;
 }
 
-.button 
-{
+.button {
   border: 0px;
   color: white;
   border-radius: 17px;
@@ -211,18 +193,15 @@
   fill: white;
 }
 
-.decrease-button 
-{
+.decrease-button {
   background-color: rgb(247, 25, 16);
 }
 
-.increase-button 
-{
+.increase-button {
   background-color: rgb(53, 224, 49);
 }
 
-.submit-order-button
-{
+.submit-order-button {
   width: 100%;
   border: 0px;
   height: 45px;
@@ -233,12 +212,12 @@
   font-size: 20px;
 }
 
-.submit-order-button:hover{
+.submit-order-button:hover {
   background-color: rgb(36, 35, 35);
 }
 
 /* iPad Landscape ----------- */
-@media only screen and (max-width : 1024px) {
+@media only screen and (max-width: 1024px) {
   .menu-item-popup {
     width: 500px;
     height: 90vh;
@@ -259,18 +238,17 @@
 }
 
 /* Galaxy Fold ----------- */
-@media only screen and (max-width : 300px) {
-
-    .instructions-note {
-        margin-left: 0px;
-    }
-
-    .instructions-textarea {
-        margin-left: 10px;
-    }
-
-    .submit-order-button {
-        font-size: 16px;
-        width: 70vw;
-    }
+@media only screen and (max-width: 300px) {
+  .instructions-note {
+    margin-left: 0px;
   }
+
+  .instructions-textarea {
+    margin-left: 10px;
+  }
+
+  .submit-order-button {
+    font-size: 16px;
+    width: 70vw;
+  }
+}

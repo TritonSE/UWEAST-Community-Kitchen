@@ -11,8 +11,9 @@ const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const { verify } = require("./services/jwt");
 const { findAllEmails, findPrimaryEmail } = require("../db/services/email");
-const { sendEmail } = require("../routes/services/mailer");
+const { sendEmail } = require("./services/mailer");
 const { deleteOrder, findOrders, updateStatus, editOrder } = require("../db/services/order");
+
 const router = express.Router();
 
 /**
@@ -24,10 +25,11 @@ const router = express.Router();
 router.post(
   "/",
   [
-    body("token").custom(async (token) => {
-      // verify token
-      return await verify(token);
-    }),
+    body("token").custom(
+      async (token) =>
+        // verify token
+        await verify(token)
+    ),
     isValidated,
   ],
   async (req, res, next) => {
@@ -44,7 +46,7 @@ router.post(
 
       // successfully retrieved orders
       return res.status(200).json({
-        orders: orders,
+        orders,
       });
     } catch (err) {
       console.error(err.message);
@@ -66,10 +68,11 @@ router.post(
   [
     body("_id").isString(),
     body("isCompleted").isInt(),
-    body("token").custom(async (token) => {
-      // verify token
-      return await verify(token);
-    }),
+    body("token").custom(
+      async (token) =>
+        // verify token
+        await verify(token)
+    ),
     isValidated,
   ],
   async (req, res, next) => {
@@ -105,39 +108,35 @@ router.delete(
     body("_id").isString(),
     body("customerReceipt").isBoolean(),
     body("adminReceipt").isBoolean(),
-    body("token").custom(async (token) => {
-      // verify token
-      return await verify(token);
-    }),
+    body("token").custom(
+      async (token) =>
+        // verify token
+        await verify(token)
+    ),
     isValidated,
   ],
   async (req, res, next) => {
     try {
-
       // try to add the order and respond with err msg or success
       const removedOrder = await deleteOrder(req.body._id);
 
       if (!removedOrder) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Order could not be removed" }] });
+        return res.status(400).json({ errors: [{ msg: "Order could not be removed" }] });
       }
 
-      let isCustomerError = false; 
-      let isUWEASTError = false; 
+      let isCustomerError = false;
+      let isUWEASTError = false;
 
-      // send customer cancellation receipt 
-      if(req.body.customerReceipt){
-
+      // send customer cancellation receipt
+      if (req.body.customerReceipt) {
         // get primary email from collection
         const primaryEmail = await findPrimaryEmail();
 
         // only send email if there is a primary email in the DB
-        if(!primaryEmail){
-          isCustomerError = true; 
+        if (!primaryEmail) {
+          isCustomerError = true;
         } else {
-          
-          let locals = {
+          const locals = {
             name: removedOrder.Customer.Name,
             date: new Date(removedOrder.Pickup).toLocaleDateString(),
             time: new Date(removedOrder.Pickup).toLocaleTimeString([], {
@@ -150,66 +149,67 @@ router.delete(
             primaryEmail: primaryEmail.email,
           };
 
-           // send customer of removed order a cancellation receipt
-           isCustomerError = ! (await sendEmail("customer-cancellation", removedOrder.Customer.Email, locals, res));
-
+          // send customer of removed order a cancellation receipt
+          isCustomerError = !(await sendEmail(
+            "customer-cancellation",
+            removedOrder.Customer.Email,
+            locals,
+            res
+          ));
         }
       }
 
-      // send admins cancellation receipt 
-      if(req.body.adminReceipt){
+      // send admins cancellation receipt
+      if (req.body.adminReceipt) {
+        // retrieve all emails inside of Emails DB
+        const emails = await findAllEmails();
+        if (!emails.length) {
+          return res.status(400).json({ errors: [{ msg: "no emails found" }] });
+        }
 
-         // retrieve all emails inside of Emails DB
-          const emails = await findAllEmails();
-          if (!emails.length) {
-            return res.status(400).json({ errors: [{ msg: "no emails found" }] });
-          }
+        dbemails = emails.map((item) => item.email);
 
-          dbemails = emails.map(function (item) {
-            return item.email;
-          });
-        
         // only send email if there are recipient emails in the DB
-        if(!dbemails){
+        if (!dbemails) {
           isUWEASTError = true;
         } else {
+          const locals = {
+            name: removedOrder.Customer.Name,
+            email: removedOrder.Customer.Email,
+            number: removedOrder.Customer.Phone,
+            date: new Date(removedOrder.Pickup).toLocaleDateString(),
+            time: new Date(removedOrder.Pickup).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            order: removedOrder.Order,
+            amount: removedOrder.PayPal.Amount,
+            transactionID: removedOrder.PayPal.transactionID,
+            notes: removedOrder.Notes,
+          };
 
-        let locals = {
-
-          name: removedOrder.Customer.Name,
-          email: removedOrder.Customer.Email,
-          number: removedOrder.Customer.Phone,
-          date: new Date(removedOrder.Pickup).toLocaleDateString(),
-          time: new Date(removedOrder.Pickup).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          order: removedOrder.Order,
-          amount: removedOrder.PayPal.Amount,
-          transactionID: removedOrder.PayPal.transactionID,
-          notes: removedOrder.Notes
-        };
-
-         // send UWEAST cancellation receipt for records
-         isUWEASTError = !(await sendEmail("uweast-cancellation", dbemails, locals, res));
+          // send UWEAST cancellation receipt for records
+          isUWEASTError = !(await sendEmail("uweast-cancellation", dbemails, locals, res));
+        }
       }
-    }
 
-    let msg; 
+      let msg;
 
-    // message customization, dependent on any errors in sending emails 
-    if(isCustomerError && isUWEASTError){
-      msg = "Order successfully deleted. However, no email cancellations were sent out due to an internal error."
-    } else if(isCustomerError){
-      msg = "Order successfully deleted. However, an email cancellation could not be sent to the customer due to an internal error."
-    } else if(isUWEASTError){
-      msg = "Order successfully deleted. However, an email cancellation could not be sent to admin emails due to an internal error."
-    } else {
-      msg = "Order successfully deleted!"
-    }
+      // message customization, dependent on any errors in sending emails
+      if (isCustomerError && isUWEASTError) {
+        msg =
+          "Order successfully deleted. However, no email cancellations were sent out due to an internal error.";
+      } else if (isCustomerError) {
+        msg =
+          "Order successfully deleted. However, an email cancellation could not be sent to the customer due to an internal error.";
+      } else if (isUWEASTError) {
+        msg =
+          "Order successfully deleted. However, an email cancellation could not be sent to admin emails due to an internal error.";
+      } else {
+        msg = "Order successfully deleted!";
+      }
 
-    return res.status(200).json({ msg: msg });
-
+      return res.status(200).json({ msg });
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server error");
@@ -233,10 +233,11 @@ router.post(
     body("Customer").notEmpty().optional(),
     body("Pickup").notEmpty().optional(),
     body("Notes").isString().optional(),
-    body("token").custom(async (token) => {
-      // verify token
-      return await verify(token);
-    }),
+    body("token").custom(
+      async (token) =>
+        // verify token
+        await verify(token)
+    ),
     isValidated,
   ],
   async (req, res, next) => {
@@ -244,9 +245,7 @@ router.post(
     // if there is an error or item is not found
     if (edit === false || (edit && edit.n !== 1)) {
       console.log("Bad edit");
-      res
-        .status(400)
-        .json({ errors: [{ msg: "edit unsuccessful/ not found" }] });
+      res.status(400).json({ errors: [{ msg: "edit unsuccessful/ not found" }] });
     } else {
       res.status(200).json({ success: true });
     }

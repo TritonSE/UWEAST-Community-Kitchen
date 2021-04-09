@@ -1,14 +1,14 @@
 /**
  * File contains all functions related to setting, removing, and accessing the admin token on the site
  * using LocalStorage.
- * 
- * @summary   Functionality related to admin tokens. 
+ *
+ * @summary   Functionality related to admin tokens.
  * @author    Amrit Kaur Singh
  */
 
-const config = require('../config');
+const config = require("../config");
 
-const ADMIN_TOKEN_ATTRIBUTE = 'uweast-ck:admin-token'; // genereated from backend using secret-id
+const ADMIN_TOKEN_ATTRIBUTE = "uweast-ck:admin-token"; // genereated from backend using secret-id
 
 const BACKEND_URL = config.backend.uri;
 
@@ -16,19 +16,18 @@ const BACKEND_URL = config.backend.uri;
 async function isAuthenticated() {
   try {
     if (!localStorage.hasOwnProperty(ADMIN_TOKEN_ATTRIBUTE)) {
-      return false
+      return false;
     }
     const submission = {
-      jwtToken: localStorage.getItem(ADMIN_TOKEN_ATTRIBUTE)
-    }
+      jwtToken: localStorage.getItem(ADMIN_TOKEN_ATTRIBUTE),
+    };
 
     try {
-      const response = await
-        fetch(`${BACKEND_URL}jwt/verify`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(submission)
-        });
+      const response = await fetch(`${BACKEND_URL}jwt/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(submission),
+      });
       if (response.ok) {
         return true;
       }
@@ -62,7 +61,7 @@ function setJWT(token) {
   }
 }
 
-//Clears out all attributes in local storage
+// Clears out all attributes in local storage
 function logout() {
   try {
     if (localStorage.hasOwnProperty(ADMIN_TOKEN_ATTRIBUTE)) {
@@ -73,6 +72,4 @@ function logout() {
   }
 }
 
-export {
-  isAuthenticated, getJWT, setJWT, logout
-};
+export { isAuthenticated, getJWT, setJWT, logout };

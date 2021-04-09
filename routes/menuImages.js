@@ -10,6 +10,7 @@ const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const { changeMenuImage, findMenuImage } = require("../db/services/menuImages");
 const { verify } = require("./services/jwt");
+
 const router = express.Router();
 
 /**
@@ -23,10 +24,11 @@ router.post(
   "/changeMenuImage",
   [
     body("imageUrl").notEmpty().isURL(),
-    body("token").custom(async (token) => {
-      // verify token
-      return await verify(token);
-    }),
+    body("token").custom(
+      async (token) =>
+        // verify token
+        await verify(token)
+    ),
     isValidated,
   ],
   async (req, res, next) => {
@@ -34,16 +36,13 @@ router.post(
     try {
       // try to change image and respond with err msg or success
       imageJson = {
-        imageUrl: imageUrl,
+        imageUrl,
       };
       const imageSuccessful = await changeMenuImage(imageJson);
       if (!imageSuccessful) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "MenuImage change unsuccessful" }] });
-      } else {
-        return res.status(200).json({ success: true });
+        return res.status(400).json({ errors: [{ msg: "MenuImage change unsuccessful" }] });
       }
+      return res.status(200).json({ success: true });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server err");

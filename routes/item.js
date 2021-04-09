@@ -9,17 +9,18 @@
  * @author    Thomas Garry, Amrit Singh
  */
 const express = require("express");
+const { body } = require("express-validator");
 const {
   getAllMenuItems,
   addNewItem,
   deleteItem,
   editItem,
   setFeatured,
-  getItemById
+  getItemById,
 } = require("../db/services/item");
-const { body } = require("express-validator");
 const { isValidated } = require("../middleware/validation");
 const { verify } = require("./services/jwt");
+
 const router = express.Router();
 
 /**
@@ -32,7 +33,7 @@ router.get("/", async (req, res, next) => {
   if (!items) {
     res.status(400).json({ errors: [{ msg: "Get unsuccessful" }] });
   } else {
-    res.status(200).json({ items: items });
+    res.status(200).json({ items });
   }
 });
 
@@ -75,16 +76,17 @@ router.post(
           (checkNumeral(value.Family) && checkNumeral(value.Individual)))
       );
     }),
-    body("token").custom(async (token) => {
-      // verify token
-      return await verify(token);
-    }),
+    body("token").custom(
+      async (token) =>
+        // verify token
+        await verify(token)
+    ),
     body("Accommodations")
       .custom((value) => {
         // check for numeric values with regex to be price conforming
         // for each price in Accomodations array
         for (val of value) {
-          let success = checkNumeral(val.Price) ? true : false;
+          const success = !!checkNumeral(val.Price);
           if (success === false) return false;
         }
         return true;
@@ -100,9 +102,8 @@ router.post(
         return res.status(400).json({
           errors: [{ msg: "Insert unsuccessful/ enter valid Item data" }],
         });
-      } else {
-        return res.status(200).json({ item_id: addedItem._id });
       }
+      return res.status(200).json({ item_id: addedItem._id });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server err/ enter valid Item data");
@@ -121,10 +122,11 @@ router.delete(
   "/remove",
   [
     body("_id").notEmpty(),
-    body("token").custom(async (token) => {
-      // verify token
-      return await verify(token);
-    }),
+    body("token").custom(
+      async (token) =>
+        // verify token
+        await verify(token)
+    ),
     isValidated,
   ],
   async (req, res, next) => {
@@ -132,12 +134,9 @@ router.delete(
       // deleted object response check if deletedCount is 1
       const deleted = await deleteItem(req.body._id);
       if (deleted && deleted.deletedCount !== 1) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Delete unsuccessful/ not found" }] });
-      } else {
-        return res.status(200).json({ success: true });
+        return res.status(400).json({ errors: [{ msg: "Delete unsuccessful/ not found" }] });
       }
+      return res.status(200).json({ success: true });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server err");
@@ -170,16 +169,17 @@ router.post(
           (checkNumeral(value.Family) && checkNumeral(value.Individual)))
       );
     }),
-    body("token").custom(async (token) => {
-      // verify token
-      return await verify(token);
-    }),
+    body("token").custom(
+      async (token) =>
+        // verify token
+        await verify(token)
+    ),
     body("Accommodations")
       .custom((value) => {
         // check for numeric values with regex to be price conforming
         // for each price in Accommodations array
         for (val of value) {
-          let success = checkNumeral(val.Price) ? true : false;
+          const success = !!checkNumeral(val.Price);
           if (success === false) return false;
         }
         return true;
@@ -191,9 +191,7 @@ router.post(
     const edit = await editItem(req.body._id, req.body);
     // if there is an error or item is not found
     if (edit === false || (edit && edit.n !== 1)) {
-      res
-        .status(400)
-        .json({ errors: [{ msg: "edit unsuccessful/ not found" }] });
+      res.status(400).json({ errors: [{ msg: "edit unsuccessful/ not found" }] });
     } else {
       res.status(200).json({ success: true });
     }
@@ -212,10 +210,11 @@ router.post(
   "/feature",
   [
     body("_id").notEmpty(),
-    body("token").custom(async (token) => {
-      // verify token
-      return await verify(token);
-    }),
+    body("token").custom(
+      async (token) =>
+        // verify token
+        await verify(token)
+    ),
     body("isFeatured").notEmpty(),
     isValidated,
   ],
@@ -223,9 +222,7 @@ router.post(
     const featured = await setFeatured(req.body._id, req.body.isFeatured);
     // if there is an error or the item is not found
     if (featured === false || (featured && featured.n !== 1)) {
-      res
-        .status(400)
-        .json({ errors: [{ msg: "edit unsuccessful/ not found" }] });
+      res.status(400).json({ errors: [{ msg: "edit unsuccessful/ not found" }] });
     } else {
       res.status(200).json({ success: true });
     }
@@ -233,7 +230,7 @@ router.post(
 );
 
 /**
- * Queries the Item collection for Item document with a given Object ID tag. Returns 
+ * Queries the Item collection for Item document with a given Object ID tag. Returns
  * JSON denoting said item upon success, else returns error.
  *
  * @body {string} _id - Id of the item whose information need to be retrieved
@@ -241,30 +238,22 @@ router.post(
  */
 router.post(
   "/itemInfo",
-  [
-    body("_id").notEmpty().isString(),
-    isValidated,
-  ],
+  [body("_id").notEmpty().isString(), isValidated],
   async (req, res, next) => {
-
-    try{
+    try {
       // retrieve item JSON given id
       const itemJSON = await getItemById(req.body._id);
 
       // item not found
-      if(!itemJSON){
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "item does not exist" }] });
+      if (!itemJSON) {
+        return res.status(400).json({ errors: [{ msg: "item does not exist" }] });
       }
 
       return res.status(200).json({ item: itemJSON });
-
-  } catch(err){
+    } catch (err) {
       console.error(err.message);
       res.status(500).send("Server error");
-  }
-  
+    }
   }
 );
 

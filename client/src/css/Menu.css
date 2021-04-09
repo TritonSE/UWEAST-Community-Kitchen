@@ -1,7 +1,5 @@
-@media only screen and (max-width: 768px) 
-{
-    .cart-preview 
-    {
-        display: none;
-    }
+@media only screen and (max-width: 768px) {
+  .cart-preview {
+    display: none;
+  }
 }

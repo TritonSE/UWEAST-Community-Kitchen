@@ -10,10 +10,11 @@
 const express = require("express");
 const { body } = require("express-validator");
 const { findAllEmails, findPrimaryEmail } = require("../db/services/email");
-const { sendEmail } = require("../routes/services/mailer");
+const { sendEmail } = require("./services/mailer");
 const { addOrder } = require("../db/services/order");
 const { isValidated } = require("../middleware/validation");
 const config = require("../config");
+
 const router = express.Router();
 
 /**
@@ -51,7 +52,7 @@ router.post(
     //       "item": "Blue Bayou Lemonade",
     //       "quantity": 4,
     //       "size": "Individual",
-    //     }, 
+    //     },
     //     {
     //       "item": "Hawaiian Barbeque",
     //       "quantity": 2,
@@ -63,15 +64,17 @@ router.post(
     // }
 
     try {
-
       // all orders have tentative approval, and will be waiting on final PayPal IPN approval
       req.body.PayPal.status = 0;
 
       // add hypens to phone number
-      req.body.Customer.Phone = req.body.Customer.Phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+      req.body.Customer.Phone = req.body.Customer.Phone.replace(
+        /(\d{3})(\d{3})(\d{4})/,
+        "$1-$2-$3"
+      );
 
       // add spaces after commas in accommodation strings
-      for(var i=0; i < req.body.Order.length; i++ ){
+      for (let i = 0; i < req.body.Order.length; i++) {
         req.body.Order[i].accommodations = req.body.Order[i].accommodations.replace(/,/g, ", ");
       }
 
@@ -79,28 +82,24 @@ router.post(
       const order = await addOrder(req.body);
       // error Status if order could not be added
       if (!order) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Order unsuccessful" }] });
+        return res.status(400).json({ errors: [{ msg: "Order unsuccessful" }] });
       }
-      
+
       // retrieve all emails inside of Emails DB
       const emails = await findAllEmails();
       if (!emails.length) {
         return res.status(400).json({ errors: [{ msg: "no emails found" }] });
       }
 
-      // primary email 
+      // primary email
       const primaryEmail = await findPrimaryEmail();
       if (!primaryEmail) {
         return res.status(400).json({ errors: [{ msg: "no primary email found" }] });
       }
 
-      dbemail = emails.map(function (item) {
-        return item.email;
-      });
+      dbemail = emails.map((item) => item.email);
 
-      let locals = {
+      const locals = {
         name: req.body.Customer.Name,
         number: req.body.Customer.Phone,
         email: req.body.Customer.Email,
@@ -113,18 +112,23 @@ router.post(
         transactionID: req.body.PayPal.transactionID,
         primaryEmail: primaryEmail.email,
         ordersPageLink: `${config.frontend.uri}admin`,
-        dbemail: dbemail,
-        amount: req.body.PayPal.Amount, 
+        dbemail,
+        amount: req.body.PayPal.Amount,
       };
 
       // send UWEAST an order receipt
       await sendEmail("uweast-receipt", dbemail, locals, res);
 
       // send customer copy of order receipt
-      const custEmailSent = await sendEmail("customer-receipt", req.body.Customer.Email, locals, res);
+      const custEmailSent = await sendEmail(
+        "customer-receipt",
+        req.body.Customer.Email,
+        locals,
+        res
+      );
 
-      // return error if email could not be sent to customer 
-      if(!custEmailSent){
+      // return error if email could not be sent to customer
+      if (!custEmailSent) {
         throw 500;
       }
 
@@ -162,9 +166,9 @@ router.post(
       }
 
       // extract the emails from the JSON objects
-      let dbemails = emails.email;
+      const dbemails = emails.email;
 
-      let locals = {
+      const locals = {
         name: req.body.name,
         email: req.body.email,
         message: req.body.message,
@@ -173,8 +177,8 @@ router.post(
       // send UWEAST a notification that someone wants to contact them
       const emailSent = await sendEmail("contact-message", dbemails, locals, res);
 
-      // return error if email could not be sent to customer 
-      if(!emailSent){
+      // return error if email could not be sent to customer
+      if (!emailSent) {
         throw 500;
       }
 

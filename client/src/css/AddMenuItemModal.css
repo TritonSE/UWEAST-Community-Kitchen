@@ -1,156 +1,156 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 :root {
-    --yellow: #f9ce1d;
-    --black: black;
-    --lightgrey: #cccccc;
-    --darkgrey: #747474;
-    --white: #FFFFFF;
-    --offwhite: #F1f1f1;
+  --yellow: #f9ce1d;
+  --black: black;
+  --lightgrey: #cccccc;
+  --darkgrey: #747474;
+  --white: #ffffff;
+  --offwhite: #f1f1f1;
 }
 
-.modalContainer{
-    font-family: 'Roboto', sans-serif !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 40px 20px 20px;
+.modalContainer {
+  font-family: "Roboto", sans-serif !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 40px 20px 20px;
 }
-.headerContainer{
-    font-family: 'Roboto', sans-serif !important;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
+.headerContainer {
+  font-family: "Roboto", sans-serif !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }
-.modalBackground{
-    max-height: 700px;
-    min-width: 400px;
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-    height: auto;
-    background-color: white;
-    padding: 10px 20px 20px 20px;
-    overflow: scroll !important;
-    overflow-x: hidden;
+.modalBackground {
+  max-height: 700px;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  height: auto;
+  background-color: white;
+  padding: 10px 20px 20px 20px;
+  overflow: scroll !important;
+  overflow-x: hidden;
 }
-.formItem{
-    font-size: 16px !important;
-    margin: 0 0 20px 0 !important;
+.formItem {
+  font-size: 16px !important;
+  margin: 0 0 20px 0 !important;
 }
-.formLongItem{
-    font-size: 16px !important; 
-    margin: 0 0 10px 0 !important;
+.formLongItem {
+  font-size: 16px !important;
+  margin: 0 0 10px 0 !important;
 }
-.formTextInput{
-    height: 28px !important;
+.formTextInput {
+  height: 28px !important;
 }
-.formLongInput{
-    height: 78px !important;
+.formLongInput {
+  height: 78px !important;
 }
-.formSelectInput{
-    height: 28px !important;
+.formSelectInput {
+  height: 28px !important;
 }
 .formLabelText {
-    display: inline-block;
-    font-weight: bold;
-    margin: 0px !important;
-    width: 100% !important;
+  display: inline-block;
+  font-weight: bold;
+  margin: 0px !important;
+  width: 100% !important;
 }
-.formSubHeading{
-    display: inline-block;
-    margin: 0px !important;
-    width: 100% !important;
+.formSubHeading {
+  display: inline-block;
+  margin: 0px !important;
+  width: 100% !important;
 }
-.priceSizeContainer{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    padding-top: 5px;
+.priceSizeContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding-top: 5px;
 }
-.priceContainer{
-    width: 40%;
+.priceContainer {
+  width: 40%;
 }
-.priceContainer > *{
-    margin-top: 0 !important;
-    padding-right: 5px !important;
+.priceContainer > * {
+  margin-top: 0 !important;
+  padding-right: 5px !important;
 }
-.sizeContainer{
-    width: 40%;
+.sizeContainer {
+  width: 40%;
 }
-.sizePriceTextInput{
-    height: 28px !important;
-    width: 100% !important;
+.sizePriceTextInput {
+  height: 28px !important;
+  width: 100% !important;
 }
-.sizeContainer > *{
-    margin-top: 0 !important;
-    padding-right: 3px !important;
+.sizeContainer > * {
+  margin-top: 0 !important;
+  padding-right: 3px !important;
 }
-.removeAddOnContainer{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 40px;
-    margin: 0 !important;
-    padding: 21px 0px 0 0 !important;
+.removeAddOnContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 40px;
+  margin: 0 !important;
+  padding: 21px 0px 0 0 !important;
 }
 .removeAddOnButton {
-    background-color: var(--white) !important;
-    color: var(--black) !important;
-    width: 40px !important;
-    height: 43px !important;
-    font-size: 11px !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  background-color: var(--white) !important;
+  color: var(--black) !important;
+  width: 40px !important;
+  height: 43px !important;
+  font-size: 11px !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 .removeAddOnButton:hover {
-    color: red !important;
+  color: red !important;
 }
 .modalFooter {
-    padding-top: 20px;
-    height: auto;
-    display: flex;
-    flex-direction: row-reverse !important;
+  padding-top: 20px;
+  height: auto;
+  display: flex;
+  flex-direction: row-reverse !important;
 }
 .modalFooter > * {
-    margin-left: 10px !important;
+  margin-left: 10px !important;
 }
 .addAddOnButton {
-    font-family: 'Roboto', sans-serif !important;
-    background-color: var(--black) !important;
-    border: 1px solid var(--black) !important;
-    color: var(--white) !important;
-    font-weight: bold !important;
-    min-width: 112px;
-    width: 100%;
-    max-width: 195px;
-    height: auto !important;
-    font-size: 12px !important;
-    margin: 10px 0 20px 0;
+  font-family: "Roboto", sans-serif !important;
+  background-color: var(--black) !important;
+  border: 1px solid var(--black) !important;
+  color: var(--white) !important;
+  font-weight: bold !important;
+  min-width: 112px;
+  width: 100%;
+  max-width: 195px;
+  height: auto !important;
+  font-size: 12px !important;
+  margin: 10px 0 20px 0;
 }
 .menuAddButton {
-    font-family: 'Roboto', sans-serif !important;
-    background-color: var(--yellow) !important;
-    border: 1px solid var(--yellow) !important;
-    color: var(--black) !important;
-    font-weight: bold !important;
-    width: 150px;
-    height: 40px !important;
+  font-family: "Roboto", sans-serif !important;
+  background-color: var(--yellow) !important;
+  border: 1px solid var(--yellow) !important;
+  color: var(--black) !important;
+  font-weight: bold !important;
+  width: 150px;
+  height: 40px !important;
 }
 .cancelButton {
-    font-family: 'Roboto', sans-serif !important;
-    background-color: var(--darkgrey) !important;
-    border: 1px solid var(--darkgrey) !important;
-    color: var(--white) !important;
-    font-weight: bold !important;
-    width: 150px;
-    height: 40px !important;
+  font-family: "Roboto", sans-serif !important;
+  background-color: var(--darkgrey) !important;
+  border: 1px solid var(--darkgrey) !important;
+  color: var(--white) !important;
+  font-weight: bold !important;
+  width: 150px;
+  height: 40px !important;
 }
 .requiredAsterix {
-    display: inline-block;
-    font-family: 'Roboto', sans-serif;
-    color: red;
-    font-weight: bold;
-    margin: 0;
-    font-size: 16px;
+  display: inline-block;
+  font-family: "Roboto", sans-serif;
+  color: red;
+  font-weight: bold;
+  margin: 0;
+  font-size: 16px;
 }

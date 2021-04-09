@@ -1,40 +1,35 @@
 /**
- * The file is responsible for the routing of all pages on the site with a corresponding URL. 
- * 
- * @summary     Routes all URLs to a specific page on the site. 
+ * The file is responsible for the routing of all pages on the site with a corresponding URL.
+ *
+ * @summary     Routes all URLs to a specific page on the site.
  * @author      Amrit Kaur Singh
  */
 
-import './App.css';
+import "./App.css";
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
-import { CookiesProvider } from 'react-cookie';
-import { withCookies } from 'react-cookie';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { CookiesProvider, withCookies } from "react-cookie";
 
-import Menu from './pages/Menu';
-import Admin from './pages/Admin';
-import Contact from './pages/Contact';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import ResetPassword from './pages/ResetPassword';
-import CartSummary from './components/CartSummary';
-import Custom404 from './pages/Custom404';
+import Menu from "./pages/Menu";
+import Admin from "./pages/Admin";
+import Contact from "./pages/Contact";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ResetPassword from "./pages/ResetPassword";
+import CartSummary from "./components/CartSummary";
+import Custom404 from "./pages/Custom404";
 
 function App() {
   return (
     // CookiesProvider allows cookies to be used in any page component
     <CookiesProvider>
       <Router>
-        {/* Switch gurantees that a URL can match to only one route*/}
+        {/* Switch gurantees that a URL can match to only one route */}
         <Switch>
           {/* Menu Page (Home) */}
-         <Route exact path="/">
-          <Menu/>
-        </Route>
+          <Route exact path="/">
+            <Menu />
+          </Route>
           {/* Login Page */}
           <Route exact path="/login">
             <Login />
@@ -48,11 +43,14 @@ function App() {
             <ResetPassword />
           </Route>
           {/* About Page */}
-        <Route exact path="/about" component={() => { 
-          window.location = 'https://www.uweast.org'; 
-          return null;
-          } }>        
-        </Route>
+          <Route
+            exact
+            path="/about"
+            component={() => {
+              window.location = "https://www.uweast.org";
+              return null;
+            }}
+          />
           {/* Contact Page */}
           <Route exact path="/contact">
             <Contact />
@@ -61,13 +59,13 @@ function App() {
           <Route exact path="/admin">
             <Admin />
           </Route>
-          {/* Cart Summary Page for when screen size is mobile*/}
+          {/* Cart Summary Page for when screen size is mobile */}
           <Route exact path="/cart">
             <CartSummary />
           </Route>
           {/* Any other URL is automatically matched to Menu Page */}
           <Route path="/">
-            <Custom404/>
+            <Custom404 />
           </Route>
         </Switch>
       </Router>
