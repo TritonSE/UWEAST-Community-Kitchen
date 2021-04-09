@@ -8,6 +8,6 @@ workflows:
           name: Backend lint and style check
           run-command: lint-check
       - node/test:
-          name: Frontend lint and style check
+          name: Client lint and style check
           app-dir: client
           run-command: lint-check
