@@ -3,7 +3,7 @@
  */
 
 // frontend + backend global constants - both backend & frontend constant files must be modified
-const MIN_CART_TOTAL_CHECKOUT = 30;
+const MIN_CART_TOTAL_CHECKOUT = 40;
 const ORDER_SERVICE_TAX_RATE = 0.0775;
 
 module.exports = {
