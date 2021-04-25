@@ -82,15 +82,9 @@ lint_check() {
 }
 
 main() {
-	stash_push
-	local stash_push_status="${?}"
+	stash_push && trap stash_pop EXIT
 
 	lint_check
-	local lint_check_status="${?}"
-
-	(( stash_push_status == 0 )) && stash_pop
-
-	exit "${lint_check_status}"
 }
 
 main "${@}"
